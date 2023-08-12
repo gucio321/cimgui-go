@@ -181,3 +181,22 @@ jobs:
         push_options: '--force'
         commit_message: Update macos lib from ci
         branch: ${{ vars.tmp-branch }}
+  merge:
+    needs: [build-linux-x64, build-windows-x64, build-macos]
+    runs-on: ubuntu-latest
+
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
+
+    steps:
+    - uses: actions/checkout@main
+
+    - name: merge
+      run: |
+        git merge ${{ vars.tmp-branch }}
+    - uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
