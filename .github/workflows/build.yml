@@ -3,7 +3,7 @@ name: Compile cimgui
 on:
   workflow_dispatch:
 env:
-   tmp-branch: 'github_actions/${{ github.ref }}'
+   TMP_BRANCH: 'github_actions/${{ github.ref }}'
 
 jobs:
   build-linux-x64:
@@ -51,7 +51,7 @@ jobs:
       with:
         push_options: '--force'
         commit_message: Update linux lib from ci
-        branch: ${{ vars.tmp-branch }}
+        branch: ${{ vars.TMP_BRANCH }}
   build-windows-x64:
     needs: build-linux-x64
     runs-on: windows-latest
@@ -105,7 +105,7 @@ jobs:
       with:
         push_options: '--force'
         commit_message: Update windows lib from ci
-        branch: ${{ vars.tmp-branch }}
+        branch: ${{ vars.TMP_BRANCH }}
   build-macos:
     needs: build-windows-x64
     runs-on: macos-latest
@@ -180,7 +180,7 @@ jobs:
       with:
         push_options: '--force'
         commit_message: Update macos lib from ci
-        branch: ${{ vars.tmp-branch }}
+        branch: ${{ vars.TMP_BRANCH }}
   merge:
     needs: [build-linux-x64, build-windows-x64, build-macos]
     runs-on: ubuntu-latest
@@ -195,7 +195,7 @@ jobs:
 
     - name: merge
       run: |
-        git merge ${{ vars.tmp-branch }}
+        git merge ${{ vars.TMP_BRANCH }}
     - uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
