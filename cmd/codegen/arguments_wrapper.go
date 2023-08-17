@@ -20,7 +20,7 @@ type ArgumentWrapperData struct {
 	VarName string
 }
 
-type argumentWrapper func(arg ArgDef) ArgumentWrapperData
+type argumentWrapper func(argName string) ArgumentWrapperData
 
 func argWrapper(argType string) (wrapper argumentWrapper, err error) {
 	argWrapperMap := map[string]argumentWrapper{
@@ -117,87 +117,81 @@ func argWrapper(argType string) (wrapper argumentWrapper, err error) {
 	return nil, fmt.Errorf("no wrapper for type %s", argType)
 }
 
-func constCharW(arg ArgDef) ArgumentWrapperData {
+func constCharW(arg string) ArgumentWrapperData {
 	return ArgumentWrapperData{
 		ArgType:   "string",
-		VarName:   fmt.Sprintf("%sArg", arg.Name),
-		ArgDef:    fmt.Sprintf("%[1]sArg, %[1]sFin := WrapString(%[1]s)", arg.Name),
-		Finalizer: fmt.Sprintf("%sFin()", arg.Name),
+		VarName:   fmt.Sprintf("%sArg", arg),
+		ArgDef:    fmt.Sprintf("%[1]sArg, %[1]sFin := WrapString(%[1]s)", arg),
+		Finalizer: fmt.Sprintf("%sFin()", arg),
 	}
 }
 
-func charPtrPtrW(arg ArgDef) ArgumentWrapperData {
+func charPtrPtrW(arg string) ArgumentWrapperData {
 	return ArgumentWrapperData{
 		ArgType:   "[]string",
-		VarName:   fmt.Sprintf("%sArg", arg.Name),
-		ArgDef:    fmt.Sprintf("%[1]sArg, %[1]sFin := WrapStringList(%[1]s)", arg.Name),
-		Finalizer: fmt.Sprintf("%sFin()", arg.Name),
+		VarName:   fmt.Sprintf("%sArg", arg),
+		ArgDef:    fmt.Sprintf("%[1]sArg, %[1]sFin := WrapStringList(%[1]s)", arg),
+		Finalizer: fmt.Sprintf("%sFin()", arg),
 	}
 }
 
-func uCharPtrW(arg ArgDef) ArgumentWrapperData {
+func uCharPtrW(arg string) ArgumentWrapperData {
 	return ArgumentWrapperData{
 		ArgType: "*C.uchar",
-		VarName: fmt.Sprintf("&%s", arg.Name),
+		VarName: fmt.Sprintf("&%s", arg),
 	}
 }
 
-func sizeTPtrW(arg ArgDef) ArgumentWrapperData {
+func sizeTPtrW(arg string) ArgumentWrapperData {
 	return ArgumentWrapperData{
 		ArgType: "*uint64",
-		VarName: fmt.Sprintf("(*C.xulong)(%s)", arg.Name),
+		VarName: fmt.Sprintf("(*C.xulong)(%s)", arg),
 	}
 }
 
 // leave this for now because of https://github.com/AllenDang/cimgui-go/issues/31
-func floatPtrW(arg ArgDef) ArgumentWrapperData {
+func floatPtrW(arg string) ArgumentWrapperData {
 	return simplePtrW("float32", "C.float")(arg)
 }
 
-func floatArrayW(arg ArgDef) ArgumentWrapperData {
+func floatArrayW(arg string) ArgumentWrapperData {
 	return ArgumentWrapperData{
 		ArgType: "[]float32",
-		VarName: fmt.Sprintf("(*C.float)(&(%s[0]))", arg.Name),
+		VarName: fmt.Sprintf("(*C.float)(&(%s[0]))", arg),
 	}
 }
 
-func boolPtrW(arg ArgDef) ArgumentWrapperData {
+func boolPtrW(arg string) ArgumentWrapperData {
 	return ArgumentWrapperData{
 		ArgType:   "*bool",
-		ArgDef:    fmt.Sprintf("%[1]sArg, %[1]sFin := WrapBool(%[1]s)", arg.Name),
-		Finalizer: fmt.Sprintf("%[1]sFin()", arg.Name),
-		VarName:   fmt.Sprintf("%sArg", arg.Name),
+		ArgDef:    fmt.Sprintf("%[1]sArg, %[1]sFin := WrapBool(%[1]s)", arg),
+		Finalizer: fmt.Sprintf("%[1]sFin()", arg),
+		VarName:   fmt.Sprintf("%sArg", arg),
 	}
 }
 
-func int64ArrayW(arg ArgDef) ArgumentWrapperData {
+func int64ArrayW(arg string) ArgumentWrapperData {
 	return ArgumentWrapperData{
 		ArgType: "[]int64",
-		VarName: fmt.Sprintf("(*C.longlong)(&(%s[0]))", arg.Name),
+		VarName: fmt.Sprintf("(*C.longlong)(&(%s[0]))", arg),
 	}
 }
 
-func uint64ArrayW(arg ArgDef) ArgumentWrapperData {
+func uint64ArrayW(arg string) ArgumentWrapperData {
 	return ArgumentWrapperData{
 		ArgType: "[]uint64",
-		VarName: fmt.Sprintf("(*C.ulonglong)(&(%s[0]))", arg.Name),
+		VarName: fmt.Sprintf("(*C.ulonglong)(&(%s[0]))", arg),
 	}
-}
-
-func inputeTextCallbackW(arg ArgDef) (argType string, def string, varName string) {
-	argType = "ImGuiInputTextCallback"
-	// TODO: implement me
-	return
 }
 
 // generic wrappers:
 
 // C.int -> int32
 func simpleW(goType, cType string) argumentWrapper {
-	return func(arg ArgDef) ArgumentWrapperData {
+	return func(arg string) ArgumentWrapperData {
 		return ArgumentWrapperData{
 			ArgType: goType,
-			VarName: fmt.Sprintf("%s(%s)", cType, arg.Name),
+			VarName: fmt.Sprintf("%s(%s)", cType, arg),
 		}
 	}
 }
@@ -206,81 +200,81 @@ func simpleW(goType, cType string) argumentWrapper {
 //
 //	return simplePtrW(arg.Name, "int16", "C.int")
 func simplePtrW(goType, cType string) argumentWrapper {
-	return func(arg ArgDef) ArgumentWrapperData {
+	return func(arg string) ArgumentWrapperData {
 		return ArgumentWrapperData{
 			ArgType:   fmt.Sprintf("*%s", goType),
-			ArgDef:    fmt.Sprintf("%[1]sArg, %[1]sFin := WrapNumberPtr[%[2]s, %[3]s](%[1]s)", arg.Name, cType, goType),
-			Finalizer: fmt.Sprintf("%[1]sFin()", arg.Name, cType, goType),
-			VarName:   fmt.Sprintf("%sArg", arg.Name),
+			ArgDef:    fmt.Sprintf("%[1]sArg, %[1]sFin := WrapNumberPtr[%[2]s, %[3]s](%[1]s)", arg, cType, goType),
+			Finalizer: fmt.Sprintf("%[1]sFin()", arg, cType, goType),
+			VarName:   fmt.Sprintf("%sArg", arg),
 		}
 	}
 }
 
 // C.int*, C.int[] as well as C.int[2] -> [2]*int32
 func simplePtrArrayW(size int, cArrayType, goArrayType string) argumentWrapper {
-	return func(arg ArgDef) ArgumentWrapperData {
+	return func(arg string) ArgumentWrapperData {
 		return ArgumentWrapperData{
 			ArgType: fmt.Sprintf("*[%d]%s", size, goArrayType),
 			ArgDef: fmt.Sprintf(`
 %[1]sArg := make([]%[2]s, len(%[1]s))
 for i, %[1]sV := range %[1]s {
   %[1]sArg[i] = %[2]s(%[1]sV)
-}`, arg.Name, cArrayType),
-			VarName: fmt.Sprintf("(*%s)(&%sArg[0])", cArrayType, arg.Name),
+}`, arg, cArrayType),
+			VarName: fmt.Sprintf("(*%s)(&%sArg[0])", cArrayType, arg),
 			Finalizer: fmt.Sprintf(`
 for i, %[1]sV := range %[1]sArg {
 	(*%[1]s)[i] = %[3]s(%[1]sV)
 }
 
-`, arg.Name, cArrayType, goArrayType),
+`, arg, cArrayType, goArrayType),
 		}
 	}
 }
 
 // C.int*, C.int[] -> *[]int32
 func simplePtrSliceW(cArrayType, goArrayType string) argumentWrapper {
-	return func(arg ArgDef) ArgumentWrapperData {
+	return func(arg string) ArgumentWrapperData {
 		return ArgumentWrapperData{
 			ArgType: fmt.Sprintf("*[]%s", goArrayType),
 			ArgDef: fmt.Sprintf(`%[1]sArg := make([]%[2]s, len(*%[1]s))
 for i, %[1]sV := range *%[1]s {
   %[1]sArg[i] = %[2]s(%[1]sV)
 }
-`, arg.Name, cArrayType, goArrayType),
+`, arg, cArrayType, goArrayType),
 			Finalizer: fmt.Sprintf(`
   for i, %[1]sV := range %[1]sArg {
     (*%[1]s)[i] = %[3]s(%[1]sV)
   }
-`, arg.Name, cArrayType, goArrayType),
-			VarName: fmt.Sprintf("(*%s)(&%sArg[0])", cArrayType, arg.Name),
+`, arg, cArrayType, goArrayType),
+			VarName: fmt.Sprintf("(*%s)(&%sArg[0])", cArrayType, arg),
 		}
 	}
 }
 
 // C.ImVec2 -> ImVec2
 func wrappableW(sType string) argumentWrapper {
-	return func(arg ArgDef) ArgumentWrapperData {
+	return func(arg string) ArgumentWrapperData {
 		return ArgumentWrapperData{
 			ArgType: sType,
-			VarName: fmt.Sprintf("%s.toC()", arg.Name),
+			VarName: fmt.Sprintf("%s.toC()", arg),
 		}
 	}
 }
 
 // C.ImVec2* -> *ImVec2
 func wrappablePtrW(goType, cType string) argumentWrapper {
-	return func(arg ArgDef) ArgumentWrapperData {
+	return func(arg string) ArgumentWrapperData {
 		return ArgumentWrapperData{
 			ArgType:   goType,
-			ArgDef:    fmt.Sprintf("%[1]sArg, %[1]sFin := wrap[%[3]s, %[2]s](%[1]s)", arg.Name, goType, cType),
-			Finalizer: fmt.Sprintf("%[1]sFin()", arg.Name, goType, cType),
-			VarName:   fmt.Sprintf("%sArg", arg.Name),
+			ArgDef:    fmt.Sprintf("%[1]sArg, %[1]sFin := wrap[%[3]s, %[2]s](%[1]s)", arg, goType, cType),
+			Finalizer: fmt.Sprintf("%[1]sFin()", arg, goType, cType),
+			VarName:   fmt.Sprintf("%sArg", arg),
 		}
 	}
 }
 
 func wrappablePtrArrayW(size int, cArrayType, goArrayType string) argumentWrapper {
-	return func(arg ArgDef) ArgumentWrapperData {
+	return func(arg string) ArgumentWrapperData {
 		return ArgumentWrapperData{
 			ArgType: fmt.Sprintf("[%d]*%s", size, goArrayType),
 			ArgDef: fmt.Sprintf(`%[1]sArg := make([]%[2]s, len(%[1]s))
@@ -290,13 +284,13 @@ for i, %[1]sV := range %[1]s {
   	tmp, %[1]sFin[i] = wrap[%[2]s, *%[3]s](%[1]sV)
   	%[1]sArg[i] = *tmp
 }
-`, arg.Name, cArrayType, goArrayType),
+`, arg, cArrayType, goArrayType),
 			Finalizer: fmt.Sprintf(`
   for _, %[1]sV := range %[1]sFin {
     %[1]sV()
   }
-`, arg.Name, cArrayType, goArrayType),
-			VarName: fmt.Sprintf("(*%s)(&%sArg[0])", cArrayType, arg.Name),
+`, arg, cArrayType, goArrayType),
+			VarName: fmt.Sprintf("(*%s)(&%sArg[0])", cArrayType, arg),
 		}
 	}
 }
