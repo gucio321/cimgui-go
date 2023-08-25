@@ -87,8 +87,8 @@ func showImPlotDemo() {
 	imgui.SetNextWindowSizeV(imgui.NewVec2(500, 300), imgui.CondOnce)
 	imgui.Begin("Plot window")
 	if imgui.PlotBeginPlotV("Plot", imgui.NewVec2(-1, -1), 0) {
-		imgui.PlotPlotBarsS64PtrInt("Bar", barValues, int32(len(barValues)))
-		imgui.PlotPlotLineS64PtrInt("Line", barValues, int32(len(barValues)))
+		imgui.PlotPlotBarsS64PtrInt("Bar", imgui.SliceToPtr(barValues), int32(len(barValues)))
+		imgui.PlotPlotLineS64PtrInt("Line", imgui.SliceToPtr(barValues), int32(len(barValues)))
 		imgui.PlotEndPlot()
 	}
 	imgui.End()
