@@ -63,6 +63,7 @@ func getReturnWrapper(
 		"ImGuiTableDrawChannelIdx": simpleR("TableDrawChannelIdx"),
 		"void*":                    simpleR("unsafe.Pointer"),
 		"size_t":                   simpleR("uint64"),
+		"ImGuiKeyChord":            simpleR("KeyChord"),
 	}
 
 	w, known := returnWrapperMap[t]
