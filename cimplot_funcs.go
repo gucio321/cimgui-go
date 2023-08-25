@@ -466,6 +466,15 @@ func (self PlotColormapData) KeyCount(cmap PlotColormap) int32 {
 	return int32(C.ImPlotColormapData_GetKeyCount(selfArg, C.ImPlotColormap(cmap)))
 }
 
+func (self PlotColormapData) Keys(cmap PlotColormap) *uint32 {
+	selfArg, selfFin := self.handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return (*uint32)(C.ImPlotColormapData_GetKeys(selfArg, C.ImPlotColormap(cmap)))
+}
+
 func (self PlotColormapData) Name(cmap PlotColormap) string {
 	selfArg, selfFin := self.handle()
 
@@ -473,6 +482,15 @@ func (self PlotColormapData) Name(cmap PlotColormap) string {
 		selfFin()
 	}()
 	return C.GoString(C.ImPlotColormapData_GetName(selfArg, C.ImPlotColormap(cmap)))
+}
+
+func (self PlotColormapData) Table(cmap PlotColormap) *uint32 {
+	selfArg, selfFin := self.handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return (*uint32)(C.ImPlotColormapData_GetTable(selfArg, C.ImPlotColormap(cmap)))
 }
 
 func (self PlotColormapData) TableColor(cmap PlotColormap, idx int32) uint32 {
@@ -6763,6 +6781,26 @@ func PlotShowColormapSelector(label string) bool {
 		labelFin()
 	}()
 	return C.ImPlot_ShowColormapSelector(labelArg) == C.bool(true)
+}
+
+// PlotShowDatePickerV parameter default value hint:
+// t1: nullptr
+// t2: nullptr
+func PlotShowDatePickerV(id string, level *int32, t *PlotTime, t1 *PlotTime, t2 *PlotTime) bool {
+	idArg, idFin := WrapString(id)
+	levelArg, levelFin := WrapNumberPtr[C.int, int32](level)
+	tArg, tFin := wrap[C.ImPlotTime, *PlotTime](t)
+	t1Arg, t1Fin := wrap[C.ImPlotTime, *PlotTime](t1)
+	t2Arg, t2Fin := wrap[C.ImPlotTime, *PlotTime](t2)
+
+	defer func() {
+		idFin()
+		levelFin()
+		tFin()
+		t1Fin()
+		t2Fin()
+	}()
+	return C.ImPlot_ShowDatePicker(idArg, levelArg, tArg, t1Arg, t2Arg) == C.bool(true)
 }
 
 // PlotShowDemoWindowV parameter default value hint:

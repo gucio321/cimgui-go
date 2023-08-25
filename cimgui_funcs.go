@@ -16655,6 +16655,30 @@ func (self Context) DragDropHoldJustPressedId() ID {
 	return ID(C.wrap_ImGuiContext_GetDragDropHoldJustPressedId(selfArg))
 }
 
+func (self Context) SetDragDropPayloadBufHeap(v Vector[*uint]) {
+	vData := v.Data
+	vDataArg, vDataFin := WrapNumberPtr[C.uchar, uint](vData)
+	vVecArg := new(C.ImVector_unsigned_char)
+	vVecArg.Size = C.int(v.Size)
+	vVecArg.Capacity = C.int(v.Capacity)
+	vVecArg.Data = vDataArg
+
+	selfArg, selfFin := self.handle()
+	defer selfFin()
+	C.wrap_ImGuiContext_SetDragDropPayloadBufHeap(selfArg, *vVecArg)
+
+	vDataFin()
+}
+
+func (self Context) DragDropPayloadBufHeap() Vector[*uint] {
+	selfArg, selfFin := self.handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return newVectorFromC(C.wrap_ImGuiContext_GetDragDropPayloadBufHeap(selfArg).Size, C.wrap_ImGuiContext_GetDragDropPayloadBufHeap(selfArg).Capacity, (*uint)(unsafe.Pointer(C.wrap_ImGuiContext_GetDragDropPayloadBufHeap(selfArg).Data)))
+}
+
 func (self Context) SetClipperTempDataStacked(v int32) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
