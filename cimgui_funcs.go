@@ -4022,6 +4022,10 @@ func ComboStrarrV(label string, current_item *int32, items []string, items_count
 	return C.igCombo_Str_arr(labelArg, current_itemArg, itemsArg, C.int(items_count), C.int(popup_max_height_in_items)) == C.bool(true)
 }
 
+func InternalConvertShortcutMod(key_chord KeyChord) KeyChord {
+	return KeyChord(C.igConvertShortcutMod(C.ImGuiKeyChord(key_chord)))
+}
+
 func InternalConvertSingleModFlagToKey(ctx Context, key Key) Key {
 	ctxArg, ctxFin := ctx.handle()
 
@@ -15794,6 +15798,15 @@ func (self Context) SetNavJustMovedToKeyMods(v KeyChord) {
 	C.wrap_ImGuiContext_SetNavJustMovedToKeyMods(selfArg, C.ImGuiKeyChord(v))
 }
 
+func (self Context) NavJustMovedToKeyMods() KeyChord {
+	selfArg, selfFin := self.handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return KeyChord(C.wrap_ImGuiContext_GetNavJustMovedToKeyMods(selfArg))
+}
+
 func (self Context) SetNavNextActivateId(v ID) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
@@ -16061,6 +16074,15 @@ func (self Context) SetNavMoveKeyMods(v KeyChord) {
 	C.wrap_ImGuiContext_SetNavMoveKeyMods(selfArg, C.ImGuiKeyChord(v))
 }
 
+func (self Context) NavMoveKeyMods() KeyChord {
+	selfArg, selfFin := self.handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return KeyChord(C.wrap_ImGuiContext_GetNavMoveKeyMods(selfArg))
+}
+
 func (self Context) SetNavMoveDir(v Dir) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
@@ -16271,10 +16293,28 @@ func (self Context) SetConfigNavWindowingKeyNext(v KeyChord) {
 	C.wrap_ImGuiContext_SetConfigNavWindowingKeyNext(selfArg, C.ImGuiKeyChord(v))
 }
 
+func (self Context) ConfigNavWindowingKeyNext() KeyChord {
+	selfArg, selfFin := self.handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return KeyChord(C.wrap_ImGuiContext_GetConfigNavWindowingKeyNext(selfArg))
+}
+
 func (self Context) SetConfigNavWindowingKeyPrev(v KeyChord) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImGuiContext_SetConfigNavWindowingKeyPrev(selfArg, C.ImGuiKeyChord(v))
+}
+
+func (self Context) ConfigNavWindowingKeyPrev() KeyChord {
+	selfArg, selfFin := self.handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return KeyChord(C.wrap_ImGuiContext_GetConfigNavWindowingKeyPrev(selfArg))
 }
 
 func (self Context) SetNavWindowingTarget(v Window) {
@@ -20199,6 +20239,15 @@ func (self IO) SetKeyMods(v KeyChord) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImGuiIO_SetKeyMods(selfArg, C.ImGuiKeyChord(v))
+}
+
+func (self IO) KeyMods() KeyChord {
+	selfArg, selfFin := self.handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return KeyChord(C.wrap_ImGuiIO_GetKeyMods(selfArg))
 }
 
 func (self IO) SetWantCaptureMouseUnlessPopupClose(v bool) {
