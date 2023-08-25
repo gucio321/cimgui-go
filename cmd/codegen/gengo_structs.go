@@ -113,7 +113,7 @@ func generateStruct(s StructDef, defs []StructDef, enumDefs []EnumDef, refEnums,
 		case toCErr == nil && fromCErr == nil:
 			if toC.ArgType != fromC.returnType { // <- this absolutly shouldn't happen
 				panic(fmt.Sprintf(`
-%s != %s
+toC type (Arg Type) %s != fromC type (Return Type) %s
 %s
 `, toC.ArgType, fromC.returnType, field.Type))
 			}
