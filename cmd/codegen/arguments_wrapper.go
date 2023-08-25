@@ -114,6 +114,7 @@ func getArgWrapper(a *ArgDef, makeFirstArgReceiver, isGetter bool, structNames, 
 		"ImPlotTime":               wrappableW("PlotTime"),
 		"const ImPlotTime":         wrappableW("PlotTime"),
 		"ImPlotTime*":              wrappablePtrW("*PlotTime", "C.ImPlotTime"),
+		"const ImPlotTime*":        wrappablePtrW("*PlotTime", "C.ImPlotTime"),
 	}
 
 	if a.Name == "type" || a.Name == "range" {
