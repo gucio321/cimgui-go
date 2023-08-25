@@ -158,6 +158,7 @@ func getArgWrapper(a *ArgDef, makeFirstArgReceiver, isGetter bool, structNames, 
 	if strings.HasPrefix(a.Type, "ImVector_") &&
 		!(strings.HasSuffix(a.Type, "*") || strings.HasSuffix(a.Type, "]")) {
 		pureType := strings.TrimPrefix(a.Type, "ImVector_") + "*"
+		pureType = strings.ReplaceAll(pureType, "_", " ")
 		dataName := a.Name + "Data"
 		_, w, err := getArgWrapper(&ArgDef{
 			Name: dataName,

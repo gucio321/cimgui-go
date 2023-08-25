@@ -83,6 +83,7 @@ func getReturnWrapper(
 	case strings.HasPrefix(t, "ImVector_") &&
 		!(strings.HasSuffix(t, "*") || strings.HasSuffix(t, "]")):
 		pureType := strings.TrimPrefix(t, "ImVector_") + "*"
+		pureType = strings.ReplaceAll(pureType, "_", " ")
 		rw, err := getReturnWrapper(pureType, structNames, enumNames)
 		if err != nil {
 			return returnWrapper{}, fmt.Errorf("creating vector wrapper %w", err)
