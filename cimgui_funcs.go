@@ -3734,21 +3734,15 @@ func InternalCheckboxFlagsS64Ptr(label string, flags *int64, flags_value int64) 
 	return C.igCheckboxFlags_S64Ptr(labelArg, flagsArg, C.ImS64(flags_value)) == C.bool(true)
 }
 
-func InternalCheckboxFlagsU64Ptr(label string, flags *[]uint64, flags_value uint64) bool {
+func InternalCheckboxFlagsU64Ptr(label string, flags *uint64, flags_value uint64) bool {
 	labelArg, labelFin := WrapString(label)
-	flagsArg := make([]C.ImU64, len(*flags))
-	for i, flagsV := range *flags {
-		flagsArg[i] = C.ImU64(flagsV)
-	}
+	flagsArg, flagsFin := WrapNumberPtr[C.ImU64, uint64](flags)
 
 	defer func() {
 		labelFin()
-
-		for i, flagsV := range flagsArg {
-			(*flags)[i] = uint64(flagsV)
-		}
+		flagsFin()
 	}()
-	return C.igCheckboxFlags_U64Ptr(labelArg, (*C.ImU64)(&flagsArg[0]), C.ImU64(flags_value)) == C.bool(true)
+	return C.igCheckboxFlags_U64Ptr(labelArg, flagsArg, C.ImU64(flags_value)) == C.bool(true)
 }
 
 func CheckboxFlagsUintPtr(label string, flags *uint32, flags_value uint32) bool {
@@ -5946,70 +5940,41 @@ func InternalImBezierQuadraticCalc(p1 Vec2, p2 Vec2, p3 Vec2, t float32) Vec2 {
 	return *pOut
 }
 
-func InternalImBitArrayClearAllBits(arr *[]uint32, bitcount int32) {
-	arrArg := make([]C.ImU32, len(*arr))
-	for i, arrV := range *arr {
-		arrArg[i] = C.ImU32(arrV)
-	}
+func InternalImBitArrayClearAllBits(arr *uint32, bitcount int32) {
+	arrArg, arrFin := WrapNumberPtr[C.ImU32, uint32](arr)
+	C.igImBitArrayClearAllBits(arrArg, C.int(bitcount))
 
-	C.igImBitArrayClearAllBits((*C.ImU32)(&arrArg[0]), C.int(bitcount))
-
-	for i, arrV := range arrArg {
-		(*arr)[i] = uint32(arrV)
-	}
+	arrFin()
 }
 
-func InternalImBitArrayClearBit(arr *[]uint32, n int32) {
-	arrArg := make([]C.ImU32, len(*arr))
-	for i, arrV := range *arr {
-		arrArg[i] = C.ImU32(arrV)
-	}
+func InternalImBitArrayClearBit(arr *uint32, n int32) {
+	arrArg, arrFin := WrapNumberPtr[C.ImU32, uint32](arr)
+	C.igImBitArrayClearBit(arrArg, C.int(n))
 
-	C.igImBitArrayClearBit((*C.ImU32)(&arrArg[0]), C.int(n))
-
-	for i, arrV := range arrArg {
-		(*arr)[i] = uint32(arrV)
-	}
+	arrFin()
 }
 
-func InternalImBitArraySetBit(arr *[]uint32, n int32) {
-	arrArg := make([]C.ImU32, len(*arr))
-	for i, arrV := range *arr {
-		arrArg[i] = C.ImU32(arrV)
-	}
+func InternalImBitArraySetBit(arr *uint32, n int32) {
+	arrArg, arrFin := WrapNumberPtr[C.ImU32, uint32](arr)
+	C.igImBitArraySetBit(arrArg, C.int(n))
 
-	C.igImBitArraySetBit((*C.ImU32)(&arrArg[0]), C.int(n))
-
-	for i, arrV := range arrArg {
-		(*arr)[i] = uint32(arrV)
-	}
+	arrFin()
 }
 
-func InternalImBitArraySetBitRange(arr *[]uint32, n int32, n2 int32) {
-	arrArg := make([]C.ImU32, len(*arr))
-	for i, arrV := range *arr {
-		arrArg[i] = C.ImU32(arrV)
-	}
+func InternalImBitArraySetBitRange(arr *uint32, n int32, n2 int32) {
+	arrArg, arrFin := WrapNumberPtr[C.ImU32, uint32](arr)
+	C.igImBitArraySetBitRange(arrArg, C.int(n), C.int(n2))
 
-	C.igImBitArraySetBitRange((*C.ImU32)(&arrArg[0]), C.int(n), C.int(n2))
-
-	for i, arrV := range arrArg {
-		(*arr)[i] = uint32(arrV)
-	}
+	arrFin()
 }
 
-func InternalImBitArrayTestBit(arr *[]uint32, n int32) bool {
-	arrArg := make([]C.ImU32, len(*arr))
-	for i, arrV := range *arr {
-		arrArg[i] = C.ImU32(arrV)
-	}
+func InternalImBitArrayTestBit(arr *uint32, n int32) bool {
+	arrArg, arrFin := WrapNumberPtr[C.ImU32, uint32](arr)
 
 	defer func() {
-		for i, arrV := range arrArg {
-			(*arr)[i] = uint32(arrV)
-		}
+		arrFin()
 	}()
-	return C.igImBitArrayTestBit((*C.ImU32)(&arrArg[0]), C.int(n)) == C.bool(true)
+	return C.igImBitArrayTestBit(arrArg, C.int(n)) == C.bool(true)
 }
 
 func InternalImCharIsBlankA(c rune) bool {
@@ -11941,25 +11906,28 @@ func ValueFloat(prefix string, v float32) {
 	prefixFin()
 }
 
-func (self BitVector) SetStorage(v Vector[*[]uint32]) {
+func (self BitVector) SetStorage(v Vector[*uint32]) {
 	vData := v.Data
-	vDataArg := make([]C.ImU32, len(*vData))
-	for i, vDataV := range *vData {
-		vDataArg[i] = C.ImU32(vDataV)
-	}
-
+	vDataArg, vDataFin := WrapNumberPtr[C.ImU32, uint32](vData)
 	vVecArg := new(C.ImVector_ImU32)
 	vVecArg.Size = C.int(v.Size)
 	vVecArg.Capacity = C.int(v.Capacity)
-	vVecArg.Data = (*C.ImU32)(&vDataArg[0])
+	vVecArg.Data = vDataArg
 
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImBitVector_SetStorage(selfArg, *vVecArg)
 
-	for i, vDataV := range vDataArg {
-		(*vData)[i] = uint32(vDataV)
-	}
+	vDataFin()
+}
+
+func (self BitVector) Storage() Vector[*uint32] {
+	selfArg, selfFin := self.handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return newVectorFromC(C.wrap_ImBitVector_GetStorage(selfArg).Size, C.wrap_ImBitVector_GetStorage(selfArg).Capacity, (*uint32)(C.wrap_ImBitVector_GetStorage(selfArg).Data))
 }
 
 func (self *Color) Value() Vec4 {
@@ -13948,25 +13916,28 @@ func (self FontGlyph) V1() float32 {
 	return float32(C.wrap_ImFontGlyph_GetV1(selfArg))
 }
 
-func (self FontGlyphRangesBuilder) SetUsedChars(v Vector[*[]uint32]) {
+func (self FontGlyphRangesBuilder) SetUsedChars(v Vector[*uint32]) {
 	vData := v.Data
-	vDataArg := make([]C.ImU32, len(*vData))
-	for i, vDataV := range *vData {
-		vDataArg[i] = C.ImU32(vDataV)
-	}
-
+	vDataArg, vDataFin := WrapNumberPtr[C.ImU32, uint32](vData)
 	vVecArg := new(C.ImVector_ImU32)
 	vVecArg.Size = C.int(v.Size)
 	vVecArg.Capacity = C.int(v.Capacity)
-	vVecArg.Data = (*C.ImU32)(&vDataArg[0])
+	vVecArg.Data = vDataArg
 
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImFontGlyphRangesBuilder_SetUsedChars(selfArg, *vVecArg)
 
-	for i, vDataV := range vDataArg {
-		(*vData)[i] = uint32(vDataV)
-	}
+	vDataFin()
+}
+
+func (self FontGlyphRangesBuilder) UsedChars() Vector[*uint32] {
+	selfArg, selfFin := self.handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return newVectorFromC(C.wrap_ImFontGlyphRangesBuilder_GetUsedChars(selfArg).Size, C.wrap_ImFontGlyphRangesBuilder_GetUsedChars(selfArg).Capacity, (*uint32)(C.wrap_ImFontGlyphRangesBuilder_GetUsedChars(selfArg).Data))
 }
 
 func (self ColorMod) SetCol(v Col) {
