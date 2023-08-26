@@ -29569,6 +29569,12 @@ func (self Window) HasCloseButton() bool {
 	return C.wrap_ImGuiWindow_GetHasCloseButton(selfArg) == C.bool(true)
 }
 
+func (self Window) SetResizeBorderHeld(v byte) {
+	selfArg, selfFin := self.handle()
+	defer selfFin()
+	C.wrap_ImGuiWindow_SetResizeBorderHeld(selfArg, C.schar(v))
+}
+
 func (self Window) SetBeginCount(v int16) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
