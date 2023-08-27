@@ -120,7 +120,10 @@ func (g *goFuncsGenerator) writeFuncsFileHeader() {
 // #include "%[1]s_structs_accessor.h"
 // #include "%[1]s_wrapper.h"
 import "C"
-import "unsafe"
+import (
+   "unsafe"
+   "runtime/cgo"
+)
 
 `, g.prefix))
 }

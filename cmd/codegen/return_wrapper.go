@@ -59,7 +59,7 @@ func getReturnWrapper(
 		"ImPlotTime":               wrappableR("PlotTime"),
 		"ImGuiTableColumnIdx":      simpleR("TableColumnIdx"),
 		"ImGuiTableDrawChannelIdx": simpleR("TableDrawChannelIdx"),
-		"void*":                    simpleR("unsafe.Pointer"),
+		"void*":                    {returnType: "any", returnStmt: "cgo.NewHandle(%s).Value()"},
 		"size_t":                   simpleR("uint64"),
 	}
 

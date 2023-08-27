@@ -21,7 +21,10 @@ func generateGoStructs(prefix string, structs []StructDef, enums []EnumDef, refE
 // #include "extra_types.h"
 // #include "%s_wrapper.h"
 import "C"
-import "unsafe"
+import (
+   "unsafe"
+   "runtime/cgo"
+)
 
 `, prefix))
 
