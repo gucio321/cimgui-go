@@ -90,35 +90,28 @@ func getArgWrapper(a *ArgDef, makeFirstArgReceiver, isGetter bool, structNames, 
 		"ImGuiTableColumnIdx":      simpleW("TableColumnIdx", "C.ImGuiTableColumnIdx"),
 		"ImGuiTableDrawChannelIdx": simpleW("TableDrawChannelIdx", "C.ImGuiTableDrawChannelIdx"),
 		"ImGuiKeyChord":            simpleW("KeyChord", "C.ImGuiKeyChord"),
-		//"void*":                    simpleW("unsafe.Pointer", ""),
-		"void*": func(arg ArgDef) ArgumentWrapperData {
-			return ArgumentWrapperData{
-				ArgType: "any",
-				ArgDef:  fmt.Sprintf("%[1]sArg := cgo.NewHandle(%[1]s)", arg.Name),
-				VarName: fmt.Sprintf("unsafe.Pointer(&%sArg)", arg.Name),
-			}
-		},
-		"const void*":       simpleW("unsafe.Pointer", ""),
-		"const ImVec2":      wrappableW("Vec2"),
-		"const ImVec2*":     wrappablePtrW("*Vec2", "C.ImVec2"),
-		"ImVec2":            wrappableW("Vec2"),
-		"ImVec2*":           wrappablePtrW("*Vec2", "C.ImVec2"),
-		"ImVec2[2]":         wrappablePtrArrayW(2, "C.ImVec2", "Vec2"),
-		"const ImVec4":      wrappableW("Vec4"),
-		"const ImVec4*":     wrappablePtrW("*Vec4", "C.ImVec4"),
-		"ImVec4":            wrappableW("Vec4"),
-		"ImVec4*":           wrappablePtrW("*Vec4", "C.ImVec4"),
-		"ImColor*":          wrappablePtrW("*Color", "C.ImColor"),
-		"ImRect":            wrappableW("Rect"),
-		"const ImRect":      wrappableW("Rect"),
-		"ImRect*":           wrappablePtrW("*Rect", "C.ImRect"),
-		"const ImRect*":     wrappablePtrW("*Rect", "C.ImRect"),
-		"ImPlotPoint":       wrappableW("PlotPoint"),
-		"const ImPlotPoint": wrappableW("PlotPoint"),
-		"ImPlotPoint*":      wrappablePtrW("*PlotPoint", "C.ImPlotPoint"),
-		"ImPlotTime":        wrappableW("PlotTime"),
-		"const ImPlotTime":  wrappableW("PlotTime"),
-		"ImPlotTime*":       wrappablePtrW("*PlotTime", "C.ImPlotTime"),
+		"void*":                    voidPtrW,
+		"const void*":              voidPtrW,
+		"const ImVec2":             wrappableW("Vec2"),
+		"const ImVec2*":            wrappablePtrW("*Vec2", "C.ImVec2"),
+		"ImVec2":                   wrappableW("Vec2"),
+		"ImVec2*":                  wrappablePtrW("*Vec2", "C.ImVec2"),
+		"ImVec2[2]":                wrappablePtrArrayW(2, "C.ImVec2", "Vec2"),
+		"const ImVec4":             wrappableW("Vec4"),
+		"const ImVec4*":            wrappablePtrW("*Vec4", "C.ImVec4"),
+		"ImVec4":                   wrappableW("Vec4"),
+		"ImVec4*":                  wrappablePtrW("*Vec4", "C.ImVec4"),
+		"ImColor*":                 wrappablePtrW("*Color", "C.ImColor"),
+		"ImRect":                   wrappableW("Rect"),
+		"const ImRect":             wrappableW("Rect"),
+		"ImRect*":                  wrappablePtrW("*Rect", "C.ImRect"),
+		"const ImRect*":            wrappablePtrW("*Rect", "C.ImRect"),
+		"ImPlotPoint":              wrappableW("PlotPoint"),
+		"const ImPlotPoint":        wrappableW("PlotPoint"),
+		"ImPlotPoint*":             wrappablePtrW("*PlotPoint", "C.ImPlotPoint"),
+		"ImPlotTime":               wrappableW("PlotTime"),
+		"const ImPlotTime":         wrappableW("PlotTime"),
+		"ImPlotTime*":              wrappablePtrW("*PlotTime", "C.ImPlotTime"),
 	}
 
 	if a.Name == "type" || a.Name == "range" {
@@ -414,5 +407,30 @@ for i, %[1]sV := range %[1]s {
 `, arg.Name, cArrayType, goArrayType),
 			VarName: fmt.Sprintf("(*%s)(&%sArg[0])", cArrayType, arg.Name),
 		}
+	}
+}
+
+func voidPtrW(a ArgDef) ArgumentWrapperData {
+	return ArgumentWrapperData{
+		ArgDef: fmt.Sprintf(`
+		var %[1]sIsPinned bool
+		%[1]sPinner := &runtime.Pinner{}
+		if %[1]s != nil {
+		%[1]sPinner.Pin(%[1]s)
+		%[1]sIsPinned = true
+		}
+		`, a.Name),
+		Finalizer: fmt.Sprintf(`
+		if %[1]sIsPinned {
+		%[1]sPinner.Unpin()
+		}
+		`, a.Name),
+		VarName: fmt.Sprintf("%s", a.Name),
+		ArgType: "unsafe.Pointer",
+		//ArgType: "any",
+		//		ArgDef: fmt.Sprintf(`
+		//%[1]sArg := cgo.NewHandle(%[1]s)
+		//`, a.Name),
+		//		VarName: fmt.Sprintf("unsafe.Pointer(&%sArg)", a.Name),
 	}
 }
