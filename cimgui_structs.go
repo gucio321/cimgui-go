@@ -8,7 +8,11 @@ package imgui
 // #include "extra_types.h"
 // #include "cimgui_wrapper.h"
 import "C"
-import "unsafe"
+
+import (
+	"runtime"
+	"unsafe"
+)
 
 // Helper: ImBitVector
 // Store 1-bit per value.
@@ -1155,7 +1159,14 @@ func (self InputTextCallbackData) handle() (result *C.ImGuiInputTextCallbackData
 	result.Flags = C.ImGuiInputTextFlags(FieldFlags)
 	FieldUserData := self.FieldUserData
 
-	result.UserData = (FieldUserData)
+	var FieldUserDataIsPinned bool
+	FieldUserDataPinner := &runtime.Pinner{}
+	if FieldUserData != nil {
+		FieldUserDataPinner.Pin(FieldUserData)
+		FieldUserDataIsPinned = true
+	}
+
+	result.UserData = FieldUserData
 	FieldEventChar := self.FieldEventChar
 
 	result.EventChar = C.ImWchar(FieldEventChar)
@@ -1185,6 +1196,10 @@ func (self InputTextCallbackData) handle() (result *C.ImGuiInputTextCallbackData
 	result.SelectionEnd = C.int(FieldSelectionEnd)
 	releaseFn = func() {
 		FieldCtxFin()
+
+		if FieldUserDataIsPinned {
+			FieldUserDataPinner.Unpin()
+		}
 
 		FieldBufFin()
 	}
@@ -1615,9 +1630,20 @@ func (self ListClipper) handle() (result *C.ImGuiListClipper, releaseFn func()) 
 	result.StartPosY = C.float(FieldStartPosY)
 	FieldTempData := self.FieldTempData
 
-	result.TempData = (FieldTempData)
+	var FieldTempDataIsPinned bool
+	FieldTempDataPinner := &runtime.Pinner{}
+	if FieldTempData != nil {
+		FieldTempDataPinner.Pin(FieldTempData)
+		FieldTempDataIsPinned = true
+	}
+
+	result.TempData = FieldTempData
 	releaseFn = func() {
 		FieldCtxFin()
+
+		if FieldTempDataIsPinned {
+			FieldTempDataPinner.Unpin()
+		}
 	}
 	return result, releaseFn
 }
@@ -2330,8 +2356,18 @@ func (self PlatformMonitor) handle() (result *C.ImGuiPlatformMonitor, releaseFn 
 	result.DpiScale = C.float(FieldDpiScale)
 	FieldPlatformHandle := self.FieldPlatformHandle
 
-	result.PlatformHandle = (FieldPlatformHandle)
+	var FieldPlatformHandleIsPinned bool
+	FieldPlatformHandlePinner := &runtime.Pinner{}
+	if FieldPlatformHandle != nil {
+		FieldPlatformHandlePinner.Pin(FieldPlatformHandle)
+		FieldPlatformHandleIsPinned = true
+	}
+
+	result.PlatformHandle = FieldPlatformHandle
 	releaseFn = func() {
+		if FieldPlatformHandleIsPinned {
+			FieldPlatformHandlePinner.Unpin()
+		}
 	}
 	return result, releaseFn
 }
@@ -2424,11 +2460,21 @@ func (self PtrOrIndex) handle() (result *C.ImGuiPtrOrIndex, releaseFn func()) {
 	result = new(C.ImGuiPtrOrIndex)
 	FieldPtr := self.FieldPtr
 
-	result.Ptr = (FieldPtr)
+	var FieldPtrIsPinned bool
+	FieldPtrPinner := &runtime.Pinner{}
+	if FieldPtr != nil {
+		FieldPtrPinner.Pin(FieldPtr)
+		FieldPtrIsPinned = true
+	}
+
+	result.Ptr = FieldPtr
 	FieldIndex := self.FieldIndex
 
 	result.Index = C.int(FieldIndex)
 	releaseFn = func() {
+		if FieldPtrIsPinned {
+			FieldPtrPinner.Unpin()
+		}
 	}
 	return result, releaseFn
 }
@@ -2514,7 +2560,14 @@ func (self SizeCallbackData) handle() (result *C.ImGuiSizeCallbackData, releaseF
 	result = new(C.ImGuiSizeCallbackData)
 	FieldUserData := self.FieldUserData
 
-	result.UserData = (FieldUserData)
+	var FieldUserDataIsPinned bool
+	FieldUserDataPinner := &runtime.Pinner{}
+	if FieldUserData != nil {
+		FieldUserDataPinner.Pin(FieldUserData)
+		FieldUserDataIsPinned = true
+	}
+
+	result.UserData = FieldUserData
 	FieldPos := self.FieldPos
 
 	result.Pos = FieldPos.toC()
@@ -2525,6 +2578,9 @@ func (self SizeCallbackData) handle() (result *C.ImGuiSizeCallbackData, releaseF
 
 	result.DesiredSize = FieldDesiredSize.toC()
 	releaseFn = func() {
+		if FieldUserDataIsPinned {
+			FieldUserDataPinner.Unpin()
+		}
 	}
 	return result, releaseFn
 }
@@ -3612,16 +3668,44 @@ func (self Viewport) handle() (result *C.ImGuiViewport, releaseFn func()) {
 	result.DrawData = FieldDrawDataArg
 	FieldRendererUserData := self.FieldRendererUserData
 
-	result.RendererUserData = (FieldRendererUserData)
+	var FieldRendererUserDataIsPinned bool
+	FieldRendererUserDataPinner := &runtime.Pinner{}
+	if FieldRendererUserData != nil {
+		FieldRendererUserDataPinner.Pin(FieldRendererUserData)
+		FieldRendererUserDataIsPinned = true
+	}
+
+	result.RendererUserData = FieldRendererUserData
 	FieldPlatformUserData := self.FieldPlatformUserData
 
-	result.PlatformUserData = (FieldPlatformUserData)
+	var FieldPlatformUserDataIsPinned bool
+	FieldPlatformUserDataPinner := &runtime.Pinner{}
+	if FieldPlatformUserData != nil {
+		FieldPlatformUserDataPinner.Pin(FieldPlatformUserData)
+		FieldPlatformUserDataIsPinned = true
+	}
+
+	result.PlatformUserData = FieldPlatformUserData
 	FieldPlatformHandle := self.FieldPlatformHandle
 
-	result.PlatformHandle = (FieldPlatformHandle)
+	var FieldPlatformHandleIsPinned bool
+	FieldPlatformHandlePinner := &runtime.Pinner{}
+	if FieldPlatformHandle != nil {
+		FieldPlatformHandlePinner.Pin(FieldPlatformHandle)
+		FieldPlatformHandleIsPinned = true
+	}
+
+	result.PlatformHandle = FieldPlatformHandle
 	FieldPlatformHandleRaw := self.FieldPlatformHandleRaw
 
-	result.PlatformHandleRaw = (FieldPlatformHandleRaw)
+	var FieldPlatformHandleRawIsPinned bool
+	FieldPlatformHandleRawPinner := &runtime.Pinner{}
+	if FieldPlatformHandleRaw != nil {
+		FieldPlatformHandleRawPinner.Pin(FieldPlatformHandleRaw)
+		FieldPlatformHandleRawIsPinned = true
+	}
+
+	result.PlatformHandleRaw = FieldPlatformHandleRaw
 	FieldPlatformWindowCreated := self.FieldPlatformWindowCreated
 
 	result.PlatformWindowCreated = C.bool(FieldPlatformWindowCreated)
@@ -3636,6 +3720,22 @@ func (self Viewport) handle() (result *C.ImGuiViewport, releaseFn func()) {
 	result.PlatformRequestClose = C.bool(FieldPlatformRequestClose)
 	releaseFn = func() {
 		FieldDrawDataFin()
+
+		if FieldRendererUserDataIsPinned {
+			FieldRendererUserDataPinner.Unpin()
+		}
+
+		if FieldPlatformUserDataIsPinned {
+			FieldPlatformUserDataPinner.Unpin()
+		}
+
+		if FieldPlatformHandleIsPinned {
+			FieldPlatformHandlePinner.Unpin()
+		}
+
+		if FieldPlatformHandleRawIsPinned {
+			FieldPlatformHandleRawPinner.Unpin()
+		}
 	}
 	return result, releaseFn
 }

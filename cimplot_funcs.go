@@ -7,7 +7,11 @@ package imgui
 // #include "cimplot_structs_accessor.h"
 // #include "cimplot_wrapper.h"
 import "C"
-import "unsafe"
+
+import (
+	"runtime"
+	"unsafe"
+)
 
 func (self PlotAlignmentData) Begin() {
 	selfArg, selfFin := self.handle()
@@ -1878,28 +1882,61 @@ func PlotFormatTime(t PlotTime, buffer string, size int32, fmt PlotTimeFmt, use_
 func PlotFormatterDefault(value float64, buff string, size int32, data unsafe.Pointer) int32 {
 	buffArg, buffFin := WrapString(buff)
 
+	var dataIsPinned bool
+	dataPinner := &runtime.Pinner{}
+	if data != nil {
+		dataPinner.Pin(data)
+		dataIsPinned = true
+	}
+
 	defer func() {
 		buffFin()
+
+		if dataIsPinned {
+			dataPinner.Unpin()
+		}
 	}()
-	return int32(C.ImPlot_Formatter_Default(C.double(value), buffArg, C.int(size), (data)))
+	return int32(C.ImPlot_Formatter_Default(C.double(value), buffArg, C.int(size), data))
 }
 
 func PlotFormatterLogit(value float64, buff string, size int32, noname1 unsafe.Pointer) int32 {
 	buffArg, buffFin := WrapString(buff)
 
+	var noname1IsPinned bool
+	noname1Pinner := &runtime.Pinner{}
+	if noname1 != nil {
+		noname1Pinner.Pin(noname1)
+		noname1IsPinned = true
+	}
+
 	defer func() {
 		buffFin()
+
+		if noname1IsPinned {
+			noname1Pinner.Unpin()
+		}
 	}()
-	return int32(C.ImPlot_Formatter_Logit(C.double(value), buffArg, C.int(size), (noname1)))
+	return int32(C.ImPlot_Formatter_Logit(C.double(value), buffArg, C.int(size), noname1))
 }
 
 func PlotFormatterTime(noname1 float64, buff string, size int32, data unsafe.Pointer) int32 {
 	buffArg, buffFin := WrapString(buff)
 
+	var dataIsPinned bool
+	dataPinner := &runtime.Pinner{}
+	if data != nil {
+		dataPinner.Pin(data)
+		dataIsPinned = true
+	}
+
 	defer func() {
 		buffFin()
+
+		if dataIsPinned {
+			dataPinner.Unpin()
+		}
 	}()
-	return int32(C.ImPlot_Formatter_Time(C.double(noname1), buffArg, C.int(size), (data)))
+	return int32(C.ImPlot_Formatter_Time(C.double(noname1), buffArg, C.int(size), data))
 }
 
 func PlotGetAutoColor(idx PlotCol) Vec4 {
@@ -8894,27 +8931,99 @@ func PlotTagYStr(y float64, col Vec4, fmt string) {
 }
 
 func PlotTransformForwardLog10(v float64, noname1 unsafe.Pointer) float64 {
-	return float64(C.ImPlot_TransformForward_Log10(C.double(v), (noname1)))
+	var noname1IsPinned bool
+	noname1Pinner := &runtime.Pinner{}
+	if noname1 != nil {
+		noname1Pinner.Pin(noname1)
+		noname1IsPinned = true
+	}
+
+	defer func() {
+		if noname1IsPinned {
+			noname1Pinner.Unpin()
+		}
+	}()
+	return float64(C.ImPlot_TransformForward_Log10(C.double(v), noname1))
 }
 
 func PlotTransformForwardLogit(v float64, noname1 unsafe.Pointer) float64 {
-	return float64(C.ImPlot_TransformForward_Logit(C.double(v), (noname1)))
+	var noname1IsPinned bool
+	noname1Pinner := &runtime.Pinner{}
+	if noname1 != nil {
+		noname1Pinner.Pin(noname1)
+		noname1IsPinned = true
+	}
+
+	defer func() {
+		if noname1IsPinned {
+			noname1Pinner.Unpin()
+		}
+	}()
+	return float64(C.ImPlot_TransformForward_Logit(C.double(v), noname1))
 }
 
 func PlotTransformForwardSymLog(v float64, noname1 unsafe.Pointer) float64 {
-	return float64(C.ImPlot_TransformForward_SymLog(C.double(v), (noname1)))
+	var noname1IsPinned bool
+	noname1Pinner := &runtime.Pinner{}
+	if noname1 != nil {
+		noname1Pinner.Pin(noname1)
+		noname1IsPinned = true
+	}
+
+	defer func() {
+		if noname1IsPinned {
+			noname1Pinner.Unpin()
+		}
+	}()
+	return float64(C.ImPlot_TransformForward_SymLog(C.double(v), noname1))
 }
 
 func PlotTransformInverseLog10(v float64, noname1 unsafe.Pointer) float64 {
-	return float64(C.ImPlot_TransformInverse_Log10(C.double(v), (noname1)))
+	var noname1IsPinned bool
+	noname1Pinner := &runtime.Pinner{}
+	if noname1 != nil {
+		noname1Pinner.Pin(noname1)
+		noname1IsPinned = true
+	}
+
+	defer func() {
+		if noname1IsPinned {
+			noname1Pinner.Unpin()
+		}
+	}()
+	return float64(C.ImPlot_TransformInverse_Log10(C.double(v), noname1))
 }
 
 func PlotTransformInverseLogit(v float64, noname1 unsafe.Pointer) float64 {
-	return float64(C.ImPlot_TransformInverse_Logit(C.double(v), (noname1)))
+	var noname1IsPinned bool
+	noname1Pinner := &runtime.Pinner{}
+	if noname1 != nil {
+		noname1Pinner.Pin(noname1)
+		noname1IsPinned = true
+	}
+
+	defer func() {
+		if noname1IsPinned {
+			noname1Pinner.Unpin()
+		}
+	}()
+	return float64(C.ImPlot_TransformInverse_Logit(C.double(v), noname1))
 }
 
 func PlotTransformInverseSymLog(v float64, noname1 unsafe.Pointer) float64 {
-	return float64(C.ImPlot_TransformInverse_SymLog(C.double(v), (noname1)))
+	var noname1IsPinned bool
+	noname1Pinner := &runtime.Pinner{}
+	if noname1 != nil {
+		noname1Pinner.Pin(noname1)
+		noname1IsPinned = true
+	}
+
+	defer func() {
+		if noname1IsPinned {
+			noname1Pinner.Unpin()
+		}
+	}()
+	return float64(C.ImPlot_TransformInverse_SymLog(C.double(v), noname1))
 }
 
 func (self PlotAxis) SetMax(_max float64) bool {
@@ -13797,9 +13906,20 @@ func (self PlotAxis) Ticker() PlotTicker {
 }
 
 func (self PlotAxis) SetFormatterData(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImPlotAxis_SetFormatterData(selfArg, (v))
+	C.wrap_ImPlotAxis_SetFormatterData(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self PlotAxis) FormatterData() unsafe.Pointer {
@@ -13895,9 +14015,20 @@ func (self PlotAxis) PickerTimeMax() PlotTime {
 }
 
 func (self PlotAxis) SetTransformData(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImPlotAxis_SetTransformData(selfArg, (v))
+	C.wrap_ImPlotAxis_SetTransformData(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self PlotAxis) TransformData() unsafe.Pointer {

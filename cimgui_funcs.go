@@ -7,7 +7,11 @@ package imgui
 // #include "cimgui_structs_accessor.h"
 // #include "cimgui_wrapper.h"
 import "C"
-import "unsafe"
+
+import (
+	"runtime"
+	"unsafe"
+)
 
 func (self BitVector) InternalClear() {
 	selfArg, selfFin := self.handle()
@@ -792,13 +796,26 @@ func (self FontAtlas) AddFontFromMemoryCompressedBase85TTFV(compressed_font_data
 // glyph_ranges: NULL
 func (self FontAtlas) AddFontFromMemoryCompressedTTFV(compressed_font_data unsafe.Pointer, compressed_font_size int32, size_pixels float32, font_cfg FontConfig, glyph_ranges *Wchar) *Font {
 	selfArg, selfFin := self.handle()
+
+	var compressed_font_dataIsPinned bool
+	compressed_font_dataPinner := &runtime.Pinner{}
+	if compressed_font_data != nil {
+		compressed_font_dataPinner.Pin(compressed_font_data)
+		compressed_font_dataIsPinned = true
+	}
+
 	font_cfgArg, font_cfgFin := font_cfg.handle()
 
 	defer func() {
 		selfFin()
+
+		if compressed_font_dataIsPinned {
+			compressed_font_dataPinner.Unpin()
+		}
+
 		font_cfgFin()
 	}()
-	return newFontFromC(C.ImFontAtlas_AddFontFromMemoryCompressedTTF(selfArg, (compressed_font_data), C.int(compressed_font_size), C.float(size_pixels), font_cfgArg, (*C.ImWchar)(glyph_ranges)))
+	return newFontFromC(C.ImFontAtlas_AddFontFromMemoryCompressedTTF(selfArg, compressed_font_data, C.int(compressed_font_size), C.float(size_pixels), font_cfgArg, (*C.ImWchar)(glyph_ranges)))
 }
 
 // Note: Transfer ownership of 'ttf_data' to ImFontAtlas! Will be deleted after destruction of the atlas. Set font_cfg->FontDataOwnedByAtlas=false to keep ownership of your data and it won't be freed.
@@ -807,13 +824,26 @@ func (self FontAtlas) AddFontFromMemoryCompressedTTFV(compressed_font_data unsaf
 // glyph_ranges: NULL
 func (self FontAtlas) AddFontFromMemoryTTFV(font_data unsafe.Pointer, font_size int32, size_pixels float32, font_cfg FontConfig, glyph_ranges *Wchar) *Font {
 	selfArg, selfFin := self.handle()
+
+	var font_dataIsPinned bool
+	font_dataPinner := &runtime.Pinner{}
+	if font_data != nil {
+		font_dataPinner.Pin(font_data)
+		font_dataIsPinned = true
+	}
+
 	font_cfgArg, font_cfgFin := font_cfg.handle()
 
 	defer func() {
 		selfFin()
+
+		if font_dataIsPinned {
+			font_dataPinner.Unpin()
+		}
+
 		font_cfgFin()
 	}()
-	return newFontFromC(C.ImFontAtlas_AddFontFromMemoryTTF(selfArg, (font_data), C.int(font_size), C.float(size_pixels), font_cfgArg, (*C.ImWchar)(glyph_ranges)))
+	return newFontFromC(C.ImFontAtlas_AddFontFromMemoryTTF(selfArg, font_data, C.int(font_size), C.float(size_pixels), font_cfgArg, (*C.ImWchar)(glyph_ranges)))
 }
 
 // Build pixels data. This is called automatically for you by the GetTexData*** functions.
@@ -1352,10 +1382,21 @@ func (self Context) Destroy() {
 func (self DataVarInfo) InternalVarPtr(parent unsafe.Pointer) unsafe.Pointer {
 	selfArg, selfFin := self.handle()
 
+	var parentIsPinned bool
+	parentPinner := &runtime.Pinner{}
+	if parent != nil {
+		parentPinner.Pin(parent)
+		parentIsPinned = true
+	}
+
 	defer func() {
 		selfFin()
+
+		if parentIsPinned {
+			parentPinner.Unpin()
+		}
 	}()
-	return unsafe.Pointer(C.ImGuiDataVarInfo_GetVarPtr(selfArg, (parent)))
+	return unsafe.Pointer(C.ImGuiDataVarInfo_GetVarPtr(selfArg, parent))
 }
 
 func InternalNewDockContext() *DockContext {
@@ -2171,7 +2212,19 @@ func InternalNewPtrOrIndexInt(index int32) *PtrOrIndex {
 }
 
 func InternalNewPtrOrIndexPtr(ptr unsafe.Pointer) *PtrOrIndex {
-	return newPtrOrIndexFromC(C.ImGuiPtrOrIndex_ImGuiPtrOrIndex_Ptr((ptr)))
+	var ptrIsPinned bool
+	ptrPinner := &runtime.Pinner{}
+	if ptr != nil {
+		ptrPinner.Pin(ptr)
+		ptrIsPinned = true
+	}
+
+	defer func() {
+		if ptrIsPinned {
+			ptrPinner.Unpin()
+		}
+	}()
+	return newPtrOrIndexFromC(C.ImGuiPtrOrIndex_ImGuiPtrOrIndex_Ptr(ptr))
 }
 
 func (self PtrOrIndex) Destroy() {
@@ -2796,10 +2849,21 @@ func (self Window) InternalIDInt(n int32) ID {
 func (self Window) InternalIDPtr(ptr unsafe.Pointer) ID {
 	selfArg, selfFin := self.handle()
 
+	var ptrIsPinned bool
+	ptrPinner := &runtime.Pinner{}
+	if ptr != nil {
+		ptrPinner.Pin(ptr)
+		ptrIsPinned = true
+	}
+
 	defer func() {
 		selfFin()
+
+		if ptrIsPinned {
+			ptrPinner.Unpin()
+		}
 	}()
-	return ID(C.ImGuiWindow_GetID_Ptr(selfArg, (ptr)))
+	return ID(C.ImGuiWindow_GetID_Ptr(selfArg, ptr))
 }
 
 // InternalIDStrV parameter default value hint:
@@ -4059,36 +4123,152 @@ func InternalCreateNewWindowSettings(name string) *WindowSettings {
 
 func InternalDataTypeApplyFromText(buf string, data_type DataType, p_data unsafe.Pointer, format string) bool {
 	bufArg, bufFin := WrapString(buf)
+
+	var p_dataIsPinned bool
+	p_dataPinner := &runtime.Pinner{}
+	if p_data != nil {
+		p_dataPinner.Pin(p_data)
+		p_dataIsPinned = true
+	}
+
 	formatArg, formatFin := WrapString(format)
 
 	defer func() {
 		bufFin()
+
+		if p_dataIsPinned {
+			p_dataPinner.Unpin()
+		}
+
 		formatFin()
 	}()
-	return C.igDataTypeApplyFromText(bufArg, C.ImGuiDataType(data_type), (p_data), formatArg) == C.bool(true)
+	return C.igDataTypeApplyFromText(bufArg, C.ImGuiDataType(data_type), p_data, formatArg) == C.bool(true)
 }
 
 func InternalDataTypeApplyOp(data_type DataType, op int32, output unsafe.Pointer, arg_1 unsafe.Pointer, arg_2 unsafe.Pointer) {
-	C.igDataTypeApplyOp(C.ImGuiDataType(data_type), C.int(op), (output), (arg_1), (arg_2))
+	var outputIsPinned bool
+	outputPinner := &runtime.Pinner{}
+	if output != nil {
+		outputPinner.Pin(output)
+		outputIsPinned = true
+	}
+
+	var arg_1IsPinned bool
+	arg_1Pinner := &runtime.Pinner{}
+	if arg_1 != nil {
+		arg_1Pinner.Pin(arg_1)
+		arg_1IsPinned = true
+	}
+
+	var arg_2IsPinned bool
+	arg_2Pinner := &runtime.Pinner{}
+	if arg_2 != nil {
+		arg_2Pinner.Pin(arg_2)
+		arg_2IsPinned = true
+	}
+
+	C.igDataTypeApplyOp(C.ImGuiDataType(data_type), C.int(op), output, arg_1, arg_2)
+
+	if outputIsPinned {
+		outputPinner.Unpin()
+	}
+
+	if arg_1IsPinned {
+		arg_1Pinner.Unpin()
+	}
+
+	if arg_2IsPinned {
+		arg_2Pinner.Unpin()
+	}
 }
 
 func InternalDataTypeClamp(data_type DataType, p_data unsafe.Pointer, p_min unsafe.Pointer, p_max unsafe.Pointer) bool {
-	return C.igDataTypeClamp(C.ImGuiDataType(data_type), (p_data), (p_min), (p_max)) == C.bool(true)
+	var p_dataIsPinned bool
+	p_dataPinner := &runtime.Pinner{}
+	if p_data != nil {
+		p_dataPinner.Pin(p_data)
+		p_dataIsPinned = true
+	}
+
+	var p_minIsPinned bool
+	p_minPinner := &runtime.Pinner{}
+	if p_min != nil {
+		p_minPinner.Pin(p_min)
+		p_minIsPinned = true
+	}
+
+	var p_maxIsPinned bool
+	p_maxPinner := &runtime.Pinner{}
+	if p_max != nil {
+		p_maxPinner.Pin(p_max)
+		p_maxIsPinned = true
+	}
+
+	defer func() {
+		if p_dataIsPinned {
+			p_dataPinner.Unpin()
+		}
+
+		if p_minIsPinned {
+			p_minPinner.Unpin()
+		}
+
+		if p_maxIsPinned {
+			p_maxPinner.Unpin()
+		}
+	}()
+	return C.igDataTypeClamp(C.ImGuiDataType(data_type), p_data, p_min, p_max) == C.bool(true)
 }
 
 func InternalDataTypeCompare(data_type DataType, arg_1 unsafe.Pointer, arg_2 unsafe.Pointer) int32 {
-	return int32(C.igDataTypeCompare(C.ImGuiDataType(data_type), (arg_1), (arg_2)))
+	var arg_1IsPinned bool
+	arg_1Pinner := &runtime.Pinner{}
+	if arg_1 != nil {
+		arg_1Pinner.Pin(arg_1)
+		arg_1IsPinned = true
+	}
+
+	var arg_2IsPinned bool
+	arg_2Pinner := &runtime.Pinner{}
+	if arg_2 != nil {
+		arg_2Pinner.Pin(arg_2)
+		arg_2IsPinned = true
+	}
+
+	defer func() {
+		if arg_1IsPinned {
+			arg_1Pinner.Unpin()
+		}
+
+		if arg_2IsPinned {
+			arg_2Pinner.Unpin()
+		}
+	}()
+	return int32(C.igDataTypeCompare(C.ImGuiDataType(data_type), arg_1, arg_2))
 }
 
 func InternalDataTypeFormatString(buf string, buf_size int32, data_type DataType, p_data unsafe.Pointer, format string) int32 {
 	bufArg, bufFin := WrapString(buf)
+
+	var p_dataIsPinned bool
+	p_dataPinner := &runtime.Pinner{}
+	if p_data != nil {
+		p_dataPinner.Pin(p_data)
+		p_dataIsPinned = true
+	}
+
 	formatArg, formatFin := WrapString(format)
 
 	defer func() {
 		bufFin()
+
+		if p_dataIsPinned {
+			p_dataPinner.Unpin()
+		}
+
 		formatFin()
 	}()
-	return int32(C.igDataTypeFormatString(bufArg, C.int(buf_size), C.ImGuiDataType(data_type), (p_data), formatArg))
+	return int32(C.igDataTypeFormatString(bufArg, C.int(buf_size), C.ImGuiDataType(data_type), p_data, formatArg))
 }
 
 func InternalDataTypeGetInfo(data_type DataType) *DataTypeInfo {
@@ -4112,7 +4292,29 @@ func InternalDebugDrawItemRectV(col uint32) {
 }
 
 func InternalDebugHookIdInfo(id ID, data_type DataType, data_id unsafe.Pointer, data_id_end unsafe.Pointer) {
-	C.igDebugHookIdInfo(C.ImGuiID(id), C.ImGuiDataType(data_type), (data_id), (data_id_end))
+	var data_idIsPinned bool
+	data_idPinner := &runtime.Pinner{}
+	if data_id != nil {
+		data_idPinner.Pin(data_id)
+		data_idIsPinned = true
+	}
+
+	var data_id_endIsPinned bool
+	data_id_endPinner := &runtime.Pinner{}
+	if data_id_end != nil {
+		data_id_endPinner.Pin(data_id_end)
+		data_id_endIsPinned = true
+	}
+
+	C.igDebugHookIdInfo(C.ImGuiID(id), C.ImGuiDataType(data_type), data_id, data_id_end)
+
+	if data_idIsPinned {
+		data_idPinner.Unpin()
+	}
+
+	if data_id_endIsPinned {
+		data_id_endPinner.Unpin()
+	}
 }
 
 // Call sparingly: only 1 at the same time!
@@ -4592,12 +4794,45 @@ func DockSpaceOverViewportV(viewport Viewport, flags DockNodeFlags, window_class
 }
 
 func InternalDragBehavior(id ID, data_type DataType, p_v unsafe.Pointer, v_speed float32, p_min unsafe.Pointer, p_max unsafe.Pointer, format string, flags SliderFlags) bool {
+	var p_vIsPinned bool
+	p_vPinner := &runtime.Pinner{}
+	if p_v != nil {
+		p_vPinner.Pin(p_v)
+		p_vIsPinned = true
+	}
+
+	var p_minIsPinned bool
+	p_minPinner := &runtime.Pinner{}
+	if p_min != nil {
+		p_minPinner.Pin(p_min)
+		p_minIsPinned = true
+	}
+
+	var p_maxIsPinned bool
+	p_maxPinner := &runtime.Pinner{}
+	if p_max != nil {
+		p_maxPinner.Pin(p_max)
+		p_maxIsPinned = true
+	}
+
 	formatArg, formatFin := WrapString(format)
 
 	defer func() {
+		if p_vIsPinned {
+			p_vPinner.Unpin()
+		}
+
+		if p_minIsPinned {
+			p_minPinner.Unpin()
+		}
+
+		if p_maxIsPinned {
+			p_maxPinner.Unpin()
+		}
+
 		formatFin()
 	}()
-	return C.igDragBehavior(C.ImGuiID(id), C.ImGuiDataType(data_type), (p_v), C.float(v_speed), (p_min), (p_max), formatArg, C.ImGuiSliderFlags(flags)) == C.bool(true)
+	return C.igDragBehavior(C.ImGuiID(id), C.ImGuiDataType(data_type), p_v, C.float(v_speed), p_min, p_max, formatArg, C.ImGuiSliderFlags(flags)) == C.bool(true)
 }
 
 // If v_min >= v_max we have no bound
@@ -4858,13 +5093,48 @@ func DragIntRange2V(label string, v_current_min *int32, v_current_max *int32, v_
 // flags: 0
 func DragScalarV(label string, data_type DataType, p_data unsafe.Pointer, v_speed float32, p_min unsafe.Pointer, p_max unsafe.Pointer, format string, flags SliderFlags) bool {
 	labelArg, labelFin := WrapString(label)
+
+	var p_dataIsPinned bool
+	p_dataPinner := &runtime.Pinner{}
+	if p_data != nil {
+		p_dataPinner.Pin(p_data)
+		p_dataIsPinned = true
+	}
+
+	var p_minIsPinned bool
+	p_minPinner := &runtime.Pinner{}
+	if p_min != nil {
+		p_minPinner.Pin(p_min)
+		p_minIsPinned = true
+	}
+
+	var p_maxIsPinned bool
+	p_maxPinner := &runtime.Pinner{}
+	if p_max != nil {
+		p_maxPinner.Pin(p_max)
+		p_maxIsPinned = true
+	}
+
 	formatArg, formatFin := WrapString(format)
 
 	defer func() {
 		labelFin()
+
+		if p_dataIsPinned {
+			p_dataPinner.Unpin()
+		}
+
+		if p_minIsPinned {
+			p_minPinner.Unpin()
+		}
+
+		if p_maxIsPinned {
+			p_maxPinner.Unpin()
+		}
+
 		formatFin()
 	}()
-	return C.igDragScalar(labelArg, C.ImGuiDataType(data_type), (p_data), C.float(v_speed), (p_min), (p_max), formatArg, C.ImGuiSliderFlags(flags)) == C.bool(true)
+	return C.igDragScalar(labelArg, C.ImGuiDataType(data_type), p_data, C.float(v_speed), p_min, p_max, formatArg, C.ImGuiSliderFlags(flags)) == C.bool(true)
 }
 
 // DragScalarNV parameter default value hint:
@@ -4875,13 +5145,48 @@ func DragScalarV(label string, data_type DataType, p_data unsafe.Pointer, v_spee
 // flags: 0
 func DragScalarNV(label string, data_type DataType, p_data unsafe.Pointer, components int32, v_speed float32, p_min unsafe.Pointer, p_max unsafe.Pointer, format string, flags SliderFlags) bool {
 	labelArg, labelFin := WrapString(label)
+
+	var p_dataIsPinned bool
+	p_dataPinner := &runtime.Pinner{}
+	if p_data != nil {
+		p_dataPinner.Pin(p_data)
+		p_dataIsPinned = true
+	}
+
+	var p_minIsPinned bool
+	p_minPinner := &runtime.Pinner{}
+	if p_min != nil {
+		p_minPinner.Pin(p_min)
+		p_minIsPinned = true
+	}
+
+	var p_maxIsPinned bool
+	p_maxPinner := &runtime.Pinner{}
+	if p_max != nil {
+		p_maxPinner.Pin(p_max)
+		p_maxIsPinned = true
+	}
+
 	formatArg, formatFin := WrapString(format)
 
 	defer func() {
 		labelFin()
+
+		if p_dataIsPinned {
+			p_dataPinner.Unpin()
+		}
+
+		if p_minIsPinned {
+			p_minPinner.Unpin()
+		}
+
+		if p_maxIsPinned {
+			p_maxPinner.Unpin()
+		}
+
 		formatFin()
 	}()
-	return C.igDragScalarN(labelArg, C.ImGuiDataType(data_type), (p_data), C.int(components), C.float(v_speed), (p_min), (p_max), formatArg, C.ImGuiSliderFlags(flags)) == C.bool(true)
+	return C.igDragScalarN(labelArg, C.ImGuiDataType(data_type), p_data, C.int(components), C.float(v_speed), p_min, p_max, formatArg, C.ImGuiSliderFlags(flags)) == C.bool(true)
 }
 
 // add a dummy item of given size. unlike InvisibleButton(), Dummy() won't take the mouse click or be navigable into.
@@ -5060,7 +5365,19 @@ func FindViewportByID(id ID) *Viewport {
 
 // this is a helper for backends. the type platform_handle is decided by the backend (e.g. HWND, MyWindow*, GLFWwindow* etc.)
 func FindViewportByPlatformHandle(platform_handle unsafe.Pointer) *Viewport {
-	return newViewportFromC(C.igFindViewportByPlatformHandle((platform_handle)))
+	var platform_handleIsPinned bool
+	platform_handlePinner := &runtime.Pinner{}
+	if platform_handle != nil {
+		platform_handlePinner.Pin(platform_handle)
+		platform_handleIsPinned = true
+	}
+
+	defer func() {
+		if platform_handleIsPinned {
+			platform_handlePinner.Unpin()
+		}
+	}()
+	return newViewportFromC(C.igFindViewportByPlatformHandle(platform_handle))
 }
 
 func InternalFindWindowByID(id ID) *Window {
@@ -5441,7 +5758,19 @@ func InternalIDWithSeedStr(str_id_begin string, str_id_end string, seed ID) ID {
 }
 
 func IDPtr(ptr_id unsafe.Pointer) ID {
-	return ID(C.igGetID_Ptr((ptr_id)))
+	var ptr_idIsPinned bool
+	ptr_idPinner := &runtime.Pinner{}
+	if ptr_id != nil {
+		ptr_idPinner.Pin(ptr_id)
+		ptr_idIsPinned = true
+	}
+
+	defer func() {
+		if ptr_idIsPinned {
+			ptr_idPinner.Unpin()
+		}
+	}()
+	return ID(C.igGetID_Ptr(ptr_id))
 }
 
 // calculate unique ID (hash of whole ID stack + given parameter). e.g. if you want to query into ImGuiStorage yourself
@@ -6100,9 +6429,21 @@ func InternalImFontAtlasBuildInit(atlas FontAtlas) {
 
 func InternalImFontAtlasBuildPackCustomRects(atlas FontAtlas, stbrp_context_opaque unsafe.Pointer) {
 	atlasArg, atlasFin := atlas.handle()
-	C.igImFontAtlasBuildPackCustomRects(atlasArg, (stbrp_context_opaque))
+
+	var stbrp_context_opaqueIsPinned bool
+	stbrp_context_opaquePinner := &runtime.Pinner{}
+	if stbrp_context_opaque != nil {
+		stbrp_context_opaquePinner.Pin(stbrp_context_opaque)
+		stbrp_context_opaqueIsPinned = true
+	}
+
+	C.igImFontAtlasBuildPackCustomRects(atlasArg, stbrp_context_opaque)
 
 	atlasFin()
+
+	if stbrp_context_opaqueIsPinned {
+		stbrp_context_opaquePinner.Unpin()
+	}
 }
 
 func InternalImFontAtlasBuildRender32bppRectFromString(atlas FontAtlas, x int32, y int32, w int32, h int32, in_str string, in_marker_char rune, in_marker_pixel_value uint32) {
@@ -6163,7 +6504,19 @@ func InternalImFormatStringToTempBuffer(out_buf []string, out_buf_end []string, 
 // InternalImHashDataV parameter default value hint:
 // seed: 0
 func InternalImHashDataV(data unsafe.Pointer, data_size uint64, seed ID) ID {
-	return ID(C.igImHashData((data), C.xulong(data_size), C.ImGuiID(seed)))
+	var dataIsPinned bool
+	dataPinner := &runtime.Pinner{}
+	if data != nil {
+		dataPinner.Pin(data)
+		dataIsPinned = true
+	}
+
+	defer func() {
+		if dataIsPinned {
+			dataPinner.Unpin()
+		}
+	}()
+	return ID(C.igImHashData(data, C.xulong(data_size), C.ImGuiID(seed)))
 }
 
 // InternalImHashStrV parameter default value hint:
@@ -6861,13 +7214,48 @@ func InputInt4V(label string, v *[4]int32, flags InputTextFlags) bool {
 // flags: 0
 func InputScalarV(label string, data_type DataType, p_data unsafe.Pointer, p_step unsafe.Pointer, p_step_fast unsafe.Pointer, format string, flags InputTextFlags) bool {
 	labelArg, labelFin := WrapString(label)
+
+	var p_dataIsPinned bool
+	p_dataPinner := &runtime.Pinner{}
+	if p_data != nil {
+		p_dataPinner.Pin(p_data)
+		p_dataIsPinned = true
+	}
+
+	var p_stepIsPinned bool
+	p_stepPinner := &runtime.Pinner{}
+	if p_step != nil {
+		p_stepPinner.Pin(p_step)
+		p_stepIsPinned = true
+	}
+
+	var p_step_fastIsPinned bool
+	p_step_fastPinner := &runtime.Pinner{}
+	if p_step_fast != nil {
+		p_step_fastPinner.Pin(p_step_fast)
+		p_step_fastIsPinned = true
+	}
+
 	formatArg, formatFin := WrapString(format)
 
 	defer func() {
 		labelFin()
+
+		if p_dataIsPinned {
+			p_dataPinner.Unpin()
+		}
+
+		if p_stepIsPinned {
+			p_stepPinner.Unpin()
+		}
+
+		if p_step_fastIsPinned {
+			p_step_fastPinner.Unpin()
+		}
+
 		formatFin()
 	}()
-	return C.igInputScalar(labelArg, C.ImGuiDataType(data_type), (p_data), (p_step), (p_step_fast), formatArg, C.ImGuiInputTextFlags(flags)) == C.bool(true)
+	return C.igInputScalar(labelArg, C.ImGuiDataType(data_type), p_data, p_step, p_step_fast, formatArg, C.ImGuiInputTextFlags(flags)) == C.bool(true)
 }
 
 // InputScalarNV parameter default value hint:
@@ -6877,13 +7265,48 @@ func InputScalarV(label string, data_type DataType, p_data unsafe.Pointer, p_ste
 // flags: 0
 func InputScalarNV(label string, data_type DataType, p_data unsafe.Pointer, components int32, p_step unsafe.Pointer, p_step_fast unsafe.Pointer, format string, flags InputTextFlags) bool {
 	labelArg, labelFin := WrapString(label)
+
+	var p_dataIsPinned bool
+	p_dataPinner := &runtime.Pinner{}
+	if p_data != nil {
+		p_dataPinner.Pin(p_data)
+		p_dataIsPinned = true
+	}
+
+	var p_stepIsPinned bool
+	p_stepPinner := &runtime.Pinner{}
+	if p_step != nil {
+		p_stepPinner.Pin(p_step)
+		p_stepIsPinned = true
+	}
+
+	var p_step_fastIsPinned bool
+	p_step_fastPinner := &runtime.Pinner{}
+	if p_step_fast != nil {
+		p_step_fastPinner.Pin(p_step_fast)
+		p_step_fastIsPinned = true
+	}
+
 	formatArg, formatFin := WrapString(format)
 
 	defer func() {
 		labelFin()
+
+		if p_dataIsPinned {
+			p_dataPinner.Unpin()
+		}
+
+		if p_stepIsPinned {
+			p_stepPinner.Unpin()
+		}
+
+		if p_step_fastIsPinned {
+			p_step_fastPinner.Unpin()
+		}
+
 		formatFin()
 	}()
-	return C.igInputScalarN(labelArg, C.ImGuiDataType(data_type), (p_data), C.int(components), (p_step), (p_step_fast), formatArg, C.ImGuiInputTextFlags(flags)) == C.bool(true)
+	return C.igInputScalarN(labelArg, C.ImGuiDataType(data_type), p_data, C.int(components), p_step, p_step_fast, formatArg, C.ImGuiInputTextFlags(flags)) == C.bool(true)
 }
 
 func InternalInputTextDeactivateHook(id ID) {
@@ -7420,7 +7843,18 @@ func MemAlloc(size uint64) unsafe.Pointer {
 }
 
 func MemFree(ptr unsafe.Pointer) {
-	C.igMemFree((ptr))
+	var ptrIsPinned bool
+	ptrPinner := &runtime.Pinner{}
+	if ptr != nil {
+		ptrPinner.Pin(ptr)
+		ptrIsPinned = true
+	}
+
+	C.igMemFree(ptr)
+
+	if ptrIsPinned {
+		ptrPinner.Unpin()
+	}
 }
 
 // InternalMenuItemExV parameter default value hint:
@@ -7718,7 +8152,18 @@ func PushIDInt(int_id int32) {
 
 // push pointer into the ID stack (will hash pointer).
 func PushIDPtr(ptr_id unsafe.Pointer) {
-	C.igPushID_Ptr((ptr_id))
+	var ptr_idIsPinned bool
+	ptr_idPinner := &runtime.Pinner{}
+	if ptr_id != nil {
+		ptr_idPinner.Pin(ptr_id)
+		ptr_idIsPinned = true
+	}
+
+	C.igPushID_Ptr(ptr_id)
+
+	if ptr_idIsPinned {
+		ptr_idPinner.Unpin()
+	}
 }
 
 // push string into the ID stack (will hash string).
@@ -7909,7 +8354,29 @@ func InternalRenderNavHighlightV(bb Rect, id ID, flags NavHighlightFlags) {
 // platform_render_arg: NULL
 // renderer_render_arg: NULL
 func RenderPlatformWindowsDefaultV(platform_render_arg unsafe.Pointer, renderer_render_arg unsafe.Pointer) {
-	C.igRenderPlatformWindowsDefault((platform_render_arg), (renderer_render_arg))
+	var platform_render_argIsPinned bool
+	platform_render_argPinner := &runtime.Pinner{}
+	if platform_render_arg != nil {
+		platform_render_argPinner.Pin(platform_render_arg)
+		platform_render_argIsPinned = true
+	}
+
+	var renderer_render_argIsPinned bool
+	renderer_render_argPinner := &runtime.Pinner{}
+	if renderer_render_arg != nil {
+		renderer_render_argPinner.Pin(renderer_render_arg)
+		renderer_render_argIsPinned = true
+	}
+
+	C.igRenderPlatformWindowsDefault(platform_render_arg, renderer_render_arg)
+
+	if platform_render_argIsPinned {
+		platform_render_argPinner.Unpin()
+	}
+
+	if renderer_render_argIsPinned {
+		renderer_render_argPinner.Unpin()
+	}
 }
 
 func InternalRenderRectFilledRangeH(draw_list DrawList, rect Rect, col uint32, x_start_norm float32, x_end_norm float32, rounding float32) {
@@ -8207,10 +8674,21 @@ func SetCursorScreenPos(pos Vec2) {
 func SetDragDropPayloadV(typeArg string, data unsafe.Pointer, sz uint64, cond Cond) bool {
 	typeArgArg, typeArgFin := WrapString(typeArg)
 
+	var dataIsPinned bool
+	dataPinner := &runtime.Pinner{}
+	if data != nil {
+		dataPinner.Pin(data)
+		dataIsPinned = true
+	}
+
 	defer func() {
 		typeArgFin()
+
+		if dataIsPinned {
+			dataPinner.Unpin()
+		}
 	}()
-	return C.igSetDragDropPayload(typeArgArg, (data), C.xulong(sz), C.ImGuiCond(cond)) == C.bool(true)
+	return C.igSetDragDropPayload(typeArgArg, data, C.xulong(sz), C.ImGuiCond(cond)) == C.bool(true)
 }
 
 func InternalSetFocusID(id ID, window Window) {
@@ -8736,14 +9214,47 @@ func SliderAngleV(label string, v_rad *float32, v_degrees_min float32, v_degrees
 }
 
 func InternalSliderBehavior(bb Rect, id ID, data_type DataType, p_v unsafe.Pointer, p_min unsafe.Pointer, p_max unsafe.Pointer, format string, flags SliderFlags, out_grab_bb *Rect) bool {
+	var p_vIsPinned bool
+	p_vPinner := &runtime.Pinner{}
+	if p_v != nil {
+		p_vPinner.Pin(p_v)
+		p_vIsPinned = true
+	}
+
+	var p_minIsPinned bool
+	p_minPinner := &runtime.Pinner{}
+	if p_min != nil {
+		p_minPinner.Pin(p_min)
+		p_minIsPinned = true
+	}
+
+	var p_maxIsPinned bool
+	p_maxPinner := &runtime.Pinner{}
+	if p_max != nil {
+		p_maxPinner.Pin(p_max)
+		p_maxIsPinned = true
+	}
+
 	formatArg, formatFin := WrapString(format)
 	out_grab_bbArg, out_grab_bbFin := wrap[C.ImRect, *Rect](out_grab_bb)
 
 	defer func() {
+		if p_vIsPinned {
+			p_vPinner.Unpin()
+		}
+
+		if p_minIsPinned {
+			p_minPinner.Unpin()
+		}
+
+		if p_maxIsPinned {
+			p_maxPinner.Unpin()
+		}
+
 		formatFin()
 		out_grab_bbFin()
 	}()
-	return C.igSliderBehavior(bb.toC(), C.ImGuiID(id), C.ImGuiDataType(data_type), (p_v), (p_min), (p_max), formatArg, C.ImGuiSliderFlags(flags), out_grab_bbArg) == C.bool(true)
+	return C.igSliderBehavior(bb.toC(), C.ImGuiID(id), C.ImGuiDataType(data_type), p_v, p_min, p_max, formatArg, C.ImGuiSliderFlags(flags), out_grab_bbArg) == C.bool(true)
 }
 
 // adjust format to decorate the value with a prefix or a suffix for in-slider labels or unit display.
@@ -8928,13 +9439,48 @@ func SliderInt4V(label string, v *[4]int32, v_min int32, v_max int32, format str
 // flags: 0
 func SliderScalarV(label string, data_type DataType, p_data unsafe.Pointer, p_min unsafe.Pointer, p_max unsafe.Pointer, format string, flags SliderFlags) bool {
 	labelArg, labelFin := WrapString(label)
+
+	var p_dataIsPinned bool
+	p_dataPinner := &runtime.Pinner{}
+	if p_data != nil {
+		p_dataPinner.Pin(p_data)
+		p_dataIsPinned = true
+	}
+
+	var p_minIsPinned bool
+	p_minPinner := &runtime.Pinner{}
+	if p_min != nil {
+		p_minPinner.Pin(p_min)
+		p_minIsPinned = true
+	}
+
+	var p_maxIsPinned bool
+	p_maxPinner := &runtime.Pinner{}
+	if p_max != nil {
+		p_maxPinner.Pin(p_max)
+		p_maxIsPinned = true
+	}
+
 	formatArg, formatFin := WrapString(format)
 
 	defer func() {
 		labelFin()
+
+		if p_dataIsPinned {
+			p_dataPinner.Unpin()
+		}
+
+		if p_minIsPinned {
+			p_minPinner.Unpin()
+		}
+
+		if p_maxIsPinned {
+			p_maxPinner.Unpin()
+		}
+
 		formatFin()
 	}()
-	return C.igSliderScalar(labelArg, C.ImGuiDataType(data_type), (p_data), (p_min), (p_max), formatArg, C.ImGuiSliderFlags(flags)) == C.bool(true)
+	return C.igSliderScalar(labelArg, C.ImGuiDataType(data_type), p_data, p_min, p_max, formatArg, C.ImGuiSliderFlags(flags)) == C.bool(true)
 }
 
 // SliderScalarNV parameter default value hint:
@@ -8942,13 +9488,48 @@ func SliderScalarV(label string, data_type DataType, p_data unsafe.Pointer, p_mi
 // flags: 0
 func SliderScalarNV(label string, data_type DataType, p_data unsafe.Pointer, components int32, p_min unsafe.Pointer, p_max unsafe.Pointer, format string, flags SliderFlags) bool {
 	labelArg, labelFin := WrapString(label)
+
+	var p_dataIsPinned bool
+	p_dataPinner := &runtime.Pinner{}
+	if p_data != nil {
+		p_dataPinner.Pin(p_data)
+		p_dataIsPinned = true
+	}
+
+	var p_minIsPinned bool
+	p_minPinner := &runtime.Pinner{}
+	if p_min != nil {
+		p_minPinner.Pin(p_min)
+		p_minIsPinned = true
+	}
+
+	var p_maxIsPinned bool
+	p_maxPinner := &runtime.Pinner{}
+	if p_max != nil {
+		p_maxPinner.Pin(p_max)
+		p_maxIsPinned = true
+	}
+
 	formatArg, formatFin := WrapString(format)
 
 	defer func() {
 		labelFin()
+
+		if p_dataIsPinned {
+			p_dataPinner.Unpin()
+		}
+
+		if p_minIsPinned {
+			p_minPinner.Unpin()
+		}
+
+		if p_maxIsPinned {
+			p_maxPinner.Unpin()
+		}
+
 		formatFin()
 	}()
-	return C.igSliderScalarN(labelArg, C.ImGuiDataType(data_type), (p_data), C.int(components), (p_min), (p_max), formatArg, C.ImGuiSliderFlags(flags)) == C.bool(true)
+	return C.igSliderScalarN(labelArg, C.ImGuiDataType(data_type), p_data, C.int(components), p_min, p_max, formatArg, C.ImGuiSliderFlags(flags)) == C.bool(true)
 }
 
 // button with FramePadding=(0,0) to easily embed within text
@@ -9645,13 +10226,48 @@ func InternalTempInputIsActive(id ID) bool {
 // p_clamp_max: NULL
 func InternalTempInputScalarV(bb Rect, id ID, label string, data_type DataType, p_data unsafe.Pointer, format string, p_clamp_min unsafe.Pointer, p_clamp_max unsafe.Pointer) bool {
 	labelArg, labelFin := WrapString(label)
+
+	var p_dataIsPinned bool
+	p_dataPinner := &runtime.Pinner{}
+	if p_data != nil {
+		p_dataPinner.Pin(p_data)
+		p_dataIsPinned = true
+	}
+
 	formatArg, formatFin := WrapString(format)
+
+	var p_clamp_minIsPinned bool
+	p_clamp_minPinner := &runtime.Pinner{}
+	if p_clamp_min != nil {
+		p_clamp_minPinner.Pin(p_clamp_min)
+		p_clamp_minIsPinned = true
+	}
+
+	var p_clamp_maxIsPinned bool
+	p_clamp_maxPinner := &runtime.Pinner{}
+	if p_clamp_max != nil {
+		p_clamp_maxPinner.Pin(p_clamp_max)
+		p_clamp_maxIsPinned = true
+	}
 
 	defer func() {
 		labelFin()
+
+		if p_dataIsPinned {
+			p_dataPinner.Unpin()
+		}
+
 		formatFin()
+
+		if p_clamp_minIsPinned {
+			p_clamp_minPinner.Unpin()
+		}
+
+		if p_clamp_maxIsPinned {
+			p_clamp_maxPinner.Unpin()
+		}
 	}()
-	return C.igTempInputScalar(bb.toC(), C.ImGuiID(id), labelArg, C.ImGuiDataType(data_type), (p_data), formatArg, (p_clamp_min), (p_clamp_max)) == C.bool(true)
+	return C.igTempInputScalar(bb.toC(), C.ImGuiID(id), labelArg, C.ImGuiDataType(data_type), p_data, formatArg, p_clamp_min, p_clamp_max) == C.bool(true)
 }
 
 func InternalTempInputText(bb Rect, id ID, label string, buf string, buf_size int32, flags InputTextFlags) bool {
@@ -9745,12 +10361,23 @@ func InternalTreeNodeBehaviorV(id ID, flags TreeNodeFlags, label string, label_e
 }
 
 func TreeNodeExPtr(ptr_id unsafe.Pointer, flags TreeNodeFlags, fmt string) bool {
+	var ptr_idIsPinned bool
+	ptr_idPinner := &runtime.Pinner{}
+	if ptr_id != nil {
+		ptr_idPinner.Pin(ptr_id)
+		ptr_idIsPinned = true
+	}
+
 	fmtArg, fmtFin := WrapString(fmt)
 
 	defer func() {
+		if ptr_idIsPinned {
+			ptr_idPinner.Unpin()
+		}
+
 		fmtFin()
 	}()
-	return C.wrap_igTreeNodeEx_Ptr((ptr_id), C.ImGuiTreeNodeFlags(flags), fmtArg) == C.bool(true)
+	return C.wrap_igTreeNodeEx_Ptr(ptr_id, C.ImGuiTreeNodeFlags(flags), fmtArg) == C.bool(true)
 }
 
 // TreeNodeExStrV parameter default value hint:
@@ -9786,12 +10413,23 @@ func InternalTreeNodeUpdateNextOpen(id ID, flags TreeNodeFlags) bool {
 
 // "
 func TreeNodePtr(ptr_id unsafe.Pointer, fmt string) bool {
+	var ptr_idIsPinned bool
+	ptr_idPinner := &runtime.Pinner{}
+	if ptr_id != nil {
+		ptr_idPinner.Pin(ptr_id)
+		ptr_idIsPinned = true
+	}
+
 	fmtArg, fmtFin := WrapString(fmt)
 
 	defer func() {
+		if ptr_idIsPinned {
+			ptr_idPinner.Unpin()
+		}
+
 		fmtFin()
 	}()
-	return C.wrap_igTreeNode_Ptr((ptr_id), fmtArg) == C.bool(true)
+	return C.wrap_igTreeNode_Ptr(ptr_id, fmtArg) == C.bool(true)
 }
 
 func TreeNodeStr(label string) bool {
@@ -9826,7 +10464,18 @@ func InternalTreePushOverrideID(id ID) {
 
 // "
 func TreePushPtr(ptr_id unsafe.Pointer) {
-	C.igTreePush_Ptr((ptr_id))
+	var ptr_idIsPinned bool
+	ptr_idPinner := &runtime.Pinner{}
+	if ptr_id != nil {
+		ptr_idPinner.Pin(ptr_id)
+		ptr_idIsPinned = true
+	}
+
+	C.igTreePush_Ptr(ptr_id)
+
+	if ptr_idIsPinned {
+		ptr_idPinner.Unpin()
+	}
 }
 
 // ~ Indent()+PushId(). Already called by TreeNode() when returning true, but you can call TreePush/TreePop yourself if desired.
@@ -9911,13 +10560,48 @@ func VSliderIntV(label string, size Vec2, v *int32, v_min int32, v_max int32, fo
 // flags: 0
 func VSliderScalarV(label string, size Vec2, data_type DataType, p_data unsafe.Pointer, p_min unsafe.Pointer, p_max unsafe.Pointer, format string, flags SliderFlags) bool {
 	labelArg, labelFin := WrapString(label)
+
+	var p_dataIsPinned bool
+	p_dataPinner := &runtime.Pinner{}
+	if p_data != nil {
+		p_dataPinner.Pin(p_data)
+		p_dataIsPinned = true
+	}
+
+	var p_minIsPinned bool
+	p_minPinner := &runtime.Pinner{}
+	if p_min != nil {
+		p_minPinner.Pin(p_min)
+		p_minIsPinned = true
+	}
+
+	var p_maxIsPinned bool
+	p_maxPinner := &runtime.Pinner{}
+	if p_max != nil {
+		p_maxPinner.Pin(p_max)
+		p_maxIsPinned = true
+	}
+
 	formatArg, formatFin := WrapString(format)
 
 	defer func() {
 		labelFin()
+
+		if p_dataIsPinned {
+			p_dataPinner.Unpin()
+		}
+
+		if p_minIsPinned {
+			p_minPinner.Unpin()
+		}
+
+		if p_maxIsPinned {
+			p_maxPinner.Unpin()
+		}
+
 		formatFin()
 	}()
-	return C.igVSliderScalar(labelArg, size.toC(), C.ImGuiDataType(data_type), (p_data), (p_min), (p_max), formatArg, C.ImGuiSliderFlags(flags)) == C.bool(true)
+	return C.igVSliderScalar(labelArg, size.toC(), C.ImGuiDataType(data_type), p_data, p_min, p_max, formatArg, C.ImGuiSliderFlags(flags)) == C.bool(true)
 }
 
 func ValueBool(prefix string, b bool) {
@@ -10207,19 +10891,41 @@ func (self FontAtlas) AddFontFromMemoryCompressedBase85TTF(compressed_font_data_
 func (self FontAtlas) AddFontFromMemoryCompressedTTF(compressed_font_data unsafe.Pointer, compressed_font_size int32, size_pixels float32) *Font {
 	selfArg, selfFin := self.handle()
 
+	var compressed_font_dataIsPinned bool
+	compressed_font_dataPinner := &runtime.Pinner{}
+	if compressed_font_data != nil {
+		compressed_font_dataPinner.Pin(compressed_font_data)
+		compressed_font_dataIsPinned = true
+	}
+
 	defer func() {
 		selfFin()
+
+		if compressed_font_dataIsPinned {
+			compressed_font_dataPinner.Unpin()
+		}
 	}()
-	return newFontFromC(C.wrap_ImFontAtlas_AddFontFromMemoryCompressedTTF(selfArg, (compressed_font_data), C.int(compressed_font_size), C.float(size_pixels)))
+	return newFontFromC(C.wrap_ImFontAtlas_AddFontFromMemoryCompressedTTF(selfArg, compressed_font_data, C.int(compressed_font_size), C.float(size_pixels)))
 }
 
 func (self FontAtlas) AddFontFromMemoryTTF(font_data unsafe.Pointer, font_size int32, size_pixels float32) *Font {
 	selfArg, selfFin := self.handle()
 
+	var font_dataIsPinned bool
+	font_dataPinner := &runtime.Pinner{}
+	if font_data != nil {
+		font_dataPinner.Pin(font_data)
+		font_dataIsPinned = true
+	}
+
 	defer func() {
 		selfFin()
+
+		if font_dataIsPinned {
+			font_dataPinner.Unpin()
+		}
 	}()
-	return newFontFromC(C.wrap_ImFontAtlas_AddFontFromMemoryTTF(selfArg, (font_data), C.int(font_size), C.float(size_pixels)))
+	return newFontFromC(C.wrap_ImFontAtlas_AddFontFromMemoryTTF(selfArg, font_data, C.int(font_size), C.float(size_pixels)))
 }
 
 func (self FontGlyphRangesBuilder) AddText(text string) {
@@ -10861,19 +11567,41 @@ func DragIntRange2(label string, v_current_min *int32, v_current_max *int32) boo
 func DragScalar(label string, data_type DataType, p_data unsafe.Pointer) bool {
 	labelArg, labelFin := WrapString(label)
 
+	var p_dataIsPinned bool
+	p_dataPinner := &runtime.Pinner{}
+	if p_data != nil {
+		p_dataPinner.Pin(p_data)
+		p_dataIsPinned = true
+	}
+
 	defer func() {
 		labelFin()
+
+		if p_dataIsPinned {
+			p_dataPinner.Unpin()
+		}
 	}()
-	return C.wrap_igDragScalar(labelArg, C.ImGuiDataType(data_type), (p_data)) == C.bool(true)
+	return C.wrap_igDragScalar(labelArg, C.ImGuiDataType(data_type), p_data) == C.bool(true)
 }
 
 func DragScalarN(label string, data_type DataType, p_data unsafe.Pointer, components int32) bool {
 	labelArg, labelFin := WrapString(label)
 
+	var p_dataIsPinned bool
+	p_dataPinner := &runtime.Pinner{}
+	if p_data != nil {
+		p_dataPinner.Pin(p_data)
+		p_dataIsPinned = true
+	}
+
 	defer func() {
 		labelFin()
+
+		if p_dataIsPinned {
+			p_dataPinner.Unpin()
+		}
 	}()
-	return C.wrap_igDragScalarN(labelArg, C.ImGuiDataType(data_type), (p_data), C.int(components)) == C.bool(true)
+	return C.wrap_igDragScalarN(labelArg, C.ImGuiDataType(data_type), p_data, C.int(components)) == C.bool(true)
 }
 
 func InternalFindRenderedTextEnd(text string) string {
@@ -10927,7 +11655,19 @@ func InternalImFileLoadToMemory(filename string, mode string) unsafe.Pointer {
 }
 
 func InternalImHashData(data unsafe.Pointer, data_size uint64) ID {
-	return ID(C.wrap_igImHashData((data), C.xulong(data_size)))
+	var dataIsPinned bool
+	dataPinner := &runtime.Pinner{}
+	if data != nil {
+		dataPinner.Pin(data)
+		dataIsPinned = true
+	}
+
+	defer func() {
+		if dataIsPinned {
+			dataPinner.Unpin()
+		}
+	}()
+	return ID(C.wrap_igImHashData(data, C.xulong(data_size)))
 }
 
 func InternalImHashStr(data string) ID {
@@ -11115,19 +11855,41 @@ func InputInt4(label string, v *[4]int32) bool {
 func InputScalar(label string, data_type DataType, p_data unsafe.Pointer) bool {
 	labelArg, labelFin := WrapString(label)
 
+	var p_dataIsPinned bool
+	p_dataPinner := &runtime.Pinner{}
+	if p_data != nil {
+		p_dataPinner.Pin(p_data)
+		p_dataIsPinned = true
+	}
+
 	defer func() {
 		labelFin()
+
+		if p_dataIsPinned {
+			p_dataPinner.Unpin()
+		}
 	}()
-	return C.wrap_igInputScalar(labelArg, C.ImGuiDataType(data_type), (p_data)) == C.bool(true)
+	return C.wrap_igInputScalar(labelArg, C.ImGuiDataType(data_type), p_data) == C.bool(true)
 }
 
 func InputScalarN(label string, data_type DataType, p_data unsafe.Pointer, components int32) bool {
 	labelArg, labelFin := WrapString(label)
 
+	var p_dataIsPinned bool
+	p_dataPinner := &runtime.Pinner{}
+	if p_data != nil {
+		p_dataPinner.Pin(p_data)
+		p_dataIsPinned = true
+	}
+
 	defer func() {
 		labelFin()
+
+		if p_dataIsPinned {
+			p_dataPinner.Unpin()
+		}
 	}()
-	return C.wrap_igInputScalarN(labelArg, C.ImGuiDataType(data_type), (p_data), C.int(components)) == C.bool(true)
+	return C.wrap_igInputScalarN(labelArg, C.ImGuiDataType(data_type), p_data, C.int(components)) == C.bool(true)
 }
 
 func InternalInputTextEx(label string, hint string, buf string, buf_size int32, size_arg Vec2, flags InputTextFlags) bool {
@@ -11481,10 +12243,21 @@ func InternalSeparatorEx(flags SeparatorFlags) {
 func SetDragDropPayload(typeArg string, data unsafe.Pointer, sz uint64) bool {
 	typeArgArg, typeArgFin := WrapString(typeArg)
 
+	var dataIsPinned bool
+	dataPinner := &runtime.Pinner{}
+	if data != nil {
+		dataPinner.Pin(data)
+		dataIsPinned = true
+	}
+
 	defer func() {
 		typeArgFin()
+
+		if dataIsPinned {
+			dataPinner.Unpin()
+		}
 	}()
-	return C.wrap_igSetDragDropPayload(typeArgArg, (data), C.xulong(sz)) == C.bool(true)
+	return C.wrap_igSetDragDropPayload(typeArgArg, data, C.xulong(sz)) == C.bool(true)
 }
 
 func InternalSetItemKeyOwner(key Key) {
@@ -11773,19 +12546,85 @@ func SliderInt4(label string, v *[4]int32, v_min int32, v_max int32) bool {
 func SliderScalar(label string, data_type DataType, p_data unsafe.Pointer, p_min unsafe.Pointer, p_max unsafe.Pointer) bool {
 	labelArg, labelFin := WrapString(label)
 
+	var p_dataIsPinned bool
+	p_dataPinner := &runtime.Pinner{}
+	if p_data != nil {
+		p_dataPinner.Pin(p_data)
+		p_dataIsPinned = true
+	}
+
+	var p_minIsPinned bool
+	p_minPinner := &runtime.Pinner{}
+	if p_min != nil {
+		p_minPinner.Pin(p_min)
+		p_minIsPinned = true
+	}
+
+	var p_maxIsPinned bool
+	p_maxPinner := &runtime.Pinner{}
+	if p_max != nil {
+		p_maxPinner.Pin(p_max)
+		p_maxIsPinned = true
+	}
+
 	defer func() {
 		labelFin()
+
+		if p_dataIsPinned {
+			p_dataPinner.Unpin()
+		}
+
+		if p_minIsPinned {
+			p_minPinner.Unpin()
+		}
+
+		if p_maxIsPinned {
+			p_maxPinner.Unpin()
+		}
 	}()
-	return C.wrap_igSliderScalar(labelArg, C.ImGuiDataType(data_type), (p_data), (p_min), (p_max)) == C.bool(true)
+	return C.wrap_igSliderScalar(labelArg, C.ImGuiDataType(data_type), p_data, p_min, p_max) == C.bool(true)
 }
 
 func SliderScalarN(label string, data_type DataType, p_data unsafe.Pointer, components int32, p_min unsafe.Pointer, p_max unsafe.Pointer) bool {
 	labelArg, labelFin := WrapString(label)
 
+	var p_dataIsPinned bool
+	p_dataPinner := &runtime.Pinner{}
+	if p_data != nil {
+		p_dataPinner.Pin(p_data)
+		p_dataIsPinned = true
+	}
+
+	var p_minIsPinned bool
+	p_minPinner := &runtime.Pinner{}
+	if p_min != nil {
+		p_minPinner.Pin(p_min)
+		p_minIsPinned = true
+	}
+
+	var p_maxIsPinned bool
+	p_maxPinner := &runtime.Pinner{}
+	if p_max != nil {
+		p_maxPinner.Pin(p_max)
+		p_maxIsPinned = true
+	}
+
 	defer func() {
 		labelFin()
+
+		if p_dataIsPinned {
+			p_dataPinner.Unpin()
+		}
+
+		if p_minIsPinned {
+			p_minPinner.Unpin()
+		}
+
+		if p_maxIsPinned {
+			p_maxPinner.Unpin()
+		}
 	}()
-	return C.wrap_igSliderScalarN(labelArg, C.ImGuiDataType(data_type), (p_data), C.int(components), (p_min), (p_max)) == C.bool(true)
+	return C.wrap_igSliderScalarN(labelArg, C.ImGuiDataType(data_type), p_data, C.int(components), p_min, p_max) == C.bool(true)
 }
 
 func InternalSplitterBehavior(bb Rect, id ID, axis Axis, size1 *float32, size2 *float32, min_size1 float32, min_size2 float32) bool {
@@ -11858,13 +12697,26 @@ func TableSetupColumn(label string) {
 
 func InternalTempInputScalar(bb Rect, id ID, label string, data_type DataType, p_data unsafe.Pointer, format string) bool {
 	labelArg, labelFin := WrapString(label)
+
+	var p_dataIsPinned bool
+	p_dataPinner := &runtime.Pinner{}
+	if p_data != nil {
+		p_dataPinner.Pin(p_data)
+		p_dataIsPinned = true
+	}
+
 	formatArg, formatFin := WrapString(format)
 
 	defer func() {
 		labelFin()
+
+		if p_dataIsPinned {
+			p_dataPinner.Unpin()
+		}
+
 		formatFin()
 	}()
-	return C.wrap_igTempInputScalar(bb.toC(), C.ImGuiID(id), labelArg, C.ImGuiDataType(data_type), (p_data), formatArg) == C.bool(true)
+	return C.wrap_igTempInputScalar(bb.toC(), C.ImGuiID(id), labelArg, C.ImGuiDataType(data_type), p_data, formatArg) == C.bool(true)
 }
 
 func InternalTextEx(text string) {
@@ -11928,10 +12780,43 @@ func VSliderInt(label string, size Vec2, v *int32, v_min int32, v_max int32) boo
 func VSliderScalar(label string, size Vec2, data_type DataType, p_data unsafe.Pointer, p_min unsafe.Pointer, p_max unsafe.Pointer) bool {
 	labelArg, labelFin := WrapString(label)
 
+	var p_dataIsPinned bool
+	p_dataPinner := &runtime.Pinner{}
+	if p_data != nil {
+		p_dataPinner.Pin(p_data)
+		p_dataIsPinned = true
+	}
+
+	var p_minIsPinned bool
+	p_minPinner := &runtime.Pinner{}
+	if p_min != nil {
+		p_minPinner.Pin(p_min)
+		p_minIsPinned = true
+	}
+
+	var p_maxIsPinned bool
+	p_maxPinner := &runtime.Pinner{}
+	if p_max != nil {
+		p_maxPinner.Pin(p_max)
+		p_maxIsPinned = true
+	}
+
 	defer func() {
 		labelFin()
+
+		if p_dataIsPinned {
+			p_dataPinner.Unpin()
+		}
+
+		if p_minIsPinned {
+			p_minPinner.Unpin()
+		}
+
+		if p_maxIsPinned {
+			p_maxPinner.Unpin()
+		}
 	}()
-	return C.wrap_igVSliderScalar(labelArg, size.toC(), C.ImGuiDataType(data_type), (p_data), (p_min), (p_max)) == C.bool(true)
+	return C.wrap_igVSliderScalar(labelArg, size.toC(), C.ImGuiDataType(data_type), p_data, p_min, p_max) == C.bool(true)
 }
 
 func ValueFloat(prefix string, v float32) {
@@ -12071,9 +12956,20 @@ func (self DrawCmd) ElemCount() uint32 {
 }
 
 func (self DrawCmd) SetUserCallbackData(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImDrawCmd_SetUserCallbackData(selfArg, (v))
+	C.wrap_ImDrawCmd_SetUserCallbackData(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self DrawCmd) UserCallbackData() unsafe.Pointer {
@@ -13116,9 +14012,20 @@ func (self FontAtlas) Locked() bool {
 }
 
 func (self FontAtlas) SetUserData(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImFontAtlas_SetUserData(selfArg, (v))
+	C.wrap_ImFontAtlas_SetUserData(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self FontAtlas) UserData() unsafe.Pointer {
@@ -13495,9 +14402,20 @@ func (self FontAtlasCustomRect) Font() *Font {
 }
 
 func (self FontConfig) SetFontData(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImFontConfig_SetFontData(selfArg, (v))
+	C.wrap_ImFontConfig_SetFontData(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self FontConfig) FontData() unsafe.Pointer {
@@ -14433,9 +15351,20 @@ func (self Context) TestEngineHookItems() bool {
 }
 
 func (self Context) SetTestEngine(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImGuiContext_SetTestEngine(selfArg, (v))
+	C.wrap_ImGuiContext_SetTestEngine(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self Context) TestEngine() unsafe.Pointer {
@@ -18163,9 +19092,20 @@ func (self ContextHook) Owner() ID {
 }
 
 func (self ContextHook) SetUserData(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImGuiContextHook_SetUserData(selfArg, (v))
+	C.wrap_ImGuiContextHook_SetUserData(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self ContextHook) UserData() unsafe.Pointer {
@@ -19236,9 +20176,20 @@ func (self IO) LogFilename() string {
 }
 
 func (self IO) SetUserData(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImGuiIO_SetUserData(selfArg, (v))
+	C.wrap_ImGuiIO_SetUserData(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self IO) UserData() unsafe.Pointer {
@@ -19762,9 +20713,20 @@ func (self IO) BackendRendererName() string {
 }
 
 func (self IO) SetBackendPlatformUserData(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImGuiIO_SetBackendPlatformUserData(selfArg, (v))
+	C.wrap_ImGuiIO_SetBackendPlatformUserData(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self IO) BackendPlatformUserData() unsafe.Pointer {
@@ -19777,9 +20739,20 @@ func (self IO) BackendPlatformUserData() unsafe.Pointer {
 }
 
 func (self IO) SetBackendRendererUserData(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImGuiIO_SetBackendRendererUserData(selfArg, (v))
+	C.wrap_ImGuiIO_SetBackendRendererUserData(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self IO) BackendRendererUserData() unsafe.Pointer {
@@ -19792,9 +20765,20 @@ func (self IO) BackendRendererUserData() unsafe.Pointer {
 }
 
 func (self IO) SetBackendLanguageUserData(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImGuiIO_SetBackendLanguageUserData(selfArg, (v))
+	C.wrap_ImGuiIO_SetBackendLanguageUserData(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self IO) BackendLanguageUserData() unsafe.Pointer {
@@ -19807,9 +20791,20 @@ func (self IO) BackendLanguageUserData() unsafe.Pointer {
 }
 
 func (self IO) SetClipboardUserData(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImGuiIO_SetClipboardUserData(selfArg, (v))
+	C.wrap_ImGuiIO_SetClipboardUserData(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self IO) ClipboardUserData() unsafe.Pointer {
@@ -19822,9 +20817,20 @@ func (self IO) ClipboardUserData() unsafe.Pointer {
 }
 
 func (self IO) SetUnusedPadding(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImGuiIO_Set_UnusedPadding(selfArg, (v))
+	C.wrap_ImGuiIO_Set_UnusedPadding(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self IO) UnusedPadding() unsafe.Pointer {
@@ -20683,9 +21689,20 @@ func (self InputTextCallbackData) Flags() InputTextFlags {
 }
 
 func (self InputTextCallbackData) SetUserData(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImGuiInputTextCallbackData_SetUserData(selfArg, (v))
+	C.wrap_ImGuiInputTextCallbackData_SetUserData(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self InputTextCallbackData) UserData() unsafe.Pointer {
@@ -21563,9 +22580,20 @@ func (self ListClipper) StartPosY() float32 {
 }
 
 func (self ListClipper) SetTempData(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImGuiListClipper_SetTempData(selfArg, (v))
+	C.wrap_ImGuiListClipper_SetTempData(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self ListClipper) TempData() unsafe.Pointer {
@@ -22499,9 +23527,20 @@ func (self NextWindowData) SizeConstraintRect() Rect {
 }
 
 func (self NextWindowData) SetSizeCallbackUserData(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImGuiNextWindowData_SetSizeCallbackUserData(selfArg, (v))
+	C.wrap_ImGuiNextWindowData_SetSizeCallbackUserData(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self NextWindowData) SizeCallbackUserData() unsafe.Pointer {
@@ -22940,9 +23979,20 @@ func (self OnceUponAFrame) RefFrame() int32 {
 }
 
 func (self Payload) SetData(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImGuiPayload_SetData(selfArg, (v))
+	C.wrap_ImGuiPayload_SetData(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self Payload) Data() unsafe.Pointer {
@@ -23189,9 +24239,20 @@ func (self PlatformMonitor) DpiScale() float32 {
 }
 
 func (self PlatformMonitor) SetPlatformHandle(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImGuiPlatformMonitor_SetPlatformHandle(selfArg, (v))
+	C.wrap_ImGuiPlatformMonitor_SetPlatformHandle(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self PlatformMonitor) PlatformHandle() unsafe.Pointer {
@@ -23332,9 +24393,20 @@ func (self PopupData) OpenMousePos() Vec2 {
 }
 
 func (self PtrOrIndex) SetPtr(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImGuiPtrOrIndex_SetPtr(selfArg, (v))
+	C.wrap_ImGuiPtrOrIndex_SetPtr(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self PtrOrIndex) Ptr() unsafe.Pointer {
@@ -23396,9 +24468,20 @@ func (self SettingsHandler) TypeHash() ID {
 }
 
 func (self SettingsHandler) SetUserData(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImGuiSettingsHandler_SetUserData(selfArg, (v))
+	C.wrap_ImGuiSettingsHandler_SetUserData(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self SettingsHandler) UserData() unsafe.Pointer {
@@ -23456,9 +24539,20 @@ func (self ShrinkWidthItem) InitialWidth() float32 {
 }
 
 func (self SizeCallbackData) SetUserData(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImGuiSizeCallbackData_SetUserData(selfArg, (v))
+	C.wrap_ImGuiSizeCallbackData_SetUserData(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self SizeCallbackData) UserData() unsafe.Pointer {
@@ -25308,9 +26402,20 @@ func (self Table) Flags() TableFlags {
 }
 
 func (self Table) SetRawData(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImGuiTable_SetRawData(selfArg, (v))
+	C.wrap_ImGuiTable_SetRawData(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self Table) RawData() unsafe.Pointer {
@@ -28331,9 +29436,20 @@ func (self Viewport) DrawData() *DrawData {
 }
 
 func (self Viewport) SetRendererUserData(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImGuiViewport_SetRendererUserData(selfArg, (v))
+	C.wrap_ImGuiViewport_SetRendererUserData(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self Viewport) RendererUserData() unsafe.Pointer {
@@ -28346,9 +29462,20 @@ func (self Viewport) RendererUserData() unsafe.Pointer {
 }
 
 func (self Viewport) SetPlatformUserData(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImGuiViewport_SetPlatformUserData(selfArg, (v))
+	C.wrap_ImGuiViewport_SetPlatformUserData(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self Viewport) PlatformUserData() unsafe.Pointer {
@@ -28361,9 +29488,20 @@ func (self Viewport) PlatformUserData() unsafe.Pointer {
 }
 
 func (self Viewport) SetPlatformHandle(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImGuiViewport_SetPlatformHandle(selfArg, (v))
+	C.wrap_ImGuiViewport_SetPlatformHandle(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self Viewport) PlatformHandle() unsafe.Pointer {
@@ -28376,9 +29514,20 @@ func (self Viewport) PlatformHandle() unsafe.Pointer {
 }
 
 func (self Viewport) SetPlatformHandleRaw(v unsafe.Pointer) {
+	var vIsPinned bool
+	vPinner := &runtime.Pinner{}
+	if v != nil {
+		vPinner.Pin(v)
+		vIsPinned = true
+	}
+
 	selfArg, selfFin := self.handle()
 	defer selfFin()
-	C.wrap_ImGuiViewport_SetPlatformHandleRaw(selfArg, (v))
+	C.wrap_ImGuiViewport_SetPlatformHandleRaw(selfArg, v)
+
+	if vIsPinned {
+		vPinner.Unpin()
+	}
 }
 
 func (self Viewport) PlatformHandleRaw() unsafe.Pointer {

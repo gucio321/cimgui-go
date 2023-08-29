@@ -8,7 +8,10 @@ package imgui
 // #include "extra_types.h"
 // #include "cimplot_wrapper.h"
 import "C"
-import "unsafe"
+
+import (
+	"unsafe"
+)
 
 type FormatterTimeData struct {
 	// TODO: contains unsupported fields
