@@ -351,9 +351,12 @@ func (g *goFuncsGenerator) generateFuncArgs(f FuncDef) (args []GoIdentifier, arg
 	for i, a := range f.ArgsT {
 		g.shouldGenerate = false
 
+		if i == 0 && f.StructSetter {
+			continue
+		}
+
 		decl, wrapper, err := getArgWrapper(
 			&a,
-			i == 0 && f.StructSetter,
 			g.structNames,
 			g.enumNames,
 		)

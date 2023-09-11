@@ -100,7 +100,6 @@ func generateStruct(s StructDef, defs []StructDef, enumDefs []EnumDef, refEnums 
 
 		_, toC, toCErr := getArgWrapper(
 			&argDef,
-			false,
 			structs, enums,
 		)
 

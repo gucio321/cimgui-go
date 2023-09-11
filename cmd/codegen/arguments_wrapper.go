@@ -26,7 +26,7 @@ type ArgumentWrapperData struct {
 
 type argumentWrapper func(arg ArgDef) ArgumentWrapperData
 
-func getArgWrapper(a *ArgDef, makeFirstArgReceiver bool, structNames map[CIdentifier]bool, enumNames map[GoIdentifier]bool) (argDeclaration string, data ArgumentWrapperData, err error) {
+func getArgWrapper(a *ArgDef, structNames map[CIdentifier]bool, enumNames map[GoIdentifier]bool) (argDeclaration string, data ArgumentWrapperData, err error) {
 	argWrapperMap := map[CIdentifier]argumentWrapper{
 		"char":                     simpleW("rune", "C.char"),
 		"char[5]":                  simplePtrArrayW(5, "C.char", "rune"),
@@ -128,10 +128,6 @@ func getArgWrapper(a *ArgDef, makeFirstArgReceiver bool, structNames map[CIdenti
 		a.Name += "Arg"
 	}
 
-	if makeFirstArgReceiver {
-		return "", ArgumentWrapperData{}, nil
-	}
-
 	if v, ok := argWrapperMap[a.Type]; ok {
 		arg := v(*a)
 		data = arg
@@ -159,7 +155,7 @@ func getArgWrapper(a *ArgDef, makeFirstArgReceiver bool, structNames map[CIdenti
 		_, w, err := getArgWrapper(&ArgDef{
 			Name: dataName,
 			Type: pureType,
-		}, false, structNames, enumNames)
+		}, structNames, enumNames)
 
 		if err != nil {
 			return "", ArgumentWrapperData{}, fmt.Errorf("creating vector wrapper %w", err)
