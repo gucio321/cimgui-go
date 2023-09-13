@@ -3,39 +3,25 @@
 
 package imgui
 
-// #cgo amd64,linux LDFLAGS: ${SRCDIR}/lib/linux/x64/libglfw3.a -ldl -lGL -lX11
-// #cgo amd64,windows LDFLAGS: -L${SRCDIR}/lib/windows/x64 -l:libglfw3.a -lgdi32 -lopengl32 -limm32
-// #cgo darwin LDFLAGS: -framework Cocoa -framework IOKit -framework CoreVideo
-// #cgo amd64,darwin LDFLAGS: ${SRCDIR}/lib/macos/x64/libglfw3.a
-// #cgo arm64,darwin LDFLAGS: ${SRCDIR}/lib/macos/arm64/libglfw3.a
-// #cgo !gles2,darwin LDFLAGS: -framework OpenGL
-// #cgo gles2,darwin LDFLAGS: -lGLESv2
-// #cgo CPPFLAGS: -DCIMGUI_GO_USE_GLFW
-// #include <stdlib.h>
-// extern void loopCallback();
-// extern void beforeRender();
-// extern void afterRender();
-// extern void afterCreateContext();
-// extern void beforeDestoryContext();
-// #include <stdint.h>
-// #include "glfw_backend.h"
 import "C"
-
 import (
 	"image"
 	"image/draw"
 	"unsafe"
+
+	glfw "github.com/go-gl/glfw/v3.3/glfw"
 )
 
 type GLFWWindowFlags int
 
 const (
-	GLFWWindowFlagsNone         GLFWWindowFlags = GLFWWindowFlags(C.GLFWWindowFlagsNone)
-	GLFWWindowFlagsNotResizable GLFWWindowFlags = GLFWWindowFlags(C.GLFWWindowFlagsNotResizable)
-	GLFWWindowFlagsMaximized    GLFWWindowFlags = GLFWWindowFlags(C.GLFWWindowFlagsMaximized)
-	GLFWWindowFlagsFloating     GLFWWindowFlags = GLFWWindowFlags(C.GLFWWindowFlagsFloating)
-	GLFWWindowFlagsFrameless    GLFWWindowFlags = GLFWWindowFlags(C.GLFWWindowFlagsFrameless)
-	GLFWWindowFlagsTransparent  GLFWWindowFlags = GLFWWindowFlags(C.GLFWWindowFlagsTransparent)
+// TODO
+// GLFWWindowFlagsNone         GLFWWindowFlags = GLFWWindowFlags(C.GLFWWindowFlagsNone)
+// GLFWWindowFlagsNotResizable GLFWWindowFlags = GLFWWindowFlags(C.GLFWWindowFlagsNotResizable)
+// GLFWWindowFlagsMaximized    GLFWWindowFlags = GLFWWindowFlags(C.GLFWWindowFlagsMaximized)
+// GLFWWindowFlagsFloating     GLFWWindowFlags = GLFWWindowFlags(C.GLFWWindowFlagsFloating)
+// GLFWWindowFlagsFrameless    GLFWWindowFlags = GLFWWindowFlags(C.GLFWWindowFlagsFrameless)
+// GLFWWindowFlagsTransparent  GLFWWindowFlags = GLFWWindowFlags(C.GLFWWindowFlagsTransparent)
 )
 
 type voidCallbackFunc func()
@@ -50,15 +36,11 @@ type GLFWBackend struct {
 	closeCB              func(pointer unsafe.Pointer)
 	keyCb                KeyCallback
 	sizeCb               SizeChangeCallback
-	window               uintptr
+	window               *glfw.Window
 }
 
 func NewGLFWBackend() *GLFWBackend {
 	return &GLFWBackend{}
-}
-
-func (b *GLFWBackend) handle() *C.GLFWwindow {
-	return (*C.GLFWwindow)(unsafe.Pointer(b.window))
 }
 
 func (b *GLFWBackend) SetAfterCreateContextHook(hook func()) {
@@ -119,19 +101,12 @@ func (b *GLFWBackend) SetWindowPos(x, y int) {
 }
 
 func (b *GLFWBackend) GetWindowPos() (x, y int32) {
-	xArg, xFin := WrapNumberPtr[C.int, int32](&x)
-	defer xFin()
-
-	yArg, yFin := WrapNumberPtr[C.int, int32](&y)
-	defer yFin()
-
-	C.igGLFWWindow_GetWindowPos(b.handle(), xArg, yArg)
-
-	return
+	posX, posY := b.window.GetPos()
+	return int32(posX), int32(posY)
 }
 
 func (b *GLFWBackend) SetWindowSize(width, height int) {
-	C.igGLFWWindow_SetSize(b.handle(), C.int(width), C.int(height))
+	b.window.SetSize(width, height)
 }
 
 func (b GLFWBackend) DisplaySize() (width int32, height int32) {
@@ -147,37 +122,25 @@ func (b GLFWBackend) DisplaySize() (width int32, height int32) {
 }
 
 func (b *GLFWBackend) SetWindowTitle(title string) {
-	titleArg, titleFin := WrapString(title)
-	defer titleFin()
-
-	C.igGLFWWindow_SetTitle(b.handle(), titleArg)
+	b.window.SetTitle(title)
 }
 
 // The minimum and maximum size of the content area of a windowed mode window.
 // To specify only a minimum size or only a maximum one, set the other pair to -1
 // e.g. SetWindowSizeLimits(640, 480, -1, -1)
 func (b *GLFWBackend) SetWindowSizeLimits(minWidth, minHeight, maxWidth, maxHeight int) {
-	C.igGLFWWindow_SetSizeLimits(b.handle(), C.int(minWidth), C.int(minHeight), C.int(maxWidth), C.int(maxHeight))
+	b.window.SetSizeLimits(minWidth, minHeight, maxWidth, maxHeight)
 }
 
 func (b GLFWBackend) SetShouldClose(value bool) {
-	C.igGLFWWindow_SetShouldClose(b.handle(), C.int(CastBool(value)))
+	b.window.SetShouldClose(value)
 }
 
 func (b *GLFWBackend) CreateWindow(title string, width, height int, flags GLFWWindowFlags) {
-	titleArg, titleFin := WrapString(title)
-	defer titleFin()
-
-	// b.window = uintptr(unsafe.Pointer(C.igCreateGLFWWindow(titleArg, C.int(width), C.int(height), C.GLFWWindowFlags(flags), C.VoidCallback(C.afterCreateContext))))
-	b.window = uintptr(unsafe.Pointer(C.igCreateGLFWWindow(
-		titleArg,
-		C.int(width),
-		C.int(height),
-		C.GLFWWindowFlags(flags),
-		C.VoidCallback(C.afterCreateContext),
-	)))
-	if b.window == 0 {
-		panic("Failed to create GLFW window")
+	var err error
+	b.window, err = glfw.CreateWindow(width, height, title, nil, nil)
+	if err != nil {
+		panic(err)
 	}
 }
 
