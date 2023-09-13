@@ -3,6 +3,15 @@
 
 package imgui
 
+/*
+#define GL_SILENCE_DEPRECATION
+#define CIMGUI_USE_GLFW
+#define CIMGUI_USE_OPENGL3
+
+#include "cimgui/cimgui.h"
+#include "cimgui/cimgui_impl.h"
+#include <cstdlib>
+*/
 import "C"
 import (
 	"image"
@@ -115,8 +124,8 @@ func (b *GLFWBackend) Run(loop func()) {
 
 		// render
 		// Start the Dear ImGui frame
-		ImGui_ImplOpenGL3_NewFrame()
-		ImGui_ImplGlfw_NewFrame()
+		C.ImGui_ImplOpenGL3_NewFrame()
+		C.ImGui_ImplGlfw_NewFrame()
 		NewFrame()
 
 		b.window.SetUserPointer((unsafe.Pointer)(b.loop))
@@ -129,11 +138,11 @@ func (b *GLFWBackend) Run(loop func()) {
 		// Rendering
 		Render()
 		display_w, display_h := b.window.GetFramebufferSize()
-		glViewport(0, 0, display_w, display_h)
-		glClearColor(clear_color.x*clear_color.w, clear_color.y*clear_color.w, clear_color.z*clear_color.w,
+		C.glViewport(0, 0, display_w, display_h)
+		C.glClearColor(clear_color.x*clear_color.w, clear_color.y*clear_color.w, clear_color.z*clear_color.w,
 			clear_color.w)
-		glClear(GL_COLOR_BUFFER_BIT)
-		ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData())
+		C.glClear(C.GL_COLOR_BUFFER_BIT)
+		C.ImGui_ImplOpenGL3_RenderDrawData(CurrentDrawData().handle())
 
 		io := CurrentIO()
 
@@ -172,8 +181,8 @@ func (b *GLFWBackend) Run(loop func()) {
 	}
 
 	// Cleanup
-	ImGui_ImplOpenGL3_Shutdown()
-	ImGui_ImplGlfw_Shutdown()
+	C.ImGui_ImplOpenGL3_Shutdown()
+	C.ImGui_ImplGlfw_Shutdown()
 
 	if b.beforeDestroyHook() != nil {
 		b.beforeDestroyHook()
