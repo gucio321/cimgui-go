@@ -6,7 +6,6 @@ package imgui
 import "C"
 import (
 	"image"
-	"image/draw"
 	"unsafe"
 
 	glfw "github.com/go-gl/glfw/v3.3/glfw"
@@ -37,6 +36,7 @@ type GLFWBackend struct {
 	keyCb                KeyCallback
 	sizeCb               SizeChangeCallback
 	window               *glfw.Window
+	targetFps            uint
 }
 
 func NewGLFWBackend() *GLFWBackend {
@@ -80,24 +80,117 @@ func (b *GLFWBackend) SetBgColor(color Vec4) {
 }
 
 func (b *GLFWBackend) Run(loop func()) {
-	b.loop = loop
-	C.igRunLoop(b.handle(), C.VoidCallback(C.loopCallback), C.VoidCallback(C.beforeRender), C.VoidCallback(C.afterRender), C.VoidCallback(C.beforeDestoryContext))
+	b.window.MakeContextCurrent()
+	io := CurrentIO()
+
+	// Load Fonts
+	// - If no fonts are loaded, dear imgui will use the default font. You can
+	// also load multiple fonts and use igPushFont()/PopFont() to select them.
+	// - AddFontFromFileTTF() will return the ImFont* so you can store it if you
+	// need to select the font among multiple.
+	// - If the file cannot be loaded, the function will return NULL. Please
+	// handle those errors in your application (e.g. use an assertion, or display
+	// an error and quit).
+	// - The fonts will be rasterized at a given size (w/ oversampling) and stored
+	// into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which
+	// ImGui_ImplXXXX_NewFrame below will call.
+	// - Read 'docs/FONTS.md' for more instructions and details.
+	// - Remember that in C/C++ if you want to include a backslash \ in a string
+	// literal you need to write a double backslash \\ !
+	// io.Fonts->AddFontDefault();
+	// io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
+	// io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
+	// io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
+	// io.Fonts->AddFontFromFileTTF("../../misc/fonts/ProggyTiny.ttf", 10.0f);
+	// ImFont* font =
+	// io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f,
+	// NULL, io.Fonts->GetGlyphRangesJapanese()); IM_ASSERT(font != NULL);
+
+	// Main loop
+	lasttime := glfw.GetTime()
+	for !b.window.ShouldClose() {
+		if b.beforeRender != nil {
+			b.beforeRender()
+		}
+
+		// render
+		// Start the Dear ImGui frame
+		ImGui_ImplOpenGL3_NewFrame()
+		ImGui_ImplGlfw_NewFrame()
+		NewFrame()
+
+		b.window.SetUserPointer((unsafe.Pointer)(b.loop))
+
+		// Do ui stuff here
+		if b.loop != nil {
+			b.loop()
+		}
+
+		// Rendering
+		Render()
+		display_w, display_h := b.window.GetFramebufferSize()
+		glViewport(0, 0, display_w, display_h)
+		glClearColor(clear_color.x*clear_color.w, clear_color.y*clear_color.w, clear_color.z*clear_color.w,
+			clear_color.w)
+		glClear(GL_COLOR_BUFFER_BIT)
+		ImGui_ImplOpenGL3_RenderDrawData(igGetDrawData())
+
+		io := CurrentIO()
+
+		// Update and Render additional Platform Windows
+		// (Platform functions may change the current OpenGL context, so we
+		// save/restore it to make it easier to paste this code elsewhere.
+		//  For this specific demo app we could also call
+		//  glfwMakeContextCurrent(window) directly)
+		if io.ConfigFlags()&ConfigFlagsViewportsEnable != 0 {
+			backup_current_context := glfw.GetCurrentContext()
+			UpdatePlatformWindows()
+			RenderPlatformWindowsDefault()
+			backup_current_context.MakeContextCurrent()
+		}
+
+		b.window.SwapBuffers()
+		// render end
+
+		for glfw.GetTime() < lasttime+1.0/float64(b.targetFps) {
+			// do nothing here
+		}
+		lasttime += 1.0 / float64(b.targetFps)
+
+		if extra_frame_count > 0 {
+			extra_frame_count--
+		} else {
+			glfw.WaitEvents()
+			extra_frame_count = MAX_EXTRA_FRAME_COUNT
+		}
+
+		glfw.PollEvents()
+
+		if b.afterRender != nil {
+			b.afterRender()
+		}
+	}
+
+	// Cleanup
+	ImGui_ImplOpenGL3_Shutdown()
+	ImGui_ImplGlfw_Shutdown()
+
+	if b.beforeDestroyHook() != nil {
+		b.beforeDestroyHook()
+	}
+
+	DestroyContext()
+
+	b.window.Destroy()
+	glfw.Terminate()
 }
 
 func (b *GLFWBackend) loopFunc() func() {
 	return b.loop
 }
 
-func (b *GLFWBackend) dropCallback() DropCallback {
-	return b.dropCB
-}
-
-func (b *GLFWBackend) closeCallback() func(wnd unsafe.Pointer) {
-	return b.closeCB
-}
-
 func (b *GLFWBackend) SetWindowPos(x, y int) {
-	C.igGLFWWindow_SetWindowPos(b.handle(), C.int(x), C.int(y))
+	b.window.SetPos(x, y)
 }
 
 func (b *GLFWBackend) GetWindowPos() (x, y int32) {
@@ -136,30 +229,102 @@ func (b GLFWBackend) SetShouldClose(value bool) {
 	b.window.SetShouldClose(value)
 }
 
+// TODO: clearify panics
+// TODO: fix this gles stuff
 func (b *GLFWBackend) CreateWindow(title string, width, height int, flags GLFWWindowFlags) {
-	var err error
-	b.window, err = glfw.CreateWindow(width, height, title, nil, nil)
-	if err != nil {
+	// Setup window
+	if err := glfw.Init(); err != nil {
 		panic(err)
 	}
+
+	// Decide GL+GLSL versions
+	//#if defined(IMGUI_IMPL_OPENGL_ES2)
+	// GL ES 2.0 + GLSL 100
+	//const char *glsl_version = "#version 100";
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	//glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+	//#elif defined(__APPLE__)
+	// GL 3.2 + GLSL 150
+	//const char *glsl_version = "#version 150";
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // 3.2+ only
+	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);           // Required on Mac
+	//#else
+	// GL 3.0 + GLSL 130
+	//const char *glsl_version = "#version 130";
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+
+	// only glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // 3.0+ only
+	//#endif
+
+	// Create window with graphics context
+	window, err := glfw.CreateWindow(width, height, title, nil, nil)
+	if window == nil || err != nil {
+		panic(err)
+	}
+	window.MakeContextCurrent()
+	glfw.SwapInterval(1) // Enable vsync
+
+	// Setup Dear ImGui context
+	CreateContext()
+
+	if b.afterCreateContext != nil {
+		b.afterCreateContext()
+	}
+
+	io := CurrentIO()
+	igCfgFlags := io.ConfigFlags()
+	igCfgFlags |= ConfigFlagsNavEnableKeyboard // Enable Keyboard Controls
+	igCfgFlags |= ConfigFlagsDockingEnable     // Enable Docking
+	igCfgFlags |= ConfigFlagsViewportsEnable   // Enable Multi-Viewport
+	io.SetConfigFlags(igCfgFlags)
+	io.SetIniFilename("")
+
+	// Setup Dear ImGui style
+	StyleColorsDark()
+	// igStyleColorsLight();
+
+	// When viewports are enabled we tweak WindowRounding/WindowBg so platform
+	// windows can look identical to regular ones.
+	style := CurrentStyle()
+	if io.ConfigFlags()&ConfigFlagsViewportsEnable != 0 {
+		style.SetWindowRounding(0.0)
+		//style->Colors[ImGuiCol_WindowBg].w = 1.0f; // TODO: implement this
+	}
+
+	// Setup Platform/Renderer backends
+	ImGui_ImplGlfw_InitForOpenGL(window, true)
+	ImGui_ImplOpenGL3_Init(glsl_version)
+
+	// Install extra callback
+	window.SetRefreshCallback(glfw_window_refresh_callback)
+	//glfwMakeContextCurrent(NULL) // TODO: what is this?
+
+	b.window = window
 }
 
 func (b *GLFWBackend) SetTargetFPS(fps uint) {
-	C.igSetTargetFPS(C.uint(fps))
+	b.targetFps = fps
 }
 
 func (b *GLFWBackend) Refresh() {
-	C.igRefresh()
+	glfw.PostEmptyEvent()
 }
 
+// TODO
 func (b *GLFWBackend) CreateTexture(pixels unsafe.Pointer, width, height int) TextureID {
 	return TextureID(C.igCreateTexture((*C.uchar)(pixels), C.int(width), C.int(height)))
 }
 
+// TODO
 func (b *GLFWBackend) CreateTextureRgba(img *image.RGBA, width, height int) TextureID {
 	return TextureID(C.igCreateTexture((*C.uchar)(&(img.Pix[0])), C.int(width), C.int(height)))
 }
 
+// TODO
 func (b *GLFWBackend) DeleteTexture(id TextureID) {
 	C.igDeleteTexture(C.ImTextureID(id))
 }
@@ -167,86 +332,37 @@ func (b *GLFWBackend) DeleteTexture(id TextureID) {
 // SetDropCallback sets the drop callback which is called when an object
 // is dropped over the window.
 func (b *GLFWBackend) SetDropCallback(cbfun DropCallback) {
-	b.dropCB = cbfun
-	C.igGLFWWindow_SetDropCallbackCB(b.handle())
+	b.window.SetDropCallback(func(w *glfw.Window, names []string) {
+		cbfun(names)
+	})
 }
 
 func (b *GLFWBackend) SetCloseCallback(cbfun WindowCloseCallback) {
-	b.closeCB = func(_ unsafe.Pointer) {
+	b.window.SetCloseCallback(func(w *glfw.Window) {
 		cbfun(b)
-	}
-
-	C.igGLFWWindow_SetCloseCallback(b.handle())
+	})
 }
 
 // SetWindowHint applies to next CreateWindow call
 // so use it before CreateWindow call ;-)
 func (b *GLFWBackend) SetWindowHint(hint, value int) {
-	C.igWindowHint(C.int(hint), C.int(value))
+	glfw.WindowHint(glfw.Hint(hint), value) // TODO: abstraction layer - NOT int
 }
 
 // SetIcons sets icons for the window.
 // THIS CODE COMES FROM https://github.com/go-gl/glfw (BSD-3 clause) - Copyright (c) 2012 The glfw3-go Authors. All rights reserved.
 func (b *GLFWBackend) SetIcons(images ...image.Image) {
-	count := len(images)
-	cimages := make([]C.CImage, count)
-	freePixels := make([]func(), count)
-
-	for i, img := range images {
-		var pixels []uint8
-		b := img.Bounds()
-
-		switch img := img.(type) {
-		case *image.NRGBA:
-			pixels = img.Pix
-		default:
-			m := image.NewNRGBA(image.Rect(0, 0, b.Dx(), b.Dy()))
-			draw.Draw(m, m.Bounds(), img, b.Min, draw.Src)
-			pixels = m.Pix
-		}
-
-		pix, free := func(origin []byte) (pointer *uint8, free func()) {
-			n := len(origin)
-			if n == 0 {
-				return nil, func() {}
-			}
-
-			ptr := C.CBytes(origin)
-			return (*uint8)(ptr), func() { C.free(ptr) }
-		}(pixels)
-
-		freePixels[i] = free
-
-		cimages[i].width = C.int(b.Dx())
-		cimages[i].height = C.int(b.Dy())
-		cimages[i].pixels = (*C.uchar)(pix)
-	}
-
-	var p *C.CImage
-	if count > 0 {
-		p = &cimages[0]
-	}
-	C.igGLFWWindow_SetIcon(b.handle(), C.int(count), p)
-
-	for _, v := range freePixels {
-		v()
-	}
+	b.window.SetIcon(images)
 }
 
 func (b *GLFWBackend) SetKeyCallback(cbfun KeyCallback) {
-	b.keyCb = cbfun
-	C.igGLFWWindow_SetKeyCallback(b.handle())
-}
-
-func (b *GLFWBackend) keyCallback() KeyCallback {
-	return b.keyCb
+	b.window.SetKeyCallback(func(w *glfw.Window, key glfw.Key, scancode int, action glfw.Action, mods glfw.ModifierKey) {
+		cbfun(int(key), scancode, int(action), int(mods)) // TODO: another abstraction layer needed here
+	})
 }
 
 func (b *GLFWBackend) SetSizeChangeCallback(cbfun SizeChangeCallback) {
-	b.sizeCb = cbfun
-	C.igGLFWWindow_SetSizeCallback(b.handle())
-}
-
-func (b *GLFWBackend) sizeCallback() SizeChangeCallback {
-	return b.sizeCb
+	b.window.SetSizeCallback(func(w *glfw.Window, width int, height int) {
+		cbfun(width, height)
+	})
 }
