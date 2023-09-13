@@ -94,7 +94,7 @@ func (b *GLFWBackend) afterRenderHook() func() {
 }
 
 func (b *GLFWBackend) SetBgColor(color Vec4) {
-	C.igSetBgColor(color.toC())
+	b.bgColor = color
 }
 
 func (b *GLFWBackend) Run(loop func()) {
@@ -136,7 +136,7 @@ func (b *GLFWBackend) Run(loop func()) {
 		C.ImGui_ImplGlfw_NewFrame()
 		NewFrame()
 
-		//b.window.SetUserPointer((unsafe.Pointer)(b.loop))
+		b.window.SetUserPointer(loop)
 
 		// Do ui stuff here
 		if loop != nil {
@@ -221,15 +221,8 @@ func (b *GLFWBackend) SetWindowSize(width, height int) {
 
 // TODO
 func (b GLFWBackend) DisplaySize() (width int32, height int32) {
-	widthArg, widthFin := WrapNumberPtr[C.int, int32](&width)
-	defer widthFin()
-
-	heightArg, heightFin := WrapNumberPtr[C.int, int32](&height)
-	defer heightFin()
-
-	C.igGLFWWindow_GetDisplaySize(b.handle(), widthArg, heightArg)
-
-	return
+	w, h := b.window.GetSize()
+	return int32(w), int32(h)
 }
 
 func (b *GLFWBackend) SetWindowTitle(title string) {
@@ -333,7 +326,20 @@ func (b *GLFWBackend) Refresh() {
 
 // TODO
 func (b *GLFWBackend) CreateTexture(pixels unsafe.Pointer, width, height int) TextureID {
-	return TextureID(C.igCreateTexture((*C.uchar)(pixels), C.int(width), C.int(height)))
+	var last_texture C.GLint
+	var texId C.GLuint
+
+	C.glGetIntegerv(C.GL_TEXTURE_BINDING_2D, &last_texture)
+	C.glGenTextures(1, &texId)
+	C.glBindTexture(C.GL_TEXTURE_2D, texId)
+	C.glTexParameteri(C.GL_TEXTURE_2D, C.GL_TEXTURE_MIN_FILTER, C.GL_LINEAR)
+	C.glTexParameteri(C.GL_TEXTURE_2D, C.GL_TEXTURE_MAG_FILTER, C.GL_LINEAR)
+	C.glTexImage2D(C.GL_TEXTURE_2D, 0, C.GL_RGBA, width, height, 0, C.GL_RGBA, C.GL_UNSIGNED_BYTE, pixels)
+
+	// Restore state
+	C.glBindTexture(GL_TEXTURE_2D, last_texture)
+
+	return TextureID((C.intptr_t(texId)))
 }
 
 // TODO
@@ -341,9 +347,10 @@ func (b *GLFWBackend) CreateTextureRgba(img *image.RGBA, width, height int) Text
 	return TextureID(C.igCreateTexture((*C.uchar)(&(img.Pix[0])), C.int(width), C.int(height)))
 }
 
-// TODO
 func (b *GLFWBackend) DeleteTexture(id TextureID) {
-	C.igDeleteTexture(C.ImTextureID(id))
+	cId := C.ImTextureID(id)
+	C.glBindTexture(C.GL_TEXTURE_2D, 0)
+	C.glDeleteTextures(1, (*C.GLuint)(cId))
 }
 
 // SetDropCallback sets the drop callback which is called when an object
