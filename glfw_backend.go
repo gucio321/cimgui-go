@@ -10,7 +10,7 @@ package imgui
 
 #include "cimgui/cimgui.h"
 #include "cimgui/cimgui_impl.h"
-#include <cstdlib>
+#include <stdlib.h>
 */
 import "C"
 import (
@@ -19,6 +19,9 @@ import (
 
 	glfw "github.com/go-gl/glfw/v3.3/glfw"
 )
+
+const MAX_EXTRA_FRAME_COUNT = 15
+const GLFWTargetFPS = 30
 
 type GLFWWindowFlags int
 
@@ -36,20 +39,26 @@ type voidCallbackFunc func()
 
 type GLFWBackend struct {
 	afterCreateContext   voidCallbackFunc
-	loop                 voidCallbackFunc
 	beforeRender         voidCallbackFunc
 	afterRender          voidCallbackFunc
 	beforeDestoryContext voidCallbackFunc
-	dropCB               DropCallback
-	closeCB              func(pointer unsafe.Pointer)
-	keyCb                KeyCallback
-	sizeCb               SizeChangeCallback
 	window               *glfw.Window
-	targetFps            uint
+
+	targetFps       uint
+	extraFrameCount int
+	bgColor         Vec4
 }
 
 func NewGLFWBackend() *GLFWBackend {
-	return &GLFWBackend{}
+	return &GLFWBackend{
+		targetFps: GLFWTargetFPS,
+		bgColor: Vec4{
+			X: 0.45,
+			Y: 0.55,
+			Z: 0.60,
+			W: 1.00,
+		},
+	}
 }
 
 func (b *GLFWBackend) SetAfterCreateContextHook(hook func()) {
@@ -90,7 +99,6 @@ func (b *GLFWBackend) SetBgColor(color Vec4) {
 
 func (b *GLFWBackend) Run(loop func()) {
 	b.window.MakeContextCurrent()
-	io := CurrentIO()
 
 	// Load Fonts
 	// - If no fonts are loaded, dear imgui will use the default font. You can
@@ -128,19 +136,23 @@ func (b *GLFWBackend) Run(loop func()) {
 		C.ImGui_ImplGlfw_NewFrame()
 		NewFrame()
 
-		b.window.SetUserPointer((unsafe.Pointer)(b.loop))
+		//b.window.SetUserPointer((unsafe.Pointer)(b.loop))
 
 		// Do ui stuff here
-		if b.loop != nil {
-			b.loop()
+		if loop != nil {
+			loop()
 		}
 
 		// Rendering
 		Render()
 		display_w, display_h := b.window.GetFramebufferSize()
 		C.glViewport(0, 0, display_w, display_h)
-		C.glClearColor(clear_color.x*clear_color.w, clear_color.y*clear_color.w, clear_color.z*clear_color.w,
-			clear_color.w)
+		C.glClearColor(
+			b.bgColor.X*b.bgColor.W,
+			b.bgColor.Y*b.bgColor.W,
+			b.bgColor.Z*b.bgColor.W,
+			b.bgColor.W,
+		)
 		C.glClear(C.GL_COLOR_BUFFER_BIT)
 		C.ImGui_ImplOpenGL3_RenderDrawData(CurrentDrawData().handle())
 
@@ -166,11 +178,11 @@ func (b *GLFWBackend) Run(loop func()) {
 		}
 		lasttime += 1.0 / float64(b.targetFps)
 
-		if extra_frame_count > 0 {
-			extra_frame_count--
+		if b.extraFrameCount > 0 {
+			b.extraFrameCount--
 		} else {
 			glfw.WaitEvents()
-			extra_frame_count = MAX_EXTRA_FRAME_COUNT
+			b.extraFrameCount = MAX_EXTRA_FRAME_COUNT
 		}
 
 		glfw.PollEvents()
@@ -194,10 +206,6 @@ func (b *GLFWBackend) Run(loop func()) {
 	glfw.Terminate()
 }
 
-func (b *GLFWBackend) loopFunc() func() {
-	return b.loop
-}
-
 func (b *GLFWBackend) SetWindowPos(x, y int) {
 	b.window.SetPos(x, y)
 }
@@ -211,6 +219,7 @@ func (b *GLFWBackend) SetWindowSize(width, height int) {
 	b.window.SetSize(width, height)
 }
 
+// TODO
 func (b GLFWBackend) DisplaySize() (width int32, height int32) {
 	widthArg, widthFin := WrapNumberPtr[C.int, int32](&width)
 	defer widthFin()
@@ -305,12 +314,11 @@ func (b *GLFWBackend) CreateWindow(title string, width, height int, flags GLFWWi
 	}
 
 	// Setup Platform/Renderer backends
-	ImGui_ImplGlfw_InitForOpenGL(window, true)
-	ImGui_ImplOpenGL3_Init(glsl_version)
+	C.ImGui_ImplGlfw_InitForOpenGL(window, true)
+	C.ImGui_ImplOpenGL3_Init(C.glsl_version)
 
 	// Install extra callback
-	window.SetRefreshCallback(glfw_window_refresh_callback)
-	//glfwMakeContextCurrent(NULL) // TODO: what is this?
+	window.SetRefreshCallback(C.glfw_window_refresh_callback)
 
 	b.window = window
 }
