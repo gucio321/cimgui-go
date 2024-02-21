@@ -8,14 +8,14 @@ import (
 	"strings"
 )
 
-// this function will proceed the following typedefs:
-// - all structs thatare not present in struct_and_enums.json (they are supposed to be epaque)
-// - everything that satisfies IsCallbackTypedef
+// This function proceeds all typedefs.
+// If typedef is a callback it puts it in {prefix}_callbacks.*
+// else it puts it in {prefix}_tpedefs.*
 func proceedTypedefs(prefix string, typedefs *Typedefs, structs []StructDef, enums []EnumDef, refTypedefs map[CIdentifier]string) (validTypeNames []CIdentifier, err error) {
 	// we need FILES
-	callbacksGoSb := &strings.Builder{}
-	callbacksGoSb.WriteString(goPackageHeader)
-	fmt.Fprintf(callbacksGoSb,
+	typedefsGoSb := &strings.Builder{}
+	typedefsGoSb.WriteString(goPackageHeader)
+	fmt.Fprintf(typedefsGoSb,
 		`// #include <stdlib.h>
 // #include <memory.h>
 // #include "extra_types.h"
@@ -152,7 +152,7 @@ extern %[1]s %[1]s_fromUintptr(uintptr_t ptr);`, k)
 
 			// NOTE: in case of problems e.g. with Textures, here might be potential issue:
 			// handle() is incomplete - it doesn't have right finalizer (for now I think this will not affect code)
-			fmt.Fprintf(callbacksGoSb, `
+			fmt.Fprintf(typedefsGoSb, `
 type %[1]s struct {
 	Data uintptr
 }
@@ -190,7 +190,7 @@ func new%[1]sFromC(cvalue *C.%[6]s) *%[1]s {
 		case ptrReturnTypeErr == nil && argTypeErr == nil && ptrArgTypeErr == nil && !isPtr:
 			glg.Infof("typedef %s is an alias typedef.", k)
 
-			fmt.Fprintf(callbacksGoSb, `
+			fmt.Fprintf(typedefsGoSb, `
 type %[1]s %[2]s
 
 func (selfSrc *%[1]s) handle() (result *C.%[6]s, fin func()) {
@@ -227,7 +227,7 @@ func new%[1]sFromC(cvalue *C.%[6]s) *%[1]s {
 		case returnTypeErr == nil && argTypeErr == nil && isPtr:
 			// if it's a pointer type, I think we can proceed as above, but without handle() method...
 			// (handle proceeds pointer values and we don't want double pointers, really)
-			fmt.Fprintf(callbacksGoSb, `
+			fmt.Fprintf(typedefsGoSb, `
 type %[1]s  struct {
 	Data %[2]s
 }
@@ -267,7 +267,7 @@ func new%[1]sFromC(cvalue *C.%[6]s) *%[1]s {
 		case HasPrefix(typedefs.data[k], "struct"):
 			isOpaque := !IsStructName(k, structs)
 			glg.Infof("typedef %s is a struct (is opaque? %v).", k, isOpaque)
-			writeOpaqueStruct(k, isOpaque, callbacksGoSb)
+			writeOpaqueStruct(k, isOpaque, typedefsGoSb)
 			validTypeNames = append(validTypeNames, k)
 		}
 	}
@@ -278,7 +278,7 @@ func new%[1]sFromC(cvalue *C.%[6]s) *%[1]s {
 }
 #endif`)
 
-	if err := os.WriteFile(fmt.Sprintf("%s_typedefs.go", prefix), []byte(callbacksGoSb.String()), 0644); err != nil {
+	if err := os.WriteFile(fmt.Sprintf("%s_typedefs.go", prefix), []byte(typedefsGoSb.String()), 0644); err != nil {
 		return nil, fmt.Errorf("cannot write %s_typedefs.go: %w", prefix, err)
 	}
 
