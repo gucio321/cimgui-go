@@ -136,7 +136,8 @@ func main() {
 		refTypedefs = typedefs.data
 	}
 
-	callbacks, err := proceedTypedefs(*prefix, typedefs, structs, enums, refTypedefs)
+	validTypedefsNames, callbackNames, err := proceedTypedefs(*prefix, typedefs, structs, enums, refTypedefs)
+	fmt.Println(callbackNames)
 
 	// generate code
 	enumNames := generateGoEnums(*prefix, enums)
@@ -155,7 +156,7 @@ func main() {
 		structNames = append(structNames, ss...)
 	}
 
-	structNames = append(structNames, callbacks...)
+	structNames = append(structNames, validTypedefsNames...)
 
 	if err := generateGoFuncs(*prefix, validFuncs, enumNames, structNames, refTypedefs); err != nil {
 		log.Panic(err)

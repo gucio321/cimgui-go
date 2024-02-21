@@ -8,10 +8,10 @@ import (
 	"strings"
 )
 
-// This function proceeds all typedefs.
-// If typedef is a callback it puts it in {prefix}_callbacks.*
-// else it puts it in {prefix}_tpedefs.*
-func proceedTypedefs(prefix string, typedefs *Typedefs, structs []StructDef, enums []EnumDef, refTypedefs map[CIdentifier]string) (validTypeNames []CIdentifier, err error) {
+// This function proceeds all typedefs except callbacks.
+// It returns list of valid struct names and list of not parsed callbacks names.
+func proceedTypedefs(prefix string, typedefs *Typedefs, structs []StructDef, enums []EnumDef, refTypedefs map[CIdentifier]string) (validTypeNames []CIdentifier, callbacks []CIdentifier, err error) {
+	callbacks = make([]CIdentifier, 0)
 	// we need FILES
 	// - for typedefs:
 	typedefsGoSb := &strings.Builder{}
@@ -49,39 +49,39 @@ extern "C" {
 `, prefix)
 
 	// - for callbacks
-	callbacksGoSb := &strings.Builder{}
-	callbacksGoSb.WriteString(goPackageHeader)
-	fmt.Fprintf(callbacksGoSb,
-		`// #include <stdlib.h>
-// #include <memory.h>
-// #include "extra_types.h"
-// #include "%[1]s_wrapper.h"
-// #include "%[1]s_callbacks.h"
-import "C"
-import "unsafe"
+	//callbacksGoSb := &strings.Builder{}
+	//callbacksGoSb.WriteString(goPackageHeader)
+	//fmt.Fprintf(callbacksGoSb,
+	//	`// #include <stdlib.h>
+	// #include <memory.h>
+	// #include "extra_types.h"
+	// #include "%[1]s_wrapper.h"
+	// #include "%[1]s_callbacks.h"
+	//import "C"
+	//import "unsafe"
+	//
+	//`, prefix)
 
-`, prefix)
+	//callbacksHeaderSb := &strings.Builder{}
+	//callbacksHeaderSb.WriteString(cppFileHeader)
+	//fmt.Fprintf(callbacksHeaderSb,
+	//	`
+	//#pragma once
+	//
+	//#include "cimgui/%s.h"
+	//
+	//#ifdef __cplusplus
+	//extern "C" {
+	//#endif
+	//`, prefix)
 
-	callbacksHeaderSb := &strings.Builder{}
-	callbacksHeaderSb.WriteString(cppFileHeader)
-	fmt.Fprintf(callbacksHeaderSb,
-		`
-#pragma once
-
-#include "cimgui/%s.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-`, prefix)
-
-	callbacksCppSb := &strings.Builder{}
-	callbacksCppSb.WriteString(cppFileHeader)
-	fmt.Fprintf(callbacksCppSb,
-		`
-#include "%[1]s_callbacks.h"
-#include "cimgui/%[1]s.h"
-`, prefix)
+	//callbacksCppSb := &strings.Builder{}
+	//callbacksCppSb.WriteString(cppFileHeader)
+	//fmt.Fprintf(callbacksCppSb,
+	//	`
+	//#include "%[1]s_callbacks.h"
+	//#include "cimgui/%[1]s.h"
+	//`, prefix)
 
 	// because go ranges through maps as if it was drunken, we need to sort keys.
 	keys := make([]CIdentifier, 0, len(typedefs.data))
@@ -171,7 +171,6 @@ extern "C" {
 		)
 
 		// check if k is a name of struct from structDefs
-	typedefAnalysis:
 		switch {
 		case typedefs.data[k] == "void*":
 			glg.Infof("typedef %s is an alias to void*.", k)
@@ -301,64 +300,65 @@ func new%[1]sFromC(cvalue *C.%[6]s) *%[1]s {
 
 			validTypeNames = append(validTypeNames, k)
 		case IsCallbackTypedef(typedef):
-			glg.Infof("typedef %s is a callback.", k)
-
-			// this should be of form something(*)(arg1, arg2)
-			retArg := Split(typedef, "(*)")
-			if len(retArg) != 2 {
-				retArg = Split(typedef, fmt.Sprintf(" %s", k))
-				if len(retArg) != 2 {
-					glg.Errorf("Callback typedef \"%s\" is of unknown form.", typedef)
-					panic("")
-				}
-			}
-
-			ret := retArg[0]
-			arg := retArg[1]
-			arg = TrimSuffix(arg, ";")
-			arg = TrimSuffix(arg, ")")
-			arg = TrimPrefix(arg, "(")
-			glg.Debugf("-> ret: %s, arg: %s", ret, arg)
-
-			args := Split(arg, ",")
-			type CallbackArg struct {
-				Type  string
-				Name  string
-				fromC returnWrapper
-				toC   argumentWrapper
-			}
-
-			argsEx := make([]CallbackArg, len(args))
-
-			for i := range args {
-				args[i] = TrimPrefix(args[i], " ")
-				args[i] = TrimPrefix(args[i], "const ")
-				typeName := Split(args[i], " ")
-				ca := CallbackArg{}
-				// Two possibilities:
-				// 1. type name
-				// 2. type (this also may be "..."
-				switch len(typeName) {
-				case 1:
-					if typeName[0] == "..." {
-						break typedefAnalysis
-					}
-
-					ca.Type = typeName[0]
-					ca.Name = fmt.Sprintf("arg%d", i)
-				case 2:
-					ca.Type = typeName[0]
-					ca.Name = typeName[1]
-				default:
-					glg.Errorf("Can't split \"%s\" into type and name part", args[i])
-					panic("")
-				}
-
-				argsEx[i] = ca
-			}
-
+			glg.Infof("typedef %s is a callback. Will be generated in the other step.", k)
+			callbacks = append(callbacks, k)
+			//
+			//this should be of form something(*)(arg1, arg2)
+			//retArg := Split(typedef, "(*)")
+			//if len(retArg) != 2 {
+			//	retArg = Split(typedef, fmt.Sprintf(" %s", k))
+			//	if len(retArg) != 2 {
+			//		glg.Errorf("Callback typedef \"%s\" is of unknown form.", typedef)
+			//		panic("")
+			//	}
+			//}
+			//
+			//ret := retArg[0]
+			//arg := retArg[1]
+			//arg = TrimSuffix(arg, ";")
+			//arg = TrimSuffix(arg, ")")
+			//arg = TrimPrefix(arg, "(")
+			//glg.Debugf("-> ret: %s, arg: %s", ret, arg)
+			//
+			//args := Split(arg, ",")
+			//type CallbackArg struct {
+			//	Type  string
+			//	Name  string
+			//	fromC returnWrapper
+			//	toC   argumentWrapper
+			//}
+			//
+			//argsEx := make([]CallbackArg, len(args))
+			//
+			//for i := range args {
+			//	args[i] = TrimPrefix(args[i], " ")
+			//	args[i] = TrimPrefix(args[i], "const ")
+			//	typeName := Split(args[i], " ")
+			//	ca := CallbackArg{}
+			//	Two possibilities:
+			//	1. type name
+			//	2. type (this also may be "..."
+			//switch len(typeName) {
+			//case 1:
+			//	if typeName[0] == "..." {
+			//		break typedefAnalysis
+			//	}
+			//
+			//	ca.Type = typeName[0]
+			//	ca.Name = fmt.Sprintf("arg%d", i)
+			//case 2:
+			//	ca.Type = typeName[0]
+			//	ca.Name = typeName[1]
+			//default:
+			//	glg.Errorf("Can't split \"%s\" into type and name part", args[i])
+			//	panic("")
+			//}
+			//
+			//argsEx[i] = ca
+			//}
+			//
 			// Now we have argsEx. We can start proceeding code generation.
-			fmt.Println(argsEx)
+			//fmt.Println(argsEx)
 		case HasPrefix(typedefs.data[k], "struct"):
 			isOpaque := !IsStructName(k, structs)
 			glg.Infof("typedef %s is a struct (is opaque? %v).", k, isOpaque)
@@ -376,37 +376,37 @@ func new%[1]sFromC(cvalue *C.%[6]s) *%[1]s {
 #endif`)
 
 	if err := os.WriteFile(fmt.Sprintf("%s_typedefs.go", prefix), []byte(typedefsGoSb.String()), 0644); err != nil {
-		return nil, fmt.Errorf("cannot write %s_typedefs.go: %w", prefix, err)
+		return nil, nil, fmt.Errorf("cannot write %s_typedefs.go: %w", prefix, err)
 	}
 
 	if err := os.WriteFile(fmt.Sprintf("%s_typedefs.cpp", prefix), []byte(typedefsCppSb.String()), 0644); err != nil {
-		return nil, fmt.Errorf("cannot write %s_typedefs.cpp: %w", prefix, err)
+		return nil, nil, fmt.Errorf("cannot write %s_typedefs.cpp: %w", prefix, err)
 	}
 
 	if err := os.WriteFile(fmt.Sprintf("%s_typedefs.h", prefix), []byte(typedefsHeaderSb.String()), 0644); err != nil {
-		return nil, fmt.Errorf("cannot write %s_typedefs.h: %w", prefix, err)
+		return nil, nil, fmt.Errorf("cannot write %s_typedefs.h: %w", prefix, err)
 	}
 
 	// - for callbacks
-	fmt.Fprint(callbacksHeaderSb,
-		`
-#ifdef __cplusplus
-}
-#endif`)
+	//fmt.Fprint(callbacksHeaderSb,
+	//	`
+	//#ifdef __cplusplus
+	//}
+	//#endif`)
 
-	if err := os.WriteFile(fmt.Sprintf("%s_callbacks.go", prefix), []byte(callbacksGoSb.String()), 0644); err != nil {
-		return nil, fmt.Errorf("cannot write %s_typedefs.go: %w", prefix, err)
-	}
+	//if err := os.WriteFile(fmt.Sprintf("%s_callbacks.go", prefix), []byte(callbacksGoSb.String()), 0644); err != nil {
+	//	return nil, fmt.Errorf("cannot write %s_typedefs.go: %w", prefix, err)
+	//}
 
-	if err := os.WriteFile(fmt.Sprintf("%s_callbacks.cpp", prefix), []byte(callbacksCppSb.String()), 0644); err != nil {
-		return nil, fmt.Errorf("cannot write %s_typedefs.cpp: %w", prefix, err)
-	}
+	//if err := os.WriteFile(fmt.Sprintf("%s_callbacks.cpp", prefix), []byte(callbacksCppSb.String()), 0644); err != nil {
+	//	return nil, fmt.Errorf("cannot write %s_typedefs.cpp: %w", prefix, err)
+	//}
 
-	if err := os.WriteFile(fmt.Sprintf("%s_callbacks.h", prefix), []byte(callbacksHeaderSb.String()), 0644); err != nil {
-		return nil, fmt.Errorf("cannot write %s_typedefs.h: %w", prefix, err)
-	}
+	//if err := os.WriteFile(fmt.Sprintf("%s_callbacks.h", prefix), []byte(callbacksHeaderSb.String()), 0644); err != nil {
+	//	return nil, fmt.Errorf("cannot write %s_typedefs.h: %w", prefix, err)
+	//}
 
-	return validTypeNames, nil
+	return validTypeNames, callbacks, nil
 }
 
 func writeOpaqueStruct(name CIdentifier, isOpaque bool, sb *strings.Builder) {
