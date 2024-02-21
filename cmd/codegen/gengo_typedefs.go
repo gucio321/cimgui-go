@@ -299,8 +299,26 @@ func new%[1]sFromC(cvalue *C.%[6]s) *%[1]s {
 			)
 
 			validTypeNames = append(validTypeNames, k)
-		case IsCallbackTypedef(typedefs.data[k]):
-			glg.Infof("typedef %s is a callback. Not implemented yet", k)
+		case IsCallbackTypedef(typedef):
+			glg.Infof("typedef %s is a callback.", k)
+
+			// this should be of form something(*)(arg1, arg2)
+			retArg := Split(typedef, "(*)")
+			if len(retArg) != 2 {
+				retArg = Split(typedef, fmt.Sprintf(" %s", k))
+				if len(retArg) != 2 {
+					glg.Errorf("Callback typedef \"%s\" is of unknown form.", typedef)
+					panic("")
+				}
+			}
+
+			ret := retArg[0]
+			arg := retArg[1]
+			arg = TrimSuffix(arg, ";")
+			arg = TrimSuffix(arg, ")")
+			arg = TrimPrefix(arg, "(")
+			glg.Debugf("-> ret: %s, arg: %s", ret, arg)
+
 		case HasPrefix(typedefs.data[k], "struct"):
 			isOpaque := !IsStructName(k, structs)
 			glg.Infof("typedef %s is a struct (is opaque? %v).", k, isOpaque)
