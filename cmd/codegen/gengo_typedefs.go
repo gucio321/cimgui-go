@@ -171,6 +171,7 @@ extern "C" {
 		)
 
 		// check if k is a name of struct from structDefs
+	typedefAnalysis:
 		switch {
 		case typedefs.data[k] == "void*":
 			glg.Infof("typedef %s is an alias to void*.", k)
@@ -319,6 +320,45 @@ func new%[1]sFromC(cvalue *C.%[6]s) *%[1]s {
 			arg = TrimPrefix(arg, "(")
 			glg.Debugf("-> ret: %s, arg: %s", ret, arg)
 
+			args := Split(arg, ",")
+			type CallbackArg struct {
+				Type  string
+				Name  string
+				fromC returnWrapper
+				toC   argumentWrapper
+			}
+
+			argsEx := make([]CallbackArg, len(args))
+
+			for i := range args {
+				args[i] = TrimPrefix(args[i], " ")
+				args[i] = TrimPrefix(args[i], "const ")
+				typeName := Split(args[i], " ")
+				ca := CallbackArg{}
+				// Two possibilities:
+				// 1. type name
+				// 2. type (this also may be "..."
+				switch len(typeName) {
+				case 1:
+					if typeName[0] == "..." {
+						break typedefAnalysis
+					}
+
+					ca.Type = typeName[0]
+					ca.Name = fmt.Sprintf("arg%d", i)
+				case 2:
+					ca.Type = typeName[0]
+					ca.Name = typeName[1]
+				default:
+					glg.Errorf("Can't split \"%s\" into type and name part", args[i])
+					panic("")
+				}
+
+				argsEx[i] = ca
+			}
+
+			// Now we have argsEx. We can start proceeding code generation.
+			fmt.Println(argsEx)
 		case HasPrefix(typedefs.data[k], "struct"):
 			isOpaque := !IsStructName(k, structs)
 			glg.Infof("typedef %s is a struct (is opaque? %v).", k, isOpaque)
