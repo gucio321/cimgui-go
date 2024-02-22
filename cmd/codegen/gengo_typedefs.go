@@ -267,63 +267,6 @@ func new%[1]sFromC(cvalue *C.%[6]s) *%[1]s {
 		case IsCallbackTypedef(typedef):
 			glg.Infof("typedef %s is a callback. Will be generated in the other step.", k)
 			callbacks = append(callbacks, k)
-			//
-			//this should be of form something(*)(arg1, arg2)
-			//retArg := Split(typedef, "(*)")
-			//if len(retArg) != 2 {
-			//	retArg = Split(typedef, fmt.Sprintf(" %s", k))
-			//	if len(retArg) != 2 {
-			//		glg.Errorf("Callback typedef \"%s\" is of unknown form.", typedef)
-			//		panic("")
-			//	}
-			//}
-			//
-			//ret := retArg[0]
-			//arg := retArg[1]
-			//arg = TrimSuffix(arg, ";")
-			//arg = TrimSuffix(arg, ")")
-			//arg = TrimPrefix(arg, "(")
-			//glg.Debugf("-> ret: %s, arg: %s", ret, arg)
-			//
-			//args := Split(arg, ",")
-			//type CallbackArg struct {
-			//	Type  string
-			//	Name  string
-			//	fromC returnWrapper
-			//	toC   argumentWrapper
-			//}
-			//
-			//argsEx := make([]CallbackArg, len(args))
-			//
-			//for i := range args {
-			//	args[i] = TrimPrefix(args[i], " ")
-			//	args[i] = TrimPrefix(args[i], "const ")
-			//	typeName := Split(args[i], " ")
-			//	ca := CallbackArg{}
-			//	Two possibilities:
-			//	1. type name
-			//	2. type (this also may be "..."
-			//switch len(typeName) {
-			//case 1:
-			//	if typeName[0] == "..." {
-			//		break typedefAnalysis
-			//	}
-			//
-			//	ca.Type = typeName[0]
-			//	ca.Name = fmt.Sprintf("arg%d", i)
-			//case 2:
-			//	ca.Type = typeName[0]
-			//	ca.Name = typeName[1]
-			//default:
-			//	glg.Errorf("Can't split \"%s\" into type and name part", args[i])
-			//	panic("")
-			//}
-			//
-			//argsEx[i] = ca
-			//}
-			//
-			// Now we have argsEx. We can start proceeding code generation.
-			//fmt.Println(argsEx)
 		case HasPrefix(typedefs.data[k], "struct"):
 			isOpaque := !IsStructName(k, structs)
 			glg.Infof("typedef %s is a struct (is opaque? %v).", k, isOpaque)

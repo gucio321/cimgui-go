@@ -136,12 +136,13 @@ func main() {
 		refTypedefs = typedefs.data
 	}
 
-	validTypedefsNames, callbackNames, err := proceedTypedefs(*prefix, typedefs, structs, enums, refTypedefs)
-	validCallbackNames, err := proceedCallbacks(*prefix, callbackNames, typedefs, validTypedefsNames, enums, refTypedefs)
-	fmt.Println(validCallbackNames)
-
 	// generate code
 	enumNames := generateGoEnums(*prefix, enums)
+
+	validTypedefsNames, callbackNames, err := proceedTypedefs(*prefix, typedefs, structs, enums, refTypedefs)
+	validCallbackNames, err := proceedCallbacks(*prefix, callbackNames, typedefs, validTypedefsNames, enumNames, refTypedefs)
+	fmt.Println(validCallbackNames)
+
 	//structNames := generateGoStructs(*prefix, structs, enums, es, ss, refTypedefs)
 	structNames := make([]CIdentifier, 0)
 
