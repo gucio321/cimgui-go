@@ -137,7 +137,8 @@ func main() {
 	}
 
 	validTypedefsNames, callbackNames, err := proceedTypedefs(*prefix, typedefs, structs, enums, refTypedefs)
-	fmt.Println(callbackNames)
+	validCallbackNames, err := proceedCallbacks(*prefix, callbackNames, typedefs, validTypedefsNames, enums, refTypedefs)
+	fmt.Println(validCallbackNames)
 
 	// generate code
 	enumNames := generateGoEnums(*prefix, enums)

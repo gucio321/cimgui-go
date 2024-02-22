@@ -48,41 +48,6 @@ extern "C" {
 #include "cimgui/%[1]s.h"
 `, prefix)
 
-	// - for callbacks
-	//callbacksGoSb := &strings.Builder{}
-	//callbacksGoSb.WriteString(goPackageHeader)
-	//fmt.Fprintf(callbacksGoSb,
-	//	`// #include <stdlib.h>
-	// #include <memory.h>
-	// #include "extra_types.h"
-	// #include "%[1]s_wrapper.h"
-	// #include "%[1]s_callbacks.h"
-	//import "C"
-	//import "unsafe"
-	//
-	//`, prefix)
-
-	//callbacksHeaderSb := &strings.Builder{}
-	//callbacksHeaderSb.WriteString(cppFileHeader)
-	//fmt.Fprintf(callbacksHeaderSb,
-	//	`
-	//#pragma once
-	//
-	//#include "cimgui/%s.h"
-	//
-	//#ifdef __cplusplus
-	//extern "C" {
-	//#endif
-	//`, prefix)
-
-	//callbacksCppSb := &strings.Builder{}
-	//callbacksCppSb.WriteString(cppFileHeader)
-	//fmt.Fprintf(callbacksCppSb,
-	//	`
-	//#include "%[1]s_callbacks.h"
-	//#include "cimgui/%[1]s.h"
-	//`, prefix)
-
 	// because go ranges through maps as if it was drunken, we need to sort keys.
 	keys := make([]CIdentifier, 0, len(typedefs.data))
 	for k := range typedefs.data {
@@ -386,25 +351,6 @@ func new%[1]sFromC(cvalue *C.%[6]s) *%[1]s {
 	if err := os.WriteFile(fmt.Sprintf("%s_typedefs.h", prefix), []byte(typedefsHeaderSb.String()), 0644); err != nil {
 		return nil, nil, fmt.Errorf("cannot write %s_typedefs.h: %w", prefix, err)
 	}
-
-	// - for callbacks
-	//fmt.Fprint(callbacksHeaderSb,
-	//	`
-	//#ifdef __cplusplus
-	//}
-	//#endif`)
-
-	//if err := os.WriteFile(fmt.Sprintf("%s_callbacks.go", prefix), []byte(callbacksGoSb.String()), 0644); err != nil {
-	//	return nil, fmt.Errorf("cannot write %s_typedefs.go: %w", prefix, err)
-	//}
-
-	//if err := os.WriteFile(fmt.Sprintf("%s_callbacks.cpp", prefix), []byte(callbacksCppSb.String()), 0644); err != nil {
-	//	return nil, fmt.Errorf("cannot write %s_typedefs.cpp: %w", prefix, err)
-	//}
-
-	//if err := os.WriteFile(fmt.Sprintf("%s_callbacks.h", prefix), []byte(callbacksHeaderSb.String()), 0644); err != nil {
-	//	return nil, fmt.Errorf("cannot write %s_typedefs.h: %w", prefix, err)
-	//}
 
 	return validTypeNames, callbacks, nil
 }
