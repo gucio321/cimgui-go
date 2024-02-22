@@ -32,9 +32,10 @@ func proceedCallbacks(
 // #include "extra_types.h"
 // #include "%[1]s_wrapper.h"
 // #include "%[1]s_callbacks.h"
-//import "C"
-//import "unsafe"
+import "C"
+import "unsafe"
 	
+var callbackMap = make(map[string]interface{})
 `, prefix)
 
 	// 0.1.2: for C Header
@@ -166,7 +167,6 @@ callbacksProcess:
 				returnStmt: "",
 			}
 		} else {
-
 			_, returnEx.toC, err = getArgWrapper(
 				&ArgDef{
 					Name: "",
@@ -195,10 +195,51 @@ callbacksProcess:
 
 		goArgs = TrimSuffix(goArgs, ",")
 
+		goCArgs := ""
+		for _, a := range argsEx {
+			goCArgs += fmt.Sprintf("%s %s,", a.Name, a.toC.CType)
+		}
+
+		body := ""
+
+		for _, a := range argsEx {
+			body += fmt.Sprintf("%sArg := %s\n", a.Name, fmt.Sprintf(a.fromC.returnStmt, a.Name))
+		}
+
+		invocation := ""
+		for _, a := range argsEx {
+			invocation += fmt.Sprintf("%sArg, ", a.Name)
+		}
+
+		returnStmt := fmt.Sprintf("callbackFn(%s)", invocation)
+		if returnEx.fromC.returnType == "" {
+		}
+
 		fmt.Fprintf(callbacksGoSb,
 			`
+const mapName_%[1]s = "%[1]s"
+
 type %[1]s func(%[2]s) %[3]s
+
+// export callback%[1]s
+func callback%[1]s(%[4]s) %[5]s {
+	callbackInterface, ok := callbackMap[mapName_%[1]s]
+	if !ok {
+		panic("cimgui-go fatal error: Callback %[1]s not found")
+	}
+	
+	callbackFn, ok := callbackInterface.(%[1]s)
+	if !ok {
+		panic("cimgui-go fatal error: Callback %[1]s is not of proper type")
+    }
+
+	%[6]s
+
+	%[7]s
+}
 `, callback.renameGoIdentifier(), goArgs, returnEx.toC.ArgType,
+			goCArgs, returnEx.toC.CType,
+			body, returnStmt,
 		)
 	}
 
