@@ -71,6 +71,7 @@ extern "C" {
 		enumsMap[v] = true
 	}
 
+callbacksProcess:
 	for _, callback := range callbacks {
 		if _, ok := refTypedefs[callback]; ok {
 			glg.Infof("Skipping %s because it is duplicated.", callback)
@@ -138,17 +139,70 @@ extern "C" {
 
 			if err != nil {
 				glg.Errorf("Cannot get wrapper for %s: %s", ca.Type, err)
+				continue callbacksProcess
 			}
 
 			ca.fromC, err = getReturnWrapper(
 				ca.Type, validStructNamesMap, enumsMap, refTypedefs,
 			)
 
-			fmt.Println(ca)
+			if err != nil {
+				glg.Errorf("Cannot get wrapper for %s: %s", ca.Type, err)
+				continue callbacksProcess
+			}
+
 			argsEx[i] = ca
 		}
+
+		// 1.4. Find out more about return type
+		returnEx := CallbackArg{
+			Name: "",
+			Type: CIdentifier(ret),
+		}
+
+		if returnEx.Type == "void" {
+			returnEx.fromC = returnWrapper{
+				returnType: "",
+				returnStmt: "",
+			}
+		} else {
+
+			_, returnEx.toC, err = getArgWrapper(
+				&ArgDef{
+					Name: "",
+					Type: returnEx.Type,
+				},
+				false, false,
+				validStructNamesMap, enumsMap, refTypedefs,
+			)
+
+			if err != nil {
+				glg.Errorf("Cannot get wrapper for return type %s: %s", returnEx.Type, err)
+				continue callbacksProcess
+			}
+
+			returnEx.fromC, err = getReturnWrapper(
+				returnEx.Type, validStructNamesMap, enumsMap, refTypedefs,
+			)
+		}
+
+		// 2. Generate code
+		// 2.1. Generate GO code
+		goArgs := ""
+		for _, a := range argsEx {
+			goArgs += fmt.Sprintf("%s %s,", a.Name, a.toC.ArgType)
+		}
+
+		goArgs = TrimSuffix(goArgs, ",")
+
+		fmt.Fprintf(callbacksGoSb,
+			`
+type %[1]s func(%[2]s) %[3]s
+`, callback.renameGoIdentifier(), goArgs, returnEx.toC.ArgType,
+		)
 	}
 
+	// 0.3: post processing
 	fmt.Fprint(callbacksHeaderSb,
 		`
 #ifdef __cplusplus
