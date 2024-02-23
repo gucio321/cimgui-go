@@ -228,8 +228,10 @@ func getArgWrapper(
 		if isPointer {
 			w.ArgType = "*" + w.ArgType
 			fn = "handle"
+			w.CType = GoIdentifier(fmt.Sprintf("*C.%s", pureType))
 		} else {
 			fn = "c"
+			w.CType = GoIdentifier(fmt.Sprintf("C.%s", pureType))
 		}
 
 		w.ArgDef = fmt.Sprintf("%[1]sArg, %[1]sFin := %[1]s.%[2]s()", a.Name, fn)
