@@ -241,6 +241,13 @@ func callback%[1]s(%[4]s) %[5]s {
 			goCArgs, returnEx.toC.CType,
 			body, returnStmt,
 		)
+
+		// 2.2. Generate C Header
+		fmt.Fprintf(callbacksHeaderSb,
+			`
+extern %[1]s callback%[2]s(%[3]s);
+`, ret, callback, Join(args, ", "),
+		)
 	}
 
 	// 0.3: post processing
