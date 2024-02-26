@@ -168,7 +168,7 @@ func getArgWrapper(
 		data = ArgumentWrapperData{
 			ArgDef:  fmt.Sprintf("set%sCallback(%s)\n", a.Type.renameGoIdentifier(), a.Name),
 			ArgType: a.Type.renameGoIdentifier(),
-			VarName: fmt.Sprintf("C.callback%s", a.Type.renameGoIdentifier()),
+			VarName: fmt.Sprintf("C.%s(C.callback%s)", a.Type, a.Type.renameGoIdentifier()),
 			CType:   GoIdentifier(fmt.Sprintf("C.%s", a.Type)),
 		}
 		fmt.Println(data.ArgType)
