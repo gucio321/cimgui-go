@@ -128,6 +128,7 @@ func (g *goFuncsGenerator) writeFuncsFileHeader() {
 		`// #include "extra_types.h"
 // #include "%[1]s_structs_accessor.h"
 // #include "%[1]s_wrapper.h"
+// #include "%[1]s_callbacks.h"
 import "C"
 import "unsafe"
 
