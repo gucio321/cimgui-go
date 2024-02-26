@@ -164,13 +164,14 @@ func getArgWrapper(
 
 	// 1.2. check if its a callback
 	if callbacksNames[a.Type] {
-		argDeclaration = fmt.Sprintf("%s %s", a.Name, a.Type)
+		argDeclaration = fmt.Sprintf("%s %s", a.Name, a.Type.renameGoIdentifier())
 		data = ArgumentWrapperData{
 			ArgDef:  fmt.Sprintf("set%sCallbck(%s)\n", a.Type, a.Name),
 			ArgType: a.Type.renameGoIdentifier(),
 			VarName: fmt.Sprintf("C.callback%s", a.Type.renameGoIdentifier()),
 			CType:   GoIdentifier(fmt.Sprintf("C.%s", a.Type)),
 		}
+		fmt.Println(data.ArgType)
 
 		return
 	}
