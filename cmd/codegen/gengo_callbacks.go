@@ -16,6 +16,7 @@ type CallbackArg struct {
 }
 
 // TODO(gucio321): some wrappers in 2.1 are not needed.
+// TODO(gucio321): C++ file is not needed.
 func proceedCallbacks(
 	prefix string, callbacks []CIdentifier,
 	typedefs *Typedefs, validStructNames []CIdentifier, enums []GoIdentifier, refTypedefs map[CIdentifier]string,
@@ -169,7 +170,7 @@ callbacksProcess:
 		} else {
 			_, returnEx.toC, err = getArgWrapper(
 				&ArgDef{
-					Name: "",
+					Name: "%s",
 					Type: returnEx.Type,
 				},
 				false, false,
@@ -212,7 +213,24 @@ callbacksProcess:
 		}
 
 		returnStmt := fmt.Sprintf("callbackFn(%s)", invocation)
-		if returnEx.fromC.returnType == "" {
+		if returnEx.fromC.returnType != "" {
+			// TODO: this might cause strange behaviours.
+			if returnEx.toC.ArgDef == "" {
+				returnStmt = fmt.Sprintf(`
+return %s
+`, fmt.Sprintf(returnEx.toC.VarName, returnStmt))
+			} else {
+				returnStmt = fmt.Sprintf(`
+%s
+%s
+return %s
+`, fmt.Sprintf(returnEx.toC.ArgDef, "return", "return", returnStmt), func() string {
+					if returnEx.toC.Finalizer != "" {
+						return fmt.Sprintf("defer %s", fmt.Sprintf(returnEx.toC.Finalizer, "return"))
+					}
+					return ""
+				}(), fmt.Sprintf(returnEx.toC.VarName, "return"))
+			}
 		}
 
 		fmt.Fprintf(callbacksGoSb,
