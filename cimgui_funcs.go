@@ -6,6 +6,7 @@ package imgui
 // #include "extra_types.h"
 // #include "cimgui_structs_accessor.h"
 // #include "cimgui_wrapper.h"
+// #include "cimgui_callbacks.h"
 import "C"
 import "unsafe"
 
@@ -238,6 +239,16 @@ func (self *DrawList) AddBezierCubicV(p1 Vec2, p2 Vec2, p3 Vec2, p4 Vec2, col ui
 func (self *DrawList) AddBezierQuadraticV(p1 Vec2, p2 Vec2, p3 Vec2, col uint32, thickness float32, num_segments int32) {
 	selfArg, selfFin := self.handle()
 	C.ImDrawList_AddBezierQuadratic(selfArg, p1.toC(), p2.toC(), p3.toC(), C.ImU32(col), C.float(thickness), C.int(num_segments))
+
+	selfFin()
+}
+
+// Your rendering function must check for 'UserCallback' in ImDrawCmd and call the function instead of rendering triangles.
+func (self *DrawList) AddCallback(callback DrawCallback, callback_data uintptr) {
+	selfArg, selfFin := self.handle()
+	setDrawCallbackCallback(callback)
+
+	C.wrap_ImDrawList_AddCallback(selfArg, C.ImDrawCallback(C.callbackDrawCallback), C.uintptr_t(callback_data))
 
 	selfFin()
 }
@@ -7521,11 +7532,79 @@ func InputScalarNV(label string, data_type DataType, p_data uintptr, components 
 	return C.wrap_igInputScalarNV(labelArg, C.ImGuiDataType(data_type), C.uintptr_t(p_data), C.int(components), C.uintptr_t(p_step), C.uintptr_t(p_step_fast), formatArg, C.ImGuiInputTextFlags(flags)) == C.bool(true)
 }
 
+// InputTextV parameter default value hint:
+// flags: 0
+// callback: NULL
+// user_data: NULL
+func InputTextV(label string, buf string, buf_size uint64, flags InputTextFlags, callback InputTextCallback, user_data uintptr) bool {
+	labelArg, labelFin := WrapString(label)
+	bufArg, bufFin := WrapString(buf)
+	setInputTextCallbackCallback(callback)
+
+	defer func() {
+		labelFin()
+		bufFin()
+	}()
+	return C.wrap_igInputTextV(labelArg, bufArg, C.xulong(buf_size), C.ImGuiInputTextFlags(flags), C.ImGuiInputTextCallback(C.callbackInputTextCallback), C.uintptr_t(user_data)) == C.bool(true)
+}
+
 func InternalInputTextDeactivateHook(id ID) {
 	idArg, idFin := id.c()
 	C.igInputTextDeactivateHook(idArg)
 
 	idFin()
+}
+
+// InternalInputTextExV parameter default value hint:
+// callback: NULL
+// user_data: NULL
+func InternalInputTextExV(label string, hint string, buf string, buf_size int32, size_arg Vec2, flags InputTextFlags, callback InputTextCallback, user_data uintptr) bool {
+	labelArg, labelFin := WrapString(label)
+	hintArg, hintFin := WrapString(hint)
+	bufArg, bufFin := WrapString(buf)
+	setInputTextCallbackCallback(callback)
+
+	defer func() {
+		labelFin()
+		hintFin()
+		bufFin()
+	}()
+	return C.wrap_igInputTextExV(labelArg, hintArg, bufArg, C.int(buf_size), size_arg.toC(), C.ImGuiInputTextFlags(flags), C.ImGuiInputTextCallback(C.callbackInputTextCallback), C.uintptr_t(user_data)) == C.bool(true)
+}
+
+// InputTextMultilineV parameter default value hint:
+// size: ImVec2(0,0)
+// flags: 0
+// callback: NULL
+// user_data: NULL
+func InputTextMultilineV(label string, buf string, buf_size uint64, size Vec2, flags InputTextFlags, callback InputTextCallback, user_data uintptr) bool {
+	labelArg, labelFin := WrapString(label)
+	bufArg, bufFin := WrapString(buf)
+	setInputTextCallbackCallback(callback)
+
+	defer func() {
+		labelFin()
+		bufFin()
+	}()
+	return C.wrap_igInputTextMultilineV(labelArg, bufArg, C.xulong(buf_size), size.toC(), C.ImGuiInputTextFlags(flags), C.ImGuiInputTextCallback(C.callbackInputTextCallback), C.uintptr_t(user_data)) == C.bool(true)
+}
+
+// InputTextWithHintV parameter default value hint:
+// flags: 0
+// callback: NULL
+// user_data: NULL
+func InputTextWithHintV(label string, hint string, buf string, buf_size uint64, flags InputTextFlags, callback InputTextCallback, user_data uintptr) bool {
+	labelArg, labelFin := WrapString(label)
+	hintArg, hintFin := WrapString(hint)
+	bufArg, bufFin := WrapString(buf)
+	setInputTextCallbackCallback(callback)
+
+	defer func() {
+		labelFin()
+		hintFin()
+		bufFin()
+	}()
+	return C.wrap_igInputTextWithHintV(labelArg, hintArg, bufArg, C.xulong(buf_size), C.ImGuiInputTextFlags(flags), C.ImGuiInputTextCallback(C.callbackInputTextCallback), C.uintptr_t(user_data)) == C.bool(true)
 }
 
 // flexible button behavior without the visuals, frequently useful to build custom behaviors using the public api (along with IsItemActive, IsItemHovered, etc.)
@@ -9158,6 +9237,16 @@ func SetNextWindowScroll(scroll Vec2) {
 // cond: 0
 func SetNextWindowSizeV(size Vec2, cond Cond) {
 	C.igSetNextWindowSize(size.toC(), C.ImGuiCond(cond))
+}
+
+// set next window size limits. use 0.0f or FLT_MAX if you don't want limits. Use -1 for both min and max of same axis to preserve current size (which itself is a constraint). Use callback to apply non-trivial programmatic constraints.
+// SetNextWindowSizeConstraintsV parameter default value hint:
+// custom_callback: NULL
+// custom_callback_data: NULL
+func SetNextWindowSizeConstraintsV(size_min Vec2, size_max Vec2, custom_callback SizeCallback, custom_callback_data uintptr) {
+	setSizeCallbackCallback(custom_callback)
+
+	C.wrap_igSetNextWindowSizeConstraintsV(size_min.toC(), size_max.toC(), C.ImGuiSizeCallback(C.callbackSizeCallback), C.uintptr_t(custom_callback_data))
 }
 
 // set next window viewport
@@ -13188,6 +13277,14 @@ func (self *DrawCmd) ElemCount() uint32 {
 		selfFin()
 	}()
 	return uint32(C.wrap_ImDrawCmd_GetElemCount(selfArg))
+}
+
+func (self DrawCmd) SetUserCallback(v DrawCallback) {
+	setDrawCallbackCallback(v)
+
+	selfArg, selfFin := self.handle()
+	defer selfFin()
+	C.wrap_ImDrawCmd_SetUserCallback(selfArg, C.ImDrawCallback(C.callbackDrawCallback))
 }
 
 func (self DrawCmd) SetUserCallbackData(v uintptr) {
@@ -19783,6 +19880,14 @@ func (self *ContextHook) Owner() ID {
 	return *newIDFromC(func() *C.ImGuiID { result := result; return &result }())
 }
 
+func (self ContextHook) SetCallback(v ContextHookCallback) {
+	setContextHookCallbackCallback(v)
+
+	selfArg, selfFin := self.handle()
+	defer selfFin()
+	C.wrap_ImGuiContextHook_SetCallback(selfArg, C.ImGuiContextHookCallback(C.callbackContextHookCallback))
+}
+
 func (self ContextHook) SetUserData(v uintptr) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
@@ -24595,6 +24700,14 @@ func (self *NextWindowData) SizeConstraintRect() Rect {
 		selfFin()
 	}()
 	return *(&Rect{}).fromC(C.wrap_ImGuiNextWindowData_GetSizeConstraintRect(selfArg))
+}
+
+func (self NextWindowData) SetSizeCallback(v SizeCallback) {
+	setSizeCallbackCallback(v)
+
+	selfArg, selfFin := self.handle()
+	defer selfFin()
+	C.wrap_ImGuiNextWindowData_SetSizeCallback(selfArg, C.ImGuiSizeCallback(C.callbackSizeCallback))
 }
 
 func (self NextWindowData) SetSizeCallbackUserData(v uintptr) {

@@ -6,6 +6,7 @@ package imgui
 // #include "extra_types.h"
 // #include "cimnodes_structs_accessor.h"
 // #include "cimnodes_wrapper.h"
+// #include "cimnodes_callbacks.h"
 import "C"
 
 func NewEmulateThreeButtonMouse() *EmulateThreeButtonMouse {

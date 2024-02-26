@@ -6,6 +6,7 @@ package imgui
 // #include "extra_types.h"
 // #include "cimplot_structs_accessor.h"
 // #include "cimplot_wrapper.h"
+// #include "cimplot_callbacks.h"
 import "C"
 
 func (self *PlotAlignmentData) Begin() {

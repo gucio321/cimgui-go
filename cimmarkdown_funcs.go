@@ -6,6 +6,7 @@ package imgui
 // #include "extra_types.h"
 // #include "cimmarkdown_structs_accessor.h"
 // #include "cimmarkdown_wrapper.h"
+// #include "cimmarkdown_callbacks.h"
 import "C"
 
 func IsCharInsideWord(c_ rune) bool {
