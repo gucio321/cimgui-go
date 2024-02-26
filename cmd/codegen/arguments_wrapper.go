@@ -29,6 +29,7 @@ type ArgumentWrapperData struct {
 
 type argumentWrapper func(arg ArgDef) ArgumentWrapperData
 
+// TODO(gucio321) second and 3rd arguments are strange in context of current usage of this method.
 func getArgWrapper(
 	a *ArgDef,
 	makeFirstArgReceiver, isGetter bool,
@@ -127,6 +128,7 @@ func getArgWrapper(
 		"const ImPlotTime*":   wrappablePtrW("*PlotTime", "C.ImPlotTime"),
 	}
 
+	// 0.1. if argument name is a registered GO keyword, change its name by adding Arg suffix
 	if a.Name == "type" || a.Name == "range" {
 		a.Name += "Arg"
 	}
@@ -148,6 +150,8 @@ func getArgWrapper(
 		return
 	}
 
+	// 1. check type class
+	// 1.1. check if its a known type
 	if v, ok := argWrapperMap[a.Type]; ok {
 		arg := v(*a)
 		data = arg
@@ -158,6 +162,20 @@ func getArgWrapper(
 		return argDeclaration, data, nil
 	}
 
+	// 1.2. check if its a callback
+	if callbacksNames[a.Type] {
+		argDeclaration = fmt.Sprintf("%s %s", a.Name, a.Type)
+		data = ArgumentWrapperData{
+			ArgDef:  fmt.Sprintf("set%sCallbck(%s)\n", a.Type, a.Name),
+			ArgType: a.Type.renameGoIdentifier(),
+			VarName: fmt.Sprintf("C.callback%s", a.Type.renameGoIdentifier()),
+			CType:   GoIdentifier(fmt.Sprintf("C.%s", a.Type)),
+		}
+
+		return
+	}
+
+	// 1.3. check if its an enum.
 	if goEnumName := a.Type; isEnum(goEnumName, enumNames) {
 		argDeclaration = fmt.Sprintf("%s %s", a.Name, goEnumName.renameGoIdentifier())
 		data = ArgumentWrapperData{
@@ -168,6 +186,7 @@ func getArgWrapper(
 		return
 	}
 
+	// 1.4. check if its a vector. If so, create a wrapper for vector type and add generic implementation.
 	if HasPrefix(a.Type, "ImVector_") &&
 		!(HasSuffix(a.Type, "*") || HasSuffix(a.Type, "]")) {
 		pureType := TrimPrefix(a.Type, "ImVector_") + "*"

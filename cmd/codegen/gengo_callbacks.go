@@ -251,7 +251,7 @@ func set%[1]sCallback(callback %[1]s) {
 		fmt.Fprintf(callbacksHeaderSb,
 			`
 extern %[1]s callback%[2]s(%[3]s);
-`, ret, callback, Join(args, ", "),
+`, ret, callback.renameGoIdentifier(), Join(args, ", "),
 		)
 
 		// 3. Add to valid type names
