@@ -35,8 +35,7 @@ func proceedCallbacks(
 // #include "%[1]s_callbacks.h"
 import "C"
 import "unsafe"
-	
-var callbackMap = make(map[string]interface{})
+
 `, prefix)
 
 	// 0.1.2: for C Header
