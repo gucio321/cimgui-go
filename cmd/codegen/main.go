@@ -160,7 +160,7 @@ func main() {
 
 	structNames = append(structNames, validTypedefsNames...)
 
-	if err := generateGoFuncs(*prefix, validFuncs, enumNames, structNames, refTypedefs); err != nil {
+	if err := generateGoFuncs(*prefix, validFuncs, enumNames, structNames, validCallbackNames, refTypedefs); err != nil {
 		log.Panic(err)
 	}
 }

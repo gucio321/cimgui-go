@@ -33,12 +33,17 @@ const (
 )
 
 // generateGoFuncs generates given list of functions and writes them to file
-func generateGoFuncs(prefix string, validFuncs []FuncDef, enumNames []GoIdentifier, structNames []CIdentifier, refTypedefs map[CIdentifier]string) error {
+func generateGoFuncs(
+	prefix string, validFuncs []FuncDef,
+	enumNames []GoIdentifier, structNames []CIdentifier,
+	callbacksNames map[CIdentifier]bool, refTypedefs map[CIdentifier]string,
+) error {
 	generator := &goFuncsGenerator{
-		prefix:      prefix,
-		structNames: make(map[CIdentifier]bool),
-		enumNames:   make(map[GoIdentifier]bool),
-		refTypedefs: refTypedefs,
+		prefix:         prefix,
+		structNames:    make(map[CIdentifier]bool),
+		enumNames:      make(map[GoIdentifier]bool),
+		callbacksNames: callbacksNames,
+		refTypedefs:    refTypedefs,
 	}
 
 	for _, v := range structNames {
@@ -103,10 +108,11 @@ func generateGoFuncs(prefix string, validFuncs []FuncDef, enumNames []GoIdentifi
 
 // goFuncsGenerator is an internal state of GO funcs' generator
 type goFuncsGenerator struct {
-	prefix      string
-	structNames map[CIdentifier]bool
-	enumNames   map[GoIdentifier]bool
-	refTypedefs map[CIdentifier]string
+	prefix         string
+	structNames    map[CIdentifier]bool
+	callbacksNames map[CIdentifier]bool
+	enumNames      map[GoIdentifier]bool
+	refTypedefs    map[CIdentifier]string
 
 	sb                 strings.Builder
 	convertedFuncCount int
@@ -367,6 +373,7 @@ func (g *goFuncsGenerator) generateFuncArgs(f FuncDef) (args []GoIdentifier, arg
 			i == 0 && f.StructSetter,
 			f.StructGetter && g.structNames[a.Type],
 			g.structNames,
+			g.callbacksNames,
 			g.enumNames,
 			g.refTypedefs,
 		)

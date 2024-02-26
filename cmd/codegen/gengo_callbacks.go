@@ -15,6 +15,7 @@ type CallbackArg struct {
 	toC   ArgumentWrapperData
 }
 
+// TODO(gucio321): some wrappers in 2.1 are not needed.
 func proceedCallbacks(
 	prefix string, callbacks []CIdentifier,
 	typedefs *Typedefs, validStructNames []CIdentifier, enums []GoIdentifier, refTypedefs map[CIdentifier]string,
@@ -135,7 +136,7 @@ callbacksProcess:
 					Type: ca.Type,
 				},
 				false, false,
-				validStructNamesMap, enumsMap, refTypedefs,
+				validStructNamesMap, map[CIdentifier]bool{}, enumsMap, refTypedefs,
 			)
 
 			if err != nil {
@@ -173,7 +174,7 @@ callbacksProcess:
 					Type: returnEx.Type,
 				},
 				false, false,
-				validStructNamesMap, enumsMap, refTypedefs,
+				validStructNamesMap, map[CIdentifier]bool{}, enumsMap, refTypedefs,
 			)
 
 			if err != nil {

@@ -130,6 +130,7 @@ extern "C" {
 			},
 			false, false,
 			map[CIdentifier]bool{},
+			map[CIdentifier]bool{},
 			map[GoIdentifier]bool{},
 			map[CIdentifier]string{},
 		)
@@ -140,6 +141,7 @@ extern "C" {
 				Type: CIdentifier(typedef) + "*",
 			},
 			false, false,
+			map[CIdentifier]bool{},
 			map[CIdentifier]bool{},
 			map[GoIdentifier]bool{},
 			map[CIdentifier]string{},
