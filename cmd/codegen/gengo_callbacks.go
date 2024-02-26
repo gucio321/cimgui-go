@@ -18,8 +18,8 @@ type CallbackArg struct {
 func proceedCallbacks(
 	prefix string, callbacks []CIdentifier,
 	typedefs *Typedefs, validStructNames []CIdentifier, enums []GoIdentifier, refTypedefs map[CIdentifier]string,
-) (validTypeNames []CIdentifier, err error) {
-	validTypeNames = make([]CIdentifier, 0)
+) (validTypeNames map[CIdentifier]bool, err error) {
+	validTypeNames = make(map[CIdentifier]bool)
 
 	// 0: Prepare datea
 	// 0.1: create writters for files
@@ -237,6 +237,10 @@ func callback%[1]s(%[4]s) %[5]s {
 
 	%[7]s
 }
+
+func set%[1]sCallback(callback %[1]s) {
+	callbackMap[mapName_%[1]s] = callback
+}
 `, callback.renameGoIdentifier(), goArgs, returnEx.toC.ArgType,
 			goCArgs, returnEx.toC.CType,
 			body, returnStmt,
@@ -248,6 +252,9 @@ func callback%[1]s(%[4]s) %[5]s {
 extern %[1]s callback%[2]s(%[3]s);
 `, ret, callback, Join(args, ", "),
 		)
+
+		// 3. Add to valid type names
+		validTypeNames[callback] = true
 	}
 
 	// 0.3: post processing
