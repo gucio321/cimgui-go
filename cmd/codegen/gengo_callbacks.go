@@ -239,7 +239,7 @@ const mapName_%[1]s = "%[1]s"
 
 type %[1]s func(%[2]s) %[3]s
 
-// export callback%[1]s
+//export callback%[1]s
 func callback%[1]s(%[4]s) %[5]s {
 	callbackInterface, ok := callbackMap[mapName_%[1]s]
 	if !ok {

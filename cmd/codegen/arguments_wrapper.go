@@ -42,7 +42,7 @@ func getArgWrapper(
 		"char":                simpleW("rune", "C.char"),
 		"char[5]":             simplePtrArrayW(5, "C.char", "rune"),
 		"char[16]":            simplePtrArrayW(16, "C.char", "rune"),
-		"char*":               constCharW,
+		"char*":               charW,
 		"const char*":         constCharW,
 		"const char**":        charPtrPtrW,
 		"const char* const[]": charPtrPtrW,
@@ -267,6 +267,17 @@ func getArgWrapper(
 	}
 
 	return "", ArgumentWrapperData{}, fmt.Errorf("unknown argument type \"%s\"", a.Type)
+}
+
+func charW(arg ArgDef) ArgumentWrapperData {
+	return ArgumentWrapperData{
+		ArgType:     "*string",
+		VarName:     fmt.Sprintf("(*C.char)(%sArg.ptr)", arg.Name),
+		ArgDef:      fmt.Sprintf("%[1]sArg := NewStringBuffer(*%[1]s)", arg.Name),
+		ArgDefNoFin: fmt.Sprintf("%[1]sArg := NewStringBuffer(*%[1]s)", arg.Name),
+		Finalizer:   fmt.Sprintf("*%[1]s = %[1]sArg.ToGo()", arg.Name),
+		CType:       "*C.char",
+	}
 }
 
 func constCharW(arg ArgDef) ArgumentWrapperData {
