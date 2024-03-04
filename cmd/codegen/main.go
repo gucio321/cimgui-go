@@ -38,9 +38,12 @@ func getEnumAndStructNames(enumJsonBytes []byte) (enumNames []GoIdentifier, stru
 }
 
 func main() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	defJsonPath := flag.String("d", "", "definitions json file path")
 	enumsJsonpath := flag.String("e", "", "structs and enums json file path")
+	noEnums := flag.Bool("ne", false, "do not generate enums")
 	typedefsJsonpath := flag.String("t", "", "typedefs dict json file path")
+	noTypedefs := flag.Bool("nt", false, "do not generate typedefs")
 	refEnumsJsonPath := flag.String("r", "", "reference structs and enums json file path")
 	refTypedefsJsonPath := flag.String("rt", "", "reference typedefs_dict.json file path")
 	prefix := flag.String("p", "", "prefix for the generated file")
@@ -51,13 +54,13 @@ func main() {
 	flag.Parse()
 
 	stat, err := os.Stat(*defJsonPath)
-	if err != nil || stat.IsDir() {
+	if (err != nil || stat.IsDir()) && !*noEnums {
 		log.Panic("Invalid definitions json file path")
 	}
 
 	stat, err = os.Stat(*enumsJsonpath)
-	if err != nil || stat.IsDir() {
-		log.Panic("Invalid enum json file path")
+	if (err != nil || stat.IsDir()) && !*noEnums {
+		log.Panic("Invalid enum json file path", *noEnums)
 	}
 
 	defJsonBytes, err := os.ReadFile(*defJsonPath)
@@ -65,14 +68,20 @@ func main() {
 		log.Panic(err)
 	}
 
-	typedefsJsonBytes, err := os.ReadFile(*typedefsJsonpath)
-	if err != nil {
-		log.Panic(err)
+	var typedefsJsonBytes []byte
+	if !*noTypedefs {
+		typedefsJsonBytes, err = os.ReadFile(*typedefsJsonpath)
+		if err != nil {
+			log.Panic(err)
+		}
 	}
 
-	enumJsonBytes, err := os.ReadFile(*enumsJsonpath)
-	if err != nil {
-		log.Panic(err)
+	var enumJsonBytes []byte
+	if !*noEnums {
+		enumJsonBytes, err = os.ReadFile(*enumsJsonpath)
+		if err != nil {
+			log.Panic(err)
+		}
 	}
 
 	var refEnumJsonBytes []byte
@@ -97,19 +106,30 @@ func main() {
 		log.Panic(err.Error())
 	}
 
-	enums, err := getEnumDefs(enumJsonBytes)
-	if err != nil {
-		log.Panic(err.Error())
+	var enums = make([]EnumDef, 0)
+	if !*noEnums {
+		enums, err = getEnumDefs(enumJsonBytes)
+		if err != nil {
+			log.Panic(err.Error())
+		}
 	}
 
-	typedefs, err := getTypedefs(typedefsJsonBytes)
-	if err != nil {
-		log.Panic(err.Error())
+	var typedefs = &Typedefs{}
+	if !*noTypedefs {
+		typedefs, err = getTypedefs(typedefsJsonBytes)
+		if err != nil {
+			log.Panic(err.Error())
+		}
 	}
 
-	structs, err := getStructDefs(enumJsonBytes)
-	if err != nil {
-		log.Panic(err.Error())
+	var structs = make([]StructDef, 0)
+	if !*noEnums {
+		if len(*refEnumsJsonPath) > 0 {
+			structs, err = getStructDefs(enumJsonBytes)
+			if err != nil {
+				log.Panic(err.Error())
+			}
+		}
 	}
 
 	validFuncs, err := generateCppWrapper(*prefix, *include, funcs)
