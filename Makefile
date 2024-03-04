@@ -31,6 +31,7 @@ endef
 
 define cimgui
 	$(call generate,cimgui,cimgui/cimgui.h,cimgui/cimgui_templates/definitions.json,cimgui/cimgui_templates/structs_and_enums.json, cimgui/cimgui_templates/typedefs_dict.json)
+	$(call generate,cimgui_impl,cimgui/cimgui.h,cimgui/cimgui_templates/impl_definitions.json,"" -ne,"" -nt,-r cimgui/cimgui_templates/structs_and_enums.json -rt cimgui/cimgui_templates/typedefs_dict.json)
 endef
 
 ## cimgui: generate cimgui binding
