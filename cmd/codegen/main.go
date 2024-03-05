@@ -106,7 +106,7 @@ func main() {
 		log.Panic(err.Error())
 	}
 
-	var enums = make([]EnumDef, 0)
+	enums := make([]EnumDef, 0)
 	if !*noEnums {
 		enums, err = getEnumDefs(enumJsonBytes)
 		if err != nil {
@@ -114,7 +114,7 @@ func main() {
 		}
 	}
 
-	var typedefs = &Typedefs{}
+	typedefs := &Typedefs{}
 	if !*noTypedefs {
 		typedefs, err = getTypedefs(typedefsJsonBytes)
 		if err != nil {
@@ -122,13 +122,11 @@ func main() {
 		}
 	}
 
-	var structs = make([]StructDef, 0)
+	structs := make([]StructDef, 0)
 	if !*noEnums {
-		if len(*refEnumsJsonPath) > 0 {
-			structs, err = getStructDefs(enumJsonBytes)
-			if err != nil {
-				log.Panic(err.Error())
-			}
+		structs, err = getStructDefs(enumJsonBytes)
+		if err != nil {
+			log.Panic(err.Error())
 		}
 	}
 
@@ -137,7 +135,7 @@ func main() {
 		log.Panic(err)
 	}
 
-	var es, ss = make([]GoIdentifier, 0), make([]CIdentifier, 0)
+	es, ss := make([]GoIdentifier, 0), make([]CIdentifier, 0)
 	// generate reference only enum and struct names
 	if len(refEnumJsonBytes) > 0 {
 		es, ss, err = getEnumAndStructNames(refEnumJsonBytes)
@@ -146,7 +144,7 @@ func main() {
 		}
 	}
 
-	var refTypedefs = make(map[CIdentifier]string)
+	refTypedefs := make(map[CIdentifier]string)
 	if len(refTypedefsJsonBytes) > 0 {
 		typedefs, err := getTypedefs(refTypedefsJsonBytes)
 		if err != nil {
@@ -160,7 +158,7 @@ func main() {
 
 	// generate code
 	enumNames := generateGoEnums(*prefix, enums)
-	//structNames := generateGoStructs(*prefix, structs, enums, es, ss, refTypedefs)
+	// structNames := generateGoStructs(*prefix, structs, enums, es, ss, refTypedefs)
 	structNames := make([]CIdentifier, 0)
 
 	structAccessorFuncs, err := generateCppStructsAccessor(*prefix, validFuncs, structs)
