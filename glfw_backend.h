@@ -174,8 +174,8 @@ struct GLFWimage;
 extern void igSetBgColor(ImVec4 color);
 extern void igSetTargetFPS(unsigned int fps);
 extern int igInitGLFW();
-extern GLFWwindow *igCreateGLFWWindow(const char *title, int width, int height,
-                                      VoidCallback afterCreateContext);
+extern GLFWwindow *igCreateGLFWWindow(const char *title, int width, int height);
+extern void igGLFWInitImGui(GLFWwindow *window, VoidCallback afterCreateContext);
 extern void igGLFWRunLoop(GLFWwindow *window, VoidCallback loop, VoidCallback beforeRender, VoidCallback afterRender,
                       VoidCallback beforeDestroyContext);
 extern void igGLFWWindow_GetDisplaySize(GLFWwindow *window, int *width, int *height);

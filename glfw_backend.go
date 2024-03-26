@@ -245,6 +245,7 @@ func (b *GLFWBackend) SetBgColor(color Vec4) {
 }
 
 func (b *GLFWBackend) Run(loop func()) {
+	b.InitImGui() // FIXME: this might cause problems and might require exposing to Backend interface.
 	b.loop = loop
 	C.igGLFWRunLoop(b.handle(), C.VoidCallback(C.loopCallback), C.VoidCallback(C.beforeRender), C.VoidCallback(C.afterRender), C.VoidCallback(C.beforeDestoryContext))
 }
@@ -331,11 +332,17 @@ func (b *GLFWBackend) CreateWindow(title string, width, height int) {
 		titleArg,
 		C.int(width),
 		C.int(height),
-		C.VoidCallback(C.afterCreateContext),
 	)))
 	if b.window == 0 {
 		panic("Failed to create GLFW window")
 	}
+}
+
+func (b *GLFWBackend) InitImGui() {
+	C.igGLFWInitImGui(
+		b.handle(),
+		C.VoidCallback(C.afterCreateContext),
+	)
 }
 
 func (b *GLFWBackend) SetTargetFPS(fps uint) {
