@@ -118,7 +118,7 @@ endef
 .PHONY: update
 update: setup
 	rm -rf cimgui/*
-	$(call update,cimgui,https://github.com/cimgui/cimgui,imgui,docking)
+	$(call update,cimgui,https://github.com/cimgui/cimgui,imgui,v1.91.1-docking) # TODO: Temporarly using v1.91.1-docking due to https://github.com/cimgui/cimgui/issues/277
 	cat templates/assert.h >> cimgui/imgui/imconfig.h
 	$(call cimgui)
 	$(call update,cimplot,https://github.com/cimgui/cimplot,implot,master)
