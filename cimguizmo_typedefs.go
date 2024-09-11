@@ -10,19 +10,19 @@ package imgui
 // #include "cimguizmo_typedefs.h"
 import "C"
 
-type Style struct {
+type GizmoStyle struct {
 	CData *C.Style
 }
 
-func (self *Style) handle() (result *C.Style, fin func()) {
+func (self *GizmoStyle) handle() (result *C.Style, fin func()) {
 	return self.CData, func() {}
 }
 
-func (self Style) c() (C.Style, func()) {
+func (self GizmoStyle) c() (C.Style, func()) {
 	result, fn := self.handle()
 	return *result, fn
 }
 
-func newStyleFromC(cvalue *C.Style) *Style {
-	return &Style{CData: cvalue}
+func newGizmoStyleFromC(cvalue *C.Style) *GizmoStyle {
+	return &GizmoStyle{CData: cvalue}
 }

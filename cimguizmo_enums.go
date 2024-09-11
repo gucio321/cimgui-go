@@ -4,56 +4,56 @@
 package imgui
 
 // original name: COLOR
-type COLOR int32
+type GizmoCOLOR int32
 
 const (
-	DIRECTIONX          COLOR = 0
-	DIRECTIONY          COLOR = 1
-	DIRECTIONZ          COLOR = 2
-	PLANEX              COLOR = 3
-	PLANEY              COLOR = 4
-	PLANEZ              COLOR = 5
-	SELECTION           COLOR = 6
-	INACTIVE            COLOR = 7
-	TRANSLATIONLINE     COLOR = 8
-	SCALELINE           COLOR = 9
-	ROTATIONUSINGBORDER COLOR = 10
-	ROTATIONUSINGFILL   COLOR = 11
-	HATCHEDAXISLINES    COLOR = 12
-	TEXT                COLOR = 13
-	TEXTSHADOW          COLOR = 14
-	COUNT               COLOR = 15
+	GizmoDIRECTIONX          GizmoCOLOR = 0
+	GizmoDIRECTIONY          GizmoCOLOR = 1
+	GizmoDIRECTIONZ          GizmoCOLOR = 2
+	GizmoPLANEX              GizmoCOLOR = 3
+	GizmoPLANEY              GizmoCOLOR = 4
+	GizmoPLANEZ              GizmoCOLOR = 5
+	GizmoSELECTION           GizmoCOLOR = 6
+	GizmoINACTIVE            GizmoCOLOR = 7
+	GizmoTRANSLATIONLINE     GizmoCOLOR = 8
+	GizmoSCALELINE           GizmoCOLOR = 9
+	GizmoROTATIONUSINGBORDER GizmoCOLOR = 10
+	GizmoROTATIONUSINGFILL   GizmoCOLOR = 11
+	GizmoHATCHEDAXISLINES    GizmoCOLOR = 12
+	GizmoTEXT                GizmoCOLOR = 13
+	GizmoTEXTSHADOW          GizmoCOLOR = 14
+	GizmoCOUNT               GizmoCOLOR = 15
 )
 
 // original name: MODE
-type MODE int32
+type GizmoMODE int32
 
 const (
-	LOCAL MODE = 0
-	WORLD MODE = 1
+	GizmoLOCAL GizmoMODE = 0
+	GizmoWORLD GizmoMODE = 1
 )
 
 // original name: OPERATION
-type OPERATION int32
+type GizmoOPERATION int32
 
 const (
-	TRANSLATEX   OPERATION = 1
-	TRANSLATEY   OPERATION = 2
-	TRANSLATEZ   OPERATION = 4
-	ROTATEX      OPERATION = 8
-	ROTATEY      OPERATION = 16
-	ROTATEZ      OPERATION = 32
-	ROTATESCREEN OPERATION = 64
-	SCALEX       OPERATION = 128
-	SCALEY       OPERATION = 256
-	SCALEZ       OPERATION = 512
-	BOUNDS       OPERATION = 1024
-	SCALEXU      OPERATION = 2048
-	SCALEYU      OPERATION = 4096
-	SCALEZU      OPERATION = 8192
-	TRANSLATE    OPERATION = 7
-	ROTATE       OPERATION = 120
-	SCALE        OPERATION = 896
-	SCALEU       OPERATION = 14336
-	UNIVERSAL    OPERATION = 14463
+	GizmoTRANSLATEX   GizmoOPERATION = 1
+	GizmoTRANSLATEY   GizmoOPERATION = 2
+	GizmoTRANSLATEZ   GizmoOPERATION = 4
+	GizmoROTATEX      GizmoOPERATION = 8
+	GizmoROTATEY      GizmoOPERATION = 16
+	GizmoROTATEZ      GizmoOPERATION = 32
+	GizmoROTATESCREEN GizmoOPERATION = 64
+	GizmoSCALEX       GizmoOPERATION = 128
+	GizmoSCALEY       GizmoOPERATION = 256
+	GizmoSCALEZ       GizmoOPERATION = 512
+	GizmoBOUNDS       GizmoOPERATION = 1024
+	GizmoSCALEXU      GizmoOPERATION = 2048
+	GizmoSCALEYU      GizmoOPERATION = 4096
+	GizmoSCALEZU      GizmoOPERATION = 8192
+	GizmoTRANSLATE    GizmoOPERATION = 7
+	GizmoROTATE       GizmoOPERATION = 120
+	GizmoSCALE        GizmoOPERATION = 896
+	GizmoSCALEU       GizmoOPERATION = 14336
+	GizmoUNIVERSAL    GizmoOPERATION = 14463
 )

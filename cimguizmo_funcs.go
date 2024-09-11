@@ -8,15 +8,15 @@ package imgui
 // #include "cimguizmo_wrapper.h"
 import "C"
 
-func AllowAxisFlip(value bool) {
+func GizmoAllowAxisFlip(value bool) {
 	C.AllowAxisFlip(C.bool(value))
 }
 
-func BeginFrame() {
+func GizmoBeginFrame() {
 	C.BeginFrame()
 }
 
-func DecomposeMatrixToComponents(matrix []float32, translation *float32, rotation *float32, scale *float32) {
+func GizmoDecomposeMatrixToComponents(matrix []float32, translation *float32, rotation *float32, scale *float32) {
 	translationArg, translationFin := WrapNumberPtr[C.float, float32](translation)
 	rotationArg, rotationFin := WrapNumberPtr[C.float, float32](rotation)
 	scaleArg, scaleFin := WrapNumberPtr[C.float, float32](scale)
@@ -27,40 +27,40 @@ func DecomposeMatrixToComponents(matrix []float32, translation *float32, rotatio
 	scaleFin()
 }
 
-func DrawCubes(view []float32, projection []float32, matrices []float32, matrixCount int32) {
+func GizmoDrawCubes(view []float32, projection []float32, matrices []float32, matrixCount int32) {
 	C.DrawCubes((*C.float)(&(view[0])), (*C.float)(&(projection[0])), (*C.float)(&(matrices[0])), C.int(matrixCount))
 }
 
-func DrawGrid(view []float32, projection []float32, matrix []float32, gridSize float32) {
+func GizmoDrawGrid(view []float32, projection []float32, matrix []float32, gridSize float32) {
 	C.DrawGrid((*C.float)(&(view[0])), (*C.float)(&(projection[0])), (*C.float)(&(matrix[0])), C.float(gridSize))
 }
 
-func Enable(enable bool) {
+func GizmoEnable(enable bool) {
 	C.Enable(C.bool(enable))
 }
 
-func Style() *Style {
-	return newStyleFromC(C.GetStyle())
+func GizmoStyle() *GizmoStyle {
+	return newGizmoStyleFromC(C.GetStyle())
 }
 
-func IsOver() bool {
+func GizmoIsOver() bool {
 	return C.IsOver() == C.bool(true)
 }
 
-func IsUsing() bool {
+func GizmoIsUsing() bool {
 	return C.IsUsing() == C.bool(true)
 }
 
-func IsUsingAny() bool {
+func GizmoIsUsingAny() bool {
 	return C.IsUsingAny() == C.bool(true)
 }
 
-// ManipulateV parameter default value hint:
+// GizmoManipulateV parameter default value hint:
 // deltaMatrix: NULL
 // snap: NULL
 // localBounds: NULL
 // boundsSnap: NULL
-func ManipulateV(view []float32, projection []float32, operation OPERATION, mode MODE, matrix *float32, deltaMatrix *float32, snap []float32, localBounds []float32, boundsSnap []float32) bool {
+func GizmoManipulateV(view []float32, projection []float32, operation GizmoOPERATION, mode GizmoMODE, matrix *float32, deltaMatrix *float32, snap []float32, localBounds []float32, boundsSnap []float32) bool {
 	matrixArg, matrixFin := WrapNumberPtr[C.float, float32](matrix)
 	deltaMatrixArg, deltaMatrixFin := WrapNumberPtr[C.float, float32](deltaMatrix)
 
@@ -71,56 +71,56 @@ func ManipulateV(view []float32, projection []float32, operation OPERATION, mode
 	return C.Manipulate((*C.float)(&(view[0])), (*C.float)(&(projection[0])), C.OPERATION(operation), C.MODE(mode), matrixArg, deltaMatrixArg, (*C.float)(&(snap[0])), (*C.float)(&(localBounds[0])), (*C.float)(&(boundsSnap[0]))) == C.bool(true)
 }
 
-func RecomposeMatrixFromComponents(translation []float32, rotation []float32, scale []float32, matrix *float32) {
+func GizmoRecomposeMatrixFromComponents(translation []float32, rotation []float32, scale []float32, matrix *float32) {
 	matrixArg, matrixFin := WrapNumberPtr[C.float, float32](matrix)
 	C.RecomposeMatrixFromComponents((*C.float)(&(translation[0])), (*C.float)(&(rotation[0])), (*C.float)(&(scale[0])), matrixArg)
 
 	matrixFin()
 }
 
-func SetAxisLimit(value float32) {
+func GizmoSetAxisLimit(value float32) {
 	C.SetAxisLimit(C.float(value))
 }
 
-func SetGizmoSizeClipSpace(value float32) {
+func GizmoSetGizmoSizeClipSpace(value float32) {
 	C.SetGizmoSizeClipSpace(C.float(value))
 }
 
-func SetID(id int32) {
+func GizmoSetID(id int32) {
 	C.SetID(C.int(id))
 }
 
-func SetOrthographic(isOrthographic bool) {
+func GizmoSetOrthographic(isOrthographic bool) {
 	C.SetOrthographic(C.bool(isOrthographic))
 }
 
-func SetPlaneLimit(value float32) {
+func GizmoSetPlaneLimit(value float32) {
 	C.SetPlaneLimit(C.float(value))
 }
 
-func SetRect(x float32, y float32, width float32, height float32) {
+func GizmoSetRect(x float32, y float32, width float32, height float32) {
 	C.SetRect(C.float(x), C.float(y), C.float(width), C.float(height))
 }
 
-func NewStyle() *Style {
-	return newStyleFromC(C.Style_Style())
+func GizmoNewStyle() *GizmoStyle {
+	return newGizmoStyleFromC(C.Style_Style())
 }
 
-func (self *Style) Destroy() {
+func (self *GizmoStyle) GizmoDestroy() {
 	selfArg, selfFin := self.handle()
 	C.Style_destroy(selfArg)
 
 	selfFin()
 }
 
-func ViewManipulate(view *float32, length float32, position Vec2, size Vec2, backgroundColor uint32) {
+func GizmoViewManipulate(view *float32, length float32, position Vec2, size Vec2, backgroundColor uint32) {
 	viewArg, viewFin := WrapNumberPtr[C.float, float32](view)
 	C.ViewManipulate(viewArg, C.float(length), position.toC(), size.toC(), C.ImU32(backgroundColor))
 
 	viewFin()
 }
 
-func Manipulate(view []float32, projection []float32, operation OPERATION, mode MODE, matrix *float32) bool {
+func GizmoManipulate(view []float32, projection []float32, operation GizmoOPERATION, mode GizmoMODE, matrix *float32) bool {
 	matrixArg, matrixFin := WrapNumberPtr[C.float, float32](matrix)
 
 	defer func() {
@@ -129,17 +129,17 @@ func Manipulate(view []float32, projection []float32, operation OPERATION, mode 
 	return C.wrap_Manipulate((*C.float)(&(view[0])), (*C.float)(&(projection[0])), C.OPERATION(operation), C.MODE(mode), matrixArg) == C.bool(true)
 }
 
-func SetDrawlist() {
+func GizmoSetDrawlist() {
 	C.wrap_SetDrawlist()
 }
 
-func (self Style) SetTranslationLineThickness(v float32) {
+func (self GizmoStyle) GizmoSetTranslationLineThickness(v float32) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_Style_SetTranslationLineThickness(selfArg, C.float(v))
 }
 
-func (self *Style) TranslationLineThickness() float32 {
+func (self *GizmoStyle) GizmoTranslationLineThickness() float32 {
 	selfArg, selfFin := self.handle()
 
 	defer func() {
@@ -148,13 +148,13 @@ func (self *Style) TranslationLineThickness() float32 {
 	return float32(C.wrap_Style_GetTranslationLineThickness(selfArg))
 }
 
-func (self Style) SetTranslationLineArrowSize(v float32) {
+func (self GizmoStyle) GizmoSetTranslationLineArrowSize(v float32) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_Style_SetTranslationLineArrowSize(selfArg, C.float(v))
 }
 
-func (self *Style) TranslationLineArrowSize() float32 {
+func (self *GizmoStyle) GizmoTranslationLineArrowSize() float32 {
 	selfArg, selfFin := self.handle()
 
 	defer func() {
@@ -163,13 +163,13 @@ func (self *Style) TranslationLineArrowSize() float32 {
 	return float32(C.wrap_Style_GetTranslationLineArrowSize(selfArg))
 }
 
-func (self Style) SetRotationLineThickness(v float32) {
+func (self GizmoStyle) GizmoSetRotationLineThickness(v float32) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_Style_SetRotationLineThickness(selfArg, C.float(v))
 }
 
-func (self *Style) RotationLineThickness() float32 {
+func (self *GizmoStyle) GizmoRotationLineThickness() float32 {
 	selfArg, selfFin := self.handle()
 
 	defer func() {
@@ -178,13 +178,13 @@ func (self *Style) RotationLineThickness() float32 {
 	return float32(C.wrap_Style_GetRotationLineThickness(selfArg))
 }
 
-func (self Style) SetRotationOuterLineThickness(v float32) {
+func (self GizmoStyle) GizmoSetRotationOuterLineThickness(v float32) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_Style_SetRotationOuterLineThickness(selfArg, C.float(v))
 }
 
-func (self *Style) RotationOuterLineThickness() float32 {
+func (self *GizmoStyle) GizmoRotationOuterLineThickness() float32 {
 	selfArg, selfFin := self.handle()
 
 	defer func() {
@@ -193,13 +193,13 @@ func (self *Style) RotationOuterLineThickness() float32 {
 	return float32(C.wrap_Style_GetRotationOuterLineThickness(selfArg))
 }
 
-func (self Style) SetScaleLineThickness(v float32) {
+func (self GizmoStyle) GizmoSetScaleLineThickness(v float32) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_Style_SetScaleLineThickness(selfArg, C.float(v))
 }
 
-func (self *Style) ScaleLineThickness() float32 {
+func (self *GizmoStyle) GizmoScaleLineThickness() float32 {
 	selfArg, selfFin := self.handle()
 
 	defer func() {
@@ -208,13 +208,13 @@ func (self *Style) ScaleLineThickness() float32 {
 	return float32(C.wrap_Style_GetScaleLineThickness(selfArg))
 }
 
-func (self Style) SetScaleLineCircleSize(v float32) {
+func (self GizmoStyle) GizmoSetScaleLineCircleSize(v float32) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_Style_SetScaleLineCircleSize(selfArg, C.float(v))
 }
 
-func (self *Style) ScaleLineCircleSize() float32 {
+func (self *GizmoStyle) GizmoScaleLineCircleSize() float32 {
 	selfArg, selfFin := self.handle()
 
 	defer func() {
@@ -223,13 +223,13 @@ func (self *Style) ScaleLineCircleSize() float32 {
 	return float32(C.wrap_Style_GetScaleLineCircleSize(selfArg))
 }
 
-func (self Style) SetHatchedAxisLineThickness(v float32) {
+func (self GizmoStyle) GizmoSetHatchedAxisLineThickness(v float32) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_Style_SetHatchedAxisLineThickness(selfArg, C.float(v))
 }
 
-func (self *Style) HatchedAxisLineThickness() float32 {
+func (self *GizmoStyle) GizmoHatchedAxisLineThickness() float32 {
 	selfArg, selfFin := self.handle()
 
 	defer func() {
@@ -238,13 +238,13 @@ func (self *Style) HatchedAxisLineThickness() float32 {
 	return float32(C.wrap_Style_GetHatchedAxisLineThickness(selfArg))
 }
 
-func (self Style) SetCenterCircleSize(v float32) {
+func (self GizmoStyle) GizmoSetCenterCircleSize(v float32) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_Style_SetCenterCircleSize(selfArg, C.float(v))
 }
 
-func (self *Style) CenterCircleSize() float32 {
+func (self *GizmoStyle) GizmoCenterCircleSize() float32 {
 	selfArg, selfFin := self.handle()
 
 	defer func() {
@@ -253,7 +253,7 @@ func (self *Style) CenterCircleSize() float32 {
 	return float32(C.wrap_Style_GetCenterCircleSize(selfArg))
 }
 
-func (self Style) SetColors(v *[15]Vec4) {
+func (self GizmoStyle) GizmoSetColors(v *[15]Vec4) {
 	vArg := make([]C.ImVec4, len(v))
 	for i, vV := range v {
 		vArg[i] = vV.toC()
@@ -268,7 +268,7 @@ func (self Style) SetColors(v *[15]Vec4) {
 	}
 }
 
-func (self *Style) Colors() [15]Vec4 {
+func (self *GizmoStyle) GizmoColors() [15]Vec4 {
 	selfArg, selfFin := self.handle()
 
 	defer func() {
