@@ -96,6 +96,8 @@ func (c CIdentifier) renameGoIdentifier(ctx *Context) GoIdentifier {
 		c = ReplaceAll(c, "_", "")
 	}
 
+	c = CIdentifier(ctx.codePrefix) + c
+
 	return GoIdentifier(c)
 }
 
