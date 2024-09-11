@@ -16752,6 +16752,23 @@ func (self *Context) WheelingAxisAvg() Vec2 {
 	return *(&Vec2{}).fromC(C.wrap_ImGuiContext_GetWheelingAxisAvg(selfArg))
 }
 
+func (self Context) SetDebugDrawIdConflicts(v ID) {
+	vArg, _ := v.c()
+
+	selfArg, selfFin := self.handle()
+	defer selfFin()
+	C.wrap_ImGuiContext_SetDebugDrawIdConflicts(selfArg, vArg)
+}
+
+func (self *Context) DebugDrawIdConflicts() ID {
+	selfArg, selfFin := self.handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return *newIDFromC(func() *C.ImGuiID { result := C.wrap_ImGuiContext_GetDebugDrawIdConflicts(selfArg); return &result }())
+}
+
 func (self Context) SetDebugHookIdInfo(v ID) {
 	vArg, _ := v.c()
 
@@ -16801,6 +16818,21 @@ func (self *Context) HoveredIdPreviousFrame() ID {
 		selfFin()
 	}()
 	return *newIDFromC(func() *C.ImGuiID { result := C.wrap_ImGuiContext_GetHoveredIdPreviousFrame(selfArg); return &result }())
+}
+
+func (self Context) SetHoveredIdPreviousFrameItemCount(v int32) {
+	selfArg, selfFin := self.handle()
+	defer selfFin()
+	C.wrap_ImGuiContext_SetHoveredIdPreviousFrameItemCount(selfArg, C.int(v))
+}
+
+func (self *Context) HoveredIdPreviousFrameItemCount() int32 {
+	selfArg, selfFin := self.handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return int32(C.wrap_ImGuiContext_GetHoveredIdPreviousFrameItemCount(selfArg))
 }
 
 func (self Context) SetHoveredIdTimer(v float32) {
@@ -22796,6 +22828,21 @@ func (self *IO) ConfigDebugIsDebuggerPresent() bool {
 		selfFin()
 	}()
 	return C.wrap_ImGuiIO_GetConfigDebugIsDebuggerPresent(selfArg) == C.bool(true)
+}
+
+func (self IO) SetConfigDebugHighlightIdConflicts(v bool) {
+	selfArg, selfFin := self.handle()
+	defer selfFin()
+	C.wrap_ImGuiIO_SetConfigDebugHighlightIdConflicts(selfArg, C.bool(v))
+}
+
+func (self *IO) ConfigDebugHighlightIdConflicts() bool {
+	selfArg, selfFin := self.handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return C.wrap_ImGuiIO_GetConfigDebugHighlightIdConflicts(selfArg) == C.bool(true)
 }
 
 func (self IO) SetConfigDebugBeginReturnValueOnce(v bool) {

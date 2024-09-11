@@ -960,6 +960,8 @@ const (
 	ItemFlagsButtonRepeat ItemFlags = 8
 	// true     // MenuItem()/Selectable() automatically close their parent popup window.
 	ItemFlagsAutoClosePopups ItemFlags = 16
+	// false    // Allow submitting an item with the same identifier as an item already submitted this frame without triggering a warning tooltip if io.ConfigDebugHighlightIdConflicts is set.
+	ItemFlagsAllowDuplicateId ItemFlags = 32
 )
 
 // Status flags for an already submitted item

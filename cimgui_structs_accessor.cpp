@@ -437,12 +437,16 @@ void wrap_ImGuiContext_SetWheelingWindowWheelRemainder(ImGuiContext *ImGuiContex
 ImVec2 wrap_ImGuiContext_GetWheelingWindowWheelRemainder(ImGuiContext *self) { return self->WheelingWindowWheelRemainder; }
 void wrap_ImGuiContext_SetWheelingAxisAvg(ImGuiContext *ImGuiContextPtr, ImVec2 v) { ImGuiContextPtr->WheelingAxisAvg = v; }
 ImVec2 wrap_ImGuiContext_GetWheelingAxisAvg(ImGuiContext *self) { return self->WheelingAxisAvg; }
+void wrap_ImGuiContext_SetDebugDrawIdConflicts(ImGuiContext *ImGuiContextPtr, ImGuiID v) { ImGuiContextPtr->DebugDrawIdConflicts = v; }
+ImGuiID wrap_ImGuiContext_GetDebugDrawIdConflicts(ImGuiContext *self) { return self->DebugDrawIdConflicts; }
 void wrap_ImGuiContext_SetDebugHookIdInfo(ImGuiContext *ImGuiContextPtr, ImGuiID v) { ImGuiContextPtr->DebugHookIdInfo = v; }
 ImGuiID wrap_ImGuiContext_GetDebugHookIdInfo(ImGuiContext *self) { return self->DebugHookIdInfo; }
 void wrap_ImGuiContext_SetHoveredId(ImGuiContext *ImGuiContextPtr, ImGuiID v) { ImGuiContextPtr->HoveredId = v; }
 ImGuiID wrap_ImGuiContext_GetHoveredId(ImGuiContext *self) { return self->HoveredId; }
 void wrap_ImGuiContext_SetHoveredIdPreviousFrame(ImGuiContext *ImGuiContextPtr, ImGuiID v) { ImGuiContextPtr->HoveredIdPreviousFrame = v; }
 ImGuiID wrap_ImGuiContext_GetHoveredIdPreviousFrame(ImGuiContext *self) { return self->HoveredIdPreviousFrame; }
+void wrap_ImGuiContext_SetHoveredIdPreviousFrameItemCount(ImGuiContext *ImGuiContextPtr, int v) { ImGuiContextPtr->HoveredIdPreviousFrameItemCount = v; }
+int wrap_ImGuiContext_GetHoveredIdPreviousFrameItemCount(ImGuiContext *self) { return self->HoveredIdPreviousFrameItemCount; }
 void wrap_ImGuiContext_SetHoveredIdTimer(ImGuiContext *ImGuiContextPtr, float v) { ImGuiContextPtr->HoveredIdTimer = v; }
 float wrap_ImGuiContext_GetHoveredIdTimer(ImGuiContext *self) { return self->HoveredIdTimer; }
 void wrap_ImGuiContext_SetHoveredIdNotActiveTimer(ImGuiContext *ImGuiContextPtr, float v) { ImGuiContextPtr->HoveredIdNotActiveTimer = v; }
@@ -1191,6 +1195,8 @@ void wrap_ImGuiIO_SetKeyRepeatRate(ImGuiIO *ImGuiIOPtr, float v) { ImGuiIOPtr->K
 float wrap_ImGuiIO_GetKeyRepeatRate(ImGuiIO *self) { return self->KeyRepeatRate; }
 void wrap_ImGuiIO_SetConfigDebugIsDebuggerPresent(ImGuiIO *ImGuiIOPtr, bool v) { ImGuiIOPtr->ConfigDebugIsDebuggerPresent = v; }
 bool wrap_ImGuiIO_GetConfigDebugIsDebuggerPresent(ImGuiIO *self) { return self->ConfigDebugIsDebuggerPresent; }
+void wrap_ImGuiIO_SetConfigDebugHighlightIdConflicts(ImGuiIO *ImGuiIOPtr, bool v) { ImGuiIOPtr->ConfigDebugHighlightIdConflicts = v; }
+bool wrap_ImGuiIO_GetConfigDebugHighlightIdConflicts(ImGuiIO *self) { return self->ConfigDebugHighlightIdConflicts; }
 void wrap_ImGuiIO_SetConfigDebugBeginReturnValueOnce(ImGuiIO *ImGuiIOPtr, bool v) { ImGuiIOPtr->ConfigDebugBeginReturnValueOnce = v; }
 bool wrap_ImGuiIO_GetConfigDebugBeginReturnValueOnce(ImGuiIO *self) { return self->ConfigDebugBeginReturnValueOnce; }
 void wrap_ImGuiIO_SetConfigDebugBeginReturnValueLoop(ImGuiIO *ImGuiIOPtr, bool v) { ImGuiIOPtr->ConfigDebugBeginReturnValueLoop = v; }
