@@ -1973,7 +1973,6 @@ func (self *InputTextState) InternalClearText() {
 	selfFin()
 }
 
-// After a user-input the cursor stays on for a while without blinking
 func (self *InputTextState) InternalCursorAnimReset() {
 	selfArg, selfFin := self.handle()
 	C.ImGuiInputTextState_CursorAnimReset(selfArg)
@@ -1997,15 +1996,6 @@ func (self *InputTextState) InternalCursorPos() int32 {
 	return int32(C.ImGuiInputTextState_GetCursorPos(selfArg))
 }
 
-func (self *InputTextState) InternalRedoAvailCount() int32 {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return int32(C.ImGuiInputTextState_GetRedoAvailCount(selfArg))
-}
-
 func (self *InputTextState) InternalSelectionEnd() int32 {
 	selfArg, selfFin := self.handle()
 
@@ -2022,15 +2012,6 @@ func (self *InputTextState) InternalSelectionStart() int32 {
 		selfFin()
 	}()
 	return int32(C.ImGuiInputTextState_GetSelectionStart(selfArg))
-}
-
-func (self *InputTextState) InternalUndoAvailCount() int32 {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return int32(C.ImGuiInputTextState_GetUndoAvailCount(selfArg))
 }
 
 func (self *InputTextState) InternalHasSelection() bool {
@@ -2082,7 +2063,7 @@ func (self *InputTextState) InternalSelectAll() {
 	selfFin()
 }
 
-func (self *InputTextState) Destroy() {
+func (self *InputTextState) InternalDestroy() {
 	selfArg, selfFin := self.handle()
 	C.ImGuiInputTextState_destroy(selfArg)
 
@@ -20206,7 +20187,7 @@ func (self *Context) HookIdNext() ID {
 	return *newIDFromC(func() *C.ImGuiID { result := C.wrap_ImGuiContext_GetHookIdNext(selfArg); return &result }())
 }
 
-func (self Context) SetLocalizationTable(v *[12]string) {
+func (self Context) SetLocalizationTable(v *[13]string) {
 	vArg := make([]*C.char, len(v))
 	for i, vV := range v {
 		vVArg, _ := WrapString(vV)
@@ -20222,14 +20203,14 @@ func (self Context) SetLocalizationTable(v *[12]string) {
 	}
 }
 
-func (self *Context) LocalizationTable() [12]string {
+func (self *Context) LocalizationTable() [13]string {
 	selfArg, selfFin := self.handle()
 
 	defer func() {
 		selfFin()
 	}()
-	return func() [12]string {
-		result := [12]string{}
+	return func() [13]string {
+		result := [13]string{}
 		resultMirr := C.wrap_ImGuiContext_GetLocalizationTable(selfArg)
 		for i := range result {
 			result[i] = C.GoString(C.cimgui_const_charPtr_GetAtIdx(resultMirr, C.int(i)))
@@ -24666,23 +24647,6 @@ func (self *InputTextState) Scroll() Vec2 {
 		selfFin()
 	}()
 	return *(&Vec2{}).fromC(C.wrap_ImGuiInputTextState_GetScroll(selfArg))
-}
-
-func (self InputTextState) SetStb(v STBTexteditState) {
-	vArg, _ := v.c()
-
-	selfArg, selfFin := self.handle()
-	defer selfFin()
-	C.wrap_ImGuiInputTextState_SetStb(selfArg, vArg)
-}
-
-func (self *InputTextState) Stb() STBTexteditState {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return *newSTBTexteditStateFromC(func() *C.STB_TexteditState { result := C.wrap_ImGuiInputTextState_GetStb(selfArg); return &result }())
 }
 
 func (self InputTextState) SetCursorAnim(v float32) {
@@ -36335,408 +36299,4 @@ func (self *WindowTempData) TextWrapPosStack() Vector[*float32] {
 		selfFin()
 	}()
 	return newVectorFromC(C.wrap_ImGuiWindowTempData_GetTextWrapPosStack(selfArg).Size, C.wrap_ImGuiWindowTempData_GetTextWrapPosStack(selfArg).Capacity, (*float32)(C.wrap_ImGuiWindowTempData_GetTextWrapPosStack(selfArg).Data))
-}
-
-func (self *STBTexteditState) TexteditStateGetCursor() int32 {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return int32(C.wrap_STB_TexteditState_GetCursor(selfArg))
-}
-
-func (self *STBTexteditState) TexteditStateGetSelectstart() int32 {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return int32(C.wrap_STB_TexteditState_GetSelect_start(selfArg))
-}
-
-func (self *STBTexteditState) TexteditStateGetSelectend() int32 {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return int32(C.wrap_STB_TexteditState_GetSelect_end(selfArg))
-}
-
-func (self *STBTexteditState) TexteditStateGetInsertmode() uint {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return uint(C.wrap_STB_TexteditState_GetInsert_mode(selfArg))
-}
-
-func (self *STBTexteditState) TexteditStateGetRowcountperpage() int32 {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return int32(C.wrap_STB_TexteditState_GetRow_count_per_page(selfArg))
-}
-
-func (self *STBTexteditState) TexteditStateGetCursoratendofline() uint {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return uint(C.wrap_STB_TexteditState_GetCursor_at_end_of_line(selfArg))
-}
-
-func (self *STBTexteditState) TexteditStateGetInitialized() uint {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return uint(C.wrap_STB_TexteditState_GetInitialized(selfArg))
-}
-
-func (self *STBTexteditState) TexteditStateGetHaspreferredx() uint {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return uint(C.wrap_STB_TexteditState_GetHas_preferred_x(selfArg))
-}
-
-func (self *STBTexteditState) TexteditStateGetSingleline() uint {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return uint(C.wrap_STB_TexteditState_GetSingle_line(selfArg))
-}
-
-func (self *STBTexteditState) TexteditStateGetPadding1() uint {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return uint(C.wrap_STB_TexteditState_GetPadding1(selfArg))
-}
-
-func (self *STBTexteditState) TexteditStateGetPadding2() uint {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return uint(C.wrap_STB_TexteditState_GetPadding2(selfArg))
-}
-
-func (self *STBTexteditState) TexteditStateGetPadding3() uint {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return uint(C.wrap_STB_TexteditState_GetPadding3(selfArg))
-}
-
-func (self *STBTexteditState) TexteditStateGetPreferredx() float32 {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return float32(C.wrap_STB_TexteditState_GetPreferred_x(selfArg))
-}
-
-func (self *STBTexteditState) TexteditStateGetUndostate() StbUndoState {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return *newStbUndoStateFromC(func() *C.StbUndoState { result := C.wrap_STB_TexteditState_GetUndostate(selfArg); return &result }())
-}
-
-func (self StbTexteditRow) SetX0(v float32) {
-	selfArg, selfFin := self.handle()
-	defer selfFin()
-	C.wrap_StbTexteditRow_SetX0(selfArg, C.float(v))
-}
-
-func (self *StbTexteditRow) X0() float32 {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return float32(C.wrap_StbTexteditRow_GetX0(selfArg))
-}
-
-func (self StbTexteditRow) SetX1(v float32) {
-	selfArg, selfFin := self.handle()
-	defer selfFin()
-	C.wrap_StbTexteditRow_SetX1(selfArg, C.float(v))
-}
-
-func (self *StbTexteditRow) X1() float32 {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return float32(C.wrap_StbTexteditRow_GetX1(selfArg))
-}
-
-func (self StbTexteditRow) SetBaselineydelta(v float32) {
-	selfArg, selfFin := self.handle()
-	defer selfFin()
-	C.wrap_StbTexteditRow_SetBaseline_y_delta(selfArg, C.float(v))
-}
-
-func (self *StbTexteditRow) Baselineydelta() float32 {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return float32(C.wrap_StbTexteditRow_GetBaseline_y_delta(selfArg))
-}
-
-func (self StbTexteditRow) SetYmin(v float32) {
-	selfArg, selfFin := self.handle()
-	defer selfFin()
-	C.wrap_StbTexteditRow_SetYmin(selfArg, C.float(v))
-}
-
-func (self *StbTexteditRow) Ymin() float32 {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return float32(C.wrap_StbTexteditRow_GetYmin(selfArg))
-}
-
-func (self StbTexteditRow) SetYmax(v float32) {
-	selfArg, selfFin := self.handle()
-	defer selfFin()
-	C.wrap_StbTexteditRow_SetYmax(selfArg, C.float(v))
-}
-
-func (self *StbTexteditRow) Ymax() float32 {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return float32(C.wrap_StbTexteditRow_GetYmax(selfArg))
-}
-
-func (self StbTexteditRow) SetNumchars(v int32) {
-	selfArg, selfFin := self.handle()
-	defer selfFin()
-	C.wrap_StbTexteditRow_SetNum_chars(selfArg, C.int(v))
-}
-
-func (self *StbTexteditRow) Numchars() int32 {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return int32(C.wrap_StbTexteditRow_GetNum_chars(selfArg))
-}
-
-func (self StbUndoRecord) SetWhere(v int32) {
-	selfArg, selfFin := self.handle()
-	defer selfFin()
-	C.wrap_StbUndoRecord_SetWhere(selfArg, C.int(v))
-}
-
-func (self *StbUndoRecord) Where() int32 {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return int32(C.wrap_StbUndoRecord_GetWhere(selfArg))
-}
-
-func (self StbUndoRecord) SetInsertlength(v int32) {
-	selfArg, selfFin := self.handle()
-	defer selfFin()
-	C.wrap_StbUndoRecord_SetInsert_length(selfArg, C.int(v))
-}
-
-func (self *StbUndoRecord) Insertlength() int32 {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return int32(C.wrap_StbUndoRecord_GetInsert_length(selfArg))
-}
-
-func (self StbUndoRecord) SetDeletelength(v int32) {
-	selfArg, selfFin := self.handle()
-	defer selfFin()
-	C.wrap_StbUndoRecord_SetDelete_length(selfArg, C.int(v))
-}
-
-func (self *StbUndoRecord) Deletelength() int32 {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return int32(C.wrap_StbUndoRecord_GetDelete_length(selfArg))
-}
-
-func (self StbUndoRecord) SetCharstorage(v int32) {
-	selfArg, selfFin := self.handle()
-	defer selfFin()
-	C.wrap_StbUndoRecord_SetChar_storage(selfArg, C.int(v))
-}
-
-func (self *StbUndoRecord) Charstorage() int32 {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return int32(C.wrap_StbUndoRecord_GetChar_storage(selfArg))
-}
-
-func (self StbUndoState) SetUndorec(v *[99]StbUndoRecord) {
-	vArg := make([]C.StbUndoRecord, len(v))
-	for i, vV := range v {
-		vVArg, _ := vV.c()
-		vArg[i] = vVArg
-	}
-
-	selfArg, selfFin := self.handle()
-	defer selfFin()
-	C.wrap_StbUndoState_SetUndo_rec(selfArg, (*C.StbUndoRecord)(&vArg[0]))
-
-	for i, vV := range vArg {
-		(*v)[i] = *newStbUndoRecordFromC(func() *C.StbUndoRecord { result := vV; return &result }())
-	}
-}
-
-func (self *StbUndoState) Undorec() [99]StbUndoRecord {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return func() [99]StbUndoRecord {
-		result := [99]StbUndoRecord{}
-		resultMirr := C.wrap_StbUndoState_GetUndo_rec(selfArg)
-		for i := range result {
-			result[i] = *newStbUndoRecordFromC(func() *C.StbUndoRecord {
-				result := C.cimgui_StbUndoRecord_GetAtIdx(resultMirr, C.int(i))
-				return &result
-			}())
-		}
-
-		return result
-	}()
-}
-
-func (self StbUndoState) SetUndochar(v *[999]Wchar) {
-	vArg := make([]C.ImWchar, len(v))
-	for i, vV := range v {
-		vArg[i] = C.ImWchar(vV)
-	}
-
-	selfArg, selfFin := self.handle()
-	defer selfFin()
-	C.wrap_StbUndoState_SetUndo_char(selfArg, (*C.ImWchar)(&vArg[0]))
-
-	for i, vV := range vArg {
-		(*v)[i] = Wchar(vV)
-	}
-}
-
-func (self *StbUndoState) Undochar() [999]Wchar {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return func() [999]Wchar {
-		result := [999]Wchar{}
-		resultMirr := C.wrap_StbUndoState_GetUndo_char(selfArg)
-		for i := range result {
-			result[i] = Wchar(C.cimgui_ImWchar_GetAtIdx(resultMirr, C.int(i)))
-		}
-
-		return result
-	}()
-}
-
-func (self StbUndoState) SetUndopoint(v int16) {
-	selfArg, selfFin := self.handle()
-	defer selfFin()
-	C.wrap_StbUndoState_SetUndo_point(selfArg, C.short(v))
-}
-
-func (self *StbUndoState) Undopoint() int16 {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return int16(C.wrap_StbUndoState_GetUndo_point(selfArg))
-}
-
-func (self StbUndoState) SetRedopoint(v int16) {
-	selfArg, selfFin := self.handle()
-	defer selfFin()
-	C.wrap_StbUndoState_SetRedo_point(selfArg, C.short(v))
-}
-
-func (self *StbUndoState) Redopoint() int16 {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return int16(C.wrap_StbUndoState_GetRedo_point(selfArg))
-}
-
-func (self StbUndoState) SetUndocharpoint(v int32) {
-	selfArg, selfFin := self.handle()
-	defer selfFin()
-	C.wrap_StbUndoState_SetUndo_char_point(selfArg, C.int(v))
-}
-
-func (self *StbUndoState) Undocharpoint() int32 {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return int32(C.wrap_StbUndoState_GetUndo_char_point(selfArg))
-}
-
-func (self StbUndoState) SetRedocharpoint(v int32) {
-	selfArg, selfFin := self.handle()
-	defer selfFin()
-	C.wrap_StbUndoState_SetRedo_char_point(selfArg, C.int(v))
-}
-
-func (self *StbUndoState) Redocharpoint() int32 {
-	selfArg, selfFin := self.handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return int32(C.wrap_StbUndoState_GetRedo_char_point(selfArg))
 }

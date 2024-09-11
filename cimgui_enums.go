@@ -1239,11 +1239,12 @@ const (
 	LocKeyWindowingMainMenuBar          LocKey = 5
 	LocKeyWindowingPopup                LocKey = 6
 	LocKeyWindowingUntitled             LocKey = 7
-	LocKeyCopyLink                      LocKey = 8
-	LocKeyDockingHideTabBar             LocKey = 9
-	LocKeyDockingHoldShiftToDock        LocKey = 10
-	LocKeyDockingDragToUndockOrMoveNode LocKey = 11
-	LocKeyCOUNT                         LocKey = 12
+	LocKeyOpenLinks                     LocKey = 8
+	LocKeyCopyLink                      LocKey = 9
+	LocKeyDockingHideTabBar             LocKey = 10
+	LocKeyDockingHoldShiftToDock        LocKey = 11
+	LocKeyDockingDragToUndockOrMoveNode LocKey = 12
+	LocKeyCOUNT                         LocKey = 13
 )
 
 // original name: ImGuiLogType

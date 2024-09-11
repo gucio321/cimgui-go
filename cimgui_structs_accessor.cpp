@@ -863,7 +863,7 @@ void wrap_ImGuiContext_SetHooks(ImGuiContext *ImGuiContextPtr, ImVector_ImGuiCon
 ImVector_ImGuiContextHook wrap_ImGuiContext_GetHooks(ImGuiContext *self) { return self->Hooks; }
 void wrap_ImGuiContext_SetHookIdNext(ImGuiContext *ImGuiContextPtr, ImGuiID v) { ImGuiContextPtr->HookIdNext = v; }
 ImGuiID wrap_ImGuiContext_GetHookIdNext(ImGuiContext *self) { return self->HookIdNext; }
-void wrap_ImGuiContext_SetLocalizationTable(ImGuiContext *ImGuiContextPtr, const char** v) { memcpy(ImGuiContextPtr->LocalizationTable, v, sizeof(const char*)*12); }
+void wrap_ImGuiContext_SetLocalizationTable(ImGuiContext *ImGuiContextPtr, const char** v) { memcpy(ImGuiContextPtr->LocalizationTable, v, sizeof(const char*)*13); }
 const char** wrap_ImGuiContext_GetLocalizationTable(ImGuiContext *self) { return self->LocalizationTable; }
 const char* cimgui_const_charPtr_GetAtIdx(const char* *self, int index) { return self[index]; }
 void wrap_ImGuiContext_SetLogEnabled(ImGuiContext *ImGuiContextPtr, bool v) { ImGuiContextPtr->LogEnabled = v; }
@@ -1381,6 +1381,8 @@ void wrap_ImGuiInputTextDeactivatedState_SetTextA(ImGuiInputTextDeactivatedState
 ImVector_char wrap_ImGuiInputTextDeactivatedState_GetTextA(ImGuiInputTextDeactivatedState *self) { return self->TextA; }
 void wrap_ImGuiInputTextState_SetCtx(ImGuiInputTextState *ImGuiInputTextStatePtr, ImGuiContext* v) { ImGuiInputTextStatePtr->Ctx = v; }
 ImGuiContext* wrap_ImGuiInputTextState_GetCtx(ImGuiInputTextState *self) { return self->Ctx; }
+void wrap_ImGuiInputTextState_SetStb(ImGuiInputTextState *ImGuiInputTextStatePtr, ImStbTexteditState* v) { ImGuiInputTextStatePtr->Stb = v; }
+ImStbTexteditState* wrap_ImGuiInputTextState_GetStb(ImGuiInputTextState *self) { return self->Stb; }
 void wrap_ImGuiInputTextState_SetID(ImGuiInputTextState *ImGuiInputTextStatePtr, ImGuiID v) { ImGuiInputTextStatePtr->ID = v; }
 ImGuiID wrap_ImGuiInputTextState_GetID(ImGuiInputTextState *self) { return self->ID; }
 void wrap_ImGuiInputTextState_SetCurLenW(ImGuiInputTextState *ImGuiInputTextStatePtr, int v) { ImGuiInputTextStatePtr->CurLenW = v; }
@@ -1399,8 +1401,6 @@ void wrap_ImGuiInputTextState_SetBufCapacityA(ImGuiInputTextState *ImGuiInputTex
 int wrap_ImGuiInputTextState_GetBufCapacityA(ImGuiInputTextState *self) { return self->BufCapacityA; }
 void wrap_ImGuiInputTextState_SetScroll(ImGuiInputTextState *ImGuiInputTextStatePtr, ImVec2 v) { ImGuiInputTextStatePtr->Scroll = v; }
 ImVec2 wrap_ImGuiInputTextState_GetScroll(ImGuiInputTextState *self) { return self->Scroll; }
-void wrap_ImGuiInputTextState_SetStb(ImGuiInputTextState *ImGuiInputTextStatePtr, STB_TexteditState v) { ImGuiInputTextStatePtr->Stb = v; }
-STB_TexteditState wrap_ImGuiInputTextState_GetStb(ImGuiInputTextState *self) { return self->Stb; }
 void wrap_ImGuiInputTextState_SetCursorAnim(ImGuiInputTextState *ImGuiInputTextStatePtr, float v) { ImGuiInputTextStatePtr->CursorAnim = v; }
 float wrap_ImGuiInputTextState_GetCursorAnim(ImGuiInputTextState *self) { return self->CursorAnim; }
 void wrap_ImGuiInputTextState_SetCursorFollow(ImGuiInputTextState *ImGuiInputTextStatePtr, bool v) { ImGuiInputTextStatePtr->CursorFollow = v; }
@@ -3002,65 +3002,3 @@ void wrap_ImVec4_SetX(ImVec4 *ImVec4Ptr, float v) { ImVec4Ptr->x = v; }
 void wrap_ImVec4_SetY(ImVec4 *ImVec4Ptr, float v) { ImVec4Ptr->y = v; }
 void wrap_ImVec4_SetZ(ImVec4 *ImVec4Ptr, float v) { ImVec4Ptr->z = v; }
 void wrap_ImVec4_SetW(ImVec4 *ImVec4Ptr, float v) { ImVec4Ptr->w = v; }
-void wrap_STB_TexteditState_SetCursor(STB_TexteditState *STB_TexteditStatePtr, int v) { STB_TexteditStatePtr->cursor = v; }
-int wrap_STB_TexteditState_GetCursor(STB_TexteditState *self) { return self->cursor; }
-void wrap_STB_TexteditState_SetSelect_start(STB_TexteditState *STB_TexteditStatePtr, int v) { STB_TexteditStatePtr->select_start = v; }
-int wrap_STB_TexteditState_GetSelect_start(STB_TexteditState *self) { return self->select_start; }
-void wrap_STB_TexteditState_SetSelect_end(STB_TexteditState *STB_TexteditStatePtr, int v) { STB_TexteditStatePtr->select_end = v; }
-int wrap_STB_TexteditState_GetSelect_end(STB_TexteditState *self) { return self->select_end; }
-void wrap_STB_TexteditState_SetInsert_mode(STB_TexteditState *STB_TexteditStatePtr, unsigned char v) { STB_TexteditStatePtr->insert_mode = v; }
-unsigned char wrap_STB_TexteditState_GetInsert_mode(STB_TexteditState *self) { return self->insert_mode; }
-void wrap_STB_TexteditState_SetRow_count_per_page(STB_TexteditState *STB_TexteditStatePtr, int v) { STB_TexteditStatePtr->row_count_per_page = v; }
-int wrap_STB_TexteditState_GetRow_count_per_page(STB_TexteditState *self) { return self->row_count_per_page; }
-void wrap_STB_TexteditState_SetCursor_at_end_of_line(STB_TexteditState *STB_TexteditStatePtr, unsigned char v) { STB_TexteditStatePtr->cursor_at_end_of_line = v; }
-unsigned char wrap_STB_TexteditState_GetCursor_at_end_of_line(STB_TexteditState *self) { return self->cursor_at_end_of_line; }
-void wrap_STB_TexteditState_SetInitialized(STB_TexteditState *STB_TexteditStatePtr, unsigned char v) { STB_TexteditStatePtr->initialized = v; }
-unsigned char wrap_STB_TexteditState_GetInitialized(STB_TexteditState *self) { return self->initialized; }
-void wrap_STB_TexteditState_SetHas_preferred_x(STB_TexteditState *STB_TexteditStatePtr, unsigned char v) { STB_TexteditStatePtr->has_preferred_x = v; }
-unsigned char wrap_STB_TexteditState_GetHas_preferred_x(STB_TexteditState *self) { return self->has_preferred_x; }
-void wrap_STB_TexteditState_SetSingle_line(STB_TexteditState *STB_TexteditStatePtr, unsigned char v) { STB_TexteditStatePtr->single_line = v; }
-unsigned char wrap_STB_TexteditState_GetSingle_line(STB_TexteditState *self) { return self->single_line; }
-void wrap_STB_TexteditState_SetPadding1(STB_TexteditState *STB_TexteditStatePtr, unsigned char v) { STB_TexteditStatePtr->padding1 = v; }
-unsigned char wrap_STB_TexteditState_GetPadding1(STB_TexteditState *self) { return self->padding1; }
-void wrap_STB_TexteditState_SetPadding2(STB_TexteditState *STB_TexteditStatePtr, unsigned char v) { STB_TexteditStatePtr->padding2 = v; }
-unsigned char wrap_STB_TexteditState_GetPadding2(STB_TexteditState *self) { return self->padding2; }
-void wrap_STB_TexteditState_SetPadding3(STB_TexteditState *STB_TexteditStatePtr, unsigned char v) { STB_TexteditStatePtr->padding3 = v; }
-unsigned char wrap_STB_TexteditState_GetPadding3(STB_TexteditState *self) { return self->padding3; }
-void wrap_STB_TexteditState_SetPreferred_x(STB_TexteditState *STB_TexteditStatePtr, float v) { STB_TexteditStatePtr->preferred_x = v; }
-float wrap_STB_TexteditState_GetPreferred_x(STB_TexteditState *self) { return self->preferred_x; }
-void wrap_STB_TexteditState_SetUndostate(STB_TexteditState *STB_TexteditStatePtr, StbUndoState v) { STB_TexteditStatePtr->undostate = v; }
-StbUndoState wrap_STB_TexteditState_GetUndostate(STB_TexteditState *self) { return self->undostate; }
-void wrap_StbTexteditRow_SetX0(StbTexteditRow *StbTexteditRowPtr, float v) { StbTexteditRowPtr->x0 = v; }
-float wrap_StbTexteditRow_GetX0(StbTexteditRow *self) { return self->x0; }
-void wrap_StbTexteditRow_SetX1(StbTexteditRow *StbTexteditRowPtr, float v) { StbTexteditRowPtr->x1 = v; }
-float wrap_StbTexteditRow_GetX1(StbTexteditRow *self) { return self->x1; }
-void wrap_StbTexteditRow_SetBaseline_y_delta(StbTexteditRow *StbTexteditRowPtr, float v) { StbTexteditRowPtr->baseline_y_delta = v; }
-float wrap_StbTexteditRow_GetBaseline_y_delta(StbTexteditRow *self) { return self->baseline_y_delta; }
-void wrap_StbTexteditRow_SetYmin(StbTexteditRow *StbTexteditRowPtr, float v) { StbTexteditRowPtr->ymin = v; }
-float wrap_StbTexteditRow_GetYmin(StbTexteditRow *self) { return self->ymin; }
-void wrap_StbTexteditRow_SetYmax(StbTexteditRow *StbTexteditRowPtr, float v) { StbTexteditRowPtr->ymax = v; }
-float wrap_StbTexteditRow_GetYmax(StbTexteditRow *self) { return self->ymax; }
-void wrap_StbTexteditRow_SetNum_chars(StbTexteditRow *StbTexteditRowPtr, int v) { StbTexteditRowPtr->num_chars = v; }
-int wrap_StbTexteditRow_GetNum_chars(StbTexteditRow *self) { return self->num_chars; }
-void wrap_StbUndoRecord_SetWhere(StbUndoRecord *StbUndoRecordPtr, int v) { StbUndoRecordPtr->where = v; }
-int wrap_StbUndoRecord_GetWhere(StbUndoRecord *self) { return self->where; }
-void wrap_StbUndoRecord_SetInsert_length(StbUndoRecord *StbUndoRecordPtr, int v) { StbUndoRecordPtr->insert_length = v; }
-int wrap_StbUndoRecord_GetInsert_length(StbUndoRecord *self) { return self->insert_length; }
-void wrap_StbUndoRecord_SetDelete_length(StbUndoRecord *StbUndoRecordPtr, int v) { StbUndoRecordPtr->delete_length = v; }
-int wrap_StbUndoRecord_GetDelete_length(StbUndoRecord *self) { return self->delete_length; }
-void wrap_StbUndoRecord_SetChar_storage(StbUndoRecord *StbUndoRecordPtr, int v) { StbUndoRecordPtr->char_storage = v; }
-int wrap_StbUndoRecord_GetChar_storage(StbUndoRecord *self) { return self->char_storage; }
-void wrap_StbUndoState_SetUndo_rec(StbUndoState *StbUndoStatePtr, StbUndoRecord* v) { memcpy(StbUndoStatePtr->undo_rec, v, sizeof(StbUndoRecord)*99); }
-StbUndoRecord* wrap_StbUndoState_GetUndo_rec(StbUndoState *self) { return self->undo_rec; }
-StbUndoRecord cimgui_StbUndoRecord_GetAtIdx(StbUndoRecord *self, int index) { return self[index]; }
-void wrap_StbUndoState_SetUndo_char(StbUndoState *StbUndoStatePtr, ImWchar* v) { memcpy(StbUndoStatePtr->undo_char, v, sizeof(ImWchar)*999); }
-ImWchar* wrap_StbUndoState_GetUndo_char(StbUndoState *self) { return self->undo_char; }
-ImWchar cimgui_ImWchar_GetAtIdx(ImWchar *self, int index) { return self[index]; }
-void wrap_StbUndoState_SetUndo_point(StbUndoState *StbUndoStatePtr, short v) { StbUndoStatePtr->undo_point = v; }
-short wrap_StbUndoState_GetUndo_point(StbUndoState *self) { return self->undo_point; }
-void wrap_StbUndoState_SetRedo_point(StbUndoState *StbUndoStatePtr, short v) { StbUndoStatePtr->redo_point = v; }
-short wrap_StbUndoState_GetRedo_point(StbUndoState *self) { return self->redo_point; }
-void wrap_StbUndoState_SetUndo_char_point(StbUndoState *StbUndoStatePtr, int v) { StbUndoStatePtr->undo_char_point = v; }
-int wrap_StbUndoState_GetUndo_char_point(StbUndoState *self) { return self->undo_char_point; }
-void wrap_StbUndoState_SetRedo_char_point(StbUndoState *StbUndoStatePtr, int v) { StbUndoStatePtr->redo_char_point = v; }
-int wrap_StbUndoState_GetRedo_char_point(StbUndoState *self) { return self->redo_char_point; }

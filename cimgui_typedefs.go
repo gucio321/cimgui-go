@@ -2053,62 +2053,6 @@ func (self *STBTexteditState) handle() (result *C.STB_TexteditState, fin func())
 	return self.CData, func() {}
 }
 
-func (self STBTexteditState) c() (C.STB_TexteditState, func()) {
-	result, fn := self.handle()
-	return *result, fn
-}
-
 func newSTBTexteditStateFromC(cvalue *C.STB_TexteditState) *STBTexteditState {
 	return &STBTexteditState{CData: cvalue}
-}
-
-type StbTexteditRow struct {
-	CData *C.StbTexteditRow
-}
-
-func (self *StbTexteditRow) handle() (result *C.StbTexteditRow, fin func()) {
-	return self.CData, func() {}
-}
-
-func (self StbTexteditRow) c() (C.StbTexteditRow, func()) {
-	result, fn := self.handle()
-	return *result, fn
-}
-
-func newStbTexteditRowFromC(cvalue *C.StbTexteditRow) *StbTexteditRow {
-	return &StbTexteditRow{CData: cvalue}
-}
-
-type StbUndoRecord struct {
-	CData *C.StbUndoRecord
-}
-
-func (self *StbUndoRecord) handle() (result *C.StbUndoRecord, fin func()) {
-	return self.CData, func() {}
-}
-
-func (self StbUndoRecord) c() (C.StbUndoRecord, func()) {
-	result, fn := self.handle()
-	return *result, fn
-}
-
-func newStbUndoRecordFromC(cvalue *C.StbUndoRecord) *StbUndoRecord {
-	return &StbUndoRecord{CData: cvalue}
-}
-
-type StbUndoState struct {
-	CData *C.StbUndoState
-}
-
-func (self *StbUndoState) handle() (result *C.StbUndoState, fin func()) {
-	return self.CData, func() {}
-}
-
-func (self StbUndoState) c() (C.StbUndoState, func()) {
-	result, fn := self.handle()
-	return *result, fn
-}
-
-func newStbUndoStateFromC(cvalue *C.StbUndoState) *StbUndoState {
-	return &StbUndoState{CData: cvalue}
 }
