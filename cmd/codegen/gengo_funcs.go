@@ -295,7 +295,7 @@ func (g *goFuncsGenerator) generateFuncDeclarationStmt(receiver GoIdentifier, fu
 		receiver = GoIdentifier(fmt.Sprintf("(self %s)", receiver))
 	}
 
-	goFuncName := funcName.renameGoIdentifier(g.context)
+	goFuncName := funcName.renameFunc(g.context)
 
 	// if file comes from imgui_internal.h,prefix Internal is added.
 	// ref: https://github.com/AllenDang/cimgui-go/pull/118
