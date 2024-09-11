@@ -39,7 +39,7 @@ func GizmoEnable(enable bool) {
 	C.Enable(C.bool(enable))
 }
 
-func GizmoStyle() *GizmoStyle {
+func GizmoGetStyle() *GizmoStyle {
 	return newGizmoStyleFromC(C.GetStyle())
 }
 
