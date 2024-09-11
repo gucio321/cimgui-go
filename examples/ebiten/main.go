@@ -6,6 +6,7 @@ import (
 	"runtime"
 
 	imgui "github.com/AllenDang/cimgui-go"
+	ebitenbackend "github.com/AllenDang/cimgui-go/ebiten-backend"
 )
 
 var (
@@ -21,7 +22,7 @@ var (
 	a              float32
 	color4         [4]float32 = [4]float32{r, g, b, a}
 	selected       bool
-	backend        imgui.Backend[imgui.GLFWWindowFlags]
+	backend        imgui.Backend[ebitenbackend.EbitenBackendFlags]
 	img            *image.RGBA
 	texture        *imgui.Texture
 	barValues      []int64
@@ -116,7 +117,7 @@ func init() {
 
 func main() {
 	var err error
-	img, err = imgui.LoadImage("./test.jpeg")
+	img, err = imgui.LoadImage("../assets/test.jpeg")
 	if err != nil {
 		panic("Failed to load test.jpeg")
 	}
@@ -125,7 +126,7 @@ func main() {
 		barValues = append(barValues, int64(i+1))
 	}
 
-	backend, _ = imgui.CreateBackend(imgui.NewGLFWBackend())
+	backend, _ = imgui.CreateBackend(ebitenbackend.NewEbitenBackend())
 	backend.SetAfterCreateContextHook(afterCreateContext)
 	backend.SetBeforeDestroyContextHook(beforeDestroyContext)
 
@@ -133,11 +134,14 @@ func main() {
 
 	backend.CreateWindow("Hello from cimgui-go", 1200, 900)
 
-	backend.SetDropCallback(func(p []string) {
-		fmt.Printf("drop triggered: %v", p)
-	})
+	// TODO: not implemented
+	/*
+		backend.SetDropCallback(func(p []string) {
+			fmt.Printf("drop triggered: %v", p)
+		})
+	*/
 
-	backend.SetCloseCallback(func(b imgui.Backend[imgui.GLFWWindowFlags]) {
+	backend.SetCloseCallback(func(b imgui.Backend[ebitenbackend.EbitenBackendFlags]) {
 		fmt.Println("window is closing")
 	})
 
