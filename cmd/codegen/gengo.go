@@ -72,7 +72,7 @@ func (c CIdentifier) trimImGuiPrefix() CIdentifier {
 	return c
 }
 
-func (c CIdentifier) renameGoIdentifier() GoIdentifier {
+func (c CIdentifier) renameGoIdentifier(ctx *Context) GoIdentifier {
 	if r, ok := replace[c]; ok {
 		c = CIdentifier(r)
 	}
@@ -99,8 +99,8 @@ func (c CIdentifier) renameGoIdentifier() GoIdentifier {
 	return GoIdentifier(c)
 }
 
-func (c CIdentifier) renameEnum() GoIdentifier {
-	return TrimSuffix(c, "_").renameGoIdentifier()
+func (c CIdentifier) renameEnum(ctx *Context) GoIdentifier {
+	return TrimSuffix(c, "_").renameGoIdentifier(ctx)
 }
 
 // returns true if s is of form TypeName<*> <(>Name<*><)>(args)
