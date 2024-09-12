@@ -4,5 +4,5 @@
 #include "cimguizmo_wrapper.h"
 #include "cimgui/cimguizmo.h"
 
-bool wrap_Manipulate(const float* view,const float* projection,OPERATION operation,MODE mode,float* matrix) { return Manipulate(view,projection,operation,mode,matrix,0,0,0,0); }
-void wrap_SetDrawlist() { SetDrawlist(0); }
+bool wrap_ImGuizmo_Manipulate(const float* view,const float* projection,OPERATION operation,MODE mode,float* matrix) { return ImGuizmo_Manipulate(view,projection,operation,mode,matrix,0,0,0,0); }
+void wrap_ImGuizmo_SetDrawlist() { ImGuizmo_SetDrawlist(0); }

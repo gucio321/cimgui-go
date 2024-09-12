@@ -9,8 +9,8 @@
 extern "C" {
 #endif
 
-extern bool wrap_Manipulate(const float* view,const float* projection,OPERATION operation,MODE mode,float* matrix);
-extern void wrap_SetDrawlist();
+extern bool wrap_ImGuizmo_Manipulate(const float* view,const float* projection,OPERATION operation,MODE mode,float* matrix);
+extern void wrap_ImGuizmo_SetDrawlist();
 
 #ifdef __cplusplus
 }

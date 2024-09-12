@@ -8,59 +8,63 @@ package imgui
 // #include "cimguizmo_wrapper.h"
 import "C"
 
-func GizmoAllowAxisFlip(value bool) {
-	C.AllowAxisFlip(C.bool(value))
+func GizmozmoAllowAxisFlip(value bool) {
+	C.ImGuizmo_AllowAxisFlip(C.bool(value))
 }
 
-func GizmoBeginFrame() {
-	C.BeginFrame()
+func GizmozmoBeginFrame() {
+	C.ImGuizmo_BeginFrame()
 }
 
-func GizmoDecomposeMatrixToComponents(matrix []float32, translation *float32, rotation *float32, scale *float32) {
+func GizmozmoDecomposeMatrixToComponents(matrix []float32, translation *float32, rotation *float32, scale *float32) {
 	translationArg, translationFin := WrapNumberPtr[C.float, float32](translation)
 	rotationArg, rotationFin := WrapNumberPtr[C.float, float32](rotation)
 	scaleArg, scaleFin := WrapNumberPtr[C.float, float32](scale)
-	C.DecomposeMatrixToComponents((*C.float)(&(matrix[0])), translationArg, rotationArg, scaleArg)
+	C.ImGuizmo_DecomposeMatrixToComponents((*C.float)(&(matrix[0])), translationArg, rotationArg, scaleArg)
 
 	translationFin()
 	rotationFin()
 	scaleFin()
 }
 
-func GizmoDrawCubes(view []float32, projection []float32, matrices []float32, matrixCount int32) {
-	C.DrawCubes((*C.float)(&(view[0])), (*C.float)(&(projection[0])), (*C.float)(&(matrices[0])), C.int(matrixCount))
+func GizmozmoDrawCubes(view []float32, projection []float32, matrices []float32, matrixCount int32) {
+	C.ImGuizmo_DrawCubes((*C.float)(&(view[0])), (*C.float)(&(projection[0])), (*C.float)(&(matrices[0])), C.int(matrixCount))
 }
 
-func GizmoDrawGrid(view []float32, projection []float32, matrix []float32, gridSize float32) {
-	C.DrawGrid((*C.float)(&(view[0])), (*C.float)(&(projection[0])), (*C.float)(&(matrix[0])), C.float(gridSize))
+func GizmozmoDrawGrid(view []float32, projection []float32, matrix []float32, gridSize float32) {
+	C.ImGuizmo_DrawGrid((*C.float)(&(view[0])), (*C.float)(&(projection[0])), (*C.float)(&(matrix[0])), C.float(gridSize))
 }
 
-func GizmoEnable(enable bool) {
-	C.Enable(C.bool(enable))
+func GizmozmoEnable(enable bool) {
+	C.ImGuizmo_Enable(C.bool(enable))
 }
 
-func GizmoGetStyle() *GizmoStyle {
-	return newGizmoStyleFromC(C.GetStyle())
+func GizmozmoGetStyle() *GizmoStyle {
+	return newGizmoStyleFromC(C.ImGuizmo_GetStyle())
 }
 
-func GizmoIsOver() bool {
-	return C.IsOver() == C.bool(true)
+func GizmozmoIsOver() bool {
+	return C.ImGuizmo_IsOver_Nil() == C.bool(true)
 }
 
-func GizmoIsUsing() bool {
-	return C.IsUsing() == C.bool(true)
+func GizmozmoIsOverOPERATION(op GizmoOPERATION) bool {
+	return C.ImGuizmo_IsOver_OPERATION(C.OPERATION(op)) == C.bool(true)
 }
 
-func GizmoIsUsingAny() bool {
-	return C.IsUsingAny() == C.bool(true)
+func GizmozmoIsUsing() bool {
+	return C.ImGuizmo_IsUsing() == C.bool(true)
 }
 
-// GizmoManipulateV parameter default value hint:
+func GizmozmoIsUsingAny() bool {
+	return C.ImGuizmo_IsUsingAny() == C.bool(true)
+}
+
+// GizmozmoManipulateV parameter default value hint:
 // deltaMatrix: NULL
 // snap: NULL
 // localBounds: NULL
 // boundsSnap: NULL
-func GizmoManipulateV(view []float32, projection []float32, operation GizmoOPERATION, mode GizmoMODE, matrix *float32, deltaMatrix *float32, snap []float32, localBounds []float32, boundsSnap []float32) bool {
+func GizmozmoManipulateV(view []float32, projection []float32, operation GizmoOPERATION, mode GizmoMODE, matrix *float32, deltaMatrix *float32, snap []float32, localBounds []float32, boundsSnap []float32) bool {
 	matrixArg, matrixFin := WrapNumberPtr[C.float, float32](matrix)
 	deltaMatrixArg, deltaMatrixFin := WrapNumberPtr[C.float, float32](deltaMatrix)
 
@@ -68,38 +72,54 @@ func GizmoManipulateV(view []float32, projection []float32, operation GizmoOPERA
 		matrixFin()
 		deltaMatrixFin()
 	}()
-	return C.Manipulate((*C.float)(&(view[0])), (*C.float)(&(projection[0])), C.OPERATION(operation), C.MODE(mode), matrixArg, deltaMatrixArg, (*C.float)(&(snap[0])), (*C.float)(&(localBounds[0])), (*C.float)(&(boundsSnap[0]))) == C.bool(true)
+	return C.ImGuizmo_Manipulate((*C.float)(&(view[0])), (*C.float)(&(projection[0])), C.OPERATION(operation), C.MODE(mode), matrixArg, deltaMatrixArg, (*C.float)(&(snap[0])), (*C.float)(&(localBounds[0])), (*C.float)(&(boundsSnap[0]))) == C.bool(true)
 }
 
-func GizmoRecomposeMatrixFromComponents(translation []float32, rotation []float32, scale []float32, matrix *float32) {
+func GizmozmoRecomposeMatrixFromComponents(translation []float32, rotation []float32, scale []float32, matrix *float32) {
 	matrixArg, matrixFin := WrapNumberPtr[C.float, float32](matrix)
-	C.RecomposeMatrixFromComponents((*C.float)(&(translation[0])), (*C.float)(&(rotation[0])), (*C.float)(&(scale[0])), matrixArg)
+	C.ImGuizmo_RecomposeMatrixFromComponents((*C.float)(&(translation[0])), (*C.float)(&(rotation[0])), (*C.float)(&(scale[0])), matrixArg)
 
 	matrixFin()
 }
 
-func GizmoSetAxisLimit(value float32) {
-	C.SetAxisLimit(C.float(value))
+func GizmozmoSetAxisLimit(value float32) {
+	C.ImGuizmo_SetAxisLimit(C.float(value))
 }
 
-func GizmoSetGizmoSizeClipSpace(value float32) {
-	C.SetGizmoSizeClipSpace(C.float(value))
+func GizmozmoSetGizmoSizeClipSpace(value float32) {
+	C.ImGuizmo_SetGizmoSizeClipSpace(C.float(value))
 }
 
-func GizmoSetID(id int32) {
-	C.SetID(C.int(id))
+func GizmozmoSetID(id int32) {
+	C.ImGuizmo_SetID(C.int(id))
 }
 
-func GizmoSetOrthographic(isOrthographic bool) {
-	C.SetOrthographic(C.bool(isOrthographic))
+func GizmozmoSetOrthographic(isOrthographic bool) {
+	C.ImGuizmo_SetOrthographic(C.bool(isOrthographic))
 }
 
-func GizmoSetPlaneLimit(value float32) {
-	C.SetPlaneLimit(C.float(value))
+func GizmozmoSetPlaneLimit(value float32) {
+	C.ImGuizmo_SetPlaneLimit(C.float(value))
 }
 
-func GizmoSetRect(x float32, y float32, width float32, height float32) {
-	C.SetRect(C.float(x), C.float(y), C.float(width), C.float(height))
+func GizmozmoSetRect(x float32, y float32, width float32, height float32) {
+	C.ImGuizmo_SetRect(C.float(x), C.float(y), C.float(width), C.float(height))
+}
+
+func GizmozmoViewManipulateFloat(view *float32, length float32, position Vec2, size Vec2, backgroundColor uint32) {
+	viewArg, viewFin := WrapNumberPtr[C.float, float32](view)
+	C.ImGuizmo_ViewManipulate_Float(viewArg, C.float(length), position.toC(), size.toC(), C.ImU32(backgroundColor))
+
+	viewFin()
+}
+
+func GizmozmoViewManipulateFloatPtr(view *float32, projection []float32, operation GizmoOPERATION, mode GizmoMODE, matrix *float32, length float32, position Vec2, size Vec2, backgroundColor uint32) {
+	viewArg, viewFin := WrapNumberPtr[C.float, float32](view)
+	matrixArg, matrixFin := WrapNumberPtr[C.float, float32](matrix)
+	C.ImGuizmo_ViewManipulate_FloatPtr(viewArg, (*C.float)(&(projection[0])), C.OPERATION(operation), C.MODE(mode), matrixArg, C.float(length), position.toC(), size.toC(), C.ImU32(backgroundColor))
+
+	viewFin()
+	matrixFin()
 }
 
 func GizmoNewStyle() *GizmoStyle {
@@ -113,24 +133,17 @@ func (self *GizmoStyle) GizmoDestroy() {
 	selfFin()
 }
 
-func GizmoViewManipulate(view *float32, length float32, position Vec2, size Vec2, backgroundColor uint32) {
-	viewArg, viewFin := WrapNumberPtr[C.float, float32](view)
-	C.ViewManipulate(viewArg, C.float(length), position.toC(), size.toC(), C.ImU32(backgroundColor))
-
-	viewFin()
-}
-
-func GizmoManipulate(view []float32, projection []float32, operation GizmoOPERATION, mode GizmoMODE, matrix *float32) bool {
+func GizmozmoManipulate(view []float32, projection []float32, operation GizmoOPERATION, mode GizmoMODE, matrix *float32) bool {
 	matrixArg, matrixFin := WrapNumberPtr[C.float, float32](matrix)
 
 	defer func() {
 		matrixFin()
 	}()
-	return C.wrap_Manipulate((*C.float)(&(view[0])), (*C.float)(&(projection[0])), C.OPERATION(operation), C.MODE(mode), matrixArg) == C.bool(true)
+	return C.wrap_ImGuizmo_Manipulate((*C.float)(&(view[0])), (*C.float)(&(projection[0])), C.OPERATION(operation), C.MODE(mode), matrixArg) == C.bool(true)
 }
 
-func GizmoSetDrawlist() {
-	C.wrap_SetDrawlist()
+func GizmozmoSetDrawlist() {
+	C.wrap_ImGuizmo_SetDrawlist()
 }
 
 func (self GizmoStyle) GizmoSetTranslationLineThickness(v float32) {
