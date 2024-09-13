@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "cimgui/cimplot.h"
+#include "../cwrapper/cimplot.h"
 
 #ifdef __cplusplus
 extern "C" {
