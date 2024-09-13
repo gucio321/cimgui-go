@@ -8,7 +8,7 @@ package backend
 // extern void dropCallback(void*, int, char**);
 // extern void keyCallback(void*, int, int, int, int);
 // extern void sizeCallback(void*, int, int);
-// #include "../extra_types.h"
+// #include "../cimgui/extra_types.h"
 // #include "../cimgui/cimgui_wrapper.h"
 // #include "../cimgui/cimgui_typedefs.h"
 import "C"
@@ -182,9 +182,9 @@ type Backend[BackendFlagsT ~int] interface {
 // Why I separate it? Current impl of local texture.go needs to store this somewhere, and I don't want
 // to make Texture relate on BackendFlagsT.
 type TextureManager interface {
-	CreateTexture(pixels unsafe.Pointer, width, Height int) TextureID
-	CreateTextureRgba(img *image.RGBA, width, height int) TextureID
-	DeleteTexture(id TextureID)
+	CreateTexture(pixels unsafe.Pointer, width, Height int) cimgui.TextureID
+	CreateTextureRgba(img *image.RGBA, width, height int) cimgui.TextureID
+	DeleteTexture(id cimgui.TextureID)
 }
 
 type backendCExpose interface {
@@ -229,16 +229,4 @@ func CreateBackend[BackendFlagsT ~int](backend Backend[BackendFlagsT]) (sameBack
 
 	textureManager = backend
 	return backend, err
-}
-
-// Export some methods that are necessary for externally packaged backends
-
-type CImTextureID C.ImTextureID
-
-func NewTextureIDFromC(cvalue *CImTextureID) *TextureID {
-	return newTextureIDFromC((*C.ImTextureID)(cvalue))
-}
-
-func (i Vec4) ToC() C.ImVec4 {
-	return i.toC()
 }

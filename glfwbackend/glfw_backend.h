@@ -2,7 +2,7 @@
 
 #include "../cimgui/cimgui_wrapper.h"
 #include "../thirdparty/glfw/include/GLFW/glfw3.h" // Will drag system OpenGL headers
-#include "../extra_types.h"
+#include "../cimgui/extra_types.h"
 
 #ifdef __cplusplus
 extern "C" {

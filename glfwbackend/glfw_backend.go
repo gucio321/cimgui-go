@@ -19,6 +19,8 @@ import (
 	"unsafe"
 
 	backend "github.com/AllenDang/cimgui-go/backend"
+	"github.com/AllenDang/cimgui-go/cimgui"
+	"github.com/AllenDang/cimgui-go/typewrapper"
 )
 
 type voidCallbackFunc func()
@@ -192,7 +194,7 @@ const (
 	GLFWModNumLock  = GLFWModifierKey(C.GLFWModNumLock)
 )
 
-var _ imgui.Backend[GLFWWindowFlags] = &GLFWBackend{}
+var _ backend.Backend[GLFWWindowFlags] = &GLFWBackend{}
 
 type GLFWBackend struct {
 	afterCreateContext   voidCallbackFunc
@@ -202,8 +204,8 @@ type GLFWBackend struct {
 	beforeDestoryContext voidCallbackFunc
 	dropCB               backend.DropCallback
 	closeCB              func(pointer unsafe.Pointer)
-	keyCb                imgui.KeyCallback
-	sizeCb               imgui.SizeChangeCallback
+	keyCb                backend.KeyCallback
+	sizeCb               backend.SizeChangeCallback
 	window               uintptr
 }
 
@@ -252,14 +254,14 @@ func (b *GLFWBackend) AfterRenderHook() func() {
 	return b.afterRender
 }
 
-func (b *GLFWBackend) SetBgColor(color imgui.Vec4) {
+func (b *GLFWBackend) SetBgColor(color cimgui.Vec4) {
 	c := color.ToC()
 	C.igSetBgColor(*((*C.ImVec4)(unsafe.Pointer(&c))))
 }
 
 func (b *GLFWBackend) Run(loop func()) {
 	b.loop = loop
-	C.igGLFWRunLoop(b.handle(), C.VoidCallback(imgui.LoopCallback()), C.VoidCallback(imgui.BeforeRender()), C.VoidCallback(imgui.AfterRender()), C.VoidCallback(imgui.BeforeDestroyContext()))
+	C.igGLFWRunLoop(b.handle(), C.VoidCallback(backend.LoopCallback()), C.VoidCallback(backend.BeforeRender()), C.VoidCallback(backend.AfterRender()), C.VoidCallback(backend.BeforeDestroyContext()))
 }
 
 func (b *GLFWBackend) LoopFunc() func() {
@@ -279,10 +281,10 @@ func (b *GLFWBackend) SetWindowPos(x, y int) {
 }
 
 func (b *GLFWBackend) GetWindowPos() (x, y int32) {
-	xArg, xFin := imgui.WrapNumberPtr[C.int, int32](&x)
+	xArg, xFin := typewrapper.WrapNumberPtr[C.int, int32](&x)
 	defer xFin()
 
-	yArg, yFin := imgui.WrapNumberPtr[C.int, int32](&y)
+	yArg, yFin := typewrapper.WrapNumberPtr[C.int, int32](&y)
 	defer yFin()
 
 	C.igGLFWWindow_GetWindowPos(b.handle(), xArg, yArg)
@@ -295,10 +297,10 @@ func (b *GLFWBackend) SetWindowSize(width, height int) {
 }
 
 func (b *GLFWBackend) DisplaySize() (width int32, height int32) {
-	widthArg, widthFin := imgui.WrapNumberPtr[C.int, int32](&width)
+	widthArg, widthFin := typewrapper.WrapNumberPtr[C.int, int32](&width)
 	defer widthFin()
 
-	heightArg, heightFin := imgui.WrapNumberPtr[C.int, int32](&height)
+	heightArg, heightFin := typewrapper.WrapNumberPtr[C.int, int32](&height)
 	defer heightFin()
 
 	C.igGLFWWindow_GetDisplaySize(b.handle(), widthArg, heightArg)
@@ -307,10 +309,10 @@ func (b *GLFWBackend) DisplaySize() (width int32, height int32) {
 }
 
 func (b *GLFWBackend) ContentScale() (width, height float32) {
-	widthArg, widthFin := imgui.WrapNumberPtr[C.float, float32](&width)
+	widthArg, widthFin := typewrapper.WrapNumberPtr[C.float, float32](&width)
 	defer widthFin()
 
-	heightArg, heightFin := imgui.WrapNumberPtr[C.float, float32](&height)
+	heightArg, heightFin := typewrapper.WrapNumberPtr[C.float, float32](&height)
 	defer heightFin()
 
 	C.igGLFWWindow_GetContentScale(b.handle(), widthArg, heightArg)
@@ -319,10 +321,10 @@ func (b *GLFWBackend) ContentScale() (width, height float32) {
 }
 
 func (b *GLFWBackend) SetWindowTitle(title string) {
-	titleArg, titleFin := imgui.WrapString(title)
+	titleArg, titleFin := typewrapper.WrapString[C.char](title)
 	defer titleFin()
 
-	C.igGLFWWindow_SetTitle(b.handle(), (*C.char)(titleArg))
+	C.igGLFWWindow_SetTitle(b.handle(), titleArg)
 }
 
 // The minimum and maximum size of the content area of a windowed mode window.
@@ -333,18 +335,18 @@ func (b *GLFWBackend) SetWindowSizeLimits(minWidth, minHeight, maxWidth, maxHeig
 }
 
 func (b *GLFWBackend) SetShouldClose(value bool) {
-	C.igGLFWWindow_SetShouldClose(b.handle(), C.int(imgui.CastBool(value)))
+	C.igGLFWWindow_SetShouldClose(b.handle(), C.int(typewrapper.CastBool(value)))
 }
 
 func (b *GLFWBackend) CreateWindow(title string, width, height int) {
-	titleArg, titleFin := imgui.WrapString(title)
+	titleArg, titleFin := typewrapper.WrapString[C.char](title)
 	defer titleFin()
 
 	b.window = uintptr(unsafe.Pointer(C.igCreateGLFWWindow(
 		(*C.char)(titleArg),
 		C.int(width),
 		C.int(height),
-		C.VoidCallback(imgui.AfterCreateContext()),
+		C.VoidCallback(backend.AfterCreateContext()),
 	)))
 	if b.window == 0 {
 		panic("Failed to create GLFW window")
@@ -359,17 +361,17 @@ func (b *GLFWBackend) Refresh() {
 	C.igRefresh()
 }
 
-func (b *GLFWBackend) CreateTexture(pixels unsafe.Pointer, width, height int) imgui.TextureID {
+func (b *GLFWBackend) CreateTexture(pixels unsafe.Pointer, width, height int) cimgui.TextureID {
 	tex := C.igCreateTexture((*C.uchar)(pixels), C.int(width), C.int(height))
-	return *imgui.NewTextureIDFromC((*imgui.CImTextureID)(&tex))
+	return *cimgui.NewTextureIDFromC((*cimgui.CImTextureID)(&tex))
 }
 
-func (b *GLFWBackend) CreateTextureRgba(img *image.RGBA, width, height int) imgui.TextureID {
+func (b *GLFWBackend) CreateTextureRgba(img *image.RGBA, width, height int) cimgui.TextureID {
 	tex := C.igCreateTexture((*C.uchar)(&(img.Pix[0])), C.int(width), C.int(height))
-	return *imgui.NewTextureIDFromC((*imgui.CImTextureID)(&tex))
+	return *cimgui.NewTextureIDFromC((*cimgui.CImTextureID)(&tex))
 }
 
-func (b *GLFWBackend) DeleteTexture(id imgui.TextureID) {
+func (b *GLFWBackend) DeleteTexture(id cimgui.TextureID) {
 	C.igDeleteTexture(C.ImTextureID(id.Data))
 }
 
@@ -380,7 +382,7 @@ func (b *GLFWBackend) SetDropCallback(cbfun backend.DropCallback) {
 	C.igGLFWWindow_SetDropCallbackCB(b.handle())
 }
 
-func (b *GLFWBackend) SetCloseCallback(cbfun imgui.WindowCloseCallback[GLFWWindowFlags]) {
+func (b *GLFWBackend) SetCloseCallback(cbfun backend.WindowCloseCallback[GLFWWindowFlags]) {
 	b.closeCB = func(_ unsafe.Pointer) {
 		cbfun(b)
 	}
@@ -442,7 +444,7 @@ func (b *GLFWBackend) SetIcons(images ...image.Image) {
 	}
 }
 
-func (b *GLFWBackend) SetKeyCallback(cbfun imgui.KeyCallback) {
+func (b *GLFWBackend) SetKeyCallback(cbfun backend.KeyCallback) {
 	b.keyCb = func(k, s, a, m int) {
 		C.iggImplGlfw_KeyCallback(b.handle(), C.int(k), C.int(s), C.int(a), C.int(m))
 		cbfun(k, s, a, m)
@@ -450,16 +452,16 @@ func (b *GLFWBackend) SetKeyCallback(cbfun imgui.KeyCallback) {
 	C.igGLFWWindow_SetKeyCallback(b.handle())
 }
 
-func (b *GLFWBackend) KeyCallback() imgui.KeyCallback {
+func (b *GLFWBackend) KeyCallback() backend.KeyCallback {
 	return b.keyCb
 }
 
-func (b *GLFWBackend) SetSizeChangeCallback(cbfun imgui.SizeChangeCallback) {
+func (b *GLFWBackend) SetSizeChangeCallback(cbfun backend.SizeChangeCallback) {
 	b.sizeCb = cbfun
 	C.igGLFWWindow_SetSizeCallback(b.handle())
 }
 
-func (b *GLFWBackend) SizeCallback() imgui.SizeChangeCallback {
+func (b *GLFWBackend) SizeCallback() backend.SizeChangeCallback {
 	return b.sizeCb
 }
 
