@@ -10,7 +10,7 @@ all: generate
 setup:
 	go get mvdan.cc/gofumpt@latest
 	cd cmd/codegen; \
-		go build -o ../codegen .
+		go build -o ../../codegen .
 
 # Parameters:
 # $1: prefix
