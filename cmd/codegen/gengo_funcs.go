@@ -35,7 +35,8 @@ const (
 // generateGoFuncs generates given list of functions and writes them to file
 func generateGoFuncs(
 	validFuncs []FuncDef,
-	context *Context) error {
+	context *Context,
+) error {
 	generator := &goFuncsGenerator{
 		prefix:      context.prefix,
 		structNames: context.typedefsNames,
@@ -112,7 +113,7 @@ type goFuncsGenerator struct {
 
 // writeFuncsFileHeader writes a header of the generated file
 func (g *goFuncsGenerator) writeFuncsFileHeader() {
-	g.sb.WriteString(goPackageHeader)
+	g.sb.WriteString(fmt.Sprintf(goPackageHeader, g.prefix))
 
 	g.sb.WriteString(fmt.Sprintf(
 		`// #include "extra_types.h"
@@ -277,7 +278,6 @@ result := C.%s(%s)
 // it takes function name, list of arguments and return type and returns go statement.
 // e.g.: func (self *ImGuiType) FuncName(arg1 type1, arg2 type2) returnType {
 func (g *goFuncsGenerator) generateFuncDeclarationStmt(receiver GoIdentifier, funcName CIdentifier, args []GoIdentifier, returnType GoIdentifier, f FuncDef) (functionDeclaration string) {
-
 	funcParts := Split(funcName, "_")
 	typeName := funcParts[0]
 

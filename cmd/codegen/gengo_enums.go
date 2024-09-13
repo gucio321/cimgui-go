@@ -10,7 +10,7 @@ import (
 func generateGoEnums(prefix string, enums []EnumDef) []GoIdentifier {
 	var sb strings.Builder
 
-	sb.WriteString(goPackageHeader)
+	sb.WriteString(fmt.Sprintf(goPackageHeader, prefix))
 
 	var enumNames []GoIdentifier
 	for _, e := range enums {

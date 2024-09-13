@@ -3,9 +3,10 @@ package main
 import "C"
 import (
 	"fmt"
-	"github.com/kpango/glg"
 	"os"
 	"strings"
+
+	"github.com/kpango/glg"
 )
 
 // this function will proceed the following typedefs:
@@ -14,7 +15,8 @@ import (
 func proceedTypedefs(
 	typedefs *Typedefs,
 	structs []StructDef,
-	data *Context) (validTypeNames []CIdentifier, err error) {
+	data *Context,
+) (validTypeNames []CIdentifier, err error) {
 	// quick counter for coverage control
 	generatedTypedefs := 0
 	maxTypedefs := len(typedefs.data)
@@ -26,7 +28,7 @@ func proceedTypedefs(
 
 	// we need FILES
 	callbacksGoSb := &strings.Builder{}
-	callbacksGoSb.WriteString(goPackageHeader)
+	callbacksGoSb.WriteString(fmt.Sprintf(goPackageHeader, data.prefix))
 	fmt.Fprintf(callbacksGoSb,
 		`// #include <stdlib.h>
 // #include <memory.h>
