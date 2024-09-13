@@ -92,29 +92,29 @@ define update
 		git checkout $4
 	cd tmp/$1/generator; \
 		bash generator.sh --target "internal noimstrv comments" --cflags "glfw opengl3 opengl2 sdl2 -DIMGUI_USE_WCHAR32"
-	cp -f tmp/$1/$1* ../cwrappers/
+	cp -f tmp/$1/$1* cwrappers/
 	if test -e tmp/$1/generator/output/$1*; then \
 		cp -f tmp/$1/generator/output/$1* ../cwrappers/; \
 	fi
-	mkdir ../cwrappers/$1_templates
-	cp -f tmp/$1/generator/output/*json ../cwrappers/$1_templates
-	mkdir -p ../cwrappers/$3
-	cp -rf tmp/$1/$3/* ../cwrappers/$3
+	mkdir cwrappers/$1_templates
+	cp -f tmp/$1/generator/output/*json cwrappers/$1_templates
+	mkdir -p cwrappers/$3
+	cp -rf tmp/$1/$3/* cwrappers/$3
 	cd tmp/$1; \
-		echo "$1 ($2) HEAD is on: `git rev-parse HEAD`" >> ../cwrappers/VERSION.txt
+		echo "$1 ($2) HEAD is on: `git rev-parse HEAD`" >> cwrappers/VERSION.txt
 	cd tmp/$1/$3; \
-		echo "$1/$3 HEAD is on: `git rev-parse HEAD`" >> ../cwrappers/VERSION.txt
+		echo "$1/$3 HEAD is on: `git rev-parse HEAD`" >> cwrappers/VERSION.txt
 endef
 
 .PHONY: update
 update: setup
-	rm -rf ../cwrappers/*
-	$(call update,cimgui,https://github.com/../cwrappers/cimgui,imgui,docking)
-	cat templates/assert.h >> ../cwrappers/imgui/imconfig.h
+	rm -rf cwrappers/*
+	$(call update,cimgui,https://github.com/cimgui/cimgui,imgui,docking)
+	cat templates/assert.h >> cwrappers/imgui/imconfig.h
 	$(call cimgui)
-	$(call update,cimplot,https://github.com/../cwrappers/cimplot,implot,master)
+	$(call update,cimplot,https://github.com/cimgui/cimplot,implot,master)
 	$(call cimplot)
-	$(call update,cimnodes,https://github.com/../cwrappers/cimnodes,imnodes,master)
+	$(call update,cimnodes,https://github.com/cimgui/cimnodes,imnodes,master)
 	$(call cimnodes)
 	$(call update,cimmarkdown,https://github.com/gucio321/cimmarkdown,imgui_markdown,main)
 	$(call cimmarkdown)
