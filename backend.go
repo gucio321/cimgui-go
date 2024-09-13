@@ -9,8 +9,8 @@ package imgui
 // extern void keyCallback(void*, int, int, int, int);
 // extern void sizeCallback(void*, int, int);
 // #include "extra_types.h"
-// #include "cimgui_wrapper.h"
-// #include "cimgui_typedefs.h"
+// #include "cimgui/cimgui_wrapper.h"
+// #include "cimgui/cimgui_typedefs.h"
 import "C"
 
 import (
