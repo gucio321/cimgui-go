@@ -32,7 +32,7 @@ func proceedTypedefs(
 	fmt.Fprintf(callbacksGoSb,
 		`// #include <stdlib.h>
 // #include <memory.h>
-// #include "extra_types.h"
+// #include "../extra_types.h"
 // #include "%[1]s_wrapper.h"
 // #include "%[1]s_typedefs.h"
 import "C"
@@ -46,7 +46,7 @@ import "unsafe"
 		`
 #pragma once
 
-#include "cimgui/%s.h"
+#include "../cwrapper/%s.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -57,7 +57,7 @@ extern "C" {
 	fmt.Fprintf(typedefsCppSb,
 		`
 #include "%[1]s_typedefs.h"
-#include "cimgui/%[1]s.h"
+#include "../cwrapper/%[1]s.h"
 `, data.prefix)
 
 	// because go ranges through maps as if it was drunken, we need to sort keys.

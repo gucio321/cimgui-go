@@ -116,7 +116,7 @@ func (g *goFuncsGenerator) writeFuncsFileHeader() {
 	g.sb.WriteString(fmt.Sprintf(goPackageHeader, g.prefix))
 
 	g.sb.WriteString(fmt.Sprintf(
-		`// #include "extra_types.h"
+		`// #include "../extra_types.h"
 // #include "%[1]s_structs_accessor.h"
 // #include "%[1]s_wrapper.h"
 import "C"
