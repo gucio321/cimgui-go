@@ -1,9 +1,10 @@
-package imgui
+package typewrapper
 
 // #include <memory.h>
 // #include <stdlib.h>
 // #include <stdbool.h>
 import "C"
+
 import (
 	"runtime"
 	"unsafe"
@@ -16,13 +17,14 @@ func CastBool(value bool) (cast int) {
 	return
 }
 
-func WrapBool(goValue *bool) (wrapped *C.bool, finisher func()) {
+// RESULT_TYPE is C.bool
+func WrapBool[RESULT_TYPE any](goValue *bool) (wrapped *RESULT_TYPE, finisher func()) {
 	if goValue != nil {
 		var cValue C.bool
 		if *goValue {
 			cValue = C.bool(true)
 		}
-		wrapped = &cValue
+		wrapped = (*RESULT_TYPE)(unsafe.Pointer(&cValue))
 		finisher = func() {
 			*goValue = cValue == C.bool(true)
 		}
@@ -56,13 +58,15 @@ func WrapNumberPtr[CTYPE Number, GOTYPE Number](goValue *GOTYPE) (wrapped *CTYPE
 	return
 }
 
-func WrapString(value string) (wrapped *C.char, finisher func()) {
-	wrapped = C.CString(value)
+// RESULT_TYPE is C.char but in appropiate package
+func WrapString[RESULT_TYPE any](value string) (wrapped *RESULT_TYPE, finisher func()) {
+	wrapped = (*RESULT_TYPE)(unsafe.Pointer(C.CString(value)))
 	finisher = func() { C.free(unsafe.Pointer(wrapped)) } // nolint: gas
 	return
 }
 
-func WrapStringList(value []string) (wrapped **C.char, finisher func()) {
+// RESULT_TYPE is C.char but in appropiate package
+func WrapStringList[RESULT_TYPE any](value []string) (wrapped **RESULT_TYPE, finisher func()) {
 	if len(value) == 0 {
 		return nil, func() {}
 	}
@@ -72,7 +76,7 @@ func WrapStringList(value []string) (wrapped **C.char, finisher func()) {
 		wrappedList[i] = C.CString(v)
 	}
 
-	wrapped = (**C.char)(unsafe.Pointer(&wrappedList[0]))
+	wrapped = (**RESULT_TYPE)(unsafe.Pointer(&wrappedList[0]))
 
 	finisher = func() {
 		for _, v := range wrappedList {
@@ -99,8 +103,8 @@ func PtrToUint16Slice(p unsafe.Pointer) []uint16 {
 }
 
 type StringBuffer struct {
-	ptr  unsafe.Pointer
-	size int
+	Ptr  unsafe.Pointer
+	Size int
 }
 
 func NewStringBuffer(initialValue string) *StringBuffer {
@@ -112,12 +116,12 @@ func NewStringBuffer(initialValue string) *StringBuffer {
 	copy(buf[:zeroOffset], rawText)
 	buf[zeroOffset] = 0
 
-	return &StringBuffer{ptr: newPtr, size: bufSize}
+	return &StringBuffer{Ptr: newPtr, Size: bufSize}
 }
 
 func (buf *StringBuffer) Free() {
-	C.free(buf.ptr)
-	buf.size = 0
+	C.free(buf.Ptr)
+	buf.Size = 0
 }
 
 func (buf *StringBuffer) ResizeTo(requestedSize int) {
@@ -127,24 +131,24 @@ func (buf *StringBuffer) ResizeTo(requestedSize int) {
 	}
 	newPtr := C.malloc(C.size_t(bufSize))
 	copySize := bufSize
-	if copySize > buf.size {
-		copySize = buf.size
+	if copySize > buf.Size {
+		copySize = buf.Size
 	}
 	if copySize > 0 {
-		C.memcpy(newPtr, buf.ptr, C.size_t(copySize))
+		C.memcpy(newPtr, buf.Ptr, C.size_t(copySize))
 	}
 	PtrToByteSlice(newPtr)[bufSize-1] = 0
-	C.free(buf.ptr)
-	buf.ptr = newPtr
-	buf.size = bufSize
+	C.free(buf.Ptr)
+	buf.Ptr = newPtr
+	buf.Size = bufSize
 }
 
 func (buf *StringBuffer) ToGo() string {
-	if (buf.ptr == nil) || (buf.size < 1) {
+	if (buf.Ptr == nil) || (buf.Size < 1) {
 		return ""
 	}
-	PtrToByteSlice(buf.ptr)[buf.size-1] = 0
-	return C.GoString((*C.char)(buf.ptr))
+	PtrToByteSlice(buf.Ptr)[buf.Size-1] = 0
+	return C.GoString((*C.char)(buf.Ptr))
 }
 
 // WrapVoidPtr uses runtime.Pinner to pin value

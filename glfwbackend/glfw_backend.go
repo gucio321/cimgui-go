@@ -18,7 +18,7 @@ import (
 	"image/draw"
 	"unsafe"
 
-	imgui "github.com/AllenDang/cimgui-go"
+	backend "github.com/AllenDang/cimgui-go/backend"
 )
 
 type voidCallbackFunc func()
@@ -200,7 +200,7 @@ type GLFWBackend struct {
 	beforeRender         voidCallbackFunc
 	afterRender          voidCallbackFunc
 	beforeDestoryContext voidCallbackFunc
-	dropCB               imgui.DropCallback
+	dropCB               backend.DropCallback
 	closeCB              func(pointer unsafe.Pointer)
 	keyCb                imgui.KeyCallback
 	sizeCb               imgui.SizeChangeCallback
@@ -266,7 +266,7 @@ func (b *GLFWBackend) LoopFunc() func() {
 	return b.loop
 }
 
-func (b *GLFWBackend) DropCallback() imgui.DropCallback {
+func (b *GLFWBackend) DropCallback() backend.DropCallback {
 	return b.dropCB
 }
 
@@ -375,7 +375,7 @@ func (b *GLFWBackend) DeleteTexture(id imgui.TextureID) {
 
 // SetDropCallback sets the drop callback which is called when an object
 // is dropped over the window.
-func (b *GLFWBackend) SetDropCallback(cbfun imgui.DropCallback) {
+func (b *GLFWBackend) SetDropCallback(cbfun backend.DropCallback) {
 	b.dropCB = cbfun
 	C.igGLFWWindow_SetDropCallbackCB(b.handle())
 }

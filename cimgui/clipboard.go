@@ -1,4 +1,4 @@
-package imgui
+package cimgui
 
 // #include <stdlib.h>
 // typedef char* (*get_clipboard_cb)(void* );
@@ -6,6 +6,7 @@ package imgui
 // extern char* get_clipboard_callback(void* user_data);
 // extern void set_clipboard_callback(void* user_data, char *text);
 import "C"
+
 import (
 	"runtime/cgo"
 	"unsafe"

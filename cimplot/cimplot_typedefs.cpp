@@ -3,4 +3,4 @@
 
 
 #include "cimplot_typedefs.h"
-#include "../cwrapper/cimplot.h"
+#include "../cwrappers/cimplot.h"

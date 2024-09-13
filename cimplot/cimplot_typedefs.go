@@ -5,7 +5,7 @@ package cimplot
 
 // #include <stdlib.h>
 // #include <memory.h>
-// #include "../extra_types.h"
+// #include "../cimgui/extra_types.h"
 // #include "cimplot_wrapper.h"
 // #include "cimplot_typedefs.h"
 import "C"

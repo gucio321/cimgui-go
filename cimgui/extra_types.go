@@ -1,7 +1,7 @@
-package imgui
+package cimgui
 
-// #include "cimgui_wrapper.h"
-// #include "cimplot_wrapper.h"
+// #include "../cimgui/cimgui_wrapper.h"
+// #include "../cimplot/cimplot_wrapper.h"
 // #include "extra_types.h"
 import "C"
 

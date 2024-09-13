@@ -1,4 +1,4 @@
-package imgui
+package cimgui
 
 // #include "util.h"
 import "C"

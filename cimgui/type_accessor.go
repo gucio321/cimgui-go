@@ -1,4 +1,4 @@
-package imgui
+package cimgui
 
 // #include "cimgui_wrapper.h"
 // #include "util.h"

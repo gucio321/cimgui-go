@@ -1,4 +1,4 @@
-package imgui
+package backend
 
 // extern void loopCallback();
 // extern void beforeRender();
@@ -8,9 +8,9 @@ package imgui
 // extern void dropCallback(void*, int, char**);
 // extern void keyCallback(void*, int, int, int, int);
 // extern void sizeCallback(void*, int, int);
-// #include "extra_types.h"
-// #include "cimgui/cimgui_wrapper.h"
-// #include "cimgui/cimgui_typedefs.h"
+// #include "../extra_types.h"
+// #include "../cimgui/cimgui_wrapper.h"
+// #include "../cimgui/cimgui_typedefs.h"
 import "C"
 
 import (
@@ -18,6 +18,8 @@ import (
 	"fmt"
 	"image"
 	"unsafe"
+
+	"github.com/AllenDang/cimgui-go/cimgui"
 )
 
 type voidCallbackFunc func()
@@ -143,7 +145,7 @@ type Backend[BackendFlagsT ~int] interface {
 	SetBeforeRenderHook(func())
 	SetAfterRenderHook(func())
 
-	SetBgColor(color Vec4)
+	SetBgColor(color cimgui.Vec4)
 	Run(func())
 	Refresh()
 

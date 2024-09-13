@@ -5,7 +5,7 @@ package cimnodes
 
 // #include <stdlib.h>
 // #include <memory.h>
-// #include "../extra_types.h"
+// #include "../cimgui/extra_types.h"
 // #include "cimnodes_wrapper.h"
 // #include "cimnodes_typedefs.h"
 import "C"

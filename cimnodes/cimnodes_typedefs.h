@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "../cwrapper/cimnodes.h"
+#include "../cwrappers/cimnodes.h"
 
 #ifdef __cplusplus
 extern "C" {

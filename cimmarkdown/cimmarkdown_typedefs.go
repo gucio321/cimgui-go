@@ -5,7 +5,7 @@ package cimmarkdown
 
 // #include <stdlib.h>
 // #include <memory.h>
-// #include "../extra_types.h"
+// #include "../cimgui/extra_types.h"
 // #include "cimmarkdown_wrapper.h"
 // #include "cimmarkdown_typedefs.h"
 import "C"

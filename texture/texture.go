@@ -1,4 +1,4 @@
-package imgui
+package texture
 
 import (
 	"fmt"
