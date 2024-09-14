@@ -27,6 +27,9 @@ type ArgumentWrapperData struct {
 
 	// CType is a valid type that will have VarName.
 	CType GoIdentifier
+
+	// SourcePackage is wher the GO type is located (most likely prefix or "cimgui")
+	SourcePackage GoIdentifier
 }
 
 type argumentWrapper func(arg ArgDef) ArgumentWrapperData
@@ -94,28 +97,28 @@ func getArgWrapper(
 		"ImWchar16":           simpleW("uint16", "C.ImWchar16"),
 		"uintptr_t":           simpleW("uintptr", "C.uintptr_t"),
 		"const uintptr_t":     simpleW("uintptr", "C.uintptr_t"),
-		"const ImVec2":        wrappableW("Vec2", "C.ImVec2"),
-		"const ImVec2*":       wrappablePtrW("*Vec2", "C.ImVec2"),
-		"ImVec2":              wrappableW("Vec2", "C.ImVec2"),
-		"ImVec2*":             wrappablePtrW("*Vec2", "C.ImVec2"),
+		"const ImVec2":        wrappableW("Vec2", "C.ImVec2", "cimgui", context),
+		"const ImVec2*":       wrappablePtrW("*Vec2", "C.ImVec2", "cimgui", context),
+		"ImVec2":              wrappableW("Vec2", "C.ImVec2", "cimgui", context),
+		"ImVec2*":             wrappablePtrW("*Vec2", "C.ImVec2", "cimgui", context),
 		"ImVec2[2]":           wrappablePtrArrayW(2, "C.ImVec2", "Vec2"),
-		"const ImVec4":        wrappableW("Vec4", "C.ImVec4"),
-		"const ImVec4*":       wrappablePtrW("*Vec4", "C.ImVec4"),
-		"ImVec4":              wrappableW("Vec4", "C.ImVec4"),
-		"ImVec4*":             wrappablePtrW("*Vec4", "C.ImVec4"),
-		"ImColor":             wrappableW("Color", "C.ImColor"),
-		"ImColor*":            wrappablePtrW("*Color", "C.ImColor"),
-		"ImRect":              wrappableW("Rect", "C.ImRect"),
-		"const ImRect":        wrappableW("Rect", "C.ImRect"),
-		"ImRect*":             wrappablePtrW("*Rect", "C.ImRect"),
-		"const ImRect*":       wrappablePtrW("*Rect", "C.ImRect"),
-		"ImPlotPoint":         wrappableW("PlotPoint", "C.ImPlotPoint"),
-		"const ImPlotPoint":   wrappableW("PlotPoint", "C.ImPlotPoint"),
-		"ImPlotPoint*":        wrappablePtrW("*PlotPoint", "C.ImPlotPoint"),
-		"ImPlotTime":          wrappableW("PlotTime", "C.ImPlotTime"),
-		"const ImPlotTime":    wrappableW("PlotTime", "C.ImPlotTime"),
-		"ImPlotTime*":         wrappablePtrW("*PlotTime", "C.ImPlotTime"),
-		"const ImPlotTime*":   wrappablePtrW("*PlotTime", "C.ImPlotTime"),
+		"const ImVec4":        wrappableW("Vec4", "C.ImVec4", "cimgui", context),
+		"const ImVec4*":       wrappablePtrW("*Vec4", "C.ImVec4", "cimgui", context),
+		"ImVec4":              wrappableW("Vec4", "C.ImVec4", "cimgui", context),
+		"ImVec4*":             wrappablePtrW("*Vec4", "C.ImVec4", "cimgui", context),
+		"ImColor":             wrappableW("Color", "C.ImColor", "cimgui", context),
+		"ImColor*":            wrappablePtrW("*Color", "C.ImColor", "cimgui", context),
+		"ImRect":              wrappableW("Rect", "C.ImRect", "cimgui", context),
+		"const ImRect":        wrappableW("Rect", "C.ImRect", "cimgui", context),
+		"ImRect*":             wrappablePtrW("*Rect", "C.ImRect", "cimgui", context),
+		"const ImRect*":       wrappablePtrW("*Rect", "C.ImRect", "cimgui", context),
+		"ImPlotPoint":         wrappableW("PlotPoint", "C.ImPlotPoint", "cimplot", context),
+		"const ImPlotPoint":   wrappableW("PlotPoint", "C.ImPlotPoint", "cimplot", context),
+		"ImPlotPoint*":        wrappablePtrW("*PlotPoint", "C.ImPlotPoint", "cimplot", context),
+		"ImPlotTime":          wrappableW("PlotTime", "C.ImPlotTime", "cimplot", context),
+		"const ImPlotTime":    wrappableW("PlotTime", "C.ImPlotTime", "cimplot", context),
+		"ImPlotTime*":         wrappablePtrW("*PlotTime", "C.ImPlotTime", "cimplot", context),
+		"const ImPlotTime*":   wrappablePtrW("*PlotTime", "C.ImPlotTime", "cimplot", context),
 	}
 
 	if a.Name == "type" || a.Name == "range" {
@@ -150,12 +153,18 @@ func getArgWrapper(
 	}
 
 	if goEnumName := a.Type; isEnum(goEnumName, context.enumNames) {
-		argDeclaration = fmt.Sprintf("%s %s", a.Name, goEnumName.renameGoIdentifier())
 		data = ArgumentWrapperData{
 			ArgType: a.Type.renameEnum(),
 			VarName: fmt.Sprintf("C.%s(%s)", a.Type, a.Name),
 			CType:   GoIdentifier(fmt.Sprintf("C.%s", a.Type)),
 		}
+
+		if _, isRefEnum := context.refTypedefs[a.Type]; isRefEnum {
+			data.SourcePackage = GoIdentifier("cimgui") // TODO: we may want to check this somehow and make this come from main.go
+			data.ArgType = prefixType(data.ArgType, data.SourcePackage, context)
+		}
+
+		argDeclaration = fmt.Sprintf("%s %s", a.Name, data.ArgType)
 
 		return
 	}
@@ -265,11 +274,17 @@ for i, %[1]sV := range %[1]sArg {
 	_, shouldSkipRefTypedef := skippedTypedefs[pureType]
 	if context.structNames[pureType] || (isRefTypedef && !shouldSkipRefTypedef) {
 		w := ArgumentWrapperData{
-			ArgType:   pureType.renameGoIdentifier(),
-			VarName:   fmt.Sprintf("%sArg", a.Name),
-			Finalizer: fmt.Sprintf("%sFin()", a.Name),
-			NoFin:     a.RemoveFinalizer,
-			CType:     GoIdentifier(fmt.Sprintf("C.%s", pureType)),
+			ArgType:       pureType.renameGoIdentifier(),
+			VarName:       fmt.Sprintf("%sArg", a.Name),
+			Finalizer:     fmt.Sprintf("%sFin()", a.Name),
+			NoFin:         a.RemoveFinalizer,
+			CType:         GoIdentifier(fmt.Sprintf("C.%s", pureType)),
+			SourcePackage: GoIdentifier(context.prefix),
+		}
+
+		if isRefTypedef {
+			w.SourcePackage = GoIdentifier("cimgui") // TODO: we may want to check this somehow and make this come from main.go
+			w.ArgType = prefixType(w.ArgType, w.SourcePackage, context)
 		}
 
 		fn := ""
@@ -455,26 +470,28 @@ for i, %[1]sV := range *%[1]s {
 }
 
 // C.ImVec2 -> ImVec2
-func wrappableW(goType, cType GoIdentifier) argumentWrapper {
+func wrappableW(goType, cType, srcpkg GoIdentifier, ctx *Context) argumentWrapper {
 	return func(arg ArgDef) ArgumentWrapperData {
 		return ArgumentWrapperData{
-			ArgType: goType,
-			VarName: fmt.Sprintf("%s.toC()", arg.Name),
-			CType:   cType,
+			ArgType:       prefixType(goType, srcpkg, ctx),
+			VarName:       fmt.Sprintf("%s.toC()", arg.Name),
+			CType:         cType,
+			SourcePackage: srcpkg,
 		}
 	}
 }
 
 // C.ImVec2* -> *ImVec2
-func wrappablePtrW(goType, cType GoIdentifier) argumentWrapper {
+func wrappablePtrW(goType, cType, srcpkg GoIdentifier, ctx *Context) argumentWrapper {
 	return func(arg ArgDef) ArgumentWrapperData {
 		return ArgumentWrapperData{
-			ArgType:     goType,
-			ArgDef:      fmt.Sprintf("%[1]sArg, %[1]sFin := wrap[%[3]s, %[2]s](%[1]s)", arg.Name, goType, cType),
-			ArgDefNoFin: fmt.Sprintf("%[1]sArg, _ := wrap[%[3]s, %[2]s](%[1]s)", arg.Name, goType, cType),
-			Finalizer:   fmt.Sprintf("%[1]sFin()", arg.Name, goType, cType),
-			VarName:     fmt.Sprintf("%sArg", arg.Name),
-			CType:       "*" + cType,
+			ArgType:       prefixType(goType, srcpkg, ctx),
+			ArgDef:        fmt.Sprintf("%[1]sArg, %[1]sFin := wrap[%[3]s, %[2]s](%[1]s)", arg.Name, goType, cType),
+			ArgDefNoFin:   fmt.Sprintf("%[1]sArg, _ := wrap[%[3]s, %[2]s](%[1]s)", arg.Name, goType, cType),
+			Finalizer:     fmt.Sprintf("%[1]sFin()", arg.Name, goType, cType),
+			VarName:       fmt.Sprintf("%sArg", arg.Name),
+			CType:         "*" + cType,
+			SourcePackage: srcpkg,
 		}
 	}
 }
@@ -502,4 +519,20 @@ for i, %[1]sV := range %[1]s {
 			CType:   "*" + cArrayType,
 		}
 	}
+}
+
+// will prefix t with tPkg if ctx.prefix is not equal to tPkg
+func prefixType(t, tPkg GoIdentifier, ctx *Context) GoIdentifier {
+	if GoIdentifier(ctx.prefix) == tPkg {
+		return t
+	}
+
+	isPtr := HasPrefix(t, "*")
+	t = TrimPrefix(t, "*")
+	t = GoIdentifier(fmt.Sprintf("%s.%s", tPkg, t))
+	if isPtr {
+		t = "*" + t
+	}
+
+	return t
 }
