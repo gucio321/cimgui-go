@@ -4,6 +4,7 @@
 package cimplot
 
 import (
+	"github.com/AllenDang/cimgui-go/cimgui"
 	"github.com/AllenDang/cimgui-go/typewrapper"
 )
 
@@ -59,7 +60,7 @@ func (self *PlotAlignmentData) Destroy() {
 	selfFin()
 }
 
-func (self *PlotAnnotationCollection) Append(pos Vec2, off Vec2, bg uint32, fg uint32, clamp bool, fmt string) {
+func (self *PlotAnnotationCollection) Append(pos cimgui.Vec2, off cimgui.Vec2, bg uint32, fg uint32, clamp bool, fmt string) {
 	selfArg, selfFin := self.handle()
 	fmtArg, fmtFin := typewrapper.WrapString[C.char](fmt)
 	C.wrap_ImPlotAnnotationCollection_Append(selfArg, pos.toC(), off.toC(), C.ImU32(bg), C.ImU32(fg), C.bool(clamp), fmtArg)
@@ -610,7 +611,7 @@ func (self *PlotItemGroup) ItemIndex(item *PlotItem) int32 {
 	return int32(C.ImPlotItemGroup_GetItemIndex(selfArg, itemArg))
 }
 
-func (self *PlotItemGroup) ItemByID(id ID) *PlotItem {
+func (self *PlotItemGroup) ItemByID(id cimgui.ID) *PlotItem {
 	selfArg, selfFin := self.handle()
 	idArg, idFin := id.c()
 
@@ -659,7 +660,7 @@ func (self *PlotItemGroup) LegendLabel(i int32) string {
 	return C.GoString(C.ImPlotItemGroup_GetLegendLabel(selfArg, C.int(i)))
 }
 
-func (self *PlotItemGroup) OrAddItem(id ID) *PlotItem {
+func (self *PlotItemGroup) OrAddItem(id cimgui.ID) *PlotItem {
 	selfArg, selfFin := self.handle()
 	idArg, idFin := id.c()
 
@@ -1156,7 +1157,7 @@ func NewPlotTicker() *PlotTicker {
 	return newPlotTickerFromC(C.ImPlotTicker_ImPlotTicker())
 }
 
-func (self *PlotTicker) OverrideSizeLate(size Vec2) {
+func (self *PlotTicker) OverrideSizeLate(size cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	C.ImPlotTicker_OverrideSizeLate(selfArg, size.toC())
 
@@ -1241,7 +1242,7 @@ func PlotAddColormapU32PtrV(name string, cols *[]uint32, size int32, qual bool) 
 
 // PlotAddColormapVec4PtrV parameter default value hint:
 // qual: true
-func PlotAddColormapVec4PtrV(name string, cols *Vec4, size int32, qual bool) PlotColormap {
+func PlotAddColormapVec4PtrV(name string, cols *cimgui.Vec4, size int32, qual bool) PlotColormap {
 	nameArg, nameFin := typewrapper.WrapString[C.char](name)
 	colsArg, colsFin := wrap[C.ImVec4, *Vec4](cols)
 
@@ -1253,7 +1254,7 @@ func PlotAddColormapVec4PtrV(name string, cols *Vec4, size int32, qual bool) Plo
 }
 
 // PlotAddTextCenteredV parameter default value hint:
-func PlotAddTextCenteredV(DrawList *DrawList, top_center Vec2, col uint32, text_begin string) {
+func PlotAddTextCenteredV(DrawList *cimgui.DrawList, top_center cimgui.Vec2, col uint32, text_begin string) {
 	DrawListArg, DrawListFin := DrawList.handle()
 	text_beginArg, text_beginFin := typewrapper.WrapString[C.char](text_begin)
 	C.wrap_ImPlot_AddTextCenteredV(DrawListArg, top_center.toC(), C.ImU32(col), text_beginArg)
@@ -1263,7 +1264,7 @@ func PlotAddTextCenteredV(DrawList *DrawList, top_center Vec2, col uint32, text_
 }
 
 // PlotAddTextVerticalV parameter default value hint:
-func PlotAddTextVerticalV(DrawList *DrawList, pos Vec2, col uint32, text_begin string) {
+func PlotAddTextVerticalV(DrawList *cimgui.DrawList, pos cimgui.Vec2, col uint32, text_begin string) {
 	DrawListArg, DrawListFin := DrawList.handle()
 	text_beginArg, text_beginFin := typewrapper.WrapString[C.char](text_begin)
 	C.wrap_ImPlot_AddTextVerticalV(DrawListArg, pos.toC(), C.ImU32(col), text_beginArg)
@@ -1294,11 +1295,11 @@ func PlotAllAxesInputLocked(axes *PlotAxis, count int32) bool {
 
 // PlotAnnotationBoolV parameter default value hint:
 // round: false
-func PlotAnnotationBoolV(x float64, y float64, col Vec4, pix_offset Vec2, clamp bool, round bool) {
+func PlotAnnotationBoolV(x float64, y float64, col cimgui.Vec4, pix_offset cimgui.Vec2, clamp bool, round bool) {
 	C.ImPlot_Annotation_Bool(C.double(x), C.double(y), col.toC(), pix_offset.toC(), C.bool(clamp), C.bool(round))
 }
 
-func PlotAnnotationStr(x float64, y float64, col Vec4, pix_offset Vec2, clamp bool, fmt string) {
+func PlotAnnotationStr(x float64, y float64, col cimgui.Vec4, pix_offset cimgui.Vec2, clamp bool, fmt string) {
 	fmtArg, fmtFin := typewrapper.WrapString[C.char](fmt)
 	C.wrap_ImPlot_Annotation_Str(C.double(x), C.double(y), col.toC(), pix_offset.toC(), C.bool(clamp), fmtArg)
 
@@ -1345,13 +1346,13 @@ func PlotBeginAlignedPlotsV(group_id string, vertical bool) bool {
 
 // PlotBeginDragDropSourceAxisV parameter default value hint:
 // flags: 0
-func PlotBeginDragDropSourceAxisV(axis PlotAxisEnum, flags DragDropFlags) bool {
+func PlotBeginDragDropSourceAxisV(axis PlotAxisEnum, flags cimgui.DragDropFlags) bool {
 	return C.ImPlot_BeginDragDropSourceAxis(C.ImAxis(axis), C.ImGuiDragDropFlags(flags)) == C.bool(true)
 }
 
 // PlotBeginDragDropSourceItemV parameter default value hint:
 // flags: 0
-func PlotBeginDragDropSourceItemV(label_id string, flags DragDropFlags) bool {
+func PlotBeginDragDropSourceItemV(label_id string, flags cimgui.DragDropFlags) bool {
 	label_idArg, label_idFin := typewrapper.WrapString[C.char](label_id)
 
 	defer func() {
@@ -1362,7 +1363,7 @@ func PlotBeginDragDropSourceItemV(label_id string, flags DragDropFlags) bool {
 
 // PlotBeginDragDropSourcePlotV parameter default value hint:
 // flags: 0
-func PlotBeginDragDropSourcePlotV(flags DragDropFlags) bool {
+func PlotBeginDragDropSourcePlotV(flags cimgui.DragDropFlags) bool {
 	return C.ImPlot_BeginDragDropSourcePlot(C.ImGuiDragDropFlags(flags)) == C.bool(true)
 }
 
@@ -1392,7 +1393,7 @@ func PlotBeginItemV(label_id string, flags PlotItemFlags, recolor_from PlotCol) 
 
 // PlotBeginLegendPopupV parameter default value hint:
 // mouse_button: 1
-func PlotBeginLegendPopupV(label_id string, mouse_button MouseButton) bool {
+func PlotBeginLegendPopupV(label_id string, mouse_button cimgui.MouseButton) bool {
 	label_idArg, label_idFin := typewrapper.WrapString[C.char](label_id)
 
 	defer func() {
@@ -1404,7 +1405,7 @@ func PlotBeginLegendPopupV(label_id string, mouse_button MouseButton) bool {
 // PlotBeginPlotV parameter default value hint:
 // size: ImVec2(-1,0)
 // flags: 0
-func PlotBeginPlotV(title_id string, size Vec2, flags PlotFlags) bool {
+func PlotBeginPlotV(title_id string, size cimgui.Vec2, flags PlotFlags) bool {
 	title_idArg, title_idFin := typewrapper.WrapString[C.char](title_id)
 
 	defer func() {
@@ -1417,7 +1418,7 @@ func PlotBeginPlotV(title_id string, size Vec2, flags PlotFlags) bool {
 // flags: 0
 // row_ratios: nullptr
 // col_ratios: nullptr
-func PlotBeginSubplotsV(title_id string, rows int32, cols int32, size Vec2, flags PlotSubplotFlags, row_ratios *float32, col_ratios *float32) bool {
+func PlotBeginSubplotsV(title_id string, rows int32, cols int32, size cimgui.Vec2, flags PlotSubplotFlags, row_ratios *float32, col_ratios *float32) bool {
 	title_idArg, title_idFin := typewrapper.WrapString[C.char](title_id)
 	row_ratiosArg, row_ratiosFin := typewrapper.WrapNumberPtr[C.float, float32](row_ratios)
 	col_ratiosArg, col_ratiosFin := typewrapper.WrapNumberPtr[C.float, float32](col_ratios)
@@ -1451,8 +1452,8 @@ func PlotCalcHoverColor(col uint32) uint32 {
 	return uint32(C.ImPlot_CalcHoverColor(C.ImU32(col)))
 }
 
-func PlotCalcLegendSize(items *PlotItemGroup, pad Vec2, spacing Vec2, vertical bool) Vec2 {
-	pOut := new(Vec2)
+func PlotCalcLegendSize(items *PlotItemGroup, pad cimgui.Vec2, spacing cimgui.Vec2, vertical bool) cimgui.Vec2 {
+	pOut := new(cimgui.Vec2)
 	pOutArg, pOutFin := wrap[C.ImVec2, *Vec2](pOut)
 
 	itemsArg, itemsFin := items.handle()
@@ -1468,12 +1469,12 @@ func PlotCalcTextColorU32(bg uint32) uint32 {
 	return uint32(C.ImPlot_CalcTextColor_U32(C.ImU32(bg)))
 }
 
-func PlotCalcTextColorVec4(bg Vec4) uint32 {
+func PlotCalcTextColorVec4(bg cimgui.Vec4) uint32 {
 	return uint32(C.ImPlot_CalcTextColor_Vec4(bg.toC()))
 }
 
-func PlotCalcTextSizeVertical(text string) Vec2 {
-	pOut := new(Vec2)
+func PlotCalcTextSizeVertical(text string) cimgui.Vec2 {
+	pOut := new(cimgui.Vec2)
 	pOutArg, pOutFin := wrap[C.ImVec2, *Vec2](pOut)
 
 	textArg, textFin := typewrapper.WrapString[C.char](text)
@@ -1673,8 +1674,8 @@ func PlotCeilTime(t PlotTime, unit PlotTimeUnit) PlotTime {
 	return *pOut
 }
 
-func PlotClampLabelPos(pos Vec2, size Vec2, Min Vec2, Max Vec2) Vec2 {
-	pOut := new(Vec2)
+func PlotClampLabelPos(pos cimgui.Vec2, size cimgui.Vec2, Min cimgui.Vec2, Max cimgui.Vec2) cimgui.Vec2 {
+	pOut := new(cimgui.Vec2)
 	pOutArg, pOutFin := wrap[C.ImVec2, *Vec2](pOut)
 
 	C.ImPlot_ClampLabelPos(pOutArg, pos.toC(), size.toC(), Min.toC(), Max.toC())
@@ -1684,7 +1685,7 @@ func PlotClampLabelPos(pos Vec2, size Vec2, Min Vec2, Max Vec2) Vec2 {
 	return *pOut
 }
 
-func PlotClampLegendRect(legend_rect *Rect, outer_rect Rect, pad Vec2) bool {
+func PlotClampLegendRect(legend_rect *cimgui.Rect, outer_rect cimgui.Rect, pad cimgui.Vec2) bool {
 	legend_rectArg, legend_rectFin := wrap[C.ImRect, *Rect](legend_rect)
 
 	defer func() {
@@ -1696,7 +1697,7 @@ func PlotClampLegendRect(legend_rect *Rect, outer_rect Rect, pad Vec2) bool {
 // PlotColormapButtonV parameter default value hint:
 // size: ImVec2(0,0)
 // cmap: -1
-func PlotColormapButtonV(label string, size Vec2, cmap PlotColormap) bool {
+func PlotColormapButtonV(label string, size cimgui.Vec2, cmap PlotColormap) bool {
 	labelArg, labelFin := typewrapper.WrapString[C.char](label)
 
 	defer func() {
@@ -1714,7 +1715,7 @@ func PlotColormapIcon(cmap PlotColormap) {
 // format: "%g"
 // flags: 0
 // cmap: -1
-func PlotColormapScaleV(label string, scale_min float64, scale_max float64, size Vec2, format string, flags PlotColormapScaleFlags, cmap PlotColormap) {
+func PlotColormapScaleV(label string, scale_min float64, scale_max float64, size cimgui.Vec2, format string, flags PlotColormapScaleFlags, cmap PlotColormap) {
 	labelArg, labelFin := typewrapper.WrapString[C.char](label)
 	formatArg, formatFin := typewrapper.WrapString[C.char](format)
 	C.ImPlot_ColormapScale(labelArg, C.double(scale_min), C.double(scale_max), size.toC(), formatArg, C.ImPlotColormapScaleFlags(flags), C.ImPlotColormap(cmap))
@@ -1727,7 +1728,7 @@ func PlotColormapScaleV(label string, scale_min float64, scale_max float64, size
 // out: nullptr
 // format: ""
 // cmap: -1
-func PlotColormapSliderV(label string, t *float32, out *Vec4, format string, cmap PlotColormap) bool {
+func PlotColormapSliderV(label string, t *float32, out *cimgui.Vec4, format string, cmap PlotColormap) bool {
 	labelArg, labelFin := typewrapper.WrapString[C.char](label)
 	tArg, tFin := typewrapper.WrapNumberPtr[C.float, float32](t)
 	outArg, outFin := wrap[C.ImVec4, *Vec4](out)
@@ -1772,7 +1773,7 @@ func PlotDestroyContextV(ctx *PlotContext) {
 // out_clicked: nullptr
 // out_hovered: nullptr
 // held: nullptr
-func PlotDragLineXV(id int32, x *float64, col Vec4, thickness float32, flags PlotDragToolFlags, out_clicked *bool, out_hovered *bool, held *bool) bool {
+func PlotDragLineXV(id int32, x *float64, col cimgui.Vec4, thickness float32, flags PlotDragToolFlags, out_clicked *bool, out_hovered *bool, held *bool) bool {
 	xArg, xFin := typewrapper.WrapNumberPtr[C.double, float64](x)
 	out_clickedArg, out_clickedFin := typewrapper.WrapBool[C.bool](out_clicked)
 	out_hoveredArg, out_hoveredFin := typewrapper.WrapBool[C.bool](out_hovered)
@@ -1793,7 +1794,7 @@ func PlotDragLineXV(id int32, x *float64, col Vec4, thickness float32, flags Plo
 // out_clicked: nullptr
 // out_hovered: nullptr
 // held: nullptr
-func PlotDragLineYV(id int32, y *float64, col Vec4, thickness float32, flags PlotDragToolFlags, out_clicked *bool, out_hovered *bool, held *bool) bool {
+func PlotDragLineYV(id int32, y *float64, col cimgui.Vec4, thickness float32, flags PlotDragToolFlags, out_clicked *bool, out_hovered *bool, held *bool) bool {
 	yArg, yFin := typewrapper.WrapNumberPtr[C.double, float64](y)
 	out_clickedArg, out_clickedFin := typewrapper.WrapBool[C.bool](out_clicked)
 	out_hoveredArg, out_hoveredFin := typewrapper.WrapBool[C.bool](out_hovered)
@@ -1814,7 +1815,7 @@ func PlotDragLineYV(id int32, y *float64, col Vec4, thickness float32, flags Plo
 // out_clicked: nullptr
 // out_hovered: nullptr
 // held: nullptr
-func PlotDragPointV(id int32, x *float64, y *float64, col Vec4, size float32, flags PlotDragToolFlags, out_clicked *bool, out_hovered *bool, held *bool) bool {
+func PlotDragPointV(id int32, x *float64, y *float64, col cimgui.Vec4, size float32, flags PlotDragToolFlags, out_clicked *bool, out_hovered *bool, held *bool) bool {
 	xArg, xFin := typewrapper.WrapNumberPtr[C.double, float64](x)
 	yArg, yFin := typewrapper.WrapNumberPtr[C.double, float64](y)
 	out_clickedArg, out_clickedFin := typewrapper.WrapBool[C.bool](out_clicked)
@@ -1836,7 +1837,7 @@ func PlotDragPointV(id int32, x *float64, y *float64, col Vec4, size float32, fl
 // out_clicked: nullptr
 // out_hovered: nullptr
 // held: nullptr
-func PlotDragRectV(id int32, x1 *float64, y1 *float64, x2 *float64, y2 *float64, col Vec4, flags PlotDragToolFlags, out_clicked *bool, out_hovered *bool, held *bool) bool {
+func PlotDragRectV(id int32, x1 *float64, y1 *float64, x2 *float64, y2 *float64, col cimgui.Vec4, flags PlotDragToolFlags, out_clicked *bool, out_hovered *bool, held *bool) bool {
 	x1Arg, x1Fin := typewrapper.WrapNumberPtr[C.double, float64](x1)
 	y1Arg, y1Fin := typewrapper.WrapNumberPtr[C.double, float64](y1)
 	x2Arg, x2Fin := typewrapper.WrapNumberPtr[C.double, float64](x2)
@@ -1968,8 +1969,8 @@ func PlotFormatterTime(noname1 float64, buff string, size int32, data uintptr) i
 	return int32(C.wrap_ImPlot_Formatter_Time(C.double(noname1), buffArg, C.int(size), C.uintptr_t(data)))
 }
 
-func PlotGetAutoColor(idx PlotCol) Vec4 {
-	pOut := new(Vec4)
+func PlotGetAutoColor(idx PlotCol) cimgui.Vec4 {
+	pOut := new(cimgui.Vec4)
 	pOutArg, pOutFin := wrap[C.ImVec4, *Vec4](pOut)
 
 	C.ImPlot_GetAutoColor(pOutArg, C.ImPlotCol(idx))
@@ -1981,8 +1982,8 @@ func PlotGetAutoColor(idx PlotCol) Vec4 {
 
 // PlotGetColormapColorV parameter default value hint:
 // cmap: -1
-func PlotGetColormapColorV(idx int32, cmap PlotColormap) Vec4 {
-	pOut := new(Vec4)
+func PlotGetColormapColorV(idx int32, cmap PlotColormap) cimgui.Vec4 {
+	pOut := new(cimgui.Vec4)
 	pOutArg, pOutFin := wrap[C.ImVec4, *Vec4](pOut)
 
 	C.ImPlot_GetColormapColor(pOutArg, C.int(idx), C.ImPlotColormap(cmap))
@@ -2052,8 +2053,8 @@ func PlotGetItemData() *PlotNextItemData {
 	return newPlotNextItemDataFromC(C.ImPlot_GetItemData())
 }
 
-func PlotGetLastItemColor() Vec4 {
-	pOut := new(Vec4)
+func PlotGetLastItemColor() cimgui.Vec4 {
+	pOut := new(cimgui.Vec4)
 	pOutArg, pOutFin := wrap[C.ImVec4, *Vec4](pOut)
 
 	C.ImPlot_GetLastItemColor(pOutArg)
@@ -2065,8 +2066,8 @@ func PlotGetLastItemColor() Vec4 {
 
 // PlotGetLocationPosV parameter default value hint:
 // pad: ImVec2(0,0)
-func PlotGetLocationPosV(outer_rect Rect, inner_size Vec2, location PlotLocation, pad Vec2) Vec2 {
-	pOut := new(Vec2)
+func PlotGetLocationPosV(outer_rect cimgui.Rect, inner_size cimgui.Vec2, location PlotLocation, pad cimgui.Vec2) cimgui.Vec2 {
+	pOut := new(cimgui.Vec2)
 	pOutArg, pOutFin := wrap[C.ImVec2, *Vec2](pOut)
 
 	C.ImPlot_GetLocationPos(pOutArg, outer_rect.toC(), inner_size.toC(), C.ImPlotLocation(location), pad.toC())
@@ -2121,8 +2122,8 @@ func PlotGetPlotMousePosV(x_axis PlotAxisEnum, y_axis PlotAxisEnum) PlotPoint {
 	return *pOut
 }
 
-func PlotGetPlotPos() Vec2 {
-	pOut := new(Vec2)
+func PlotGetPlotPos() cimgui.Vec2 {
+	pOut := new(cimgui.Vec2)
 	pOutArg, pOutFin := wrap[C.ImVec2, *Vec2](pOut)
 
 	C.ImPlot_GetPlotPos(pOutArg)
@@ -2146,8 +2147,8 @@ func PlotGetPlotSelectionV(x_axis PlotAxisEnum, y_axis PlotAxisEnum) PlotRect {
 	return *pOut
 }
 
-func PlotGetPlotSize() Vec2 {
-	pOut := new(Vec2)
+func PlotGetPlotSize() cimgui.Vec2 {
+	pOut := new(cimgui.Vec2)
 	pOutArg, pOutFin := wrap[C.ImVec2, *Vec2](pOut)
 
 	C.ImPlot_GetPlotSize(pOutArg)
@@ -2169,8 +2170,8 @@ func PlotGetStyleColorU32(idx PlotCol) uint32 {
 	return uint32(C.ImPlot_GetStyleColorU32(C.ImPlotCol(idx)))
 }
 
-func PlotGetStyleColorVec4(idx PlotCol) Vec4 {
-	pOut := new(Vec4)
+func PlotGetStyleColorVec4(idx PlotCol) cimgui.Vec4 {
+	pOut := new(cimgui.Vec4)
 	pOutArg, pOutFin := wrap[C.ImVec4, *Vec4](pOut)
 
 	C.ImPlot_GetStyleColorVec4(pOutArg, C.ImPlotCol(idx))
@@ -3153,8 +3154,8 @@ func PlotInitialize(ctx *PlotContext) {
 	ctxFin()
 }
 
-func PlotIntersection(a1 Vec2, a2 Vec2, b1 Vec2, b2 Vec2) Vec2 {
-	pOut := new(Vec2)
+func PlotIntersection(a1 cimgui.Vec2, a2 cimgui.Vec2, b1 cimgui.Vec2, b2 cimgui.Vec2) cimgui.Vec2 {
+	pOut := new(cimgui.Vec2)
 	pOutArg, pOutFin := wrap[C.ImVec2, *Vec2](pOut)
 
 	C.ImPlot_Intersection(pOutArg, a1.toC(), a2.toC(), b1.toC(), b2.toC())
@@ -3172,7 +3173,7 @@ func PlotIsColorAutoPlotCol(idx PlotCol) bool {
 	return C.ImPlot_IsColorAuto_PlotCol(C.ImPlotCol(idx)) == C.bool(true)
 }
 
-func PlotIsColorAutoVec4(col Vec4) bool {
+func PlotIsColorAutoVec4(col cimgui.Vec4) bool {
 	return C.ImPlot_IsColorAuto_Vec4(col.toC()) == C.bool(true)
 }
 
@@ -3205,7 +3206,7 @@ func PlotItemIconU32(col uint32) {
 	C.ImPlot_ItemIcon_U32(C.ImU32(col))
 }
 
-func PlotItemIconVec4(col Vec4) {
+func PlotItemIconVec4(col cimgui.Vec4) {
 	C.ImPlot_ItemIcon_Vec4(col.toC())
 }
 
@@ -3256,8 +3257,8 @@ func PlotMapInputReverseV(dst *PlotInputMap) {
 	dstFin()
 }
 
-func PlotNextColormapColor() Vec4 {
-	pOut := new(Vec4)
+func PlotNextColormapColor() cimgui.Vec4 {
+	pOut := new(cimgui.Vec4)
 	pOutArg, pOutFin := wrap[C.ImVec4, *Vec4](pOut)
 
 	C.ImPlot_NextColormapColor(pOutArg)
@@ -3300,7 +3301,7 @@ func PlotPixelsToPlotFloatV(x float32, y float32, x_axis PlotAxisEnum, y_axis Pl
 // PlotPixelsToPlotVec2V parameter default value hint:
 // x_axis: -1
 // y_axis: -1
-func PlotPixelsToPlotVec2V(pix Vec2, x_axis PlotAxisEnum, y_axis PlotAxisEnum) PlotPoint {
+func PlotPixelsToPlotVec2V(pix cimgui.Vec2, x_axis PlotAxisEnum, y_axis PlotAxisEnum) PlotPoint {
 	pOut := new(PlotPoint)
 	pOutArg, pOutFin := wrap[C.ImPlotPoint, *PlotPoint](pOut)
 
@@ -5557,7 +5558,7 @@ func PlotPlotHistogramdoublePtrV(label_id string, values *[]float64, count int32
 // uv1: ImVec2(1,1)
 // tint_col: ImVec4(1,1,1,1)
 // flags: 0
-func PlotPlotImageV(label_id string, user_texture_id TextureID, bounds_min PlotPoint, bounds_max PlotPoint, uv0 Vec2, uv1 Vec2, tint_col Vec4, flags PlotImageFlags) {
+func PlotPlotImageV(label_id string, user_texture_id cimgui.TextureID, bounds_min PlotPoint, bounds_max PlotPoint, uv0 cimgui.Vec2, uv1 cimgui.Vec2, tint_col cimgui.Vec4, flags PlotImageFlags) {
 	label_idArg, label_idFin := typewrapper.WrapString[C.char](label_id)
 	user_texture_idArg, user_texture_idFin := user_texture_id.c()
 	C.ImPlot_PlotImage(label_idArg, user_texture_idArg, bounds_min.toC(), bounds_max.toC(), uv0.toC(), uv1.toC(), tint_col.toC(), C.ImPlotImageFlags(flags))
@@ -8426,7 +8427,7 @@ func PlotPlotStemsdoublePtrdoublePtrV(label_id string, xs *[]float64, ys *[]floa
 // PlotPlotTextV parameter default value hint:
 // pix_offset: ImVec2(0,0)
 // flags: 0
-func PlotPlotTextV(text string, x float64, y float64, pix_offset Vec2, flags PlotTextFlags) {
+func PlotPlotTextV(text string, x float64, y float64, pix_offset cimgui.Vec2, flags PlotTextFlags) {
 	textArg, textFin := typewrapper.WrapString[C.char](text)
 	C.ImPlot_PlotText(textArg, C.double(x), C.double(y), pix_offset.toC(), C.ImPlotTextFlags(flags))
 
@@ -8436,8 +8437,8 @@ func PlotPlotTextV(text string, x float64, y float64, pix_offset Vec2, flags Plo
 // PlotPlotToPixelsPlotPoIntV parameter default value hint:
 // x_axis: -1
 // y_axis: -1
-func PlotPlotToPixelsPlotPoIntV(plt PlotPoint, x_axis PlotAxisEnum, y_axis PlotAxisEnum) Vec2 {
-	pOut := new(Vec2)
+func PlotPlotToPixelsPlotPoIntV(plt PlotPoint, x_axis PlotAxisEnum, y_axis PlotAxisEnum) cimgui.Vec2 {
+	pOut := new(cimgui.Vec2)
 	pOutArg, pOutFin := wrap[C.ImVec2, *Vec2](pOut)
 
 	C.ImPlot_PlotToPixels_PlotPoInt(pOutArg, plt.toC(), C.ImAxis(x_axis), C.ImAxis(y_axis))
@@ -8450,8 +8451,8 @@ func PlotPlotToPixelsPlotPoIntV(plt PlotPoint, x_axis PlotAxisEnum, y_axis PlotA
 // PlotPlotToPixelsdoubleV parameter default value hint:
 // x_axis: -1
 // y_axis: -1
-func PlotPlotToPixelsdoubleV(x float64, y float64, x_axis PlotAxisEnum, y_axis PlotAxisEnum) Vec2 {
-	pOut := new(Vec2)
+func PlotPlotToPixelsdoubleV(x float64, y float64, x_axis PlotAxisEnum, y_axis PlotAxisEnum) cimgui.Vec2 {
+	pOut := new(cimgui.Vec2)
 	pOutArg, pOutFin := wrap[C.ImVec2, *Vec2](pOut)
 
 	C.ImPlot_PlotToPixels_double(pOutArg, C.double(x), C.double(y), C.ImAxis(x_axis), C.ImAxis(y_axis))
@@ -8508,7 +8509,7 @@ func PlotPushStyleColorU32(idx PlotCol, col uint32) {
 	C.ImPlot_PushStyleColor_U32(C.ImPlotCol(idx), C.ImU32(col))
 }
 
-func PlotPushStyleColorVec4(idx PlotCol, col Vec4) {
+func PlotPushStyleColorVec4(idx PlotCol, col cimgui.Vec4) {
 	C.ImPlot_PushStyleColor_Vec4(C.ImPlotCol(idx), col.toC())
 }
 
@@ -8520,7 +8521,7 @@ func PlotPushStyleVarInt(idx PlotStyleVar, val int32) {
 	C.ImPlot_PushStyleVar_Int(C.ImPlotStyleVar(idx), C.int(val))
 }
 
-func PlotPushStyleVarVec2(idx PlotStyleVar, val Vec2) {
+func PlotPushStyleVarVec2(idx PlotStyleVar, val cimgui.Vec2) {
 	C.ImPlot_PushStyleVar_Vec2(C.ImPlotStyleVar(idx), val.toC())
 }
 
@@ -8548,7 +8549,7 @@ func PlotRegisterOrGetItemV(label_id string, flags PlotItemFlags, just_created *
 	return newPlotItemFromC(C.ImPlot_RegisterOrGetItem(label_idArg, C.ImPlotItemFlags(flags), just_createdArg))
 }
 
-func PlotRenderColorBar(colors *[]uint32, size int32, DrawList *DrawList, bounds Rect, vert bool, reversed bool, continuous bool) {
+func PlotRenderColorBar(colors *[]uint32, size int32, DrawList *cimgui.DrawList, bounds cimgui.Rect, vert bool, reversed bool, continuous bool) {
 	colorsArg := make([]C.ImU32, len(*colors))
 	for i, colorsV := range *colors {
 		colorsArg[i] = C.ImU32(colorsV)
@@ -8602,8 +8603,8 @@ func PlotRoundTo(val float64, prec int32) float64 {
 
 // PlotSampleColormapV parameter default value hint:
 // cmap: -1
-func PlotSampleColormapV(t float32, cmap PlotColormap) Vec4 {
-	pOut := new(Vec4)
+func PlotSampleColormapV(t float32, cmap PlotColormap) cimgui.Vec4 {
+	pOut := new(cimgui.Vec4)
 	pOutArg, pOutFin := wrap[C.ImVec4, *Vec4](pOut)
 
 	C.ImPlot_SampleColormap(pOutArg, C.float(t), C.ImPlotColormap(cmap))
@@ -8632,7 +8633,7 @@ func PlotSetCurrentContext(ctx *PlotContext) {
 	ctxFin()
 }
 
-func PlotSetImGuiContext(ctx *Context) {
+func PlotSetImGuiContext(ctx *cimgui.Context) {
 	ctxArg, ctxFin := ctx.handle()
 	C.ImPlot_SetImGuiContext(ctxArg)
 
@@ -8672,21 +8673,21 @@ func PlotSetNextAxisToFit(axis PlotAxisEnum) {
 // col: ImVec4(0,0,0,-1)
 // size: -1
 // weight: -1
-func PlotSetNextErrorBarStyleV(col Vec4, size float32, weight float32) {
+func PlotSetNextErrorBarStyleV(col cimgui.Vec4, size float32, weight float32) {
 	C.ImPlot_SetNextErrorBarStyle(col.toC(), C.float(size), C.float(weight))
 }
 
 // PlotSetNextFillStyleV parameter default value hint:
 // col: ImVec4(0,0,0,-1)
 // alpha_mod: -1
-func PlotSetNextFillStyleV(col Vec4, alpha_mod float32) {
+func PlotSetNextFillStyleV(col cimgui.Vec4, alpha_mod float32) {
 	C.ImPlot_SetNextFillStyle(col.toC(), C.float(alpha_mod))
 }
 
 // PlotSetNextLineStyleV parameter default value hint:
 // col: ImVec4(0,0,0,-1)
 // weight: -1
-func PlotSetNextLineStyleV(col Vec4, weight float32) {
+func PlotSetNextLineStyleV(col cimgui.Vec4, weight float32) {
 	C.ImPlot_SetNextLineStyle(col.toC(), C.float(weight))
 }
 
@@ -8696,7 +8697,7 @@ func PlotSetNextLineStyleV(col Vec4, weight float32) {
 // fill: ImVec4(0,0,0,-1)
 // weight: -1
 // outline: ImVec4(0,0,0,-1)
-func PlotSetNextMarkerStyleV(marker PlotMarker, size float32, fill Vec4, weight float32, outline Vec4) {
+func PlotSetNextMarkerStyleV(marker PlotMarker, size float32, fill cimgui.Vec4, weight float32, outline cimgui.Vec4) {
 	C.ImPlot_SetNextMarkerStyle(C.ImPlotMarker(marker), C.float(size), fill.toC(), C.float(weight), outline.toC())
 }
 
@@ -8815,7 +8816,7 @@ func PlotSetupMouseTextV(location PlotLocation, flags PlotMouseTextFlags) {
 // vertical: true
 // size: ImVec2(0,0)
 // interactable: true
-func PlotShowAltLegendV(title_id string, vertical bool, size Vec2, interactable bool) {
+func PlotShowAltLegendV(title_id string, vertical bool, size cimgui.Vec2, interactable bool) {
 	title_idArg, title_idFin := typewrapper.WrapString[C.char](title_id)
 	C.ImPlot_ShowAltLegend(title_idArg, C.bool(vertical), size.toC(), C.bool(interactable))
 
@@ -8889,7 +8890,7 @@ func PlotShowLegendContextMenu(legend *PlotLegend, visible bool) bool {
 	return C.ImPlot_ShowLegendContextMenu(legendArg, C.bool(visible)) == C.bool(true)
 }
 
-func PlotShowLegendEntries(items *PlotItemGroup, legend_bb Rect, interactable bool, pad Vec2, spacing Vec2, vertical bool, DrawList *DrawList) bool {
+func PlotShowLegendEntries(items *PlotItemGroup, legend_bb cimgui.Rect, interactable bool, pad cimgui.Vec2, spacing cimgui.Vec2, vertical bool, DrawList *cimgui.DrawList) bool {
 	itemsArg, itemsFin := items.handle()
 	DrawListArg, DrawListFin := DrawList.handle()
 
@@ -8998,11 +8999,11 @@ func PlotSubplotNextCell() {
 
 // PlotTagXBoolV parameter default value hint:
 // round: false
-func PlotTagXBoolV(x float64, col Vec4, round bool) {
+func PlotTagXBoolV(x float64, col cimgui.Vec4, round bool) {
 	C.ImPlot_TagX_Bool(C.double(x), col.toC(), C.bool(round))
 }
 
-func PlotTagXStr(x float64, col Vec4, fmt string) {
+func PlotTagXStr(x float64, col cimgui.Vec4, fmt string) {
 	fmtArg, fmtFin := typewrapper.WrapString[C.char](fmt)
 	C.wrap_ImPlot_TagX_Str(C.double(x), col.toC(), fmtArg)
 
@@ -9011,11 +9012,11 @@ func PlotTagXStr(x float64, col Vec4, fmt string) {
 
 // PlotTagYBoolV parameter default value hint:
 // round: false
-func PlotTagYBoolV(y float64, col Vec4, round bool) {
+func PlotTagYBoolV(y float64, col cimgui.Vec4, round bool) {
 	C.ImPlot_TagY_Bool(C.double(y), col.toC(), C.bool(round))
 }
 
-func PlotTagYStr(y float64, col Vec4, fmt string) {
+func PlotTagYStr(y float64, col cimgui.Vec4, fmt string) {
 	fmtArg, fmtFin := typewrapper.WrapString[C.char](fmt)
 	C.wrap_ImPlot_TagY_Str(C.double(y), col.toC(), fmtArg)
 
@@ -9081,7 +9082,7 @@ func PlotAddColormapU32Ptr(name string, cols *[]uint32, size int32) PlotColormap
 	return PlotColormap(C.wrap_ImPlot_AddColormap_U32Ptr(nameArg, (*C.ImU32)(&colsArg[0]), C.int(size)))
 }
 
-func PlotAddColormapVec4Ptr(name string, cols *Vec4, size int32) PlotColormap {
+func PlotAddColormapVec4Ptr(name string, cols *cimgui.Vec4, size int32) PlotColormap {
 	nameArg, nameFin := typewrapper.WrapString[C.char](name)
 	colsArg, colsFin := wrap[C.ImVec4, *Vec4](cols)
 
@@ -9092,7 +9093,7 @@ func PlotAddColormapVec4Ptr(name string, cols *Vec4, size int32) PlotColormap {
 	return PlotColormap(C.wrap_ImPlot_AddColormap_Vec4Ptr(nameArg, colsArg, C.int(size)))
 }
 
-func PlotAddTextCentered(DrawList *DrawList, top_center Vec2, col uint32, text_begin string) {
+func PlotAddTextCentered(DrawList *cimgui.DrawList, top_center cimgui.Vec2, col uint32, text_begin string) {
 	DrawListArg, DrawListFin := DrawList.handle()
 	text_beginArg, text_beginFin := typewrapper.WrapString[C.char](text_begin)
 	C.wrap_ImPlot_AddTextCentered(DrawListArg, top_center.toC(), C.ImU32(col), text_beginArg)
@@ -9101,7 +9102,7 @@ func PlotAddTextCentered(DrawList *DrawList, top_center Vec2, col uint32, text_b
 	text_beginFin()
 }
 
-func PlotAddTextVertical(DrawList *DrawList, pos Vec2, col uint32, text_begin string) {
+func PlotAddTextVertical(DrawList *cimgui.DrawList, pos cimgui.Vec2, col uint32, text_begin string) {
 	DrawListArg, DrawListFin := DrawList.handle()
 	text_beginArg, text_beginFin := typewrapper.WrapString[C.char](text_begin)
 	C.wrap_ImPlot_AddTextVertical(DrawListArg, pos.toC(), C.ImU32(col), text_beginArg)
@@ -9110,7 +9111,7 @@ func PlotAddTextVertical(DrawList *DrawList, pos Vec2, col uint32, text_begin st
 	text_beginFin()
 }
 
-func PlotAnnotationBool(x float64, y float64, col Vec4, pix_offset Vec2, clamp bool) {
+func PlotAnnotationBool(x float64, y float64, col cimgui.Vec4, pix_offset cimgui.Vec2, clamp bool) {
 	C.wrap_ImPlot_Annotation_Bool(C.double(x), C.double(y), col.toC(), pix_offset.toC(), C.bool(clamp))
 }
 
@@ -9167,7 +9168,7 @@ func PlotBeginPlot(title_id string) bool {
 	return C.wrap_ImPlot_BeginPlot(title_idArg) == C.bool(true)
 }
 
-func PlotBeginSubplots(title_id string, rows int32, cols int32, size Vec2) bool {
+func PlotBeginSubplots(title_id string, rows int32, cols int32, size cimgui.Vec2) bool {
 	title_idArg, title_idFin := typewrapper.WrapString[C.char](title_id)
 
 	defer func() {
@@ -9211,7 +9212,7 @@ func PlotDestroyContext() {
 	C.wrap_ImPlot_DestroyContext()
 }
 
-func PlotDragLineX(id int32, x *float64, col Vec4) bool {
+func PlotDragLineX(id int32, x *float64, col cimgui.Vec4) bool {
 	xArg, xFin := typewrapper.WrapNumberPtr[C.double, float64](x)
 
 	defer func() {
@@ -9220,7 +9221,7 @@ func PlotDragLineX(id int32, x *float64, col Vec4) bool {
 	return C.wrap_ImPlot_DragLineX(C.int(id), xArg, col.toC()) == C.bool(true)
 }
 
-func PlotDragLineY(id int32, y *float64, col Vec4) bool {
+func PlotDragLineY(id int32, y *float64, col cimgui.Vec4) bool {
 	yArg, yFin := typewrapper.WrapNumberPtr[C.double, float64](y)
 
 	defer func() {
@@ -9229,7 +9230,7 @@ func PlotDragLineY(id int32, y *float64, col Vec4) bool {
 	return C.wrap_ImPlot_DragLineY(C.int(id), yArg, col.toC()) == C.bool(true)
 }
 
-func PlotDragPoint(id int32, x *float64, y *float64, col Vec4) bool {
+func PlotDragPoint(id int32, x *float64, y *float64, col cimgui.Vec4) bool {
 	xArg, xFin := typewrapper.WrapNumberPtr[C.double, float64](x)
 	yArg, yFin := typewrapper.WrapNumberPtr[C.double, float64](y)
 
@@ -9240,7 +9241,7 @@ func PlotDragPoint(id int32, x *float64, y *float64, col Vec4) bool {
 	return C.wrap_ImPlot_DragPoint(C.int(id), xArg, yArg, col.toC()) == C.bool(true)
 }
 
-func PlotDragRect(id int32, x1 *float64, y1 *float64, x2 *float64, y2 *float64, col Vec4) bool {
+func PlotDragRect(id int32, x1 *float64, y1 *float64, x2 *float64, y2 *float64, col cimgui.Vec4) bool {
 	x1Arg, x1Fin := typewrapper.WrapNumberPtr[C.double, float64](x1)
 	y1Arg, y1Fin := typewrapper.WrapNumberPtr[C.double, float64](y1)
 	x2Arg, x2Fin := typewrapper.WrapNumberPtr[C.double, float64](x2)
@@ -9255,8 +9256,8 @@ func PlotDragRect(id int32, x1 *float64, y1 *float64, x2 *float64, y2 *float64, 
 	return C.wrap_ImPlot_DragRect(C.int(id), x1Arg, y1Arg, x2Arg, y2Arg, col.toC()) == C.bool(true)
 }
 
-func PlotGetColormapColor(idx int32) Vec4 {
-	pOut := new(Vec4)
+func PlotGetColormapColor(idx int32) cimgui.Vec4 {
+	pOut := new(cimgui.Vec4)
 	pOutArg, pOutFin := wrap[C.ImVec4, *Vec4](pOut)
 
 	C.wrap_ImPlot_GetColormapColor(pOutArg, C.int(idx))
@@ -9270,8 +9271,8 @@ func PlotGetColormapSize() int32 {
 	return int32(C.wrap_ImPlot_GetColormapSize())
 }
 
-func PlotGetLocationPos(outer_rect Rect, inner_size Vec2, location PlotLocation) Vec2 {
-	pOut := new(Vec2)
+func PlotGetLocationPos(outer_rect cimgui.Rect, inner_size cimgui.Vec2, location PlotLocation) cimgui.Vec2 {
+	pOut := new(cimgui.Vec2)
 	pOutArg, pOutFin := wrap[C.ImVec2, *Vec2](pOut)
 
 	C.wrap_ImPlot_GetLocationPos(pOutArg, outer_rect.toC(), inner_size.toC(), C.ImPlotLocation(location))
@@ -9361,7 +9362,7 @@ func PlotPixelsToPlotFloat(x float32, y float32) PlotPoint {
 	return *pOut
 }
 
-func PlotPixelsToPlotVec2(pix Vec2) PlotPoint {
+func PlotPixelsToPlotVec2(pix cimgui.Vec2) PlotPoint {
 	pOut := new(PlotPoint)
 	pOutArg, pOutFin := wrap[C.ImPlotPoint, *PlotPoint](pOut)
 
@@ -11106,7 +11107,7 @@ func PlotPlotHistogramdoublePtr(label_id string, values *[]float64, count int32)
 	return float64(C.wrap_ImPlot_PlotHistogram_doublePtr(label_idArg, (*C.double)(&valuesArg[0]), C.int(count)))
 }
 
-func PlotPlotImage(label_id string, user_texture_id TextureID, bounds_min PlotPoint, bounds_max PlotPoint) {
+func PlotPlotImage(label_id string, user_texture_id cimgui.TextureID, bounds_min PlotPoint, bounds_max PlotPoint) {
 	label_idArg, label_idFin := typewrapper.WrapString[C.char](label_id)
 	user_texture_idArg, user_texture_idFin := user_texture_id.c()
 	C.wrap_ImPlot_PlotImage(label_idArg, user_texture_idArg, bounds_min.toC(), bounds_max.toC())
@@ -13292,8 +13293,8 @@ func PlotPlotText(text string, x float64, y float64) {
 	textFin()
 }
 
-func PlotPlotToPixelsPlotPoInt(plt PlotPoint) Vec2 {
-	pOut := new(Vec2)
+func PlotPlotToPixelsPlotPoInt(plt PlotPoint) cimgui.Vec2 {
+	pOut := new(cimgui.Vec2)
 	pOutArg, pOutFin := wrap[C.ImVec2, *Vec2](pOut)
 
 	C.wrap_ImPlot_PlotToPixels_PlotPoInt(pOutArg, plt.toC())
@@ -13303,8 +13304,8 @@ func PlotPlotToPixelsPlotPoInt(plt PlotPoint) Vec2 {
 	return *pOut
 }
 
-func PlotPlotToPixelsdouble(x float64, y float64) Vec2 {
-	pOut := new(Vec2)
+func PlotPlotToPixelsdouble(x float64, y float64) cimgui.Vec2 {
+	pOut := new(cimgui.Vec2)
 	pOutArg, pOutFin := wrap[C.ImVec2, *Vec2](pOut)
 
 	C.wrap_ImPlot_PlotToPixels_double(pOutArg, C.double(x), C.double(y))
@@ -13339,8 +13340,8 @@ func PlotRegisterOrGetItem(label_id string, flags PlotItemFlags) *PlotItem {
 	return newPlotItemFromC(C.wrap_ImPlot_RegisterOrGetItem(label_idArg, C.ImPlotItemFlags(flags)))
 }
 
-func PlotSampleColormap(t float32) Vec4 {
-	pOut := new(Vec4)
+func PlotSampleColormap(t float32) cimgui.Vec4 {
+	pOut := new(cimgui.Vec4)
 	pOutArg, pOutFin := wrap[C.ImVec4, *Vec4](pOut)
 
 	C.wrap_ImPlot_SampleColormap(pOutArg, C.float(t))
@@ -13477,11 +13478,11 @@ func PlotStyleColorsLight() {
 	C.wrap_ImPlot_StyleColorsLight()
 }
 
-func PlotTagXBool(x float64, col Vec4) {
+func PlotTagXBool(x float64, col cimgui.Vec4) {
 	C.wrap_ImPlot_TagX_Bool(C.double(x), col.toC())
 }
 
-func PlotTagYBool(y float64, col Vec4) {
+func PlotTagYBool(y float64, col cimgui.Vec4) {
 	C.wrap_ImPlot_TagY_Bool(C.double(y), col.toC())
 }
 
@@ -13587,7 +13588,7 @@ func (self *PlotAlignmentData) PadBMax() float32 {
 	return float32(C.wrap_ImPlotAlignmentData_GetPadBMax(selfArg))
 }
 
-func (self PlotAnnotation) SetPos(v Vec2) {
+func (self PlotAnnotation) SetPos(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotAnnotation_SetPos(selfArg, v.toC())
@@ -13602,7 +13603,7 @@ func (self *PlotAnnotation) Pos() Vec2 {
 	return *(&Vec2{}).fromC(C.wrap_ImPlotAnnotation_GetPos(selfArg))
 }
 
-func (self PlotAnnotation) SetOffset(v Vec2) {
+func (self PlotAnnotation) SetOffset(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotAnnotation_SetOffset(selfArg, v.toC())
@@ -13700,7 +13701,7 @@ func (self *PlotAnnotationCollection) Annotations() Vector[*PlotAnnotation] {
 	return newVectorFromC(C.wrap_ImPlotAnnotationCollection_GetAnnotations(selfArg).Size, C.wrap_ImPlotAnnotationCollection_GetAnnotations(selfArg).Capacity, newPlotAnnotationFromC(C.wrap_ImPlotAnnotationCollection_GetAnnotations(selfArg).Data))
 }
 
-func (self PlotAnnotationCollection) SetTextBuffer(v TextBuffer) {
+func (self PlotAnnotationCollection) SetTextBuffer(v cimgui.TextBuffer) {
 	vArg, _ := v.c()
 
 	selfArg, selfFin := self.handle()
@@ -13735,7 +13736,7 @@ func (self *PlotAnnotationCollection) Size() int32 {
 	return int32(C.wrap_ImPlotAnnotationCollection_GetSize(selfArg))
 }
 
-func (self PlotAxis) SetID(v ID) {
+func (self PlotAxis) SetID(v cimgui.ID) {
 	vArg, _ := v.c()
 
 	selfArg, selfFin := self.handle()
@@ -14151,7 +14152,7 @@ func (self *PlotAxis) Datum2() float32 {
 	return float32(C.wrap_ImPlotAxis_GetDatum2(selfArg))
 }
 
-func (self PlotAxis) SetHoverRect(v Rect) {
+func (self PlotAxis) SetHoverRect(v cimgui.Rect) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetHoverRect(selfArg, v.toC())
@@ -14550,7 +14551,7 @@ func (self *PlotColormapData) TableOffsets() Vector[*int32] {
 	return newVectorFromC(C.wrap_ImPlotColormapData_GetTableOffsets(selfArg).Size, C.wrap_ImPlotColormapData_GetTableOffsets(selfArg).Capacity, (*int32)(C.wrap_ImPlotColormapData_GetTableOffsets(selfArg).Data))
 }
 
-func (self PlotColormapData) SetText(v TextBuffer) {
+func (self PlotColormapData) SetText(v cimgui.TextBuffer) {
 	vArg, _ := v.c()
 
 	selfArg, selfFin := self.handle()
@@ -14604,7 +14605,7 @@ func (self PlotColormapData) SetQuals(v Vector[*bool]) {
 	C.wrap_ImPlotColormapData_SetQuals(selfArg, *vVecArg)
 }
 
-func (self PlotColormapData) SetMap(v Storage) {
+func (self PlotColormapData) SetMap(v cimgui.Storage) {
 	vArg, _ := v.c()
 
 	selfArg, selfFin := self.handle()
@@ -14792,7 +14793,7 @@ func (self *PlotContext) Style() PlotStyle {
 	return *newPlotStyleFromC(func() *C.ImPlotStyle { result := C.wrap_ImPlotContext_GetStyle(selfArg); return &result }())
 }
 
-func (self PlotContext) SetColorModifiers(v Vector[*ColorMod]) {
+func (self PlotContext) SetColorModifiers(v Vector[*cimgui.ColorMod]) {
 	vData := v.Data
 	vDataArg, _ := vData.handle()
 	vVecArg := new(C.ImVector_ImGuiColorMod)
@@ -14815,7 +14816,7 @@ func (self *PlotContext) ColorModifiers() Vector[*ColorMod] {
 	return newVectorFromC(C.wrap_ImPlotContext_GetColorModifiers(selfArg).Size, C.wrap_ImPlotContext_GetColorModifiers(selfArg).Capacity, newColorModFromC(C.wrap_ImPlotContext_GetColorModifiers(selfArg).Data))
 }
 
-func (self PlotContext) SetStyleModifiers(v Vector[*StyleMod]) {
+func (self PlotContext) SetStyleModifiers(v Vector[*cimgui.StyleMod]) {
 	vData := v.Data
 	vDataArg, _ := vData.handle()
 	vVecArg := new(C.ImVector_ImGuiStyleMod)
@@ -15029,7 +15030,7 @@ func (self *PlotContext) OpenContextThisFrame() bool {
 	return C.wrap_ImPlotContext_GetOpenContextThisFrame(selfArg) == C.bool(true)
 }
 
-func (self PlotContext) SetMousePosStringBuilder(v TextBuffer) {
+func (self PlotContext) SetMousePosStringBuilder(v cimgui.TextBuffer) {
 	vArg, _ := v.c()
 
 	selfArg, selfFin := self.handle()
@@ -15160,7 +15161,7 @@ func (self *PlotDateTimeSpec) Use24HourClock() bool {
 	return C.wrap_ImPlotDateTimeSpec_GetUse24HourClock(selfArg) == C.bool(true)
 }
 
-func (self PlotInputMap) SetPan(v MouseButton) {
+func (self PlotInputMap) SetPan(v cimgui.MouseButton) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotInputMap_SetPan(selfArg, C.ImGuiMouseButton(v))
@@ -15190,7 +15191,7 @@ func (self *PlotInputMap) PanMod() int32 {
 	return int32(C.wrap_ImPlotInputMap_GetPanMod(selfArg))
 }
 
-func (self PlotInputMap) SetFit(v MouseButton) {
+func (self PlotInputMap) SetFit(v cimgui.MouseButton) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotInputMap_SetFit(selfArg, C.ImGuiMouseButton(v))
@@ -15205,7 +15206,7 @@ func (self *PlotInputMap) Fit() MouseButton {
 	return MouseButton(C.wrap_ImPlotInputMap_GetFit(selfArg))
 }
 
-func (self PlotInputMap) SetSelect(v MouseButton) {
+func (self PlotInputMap) SetSelect(v cimgui.MouseButton) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotInputMap_SetSelect(selfArg, C.ImGuiMouseButton(v))
@@ -15220,7 +15221,7 @@ func (self *PlotInputMap) Select() MouseButton {
 	return MouseButton(C.wrap_ImPlotInputMap_GetSelect(selfArg))
 }
 
-func (self PlotInputMap) SetSelectCancel(v MouseButton) {
+func (self PlotInputMap) SetSelectCancel(v cimgui.MouseButton) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotInputMap_SetSelectCancel(selfArg, C.ImGuiMouseButton(v))
@@ -15280,7 +15281,7 @@ func (self *PlotInputMap) SelectVertMod() int32 {
 	return int32(C.wrap_ImPlotInputMap_GetSelectVertMod(selfArg))
 }
 
-func (self PlotInputMap) SetMenu(v MouseButton) {
+func (self PlotInputMap) SetMenu(v cimgui.MouseButton) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotInputMap_SetMenu(selfArg, C.ImGuiMouseButton(v))
@@ -15340,7 +15341,7 @@ func (self *PlotInputMap) ZoomRate() float32 {
 	return float32(C.wrap_ImPlotInputMap_GetZoomRate(selfArg))
 }
 
-func (self PlotItem) SetID(v ID) {
+func (self PlotItem) SetID(v cimgui.ID) {
 	vArg, _ := v.c()
 
 	selfArg, selfFin := self.handle()
@@ -15363,7 +15364,7 @@ func (self *PlotItem) Color() uint32 {
 	return uint32(C.wrap_ImPlotItem_GetColor(selfArg))
 }
 
-func (self PlotItem) SetLegendHoverRect(v Rect) {
+func (self PlotItem) SetLegendHoverRect(v cimgui.Rect) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotItem_SetLegendHoverRect(selfArg, v.toC())
@@ -15438,7 +15439,7 @@ func (self *PlotItem) SeenThisFrame() bool {
 	return C.wrap_ImPlotItem_GetSeenThisFrame(selfArg) == C.bool(true)
 }
 
-func (self PlotItemGroup) SetID(v ID) {
+func (self PlotItemGroup) SetID(v cimgui.ID) {
 	vArg, _ := v.c()
 
 	selfArg, selfFin := self.handle()
@@ -15538,7 +15539,7 @@ func (self *PlotLegend) PreviousLocation() PlotLocation {
 	return PlotLocation(C.wrap_ImPlotLegend_GetPreviousLocation(selfArg))
 }
 
-func (self PlotLegend) SetScroll(v Vec2) {
+func (self PlotLegend) SetScroll(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotLegend_SetScroll(selfArg, v.toC())
@@ -15576,7 +15577,7 @@ func (self *PlotLegend) Indices() Vector[*int32] {
 	return newVectorFromC(C.wrap_ImPlotLegend_GetIndices(selfArg).Size, C.wrap_ImPlotLegend_GetIndices(selfArg).Capacity, (*int32)(C.wrap_ImPlotLegend_GetIndices(selfArg).Data))
 }
 
-func (self PlotLegend) SetLabels(v TextBuffer) {
+func (self PlotLegend) SetLabels(v cimgui.TextBuffer) {
 	vArg, _ := v.c()
 
 	selfArg, selfFin := self.handle()
@@ -15593,7 +15594,7 @@ func (self *PlotLegend) Labels() TextBuffer {
 	return *newTextBufferFromC(func() *C.ImGuiTextBuffer { result := C.wrap_ImPlotLegend_GetLabels(selfArg); return &result }())
 }
 
-func (self PlotLegend) SetRect(v Rect) {
+func (self PlotLegend) SetRect(v cimgui.Rect) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotLegend_SetRect(selfArg, v.toC())
@@ -15608,7 +15609,7 @@ func (self *PlotLegend) Rect() Rect {
 	return *(&Rect{}).fromC(C.wrap_ImPlotLegend_GetRect(selfArg))
 }
 
-func (self PlotLegend) SetRectClamped(v Rect) {
+func (self PlotLegend) SetRectClamped(v cimgui.Rect) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotLegend_SetRectClamped(selfArg, v.toC())
@@ -15668,7 +15669,7 @@ func (self *PlotLegend) CanGoInside() bool {
 	return C.wrap_ImPlotLegend_GetCanGoInside(selfArg) == C.bool(true)
 }
 
-func (self PlotNextItemData) SetColors(v *[5]Vec4) {
+func (self PlotNextItemData) SetColors(v *[5]cimgui.Vec4) {
 	vArg := make([]C.ImVec4, len(v))
 	for i, vV := range v {
 		vArg[i] = vV.toC()
@@ -16135,7 +16136,7 @@ func (self *PlotNextPlotData) LinkedMax() [6]*float64 {
 	}()
 }
 
-func (self PlotPlot) SetID(v ID) {
+func (self PlotPlot) SetID(v cimgui.ID) {
 	vArg, _ := v.c()
 
 	selfArg, selfFin := self.handle()
@@ -16236,7 +16237,7 @@ func (self *PlotPlot) Axes() [6]PlotAxis {
 	}()
 }
 
-func (self PlotPlot) SetTextBuffer(v TextBuffer) {
+func (self PlotPlot) SetTextBuffer(v cimgui.TextBuffer) {
 	vArg, _ := v.c()
 
 	selfArg, selfFin := self.handle()
@@ -16300,7 +16301,7 @@ func (self *PlotPlot) CurrentY() PlotAxisEnum {
 	return PlotAxisEnum(C.wrap_ImPlotPlot_GetCurrentY(selfArg))
 }
 
-func (self PlotPlot) SetFrameRect(v Rect) {
+func (self PlotPlot) SetFrameRect(v cimgui.Rect) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetFrameRect(selfArg, v.toC())
@@ -16315,7 +16316,7 @@ func (self *PlotPlot) FrameRect() Rect {
 	return *(&Rect{}).fromC(C.wrap_ImPlotPlot_GetFrameRect(selfArg))
 }
 
-func (self PlotPlot) SetCanvasRect(v Rect) {
+func (self PlotPlot) SetCanvasRect(v cimgui.Rect) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetCanvasRect(selfArg, v.toC())
@@ -16330,7 +16331,7 @@ func (self *PlotPlot) CanvasRect() Rect {
 	return *(&Rect{}).fromC(C.wrap_ImPlotPlot_GetCanvasRect(selfArg))
 }
 
-func (self PlotPlot) SetPlotRect(v Rect) {
+func (self PlotPlot) SetPlotRect(v cimgui.Rect) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetPlotRect(selfArg, v.toC())
@@ -16345,7 +16346,7 @@ func (self *PlotPlot) PlotRect() Rect {
 	return *(&Rect{}).fromC(C.wrap_ImPlotPlot_GetPlotRect(selfArg))
 }
 
-func (self PlotPlot) SetAxesRect(v Rect) {
+func (self PlotPlot) SetAxesRect(v cimgui.Rect) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetAxesRect(selfArg, v.toC())
@@ -16360,7 +16361,7 @@ func (self *PlotPlot) AxesRect() Rect {
 	return *(&Rect{}).fromC(C.wrap_ImPlotPlot_GetAxesRect(selfArg))
 }
 
-func (self PlotPlot) SetSelectRect(v Rect) {
+func (self PlotPlot) SetSelectRect(v cimgui.Rect) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetSelectRect(selfArg, v.toC())
@@ -16375,7 +16376,7 @@ func (self *PlotPlot) SelectRect() Rect {
 	return *(&Rect{}).fromC(C.wrap_ImPlotPlot_GetSelectRect(selfArg))
 }
 
-func (self PlotPlot) SetSelectStart(v Vec2) {
+func (self PlotPlot) SetSelectStart(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetSelectStart(selfArg, v.toC())
@@ -16829,7 +16830,7 @@ func (self *PlotStyle) MinorAlpha() float32 {
 	return float32(C.wrap_ImPlotStyle_GetMinorAlpha(selfArg))
 }
 
-func (self PlotStyle) SetMajorTickLen(v Vec2) {
+func (self PlotStyle) SetMajorTickLen(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetMajorTickLen(selfArg, v.toC())
@@ -16844,7 +16845,7 @@ func (self *PlotStyle) MajorTickLen() Vec2 {
 	return *(&Vec2{}).fromC(C.wrap_ImPlotStyle_GetMajorTickLen(selfArg))
 }
 
-func (self PlotStyle) SetMinorTickLen(v Vec2) {
+func (self PlotStyle) SetMinorTickLen(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetMinorTickLen(selfArg, v.toC())
@@ -16859,7 +16860,7 @@ func (self *PlotStyle) MinorTickLen() Vec2 {
 	return *(&Vec2{}).fromC(C.wrap_ImPlotStyle_GetMinorTickLen(selfArg))
 }
 
-func (self PlotStyle) SetMajorTickSize(v Vec2) {
+func (self PlotStyle) SetMajorTickSize(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetMajorTickSize(selfArg, v.toC())
@@ -16874,7 +16875,7 @@ func (self *PlotStyle) MajorTickSize() Vec2 {
 	return *(&Vec2{}).fromC(C.wrap_ImPlotStyle_GetMajorTickSize(selfArg))
 }
 
-func (self PlotStyle) SetMinorTickSize(v Vec2) {
+func (self PlotStyle) SetMinorTickSize(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetMinorTickSize(selfArg, v.toC())
@@ -16889,7 +16890,7 @@ func (self *PlotStyle) MinorTickSize() Vec2 {
 	return *(&Vec2{}).fromC(C.wrap_ImPlotStyle_GetMinorTickSize(selfArg))
 }
 
-func (self PlotStyle) SetMajorGridSize(v Vec2) {
+func (self PlotStyle) SetMajorGridSize(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetMajorGridSize(selfArg, v.toC())
@@ -16904,7 +16905,7 @@ func (self *PlotStyle) MajorGridSize() Vec2 {
 	return *(&Vec2{}).fromC(C.wrap_ImPlotStyle_GetMajorGridSize(selfArg))
 }
 
-func (self PlotStyle) SetMinorGridSize(v Vec2) {
+func (self PlotStyle) SetMinorGridSize(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetMinorGridSize(selfArg, v.toC())
@@ -16919,7 +16920,7 @@ func (self *PlotStyle) MinorGridSize() Vec2 {
 	return *(&Vec2{}).fromC(C.wrap_ImPlotStyle_GetMinorGridSize(selfArg))
 }
 
-func (self PlotStyle) SetPlotPadding(v Vec2) {
+func (self PlotStyle) SetPlotPadding(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetPlotPadding(selfArg, v.toC())
@@ -16934,7 +16935,7 @@ func (self *PlotStyle) PlotPadding() Vec2 {
 	return *(&Vec2{}).fromC(C.wrap_ImPlotStyle_GetPlotPadding(selfArg))
 }
 
-func (self PlotStyle) SetLabelPadding(v Vec2) {
+func (self PlotStyle) SetLabelPadding(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetLabelPadding(selfArg, v.toC())
@@ -16949,7 +16950,7 @@ func (self *PlotStyle) LabelPadding() Vec2 {
 	return *(&Vec2{}).fromC(C.wrap_ImPlotStyle_GetLabelPadding(selfArg))
 }
 
-func (self PlotStyle) SetLegendPadding(v Vec2) {
+func (self PlotStyle) SetLegendPadding(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetLegendPadding(selfArg, v.toC())
@@ -16964,7 +16965,7 @@ func (self *PlotStyle) LegendPadding() Vec2 {
 	return *(&Vec2{}).fromC(C.wrap_ImPlotStyle_GetLegendPadding(selfArg))
 }
 
-func (self PlotStyle) SetLegendInnerPadding(v Vec2) {
+func (self PlotStyle) SetLegendInnerPadding(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetLegendInnerPadding(selfArg, v.toC())
@@ -16979,7 +16980,7 @@ func (self *PlotStyle) LegendInnerPadding() Vec2 {
 	return *(&Vec2{}).fromC(C.wrap_ImPlotStyle_GetLegendInnerPadding(selfArg))
 }
 
-func (self PlotStyle) SetLegendSpacing(v Vec2) {
+func (self PlotStyle) SetLegendSpacing(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetLegendSpacing(selfArg, v.toC())
@@ -16994,7 +16995,7 @@ func (self *PlotStyle) LegendSpacing() Vec2 {
 	return *(&Vec2{}).fromC(C.wrap_ImPlotStyle_GetLegendSpacing(selfArg))
 }
 
-func (self PlotStyle) SetMousePosPadding(v Vec2) {
+func (self PlotStyle) SetMousePosPadding(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetMousePosPadding(selfArg, v.toC())
@@ -17009,7 +17010,7 @@ func (self *PlotStyle) MousePosPadding() Vec2 {
 	return *(&Vec2{}).fromC(C.wrap_ImPlotStyle_GetMousePosPadding(selfArg))
 }
 
-func (self PlotStyle) SetAnnotationPadding(v Vec2) {
+func (self PlotStyle) SetAnnotationPadding(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetAnnotationPadding(selfArg, v.toC())
@@ -17024,7 +17025,7 @@ func (self *PlotStyle) AnnotationPadding() Vec2 {
 	return *(&Vec2{}).fromC(C.wrap_ImPlotStyle_GetAnnotationPadding(selfArg))
 }
 
-func (self PlotStyle) SetFitPadding(v Vec2) {
+func (self PlotStyle) SetFitPadding(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetFitPadding(selfArg, v.toC())
@@ -17039,7 +17040,7 @@ func (self *PlotStyle) FitPadding() Vec2 {
 	return *(&Vec2{}).fromC(C.wrap_ImPlotStyle_GetFitPadding(selfArg))
 }
 
-func (self PlotStyle) SetPlotDefaultSize(v Vec2) {
+func (self PlotStyle) SetPlotDefaultSize(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetPlotDefaultSize(selfArg, v.toC())
@@ -17054,7 +17055,7 @@ func (self *PlotStyle) PlotDefaultSize() Vec2 {
 	return *(&Vec2{}).fromC(C.wrap_ImPlotStyle_GetPlotDefaultSize(selfArg))
 }
 
-func (self PlotStyle) SetPlotMinSize(v Vec2) {
+func (self PlotStyle) SetPlotMinSize(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetPlotMinSize(selfArg, v.toC())
@@ -17069,7 +17070,7 @@ func (self *PlotStyle) PlotMinSize() Vec2 {
 	return *(&Vec2{}).fromC(C.wrap_ImPlotStyle_GetPlotMinSize(selfArg))
 }
 
-func (self PlotStyle) SetColors(v *[21]Vec4) {
+func (self PlotStyle) SetColors(v *[21]cimgui.Vec4) {
 	vArg := make([]C.ImVec4, len(v))
 	for i, vV := range v {
 		vArg[i] = vV.toC()
@@ -17161,7 +17162,7 @@ func (self *PlotStyle) Use24HourClock() bool {
 	return C.wrap_ImPlotStyle_GetUse24HourClock(selfArg) == C.bool(true)
 }
 
-func (self PlotSubplot) SetID(v ID) {
+func (self PlotSubplot) SetID(v cimgui.ID) {
 	vArg, _ := v.c()
 
 	selfArg, selfFin := self.handle()
@@ -17261,7 +17262,7 @@ func (self *PlotSubplot) CurrentIdx() int32 {
 	return int32(C.wrap_ImPlotSubplot_GetCurrentIdx(selfArg))
 }
 
-func (self PlotSubplot) SetFrameRect(v Rect) {
+func (self PlotSubplot) SetFrameRect(v cimgui.Rect) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotSubplot_SetFrameRect(selfArg, v.toC())
@@ -17276,7 +17277,7 @@ func (self *PlotSubplot) FrameRect() Rect {
 	return *(&Rect{}).fromC(C.wrap_ImPlotSubplot_GetFrameRect(selfArg))
 }
 
-func (self PlotSubplot) SetGridRect(v Rect) {
+func (self PlotSubplot) SetGridRect(v cimgui.Rect) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotSubplot_SetGridRect(selfArg, v.toC())
@@ -17291,7 +17292,7 @@ func (self *PlotSubplot) GridRect() Rect {
 	return *(&Rect{}).fromC(C.wrap_ImPlotSubplot_GetGridRect(selfArg))
 }
 
-func (self PlotSubplot) SetCellSize(v Vec2) {
+func (self PlotSubplot) SetCellSize(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotSubplot_SetCellSize(selfArg, v.toC())
@@ -17604,7 +17605,7 @@ func (self *PlotTagCollection) Tags() Vector[*PlotTag] {
 	return newVectorFromC(C.wrap_ImPlotTagCollection_GetTags(selfArg).Size, C.wrap_ImPlotTagCollection_GetTags(selfArg).Capacity, newPlotTagFromC(C.wrap_ImPlotTagCollection_GetTags(selfArg).Data))
 }
 
-func (self PlotTagCollection) SetTextBuffer(v TextBuffer) {
+func (self PlotTagCollection) SetTextBuffer(v cimgui.TextBuffer) {
 	vArg, _ := v.c()
 
 	selfArg, selfFin := self.handle()
@@ -17666,7 +17667,7 @@ func (self *PlotTick) PixelPos() float32 {
 	return float32(C.wrap_ImPlotTick_GetPixelPos(selfArg))
 }
 
-func (self PlotTick) SetLabelSize(v Vec2) {
+func (self PlotTick) SetLabelSize(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotTick_SetLabelSize(selfArg, v.toC())
@@ -17779,7 +17780,7 @@ func (self *PlotTicker) Ticks() Vector[*PlotTick] {
 	return newVectorFromC(C.wrap_ImPlotTicker_GetTicks(selfArg).Size, C.wrap_ImPlotTicker_GetTicks(selfArg).Capacity, newPlotTickFromC(C.wrap_ImPlotTicker_GetTicks(selfArg).Data))
 }
 
-func (self PlotTicker) SetTextBuffer(v TextBuffer) {
+func (self PlotTicker) SetTextBuffer(v cimgui.TextBuffer) {
 	vArg, _ := v.c()
 
 	selfArg, selfFin := self.handle()
@@ -17796,7 +17797,7 @@ func (self *PlotTicker) TextBuffer() TextBuffer {
 	return *newTextBufferFromC(func() *C.ImGuiTextBuffer { result := C.wrap_ImPlotTicker_GetTextBuffer(selfArg); return &result }())
 }
 
-func (self PlotTicker) SetMaxSize(v Vec2) {
+func (self PlotTicker) SetMaxSize(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotTicker_SetMaxSize(selfArg, v.toC())
@@ -17811,7 +17812,7 @@ func (self *PlotTicker) MaxSize() Vec2 {
 	return *(&Vec2{}).fromC(C.wrap_ImPlotTicker_GetMaxSize(selfArg))
 }
 
-func (self PlotTicker) SetLateSize(v Vec2) {
+func (self PlotTicker) SetLateSize(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_ImPlotTicker_SetLateSize(selfArg, v.toC())

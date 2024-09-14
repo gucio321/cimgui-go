@@ -4,6 +4,7 @@
 package cimmarkdown
 
 import (
+	"github.com/AllenDang/cimgui-go/cimgui"
 	"github.com/AllenDang/cimgui-go/typewrapper"
 )
 
@@ -114,7 +115,7 @@ func (self *TextRegion) Destroy() {
 	selfFin()
 }
 
-func UnderLine(col_ Color) {
+func UnderLine(col_ cimgui.Color) {
 	C.UnderLine(col_.toC())
 }
 
@@ -535,7 +536,7 @@ func (self *MarkdownFormatInfo) Config() *MarkdownConfig {
 	return newMarkdownConfigFromC(C.wrap_MarkdownFormatInfo_GetConfig(selfArg))
 }
 
-func (self MarkdownHeadingFormat) SetFont(v *Font) {
+func (self MarkdownHeadingFormat) SetFont(v *cimgui.Font) {
 	vArg, _ := v.handle()
 
 	selfArg, selfFin := self.handle()
@@ -597,7 +598,7 @@ func (self *MarkdownImageData) UseLinkCallback() bool {
 	return C.wrap_MarkdownImageData_GetUseLinkCallback(selfArg) == C.bool(true)
 }
 
-func (self MarkdownImageData) SetUsertextureid(v TextureID) {
+func (self MarkdownImageData) SetUsertextureid(v cimgui.TextureID) {
 	vArg, _ := v.c()
 
 	selfArg, selfFin := self.handle()
@@ -605,7 +606,7 @@ func (self MarkdownImageData) SetUsertextureid(v TextureID) {
 	C.wrap_MarkdownImageData_SetUser_texture_id(selfArg, vArg)
 }
 
-func (self MarkdownImageData) SetSize(v Vec2) {
+func (self MarkdownImageData) SetSize(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_MarkdownImageData_SetSize(selfArg, v.toC())
@@ -620,7 +621,7 @@ func (self *MarkdownImageData) Size() Vec2 {
 	return *(&Vec2{}).fromC(C.wrap_MarkdownImageData_GetSize(selfArg))
 }
 
-func (self MarkdownImageData) SetUv0(v Vec2) {
+func (self MarkdownImageData) SetUv0(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_MarkdownImageData_SetUv0(selfArg, v.toC())
@@ -635,7 +636,7 @@ func (self *MarkdownImageData) Uv0() Vec2 {
 	return *(&Vec2{}).fromC(C.wrap_MarkdownImageData_GetUv0(selfArg))
 }
 
-func (self MarkdownImageData) SetUv1(v Vec2) {
+func (self MarkdownImageData) SetUv1(v cimgui.Vec2) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_MarkdownImageData_SetUv1(selfArg, v.toC())
@@ -650,7 +651,7 @@ func (self *MarkdownImageData) Uv1() Vec2 {
 	return *(&Vec2{}).fromC(C.wrap_MarkdownImageData_GetUv1(selfArg))
 }
 
-func (self MarkdownImageData) SetTintcol(v Vec4) {
+func (self MarkdownImageData) SetTintcol(v cimgui.Vec4) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_MarkdownImageData_SetTint_col(selfArg, v.toC())
@@ -665,7 +666,7 @@ func (self *MarkdownImageData) Tintcol() Vec4 {
 	return *(&Vec4{}).fromC(C.wrap_MarkdownImageData_GetTint_col(selfArg))
 }
 
-func (self MarkdownImageData) SetBordercol(v Vec4) {
+func (self MarkdownImageData) SetBordercol(v cimgui.Vec4) {
 	selfArg, selfFin := self.handle()
 	defer selfFin()
 	C.wrap_MarkdownImageData_SetBorder_col(selfArg, v.toC())
