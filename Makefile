@@ -70,6 +70,15 @@ endef
 cimmarkdown: setup
 	$(call cimmarkdown)
 
+define cimcte
+	$(call generate,cimcte,imguiColorTextEdit,cwrappers/cimCTE.h,cwrappers/cimCTE_templates/definitions.json,cwrappers/cimCTE_templates/structs_and_enums.json,cwrappers/cimCTE_templates/typedefs_dict.json,-r ../cwrappers/cimgui_templates/structs_and_enums.json -rt ../cwrappers/cimgui_templates/typedefs_dict.json)
+endef
+
+## cimcte: generate immarkdown binding
+.PHONY: cimcte
+cimcte: setup
+	$(call cimcte)
+
 compile_cimgui_macos:
 	rm -rf ./lib/build
 	cd ./lib; cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DIMGUI_STATIC=On -DCMAKE_OSX_ARCHITECTURES=arm64
@@ -122,6 +131,8 @@ update: setup
 	$(call cimnodes)
 	$(call update,cimmarkdown,https://github.com/gucio321/cimmarkdown,imgui_markdown,main)
 	$(call cimmarkdown)
+	$(call update,cimCTE,https://github.com/cimgui/cimCTE,ImGuiColorTextEdit,master)
+	$(call cimcte)
 	echo -e "// +build rquired\n\npackage imgui\n\nimport (\n" > dummy.go
 	for i in `find cwrappers -type f \( -name "*.h" -o -name "*.cpp" \) -exec dirname {} \; | sort -u`; do \
 		cp templates/dummy.go.template $$i/dummy.go; \
