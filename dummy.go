@@ -7,6 +7,7 @@ import (
 	"github.com/AllenDang/cimgui-go/cwrappers"
 	"github.com/AllenDang/cimgui-go/cwrappers/imgui"
 	"github.com/AllenDang/cimgui-go/cwrappers/imgui/backends"
+	"github.com/AllenDang/cimgui-go/cwrappers/ImGuiColorTextEdit"
 	"github.com/AllenDang/cimgui-go/cwrappers/imgui/examples/example_allegro5"
 	"github.com/AllenDang/cimgui-go/cwrappers/imgui/examples/example_android_opengl3"
 	"github.com/AllenDang/cimgui-go/cwrappers/imgui/examples/example_glfw_opengl2"

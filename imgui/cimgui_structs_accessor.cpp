@@ -1181,6 +1181,8 @@ void wrap_ImGuiIO_SetConfigWindowsResizeFromEdges(ImGuiIO *ImGuiIOPtr, bool v) {
 bool wrap_ImGuiIO_GetConfigWindowsResizeFromEdges(ImGuiIO *self) { return self->ConfigWindowsResizeFromEdges; }
 void wrap_ImGuiIO_SetConfigWindowsMoveFromTitleBarOnly(ImGuiIO *ImGuiIOPtr, bool v) { ImGuiIOPtr->ConfigWindowsMoveFromTitleBarOnly = v; }
 bool wrap_ImGuiIO_GetConfigWindowsMoveFromTitleBarOnly(ImGuiIO *self) { return self->ConfigWindowsMoveFromTitleBarOnly; }
+void wrap_ImGuiIO_SetConfigScrollbarScrollByPage(ImGuiIO *ImGuiIOPtr, bool v) { ImGuiIOPtr->ConfigScrollbarScrollByPage = v; }
+bool wrap_ImGuiIO_GetConfigScrollbarScrollByPage(ImGuiIO *self) { return self->ConfigScrollbarScrollByPage; }
 void wrap_ImGuiIO_SetConfigMemoryCompactTimer(ImGuiIO *ImGuiIOPtr, float v) { ImGuiIOPtr->ConfigMemoryCompactTimer = v; }
 float wrap_ImGuiIO_GetConfigMemoryCompactTimer(ImGuiIO *self) { return self->ConfigMemoryCompactTimer; }
 void wrap_ImGuiIO_SetMouseDoubleClickTime(ImGuiIO *ImGuiIOPtr, float v) { ImGuiIOPtr->MouseDoubleClickTime = v; }

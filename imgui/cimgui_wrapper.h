@@ -44,6 +44,7 @@ extern bool wrap_igDragScalarV(const char* label,ImGuiDataType data_type,uintptr
 extern bool wrap_igDragScalarNV(const char* label,ImGuiDataType data_type,uintptr_t p_data,int components,float v_speed,const uintptr_t p_min,const uintptr_t p_max,const char* format,ImGuiSliderFlags flags);
 extern void wrap_igErrorCheckEndFrameRecoverV(ImGuiErrorLogCallback log_callback,uintptr_t user_data);
 extern void wrap_igErrorCheckEndWindowRecoverV(ImGuiErrorLogCallback log_callback,uintptr_t user_data);
+extern void wrap_igErrorLogCallbackToDebugLog(uintptr_t user_data,const char* fmt);
 extern const char* wrap_igFindRenderedTextEndV(const char* text,const int text_len);
 extern ImGuiViewport* wrap_igFindViewportByPlatformHandle(uintptr_t platform_handle);
 extern ImGuiID wrap_igGetID_Ptr(const uintptr_t ptr_id);

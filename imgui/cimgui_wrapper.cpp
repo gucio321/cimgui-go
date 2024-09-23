@@ -39,6 +39,7 @@ bool wrap_igDragScalarV(const char* label,ImGuiDataType data_type,uintptr_t p_da
 bool wrap_igDragScalarNV(const char* label,ImGuiDataType data_type,uintptr_t p_data,int components,float v_speed,const uintptr_t p_min,const uintptr_t p_max,const char* format,ImGuiSliderFlags flags) { return igDragScalarN(label,data_type,(void*)(uintptr_t)p_data,components,v_speed,(const void*)(uintptr_t)p_min,(const void*)(uintptr_t)p_max,format,flags); }
 void wrap_igErrorCheckEndFrameRecoverV(ImGuiErrorLogCallback log_callback,uintptr_t user_data) { igErrorCheckEndFrameRecover(log_callback,(void*)(uintptr_t)user_data); }
 void wrap_igErrorCheckEndWindowRecoverV(ImGuiErrorLogCallback log_callback,uintptr_t user_data) { igErrorCheckEndWindowRecover(log_callback,(void*)(uintptr_t)user_data); }
+void wrap_igErrorLogCallbackToDebugLog(uintptr_t user_data,const char* fmt) { igErrorLogCallbackToDebugLog((void*)(uintptr_t)user_data,fmt); }
 const char* wrap_igFindRenderedTextEndV(const char* text,const int text_len) { return igFindRenderedTextEnd(text,(text_len > 0) ? text + text_len*sizeof(char) : 0); }
 ImGuiViewport* wrap_igFindViewportByPlatformHandle(uintptr_t platform_handle) { return igFindViewportByPlatformHandle((void*)(uintptr_t)platform_handle); }
 ImGuiID wrap_igGetID_Ptr(const uintptr_t ptr_id) { return igGetID_Ptr((const void*)(uintptr_t)ptr_id); }

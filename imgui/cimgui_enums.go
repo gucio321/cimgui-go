@@ -922,7 +922,7 @@ const (
 type ItemFlagsPrivate int32
 
 const (
-	// false     // Disable interactions (DOES NOT affect visuals, see BeginDisabled()/EndDisabled() for full disable feature, and github #211).
+	// false     // Disable interactions (DOES NOT affect visuals. DO NOT mix direct use of this with BeginDisabled(). See BeginDisabled()/EndDisabled() for full disable feature, and github #211).
 	ItemFlagsDisabled ItemFlagsPrivate = 1024
 	// false     // [ALPHA] Allow hovering interactions but underlying value is not changed.
 	ItemFlagsReadOnly ItemFlagsPrivate = 2048

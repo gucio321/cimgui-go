@@ -1184,6 +1184,8 @@ extern void wrap_ImGuiIO_SetConfigWindowsResizeFromEdges(ImGuiIO *ImGuiIOPtr, bo
 extern bool wrap_ImGuiIO_GetConfigWindowsResizeFromEdges(ImGuiIO *self);
 extern void wrap_ImGuiIO_SetConfigWindowsMoveFromTitleBarOnly(ImGuiIO *ImGuiIOPtr, bool v);
 extern bool wrap_ImGuiIO_GetConfigWindowsMoveFromTitleBarOnly(ImGuiIO *self);
+extern void wrap_ImGuiIO_SetConfigScrollbarScrollByPage(ImGuiIO *ImGuiIOPtr, bool v);
+extern bool wrap_ImGuiIO_GetConfigScrollbarScrollByPage(ImGuiIO *self);
 extern void wrap_ImGuiIO_SetConfigMemoryCompactTimer(ImGuiIO *ImGuiIOPtr, float v);
 extern float wrap_ImGuiIO_GetConfigMemoryCompactTimer(ImGuiIO *self);
 extern void wrap_ImGuiIO_SetMouseDoubleClickTime(ImGuiIO *ImGuiIOPtr, float v);

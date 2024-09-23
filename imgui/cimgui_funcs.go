@@ -5865,6 +5865,13 @@ func InternalErrorCheckUsingSetCursorPosToExtendParentBoundaries() {
 	C.igErrorCheckUsingSetCursorPosToExtendParentBoundaries()
 }
 
+func InternalErrorLogCallbackToDebugLog(user_data uintptr, fmt string) {
+	fmtArg, fmtFin := datautils.WrapString[C.char](fmt)
+	C.wrap_igErrorLogCallbackToDebugLog(C.uintptr_t(user_data), fmtArg)
+
+	fmtFin()
+}
+
 func InternalFindBestWindowPosForPopup(window *Window) Vec2 {
 	pOut := new(Vec2)
 	pOutArg, pOutFin := datautils.Wrap(pOut)
@@ -23299,6 +23306,21 @@ func (self *IO) ConfigWindowsMoveFromTitleBarOnly() bool {
 		selfFin()
 	}()
 	return C.wrap_ImGuiIO_GetConfigWindowsMoveFromTitleBarOnly(datautils.ConvertCTypes[*C.ImGuiIO](selfArg)) == C.bool(true)
+}
+
+func (self IO) SetConfigScrollbarScrollByPage(v bool) {
+	selfArg, selfFin := self.Handle()
+	defer selfFin()
+	C.wrap_ImGuiIO_SetConfigScrollbarScrollByPage(selfArg, C.bool(v))
+}
+
+func (self *IO) ConfigScrollbarScrollByPage() bool {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return C.wrap_ImGuiIO_GetConfigScrollbarScrollByPage(datautils.ConvertCTypes[*C.ImGuiIO](selfArg)) == C.bool(true)
 }
 
 func (self IO) SetConfigMemoryCompactTimer(v float32) {
