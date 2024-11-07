@@ -10078,6 +10078,7 @@ func TagYBool(y float64, col imgui.Vec4) {
 	C.wrap_ImPlot_TagY_Bool(C.double(y), internal.ReinterpretCast[C.ImVec4](col.ToC()))
 }
 
+// Formatter_Time_Data_GetTime returns value of Formatter_Time_Data.Time
 func (self *FormatterTimeData) TimeDataGetTime() PlotTime {
 	selfArg, selfFin := self.Handle()
 
@@ -10090,6 +10091,7 @@ func (self *FormatterTimeData) TimeDataGetTime() PlotTime {
 	}()
 }
 
+// Formatter_Time_Data_GetSpec returns value of Formatter_Time_Data.Spec
 func (self *FormatterTimeData) TimeDataGetSpec() DateTimeSpec {
 	selfArg, selfFin := self.Handle()
 
@@ -10102,6 +10104,7 @@ func (self *FormatterTimeData) TimeDataGetSpec() DateTimeSpec {
 	}())
 }
 
+// Formatter_Time_Data_GetUserFormatter returns value of Formatter_Time_Data.UserFormatter
 func (self *FormatterTimeData) TimeDataGetUserFormatter() Formatter {
 	selfArg, selfFin := self.Handle()
 
@@ -10114,6 +10117,7 @@ func (self *FormatterTimeData) TimeDataGetUserFormatter() Formatter {
 	}())
 }
 
+// Formatter_Time_Data_GetUserFormatterData returns value of Formatter_Time_Data.UserFormatterData
 func (self *FormatterTimeData) TimeDataGetUserFormatterData() uintptr {
 	selfArg, selfFin := self.Handle()
 
@@ -10123,12 +10127,14 @@ func (self *FormatterTimeData) TimeDataGetUserFormatterData() uintptr {
 	return uintptr(C.wrap_Formatter_Time_Data_GetUserFormatterData(internal.ReinterpretCast[*C.Formatter_Time_Data](selfArg)))
 }
 
+// ImPlotAlignmentData_SetVertical sets value of ImPlotAlignmentData.Vertical
 func (self AlignmentData) SetVertical(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAlignmentData_SetVertical(selfArg, C.bool(v))
 }
 
+// ImPlotAlignmentData_GetVertical returns value of ImPlotAlignmentData.Vertical
 func (self *AlignmentData) Vertical() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -10138,12 +10144,14 @@ func (self *AlignmentData) Vertical() bool {
 	return C.wrap_ImPlotAlignmentData_GetVertical(internal.ReinterpretCast[*C.ImPlotAlignmentData](selfArg)) == C.bool(true)
 }
 
+// ImPlotAlignmentData_SetPadA sets value of ImPlotAlignmentData.PadA
 func (self AlignmentData) SetPadA(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAlignmentData_SetPadA(selfArg, C.float(v))
 }
 
+// ImPlotAlignmentData_GetPadA returns value of ImPlotAlignmentData.PadA
 func (self *AlignmentData) PadA() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -10153,12 +10161,14 @@ func (self *AlignmentData) PadA() float32 {
 	return float32(C.wrap_ImPlotAlignmentData_GetPadA(internal.ReinterpretCast[*C.ImPlotAlignmentData](selfArg)))
 }
 
+// ImPlotAlignmentData_SetPadB sets value of ImPlotAlignmentData.PadB
 func (self AlignmentData) SetPadB(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAlignmentData_SetPadB(selfArg, C.float(v))
 }
 
+// ImPlotAlignmentData_GetPadB returns value of ImPlotAlignmentData.PadB
 func (self *AlignmentData) PadB() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -10168,12 +10178,14 @@ func (self *AlignmentData) PadB() float32 {
 	return float32(C.wrap_ImPlotAlignmentData_GetPadB(internal.ReinterpretCast[*C.ImPlotAlignmentData](selfArg)))
 }
 
+// ImPlotAlignmentData_SetPadAMax sets value of ImPlotAlignmentData.PadAMax
 func (self AlignmentData) SetPadAMax(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAlignmentData_SetPadAMax(selfArg, C.float(v))
 }
 
+// ImPlotAlignmentData_GetPadAMax returns value of ImPlotAlignmentData.PadAMax
 func (self *AlignmentData) PadAMax() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -10183,12 +10195,14 @@ func (self *AlignmentData) PadAMax() float32 {
 	return float32(C.wrap_ImPlotAlignmentData_GetPadAMax(internal.ReinterpretCast[*C.ImPlotAlignmentData](selfArg)))
 }
 
+// ImPlotAlignmentData_SetPadBMax sets value of ImPlotAlignmentData.PadBMax
 func (self AlignmentData) SetPadBMax(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAlignmentData_SetPadBMax(selfArg, C.float(v))
 }
 
+// ImPlotAlignmentData_GetPadBMax returns value of ImPlotAlignmentData.PadBMax
 func (self *AlignmentData) PadBMax() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -10198,12 +10212,14 @@ func (self *AlignmentData) PadBMax() float32 {
 	return float32(C.wrap_ImPlotAlignmentData_GetPadBMax(internal.ReinterpretCast[*C.ImPlotAlignmentData](selfArg)))
 }
 
+// ImPlotAnnotation_SetPos sets value of ImPlotAnnotation.Pos
 func (self Annotation) SetPos(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAnnotation_SetPos(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotAnnotation_GetPos returns value of ImPlotAnnotation.Pos
 func (self *Annotation) Pos() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -10216,12 +10232,14 @@ func (self *Annotation) Pos() imgui.Vec2 {
 	}()
 }
 
+// ImPlotAnnotation_SetOffset sets value of ImPlotAnnotation.Offset
 func (self Annotation) SetOffset(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAnnotation_SetOffset(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotAnnotation_GetOffset returns value of ImPlotAnnotation.Offset
 func (self *Annotation) Offset() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -10234,12 +10252,14 @@ func (self *Annotation) Offset() imgui.Vec2 {
 	}()
 }
 
+// ImPlotAnnotation_SetColorBg sets value of ImPlotAnnotation.ColorBg
 func (self Annotation) SetColorBg(v uint32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAnnotation_SetColorBg(selfArg, C.ImU32(v))
 }
 
+// ImPlotAnnotation_GetColorBg returns value of ImPlotAnnotation.ColorBg
 func (self *Annotation) ColorBg() uint32 {
 	selfArg, selfFin := self.Handle()
 
@@ -10249,12 +10269,14 @@ func (self *Annotation) ColorBg() uint32 {
 	return uint32(C.wrap_ImPlotAnnotation_GetColorBg(internal.ReinterpretCast[*C.ImPlotAnnotation](selfArg)))
 }
 
+// ImPlotAnnotation_SetColorFg sets value of ImPlotAnnotation.ColorFg
 func (self Annotation) SetColorFg(v uint32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAnnotation_SetColorFg(selfArg, C.ImU32(v))
 }
 
+// ImPlotAnnotation_GetColorFg returns value of ImPlotAnnotation.ColorFg
 func (self *Annotation) ColorFg() uint32 {
 	selfArg, selfFin := self.Handle()
 
@@ -10264,12 +10286,14 @@ func (self *Annotation) ColorFg() uint32 {
 	return uint32(C.wrap_ImPlotAnnotation_GetColorFg(internal.ReinterpretCast[*C.ImPlotAnnotation](selfArg)))
 }
 
+// ImPlotAnnotation_SetTextOffset sets value of ImPlotAnnotation.TextOffset
 func (self Annotation) SetTextOffset(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAnnotation_SetTextOffset(selfArg, C.int(v))
 }
 
+// ImPlotAnnotation_GetTextOffset returns value of ImPlotAnnotation.TextOffset
 func (self *Annotation) TextOffset() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -10279,12 +10303,14 @@ func (self *Annotation) TextOffset() int32 {
 	return int32(C.wrap_ImPlotAnnotation_GetTextOffset(internal.ReinterpretCast[*C.ImPlotAnnotation](selfArg)))
 }
 
+// ImPlotAnnotation_SetClamp sets value of ImPlotAnnotation.Clamp
 func (self Annotation) SetClamp(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAnnotation_SetClamp(selfArg, C.bool(v))
 }
 
+// ImPlotAnnotation_GetClamp returns value of ImPlotAnnotation.Clamp
 func (self *Annotation) Clamp() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -10294,6 +10320,7 @@ func (self *Annotation) Clamp() bool {
 	return C.wrap_ImPlotAnnotation_GetClamp(internal.ReinterpretCast[*C.ImPlotAnnotation](selfArg)) == C.bool(true)
 }
 
+// ImPlotAnnotationCollection_SetAnnotations sets value of ImPlotAnnotationCollection.Annotations
 func (self AnnotationCollection) SetAnnotations(v vectors.Vector[Annotation]) {
 	vData := v.Data
 	vDataArg, _ := vData.Handle()
@@ -10308,6 +10335,7 @@ func (self AnnotationCollection) SetAnnotations(v vectors.Vector[Annotation]) {
 	C.wrap_ImPlotAnnotationCollection_SetAnnotations(selfArg, *vVecArg)
 }
 
+// ImPlotAnnotationCollection_GetAnnotations returns value of ImPlotAnnotationCollection.Annotations
 func (self *AnnotationCollection) Annotations() vectors.Vector[Annotation] {
 	selfArg, selfFin := self.Handle()
 
@@ -10317,6 +10345,7 @@ func (self *AnnotationCollection) Annotations() vectors.Vector[Annotation] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotAnnotationCollection_GetAnnotations(internal.ReinterpretCast[*C.ImPlotAnnotationCollection](selfArg)).Size, C.wrap_ImPlotAnnotationCollection_GetAnnotations(internal.ReinterpretCast[*C.ImPlotAnnotationCollection](selfArg)).Capacity, NewAnnotationFromC(C.wrap_ImPlotAnnotationCollection_GetAnnotations(internal.ReinterpretCast[*C.ImPlotAnnotationCollection](selfArg)).Data))
 }
 
+// ImPlotAnnotationCollection_SetTextBuffer sets value of ImPlotAnnotationCollection.TextBuffer
 func (self AnnotationCollection) SetTextBuffer(v imgui.TextBuffer) {
 	vArg, _ := v.C()
 
@@ -10325,6 +10354,7 @@ func (self AnnotationCollection) SetTextBuffer(v imgui.TextBuffer) {
 	C.wrap_ImPlotAnnotationCollection_SetTextBuffer(selfArg, internal.ReinterpretCast[C.ImGuiTextBuffer](vArg))
 }
 
+// ImPlotAnnotationCollection_GetTextBuffer returns value of ImPlotAnnotationCollection.TextBuffer
 func (self *AnnotationCollection) TextBuffer() imgui.TextBuffer {
 	selfArg, selfFin := self.Handle()
 
@@ -10337,12 +10367,14 @@ func (self *AnnotationCollection) TextBuffer() imgui.TextBuffer {
 	}())
 }
 
+// ImPlotAnnotationCollection_SetSize sets value of ImPlotAnnotationCollection.Size
 func (self AnnotationCollection) SetSize(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAnnotationCollection_SetSize(selfArg, C.int(v))
 }
 
+// ImPlotAnnotationCollection_GetSize returns value of ImPlotAnnotationCollection.Size
 func (self *AnnotationCollection) Size() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -10352,6 +10384,7 @@ func (self *AnnotationCollection) Size() int32 {
 	return int32(C.wrap_ImPlotAnnotationCollection_GetSize(internal.ReinterpretCast[*C.ImPlotAnnotationCollection](selfArg)))
 }
 
+// ImPlotAxis_SetID sets value of ImPlotAxis.ID
 func (self Axis) SetID(v imgui.ID) {
 	vArg, _ := v.C()
 
@@ -10360,6 +10393,7 @@ func (self Axis) SetID(v imgui.ID) {
 	C.wrap_ImPlotAxis_SetID(selfArg, internal.ReinterpretCast[C.ImGuiID](vArg))
 }
 
+// ImPlotAxis_GetID returns value of ImPlotAxis.ID
 func (self *Axis) ID() imgui.ID {
 	selfArg, selfFin := self.Handle()
 
@@ -10372,12 +10406,14 @@ func (self *Axis) ID() imgui.ID {
 	}())
 }
 
+// ImPlotAxis_SetFlags sets value of ImPlotAxis.Flags
 func (self Axis) SetFlags(v AxisFlags) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetFlags(selfArg, C.ImPlotAxisFlags(v))
 }
 
+// ImPlotAxis_GetFlags returns value of ImPlotAxis.Flags
 func (self *Axis) Flags() AxisFlags {
 	selfArg, selfFin := self.Handle()
 
@@ -10387,12 +10423,14 @@ func (self *Axis) Flags() AxisFlags {
 	return AxisFlags(C.wrap_ImPlotAxis_GetFlags(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetPreviousFlags sets value of ImPlotAxis.PreviousFlags
 func (self Axis) SetPreviousFlags(v AxisFlags) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetPreviousFlags(selfArg, C.ImPlotAxisFlags(v))
 }
 
+// ImPlotAxis_GetPreviousFlags returns value of ImPlotAxis.PreviousFlags
 func (self *Axis) PreviousFlags() AxisFlags {
 	selfArg, selfFin := self.Handle()
 
@@ -10402,6 +10440,7 @@ func (self *Axis) PreviousFlags() AxisFlags {
 	return AxisFlags(C.wrap_ImPlotAxis_GetPreviousFlags(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetRange sets value of ImPlotAxis.Range
 func (self Axis) SetRange(v Range) {
 	vArg, _ := v.C()
 
@@ -10410,6 +10449,7 @@ func (self Axis) SetRange(v Range) {
 	C.wrap_ImPlotAxis_SetRange(selfArg, internal.ReinterpretCast[C.ImPlotRange](vArg))
 }
 
+// ImPlotAxis_GetRange returns value of ImPlotAxis.Range
 func (self *Axis) Range() Range {
 	selfArg, selfFin := self.Handle()
 
@@ -10422,12 +10462,14 @@ func (self *Axis) Range() Range {
 	}())
 }
 
+// ImPlotAxis_SetRangeCond sets value of ImPlotAxis.RangeCond
 func (self Axis) SetRangeCond(v Cond) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetRangeCond(selfArg, C.ImPlotCond(v))
 }
 
+// ImPlotAxis_GetRangeCond returns value of ImPlotAxis.RangeCond
 func (self *Axis) RangeCond() Cond {
 	selfArg, selfFin := self.Handle()
 
@@ -10437,12 +10479,14 @@ func (self *Axis) RangeCond() Cond {
 	return Cond(C.wrap_ImPlotAxis_GetRangeCond(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetScale sets value of ImPlotAxis.Scale
 func (self Axis) SetScale(v Scale) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetScale(selfArg, C.ImPlotScale(v))
 }
 
+// ImPlotAxis_GetScale returns value of ImPlotAxis.Scale
 func (self *Axis) Scale() Scale {
 	selfArg, selfFin := self.Handle()
 
@@ -10452,6 +10496,7 @@ func (self *Axis) Scale() Scale {
 	return Scale(C.wrap_ImPlotAxis_GetScale(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetFitExtents sets value of ImPlotAxis.FitExtents
 func (self Axis) SetFitExtents(v Range) {
 	vArg, _ := v.C()
 
@@ -10460,6 +10505,7 @@ func (self Axis) SetFitExtents(v Range) {
 	C.wrap_ImPlotAxis_SetFitExtents(selfArg, internal.ReinterpretCast[C.ImPlotRange](vArg))
 }
 
+// ImPlotAxis_GetFitExtents returns value of ImPlotAxis.FitExtents
 func (self *Axis) FitExtents() Range {
 	selfArg, selfFin := self.Handle()
 
@@ -10472,6 +10518,7 @@ func (self *Axis) FitExtents() Range {
 	}())
 }
 
+// ImPlotAxis_SetOrthoAxis sets value of ImPlotAxis.OrthoAxis
 func (self Axis) SetOrthoAxis(v *Axis) {
 	vArg, _ := v.Handle()
 
@@ -10480,6 +10527,7 @@ func (self Axis) SetOrthoAxis(v *Axis) {
 	C.wrap_ImPlotAxis_SetOrthoAxis(selfArg, internal.ReinterpretCast[*C.ImPlotAxis](vArg))
 }
 
+// ImPlotAxis_GetOrthoAxis returns value of ImPlotAxis.OrthoAxis
 func (self *Axis) OrthoAxis() *Axis {
 	selfArg, selfFin := self.Handle()
 
@@ -10489,6 +10537,7 @@ func (self *Axis) OrthoAxis() *Axis {
 	return NewAxisFromC(C.wrap_ImPlotAxis_GetOrthoAxis(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetConstraintRange sets value of ImPlotAxis.ConstraintRange
 func (self Axis) SetConstraintRange(v Range) {
 	vArg, _ := v.C()
 
@@ -10497,6 +10546,7 @@ func (self Axis) SetConstraintRange(v Range) {
 	C.wrap_ImPlotAxis_SetConstraintRange(selfArg, internal.ReinterpretCast[C.ImPlotRange](vArg))
 }
 
+// ImPlotAxis_GetConstraintRange returns value of ImPlotAxis.ConstraintRange
 func (self *Axis) ConstraintRange() Range {
 	selfArg, selfFin := self.Handle()
 
@@ -10509,6 +10559,7 @@ func (self *Axis) ConstraintRange() Range {
 	}())
 }
 
+// ImPlotAxis_SetConstraintZoom sets value of ImPlotAxis.ConstraintZoom
 func (self Axis) SetConstraintZoom(v Range) {
 	vArg, _ := v.C()
 
@@ -10517,6 +10568,7 @@ func (self Axis) SetConstraintZoom(v Range) {
 	C.wrap_ImPlotAxis_SetConstraintZoom(selfArg, internal.ReinterpretCast[C.ImPlotRange](vArg))
 }
 
+// ImPlotAxis_GetConstraintZoom returns value of ImPlotAxis.ConstraintZoom
 func (self *Axis) ConstraintZoom() Range {
 	selfArg, selfFin := self.Handle()
 
@@ -10529,6 +10581,7 @@ func (self *Axis) ConstraintZoom() Range {
 	}())
 }
 
+// ImPlotAxis_SetTicker sets value of ImPlotAxis.Ticker
 func (self Axis) SetTicker(v Ticker) {
 	vArg, _ := v.C()
 
@@ -10537,6 +10590,7 @@ func (self Axis) SetTicker(v Ticker) {
 	C.wrap_ImPlotAxis_SetTicker(selfArg, internal.ReinterpretCast[C.ImPlotTicker](vArg))
 }
 
+// ImPlotAxis_GetTicker returns value of ImPlotAxis.Ticker
 func (self *Axis) Ticker() Ticker {
 	selfArg, selfFin := self.Handle()
 
@@ -10549,6 +10603,7 @@ func (self *Axis) Ticker() Ticker {
 	}())
 }
 
+// ImPlotAxis_SetFormatter sets value of ImPlotAxis.Formatter
 func (self Axis) SetFormatter(v Formatter) {
 	vArg, _ := v.C()
 
@@ -10557,6 +10612,7 @@ func (self Axis) SetFormatter(v Formatter) {
 	C.wrap_ImPlotAxis_SetFormatter(selfArg, internal.ReinterpretCast[C.ImPlotFormatter](vArg))
 }
 
+// ImPlotAxis_GetFormatter returns value of ImPlotAxis.Formatter
 func (self *Axis) Formatter() Formatter {
 	selfArg, selfFin := self.Handle()
 
@@ -10569,12 +10625,14 @@ func (self *Axis) Formatter() Formatter {
 	}())
 }
 
+// ImPlotAxis_SetFormatterData sets value of ImPlotAxis.FormatterData
 func (self Axis) SetFormatterData(v uintptr) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetFormatterData(selfArg, C.uintptr_t(v))
 }
 
+// ImPlotAxis_GetFormatterData returns value of ImPlotAxis.FormatterData
 func (self *Axis) FormatterData() uintptr {
 	selfArg, selfFin := self.Handle()
 
@@ -10584,6 +10642,7 @@ func (self *Axis) FormatterData() uintptr {
 	return uintptr(C.wrap_ImPlotAxis_GetFormatterData(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetFormatSpec sets value of ImPlotAxis.FormatSpec[16]
 func (self Axis) SetFormatSpec(v *[16]rune) {
 	vArg := make([]C.char, len(v))
 	for i, vV := range v {
@@ -10599,6 +10658,7 @@ func (self Axis) SetFormatSpec(v *[16]rune) {
 	}
 }
 
+// ImPlotAxis_GetFormatSpec returns value of ImPlotAxis.FormatSpec[16]
 func (self *Axis) FormatSpec() [16]rune {
 	selfArg, selfFin := self.Handle()
 
@@ -10616,6 +10676,7 @@ func (self *Axis) FormatSpec() [16]rune {
 	}()
 }
 
+// ImPlotAxis_SetLinkedMin sets value of ImPlotAxis.LinkedMin
 func (self Axis) SetLinkedMin(v *float64) {
 	vArg, _ := internal.WrapNumberPtr[C.double, float64](v)
 
@@ -10624,6 +10685,7 @@ func (self Axis) SetLinkedMin(v *float64) {
 	C.wrap_ImPlotAxis_SetLinkedMin(selfArg, vArg)
 }
 
+// ImPlotAxis_GetLinkedMin returns value of ImPlotAxis.LinkedMin
 func (self *Axis) LinkedMin() *float64 {
 	selfArg, selfFin := self.Handle()
 
@@ -10633,6 +10695,7 @@ func (self *Axis) LinkedMin() *float64 {
 	return (*float64)(C.wrap_ImPlotAxis_GetLinkedMin(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetLinkedMax sets value of ImPlotAxis.LinkedMax
 func (self Axis) SetLinkedMax(v *float64) {
 	vArg, _ := internal.WrapNumberPtr[C.double, float64](v)
 
@@ -10641,6 +10704,7 @@ func (self Axis) SetLinkedMax(v *float64) {
 	C.wrap_ImPlotAxis_SetLinkedMax(selfArg, vArg)
 }
 
+// ImPlotAxis_GetLinkedMax returns value of ImPlotAxis.LinkedMax
 func (self *Axis) LinkedMax() *float64 {
 	selfArg, selfFin := self.Handle()
 
@@ -10650,12 +10714,14 @@ func (self *Axis) LinkedMax() *float64 {
 	return (*float64)(C.wrap_ImPlotAxis_GetLinkedMax(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetPickerLevel sets value of ImPlotAxis.PickerLevel
 func (self Axis) SetPickerLevel(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetPickerLevel(selfArg, C.int(v))
 }
 
+// ImPlotAxis_GetPickerLevel returns value of ImPlotAxis.PickerLevel
 func (self *Axis) PickerLevel() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -10665,12 +10731,14 @@ func (self *Axis) PickerLevel() int32 {
 	return int32(C.wrap_ImPlotAxis_GetPickerLevel(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetPickerTimeMin sets value of ImPlotAxis.PickerTimeMin
 func (self Axis) SetPickerTimeMin(v PlotTime) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetPickerTimeMin(selfArg, internal.ReinterpretCast[C.ImPlotTime](v.ToC()))
 }
 
+// ImPlotAxis_GetPickerTimeMin returns value of ImPlotAxis.PickerTimeMin
 func (self *Axis) PickerTimeMin() PlotTime {
 	selfArg, selfFin := self.Handle()
 
@@ -10683,12 +10751,14 @@ func (self *Axis) PickerTimeMin() PlotTime {
 	}()
 }
 
+// ImPlotAxis_SetPickerTimeMax sets value of ImPlotAxis.PickerTimeMax
 func (self Axis) SetPickerTimeMax(v PlotTime) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetPickerTimeMax(selfArg, internal.ReinterpretCast[C.ImPlotTime](v.ToC()))
 }
 
+// ImPlotAxis_GetPickerTimeMax returns value of ImPlotAxis.PickerTimeMax
 func (self *Axis) PickerTimeMax() PlotTime {
 	selfArg, selfFin := self.Handle()
 
@@ -10701,6 +10771,7 @@ func (self *Axis) PickerTimeMax() PlotTime {
 	}()
 }
 
+// ImPlotAxis_SetTransformForward sets value of ImPlotAxis.TransformForward
 func (self Axis) SetTransformForward(v Transform) {
 	vArg, _ := v.C()
 
@@ -10709,6 +10780,7 @@ func (self Axis) SetTransformForward(v Transform) {
 	C.wrap_ImPlotAxis_SetTransformForward(selfArg, internal.ReinterpretCast[C.ImPlotTransform](vArg))
 }
 
+// ImPlotAxis_GetTransformForward returns value of ImPlotAxis.TransformForward
 func (self *Axis) TransformForward() Transform {
 	selfArg, selfFin := self.Handle()
 
@@ -10721,6 +10793,7 @@ func (self *Axis) TransformForward() Transform {
 	}())
 }
 
+// ImPlotAxis_SetTransformInverse sets value of ImPlotAxis.TransformInverse
 func (self Axis) SetTransformInverse(v Transform) {
 	vArg, _ := v.C()
 
@@ -10729,6 +10802,7 @@ func (self Axis) SetTransformInverse(v Transform) {
 	C.wrap_ImPlotAxis_SetTransformInverse(selfArg, internal.ReinterpretCast[C.ImPlotTransform](vArg))
 }
 
+// ImPlotAxis_GetTransformInverse returns value of ImPlotAxis.TransformInverse
 func (self *Axis) TransformInverse() Transform {
 	selfArg, selfFin := self.Handle()
 
@@ -10741,12 +10815,14 @@ func (self *Axis) TransformInverse() Transform {
 	}())
 }
 
+// ImPlotAxis_SetTransformData sets value of ImPlotAxis.TransformData
 func (self Axis) SetTransformData(v uintptr) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetTransformData(selfArg, C.uintptr_t(v))
 }
 
+// ImPlotAxis_GetTransformData returns value of ImPlotAxis.TransformData
 func (self *Axis) TransformData() uintptr {
 	selfArg, selfFin := self.Handle()
 
@@ -10756,12 +10832,14 @@ func (self *Axis) TransformData() uintptr {
 	return uintptr(C.wrap_ImPlotAxis_GetTransformData(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetPixelMin sets value of ImPlotAxis.PixelMin
 func (self Axis) SetPixelMin(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetPixelMin(selfArg, C.float(v))
 }
 
+// ImPlotAxis_GetPixelMin returns value of ImPlotAxis.PixelMin
 func (self *Axis) PixelMin() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -10771,12 +10849,14 @@ func (self *Axis) PixelMin() float32 {
 	return float32(C.wrap_ImPlotAxis_GetPixelMin(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetPixelMax sets value of ImPlotAxis.PixelMax
 func (self Axis) SetPixelMax(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetPixelMax(selfArg, C.float(v))
 }
 
+// ImPlotAxis_GetPixelMax returns value of ImPlotAxis.PixelMax
 func (self *Axis) PixelMax() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -10786,12 +10866,14 @@ func (self *Axis) PixelMax() float32 {
 	return float32(C.wrap_ImPlotAxis_GetPixelMax(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetScaleMin sets value of ImPlotAxis.ScaleMin
 func (self Axis) SetScaleMin(v float64) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetScaleMin(selfArg, C.double(v))
 }
 
+// ImPlotAxis_GetScaleMin returns value of ImPlotAxis.ScaleMin
 func (self *Axis) ScaleMin() float64 {
 	selfArg, selfFin := self.Handle()
 
@@ -10801,12 +10883,14 @@ func (self *Axis) ScaleMin() float64 {
 	return float64(C.wrap_ImPlotAxis_GetScaleMin(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetScaleMax sets value of ImPlotAxis.ScaleMax
 func (self Axis) SetScaleMax(v float64) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetScaleMax(selfArg, C.double(v))
 }
 
+// ImPlotAxis_GetScaleMax returns value of ImPlotAxis.ScaleMax
 func (self *Axis) ScaleMax() float64 {
 	selfArg, selfFin := self.Handle()
 
@@ -10816,12 +10900,14 @@ func (self *Axis) ScaleMax() float64 {
 	return float64(C.wrap_ImPlotAxis_GetScaleMax(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetScaleToPixel sets value of ImPlotAxis.ScaleToPixel
 func (self Axis) SetScaleToPixel(v float64) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetScaleToPixel(selfArg, C.double(v))
 }
 
+// ImPlotAxis_GetScaleToPixel returns value of ImPlotAxis.ScaleToPixel
 func (self *Axis) ScaleToPixel() float64 {
 	selfArg, selfFin := self.Handle()
 
@@ -10831,12 +10917,14 @@ func (self *Axis) ScaleToPixel() float64 {
 	return float64(C.wrap_ImPlotAxis_GetScaleToPixel(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetDatum1 sets value of ImPlotAxis.Datum1
 func (self Axis) SetDatum1(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetDatum1(selfArg, C.float(v))
 }
 
+// ImPlotAxis_GetDatum1 returns value of ImPlotAxis.Datum1
 func (self *Axis) Datum1() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -10846,12 +10934,14 @@ func (self *Axis) Datum1() float32 {
 	return float32(C.wrap_ImPlotAxis_GetDatum1(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetDatum2 sets value of ImPlotAxis.Datum2
 func (self Axis) SetDatum2(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetDatum2(selfArg, C.float(v))
 }
 
+// ImPlotAxis_GetDatum2 returns value of ImPlotAxis.Datum2
 func (self *Axis) Datum2() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -10861,12 +10951,14 @@ func (self *Axis) Datum2() float32 {
 	return float32(C.wrap_ImPlotAxis_GetDatum2(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetHoverRect sets value of ImPlotAxis.HoverRect
 func (self Axis) SetHoverRect(v imgui.Rect) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetHoverRect(selfArg, internal.ReinterpretCast[C.ImRect](v.ToC()))
 }
 
+// ImPlotAxis_GetHoverRect returns value of ImPlotAxis.HoverRect
 func (self *Axis) HoverRect() imgui.Rect {
 	selfArg, selfFin := self.Handle()
 
@@ -10879,12 +10971,14 @@ func (self *Axis) HoverRect() imgui.Rect {
 	}()
 }
 
+// ImPlotAxis_SetLabelOffset sets value of ImPlotAxis.LabelOffset
 func (self Axis) SetLabelOffset(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetLabelOffset(selfArg, C.int(v))
 }
 
+// ImPlotAxis_GetLabelOffset returns value of ImPlotAxis.LabelOffset
 func (self *Axis) LabelOffset() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -10894,12 +10988,14 @@ func (self *Axis) LabelOffset() int32 {
 	return int32(C.wrap_ImPlotAxis_GetLabelOffset(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetColorMaj sets value of ImPlotAxis.ColorMaj
 func (self Axis) SetColorMaj(v uint32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetColorMaj(selfArg, C.ImU32(v))
 }
 
+// ImPlotAxis_GetColorMaj returns value of ImPlotAxis.ColorMaj
 func (self *Axis) ColorMaj() uint32 {
 	selfArg, selfFin := self.Handle()
 
@@ -10909,12 +11005,14 @@ func (self *Axis) ColorMaj() uint32 {
 	return uint32(C.wrap_ImPlotAxis_GetColorMaj(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetColorMin sets value of ImPlotAxis.ColorMin
 func (self Axis) SetColorMin(v uint32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetColorMin(selfArg, C.ImU32(v))
 }
 
+// ImPlotAxis_GetColorMin returns value of ImPlotAxis.ColorMin
 func (self *Axis) ColorMin() uint32 {
 	selfArg, selfFin := self.Handle()
 
@@ -10924,12 +11022,14 @@ func (self *Axis) ColorMin() uint32 {
 	return uint32(C.wrap_ImPlotAxis_GetColorMin(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetColorTick sets value of ImPlotAxis.ColorTick
 func (self Axis) SetColorTick(v uint32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetColorTick(selfArg, C.ImU32(v))
 }
 
+// ImPlotAxis_GetColorTick returns value of ImPlotAxis.ColorTick
 func (self *Axis) ColorTick() uint32 {
 	selfArg, selfFin := self.Handle()
 
@@ -10939,12 +11039,14 @@ func (self *Axis) ColorTick() uint32 {
 	return uint32(C.wrap_ImPlotAxis_GetColorTick(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetColorTxt sets value of ImPlotAxis.ColorTxt
 func (self Axis) SetColorTxt(v uint32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetColorTxt(selfArg, C.ImU32(v))
 }
 
+// ImPlotAxis_GetColorTxt returns value of ImPlotAxis.ColorTxt
 func (self *Axis) ColorTxt() uint32 {
 	selfArg, selfFin := self.Handle()
 
@@ -10954,12 +11056,14 @@ func (self *Axis) ColorTxt() uint32 {
 	return uint32(C.wrap_ImPlotAxis_GetColorTxt(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetColorBg sets value of ImPlotAxis.ColorBg
 func (self Axis) SetColorBg(v uint32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetColorBg(selfArg, C.ImU32(v))
 }
 
+// ImPlotAxis_GetColorBg returns value of ImPlotAxis.ColorBg
 func (self *Axis) ColorBg() uint32 {
 	selfArg, selfFin := self.Handle()
 
@@ -10969,12 +11073,14 @@ func (self *Axis) ColorBg() uint32 {
 	return uint32(C.wrap_ImPlotAxis_GetColorBg(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetColorHov sets value of ImPlotAxis.ColorHov
 func (self Axis) SetColorHov(v uint32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetColorHov(selfArg, C.ImU32(v))
 }
 
+// ImPlotAxis_GetColorHov returns value of ImPlotAxis.ColorHov
 func (self *Axis) ColorHov() uint32 {
 	selfArg, selfFin := self.Handle()
 
@@ -10984,12 +11090,14 @@ func (self *Axis) ColorHov() uint32 {
 	return uint32(C.wrap_ImPlotAxis_GetColorHov(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetColorAct sets value of ImPlotAxis.ColorAct
 func (self Axis) SetColorAct(v uint32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetColorAct(selfArg, C.ImU32(v))
 }
 
+// ImPlotAxis_GetColorAct returns value of ImPlotAxis.ColorAct
 func (self *Axis) ColorAct() uint32 {
 	selfArg, selfFin := self.Handle()
 
@@ -10999,12 +11107,14 @@ func (self *Axis) ColorAct() uint32 {
 	return uint32(C.wrap_ImPlotAxis_GetColorAct(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetColorHiLi sets value of ImPlotAxis.ColorHiLi
 func (self Axis) SetColorHiLi(v uint32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetColorHiLi(selfArg, C.ImU32(v))
 }
 
+// ImPlotAxis_GetColorHiLi returns value of ImPlotAxis.ColorHiLi
 func (self *Axis) ColorHiLi() uint32 {
 	selfArg, selfFin := self.Handle()
 
@@ -11014,12 +11124,14 @@ func (self *Axis) ColorHiLi() uint32 {
 	return uint32(C.wrap_ImPlotAxis_GetColorHiLi(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)))
 }
 
+// ImPlotAxis_SetEnabled sets value of ImPlotAxis.Enabled
 func (self Axis) SetEnabled(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetEnabled(selfArg, C.bool(v))
 }
 
+// ImPlotAxis_GetEnabled returns value of ImPlotAxis.Enabled
 func (self *Axis) Enabled() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -11029,12 +11141,14 @@ func (self *Axis) Enabled() bool {
 	return C.wrap_ImPlotAxis_GetEnabled(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)) == C.bool(true)
 }
 
+// ImPlotAxis_SetVertical sets value of ImPlotAxis.Vertical
 func (self Axis) SetVertical(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetVertical(selfArg, C.bool(v))
 }
 
+// ImPlotAxis_GetVertical returns value of ImPlotAxis.Vertical
 func (self *Axis) Vertical() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -11044,12 +11158,14 @@ func (self *Axis) Vertical() bool {
 	return C.wrap_ImPlotAxis_GetVertical(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)) == C.bool(true)
 }
 
+// ImPlotAxis_SetFitThisFrame sets value of ImPlotAxis.FitThisFrame
 func (self Axis) SetFitThisFrame(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetFitThisFrame(selfArg, C.bool(v))
 }
 
+// ImPlotAxis_GetFitThisFrame returns value of ImPlotAxis.FitThisFrame
 func (self *Axis) FitThisFrame() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -11059,12 +11175,14 @@ func (self *Axis) FitThisFrame() bool {
 	return C.wrap_ImPlotAxis_GetFitThisFrame(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)) == C.bool(true)
 }
 
+// ImPlotAxis_SetHasRange sets value of ImPlotAxis.HasRange
 func (self Axis) SetHasRange(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetHasRange(selfArg, C.bool(v))
 }
 
+// ImPlotAxis_GetHasRange returns value of ImPlotAxis.HasRange
 func (self *Axis) HasRange() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -11074,12 +11192,14 @@ func (self *Axis) HasRange() bool {
 	return C.wrap_ImPlotAxis_GetHasRange(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)) == C.bool(true)
 }
 
+// ImPlotAxis_SetHasFormatSpec sets value of ImPlotAxis.HasFormatSpec
 func (self Axis) SetHasFormatSpec(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetHasFormatSpec(selfArg, C.bool(v))
 }
 
+// ImPlotAxis_GetHasFormatSpec returns value of ImPlotAxis.HasFormatSpec
 func (self *Axis) HasFormatSpec() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -11089,12 +11209,14 @@ func (self *Axis) HasFormatSpec() bool {
 	return C.wrap_ImPlotAxis_GetHasFormatSpec(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)) == C.bool(true)
 }
 
+// ImPlotAxis_SetShowDefaultTicks sets value of ImPlotAxis.ShowDefaultTicks
 func (self Axis) SetShowDefaultTicks(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetShowDefaultTicks(selfArg, C.bool(v))
 }
 
+// ImPlotAxis_GetShowDefaultTicks returns value of ImPlotAxis.ShowDefaultTicks
 func (self *Axis) ShowDefaultTicks() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -11104,12 +11226,14 @@ func (self *Axis) ShowDefaultTicks() bool {
 	return C.wrap_ImPlotAxis_GetShowDefaultTicks(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)) == C.bool(true)
 }
 
+// ImPlotAxis_SetHovered sets value of ImPlotAxis.Hovered
 func (self Axis) SetHovered(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetHovered(selfArg, C.bool(v))
 }
 
+// ImPlotAxis_GetHovered returns value of ImPlotAxis.Hovered
 func (self *Axis) Hovered() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -11119,12 +11243,14 @@ func (self *Axis) Hovered() bool {
 	return C.wrap_ImPlotAxis_GetHovered(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)) == C.bool(true)
 }
 
+// ImPlotAxis_SetHeld sets value of ImPlotAxis.Held
 func (self Axis) SetHeld(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotAxis_SetHeld(selfArg, C.bool(v))
 }
 
+// ImPlotAxis_GetHeld returns value of ImPlotAxis.Held
 func (self *Axis) Held() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -11134,6 +11260,7 @@ func (self *Axis) Held() bool {
 	return C.wrap_ImPlotAxis_GetHeld(internal.ReinterpretCast[*C.ImPlotAxis](selfArg)) == C.bool(true)
 }
 
+// ImPlotColormapData_SetKeys sets value of ImPlotColormapData.Keys
 func (self ColormapData) SetKeys(v vectors.Vector[uint32]) {
 	vData := v.Data
 	vDataArg, _ := internal.WrapNumberPtr[C.ImU32, uint32](vData)
@@ -11148,6 +11275,7 @@ func (self ColormapData) SetKeys(v vectors.Vector[uint32]) {
 	C.wrap_ImPlotColormapData_SetKeys(selfArg, *vVecArg)
 }
 
+// ImPlotColormapData_SetKeyCounts sets value of ImPlotColormapData.KeyCounts
 func (self ColormapData) SetKeyCounts(v vectors.Vector[int32]) {
 	vData := v.Data
 	vDataArg, _ := internal.WrapNumberPtr[C.int, int32](vData)
@@ -11162,6 +11290,7 @@ func (self ColormapData) SetKeyCounts(v vectors.Vector[int32]) {
 	C.wrap_ImPlotColormapData_SetKeyCounts(selfArg, *vVecArg)
 }
 
+// ImPlotColormapData_GetKeyCounts returns value of ImPlotColormapData.KeyCounts
 func (self *ColormapData) KeyCounts() vectors.Vector[int32] {
 	selfArg, selfFin := self.Handle()
 
@@ -11171,6 +11300,7 @@ func (self *ColormapData) KeyCounts() vectors.Vector[int32] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotColormapData_GetKeyCounts(internal.ReinterpretCast[*C.ImPlotColormapData](selfArg)).Size, C.wrap_ImPlotColormapData_GetKeyCounts(internal.ReinterpretCast[*C.ImPlotColormapData](selfArg)).Capacity, (*int32)(C.wrap_ImPlotColormapData_GetKeyCounts(internal.ReinterpretCast[*C.ImPlotColormapData](selfArg)).Data))
 }
 
+// ImPlotColormapData_SetKeyOffsets sets value of ImPlotColormapData.KeyOffsets
 func (self ColormapData) SetKeyOffsets(v vectors.Vector[int32]) {
 	vData := v.Data
 	vDataArg, _ := internal.WrapNumberPtr[C.int, int32](vData)
@@ -11185,6 +11315,7 @@ func (self ColormapData) SetKeyOffsets(v vectors.Vector[int32]) {
 	C.wrap_ImPlotColormapData_SetKeyOffsets(selfArg, *vVecArg)
 }
 
+// ImPlotColormapData_GetKeyOffsets returns value of ImPlotColormapData.KeyOffsets
 func (self *ColormapData) KeyOffsets() vectors.Vector[int32] {
 	selfArg, selfFin := self.Handle()
 
@@ -11194,6 +11325,7 @@ func (self *ColormapData) KeyOffsets() vectors.Vector[int32] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotColormapData_GetKeyOffsets(internal.ReinterpretCast[*C.ImPlotColormapData](selfArg)).Size, C.wrap_ImPlotColormapData_GetKeyOffsets(internal.ReinterpretCast[*C.ImPlotColormapData](selfArg)).Capacity, (*int32)(C.wrap_ImPlotColormapData_GetKeyOffsets(internal.ReinterpretCast[*C.ImPlotColormapData](selfArg)).Data))
 }
 
+// ImPlotColormapData_SetTables sets value of ImPlotColormapData.Tables
 func (self ColormapData) SetTables(v vectors.Vector[uint32]) {
 	vData := v.Data
 	vDataArg, _ := internal.WrapNumberPtr[C.ImU32, uint32](vData)
@@ -11208,6 +11340,7 @@ func (self ColormapData) SetTables(v vectors.Vector[uint32]) {
 	C.wrap_ImPlotColormapData_SetTables(selfArg, *vVecArg)
 }
 
+// ImPlotColormapData_GetTables returns value of ImPlotColormapData.Tables
 func (self *ColormapData) Tables() vectors.Vector[uint32] {
 	selfArg, selfFin := self.Handle()
 
@@ -11217,6 +11350,7 @@ func (self *ColormapData) Tables() vectors.Vector[uint32] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotColormapData_GetTables(internal.ReinterpretCast[*C.ImPlotColormapData](selfArg)).Size, C.wrap_ImPlotColormapData_GetTables(internal.ReinterpretCast[*C.ImPlotColormapData](selfArg)).Capacity, (*uint32)(C.wrap_ImPlotColormapData_GetTables(internal.ReinterpretCast[*C.ImPlotColormapData](selfArg)).Data))
 }
 
+// ImPlotColormapData_SetTableSizes sets value of ImPlotColormapData.TableSizes
 func (self ColormapData) SetTableSizes(v vectors.Vector[int32]) {
 	vData := v.Data
 	vDataArg, _ := internal.WrapNumberPtr[C.int, int32](vData)
@@ -11231,6 +11365,7 @@ func (self ColormapData) SetTableSizes(v vectors.Vector[int32]) {
 	C.wrap_ImPlotColormapData_SetTableSizes(selfArg, *vVecArg)
 }
 
+// ImPlotColormapData_GetTableSizes returns value of ImPlotColormapData.TableSizes
 func (self *ColormapData) TableSizes() vectors.Vector[int32] {
 	selfArg, selfFin := self.Handle()
 
@@ -11240,6 +11375,7 @@ func (self *ColormapData) TableSizes() vectors.Vector[int32] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotColormapData_GetTableSizes(internal.ReinterpretCast[*C.ImPlotColormapData](selfArg)).Size, C.wrap_ImPlotColormapData_GetTableSizes(internal.ReinterpretCast[*C.ImPlotColormapData](selfArg)).Capacity, (*int32)(C.wrap_ImPlotColormapData_GetTableSizes(internal.ReinterpretCast[*C.ImPlotColormapData](selfArg)).Data))
 }
 
+// ImPlotColormapData_SetTableOffsets sets value of ImPlotColormapData.TableOffsets
 func (self ColormapData) SetTableOffsets(v vectors.Vector[int32]) {
 	vData := v.Data
 	vDataArg, _ := internal.WrapNumberPtr[C.int, int32](vData)
@@ -11254,6 +11390,7 @@ func (self ColormapData) SetTableOffsets(v vectors.Vector[int32]) {
 	C.wrap_ImPlotColormapData_SetTableOffsets(selfArg, *vVecArg)
 }
 
+// ImPlotColormapData_GetTableOffsets returns value of ImPlotColormapData.TableOffsets
 func (self *ColormapData) TableOffsets() vectors.Vector[int32] {
 	selfArg, selfFin := self.Handle()
 
@@ -11263,6 +11400,7 @@ func (self *ColormapData) TableOffsets() vectors.Vector[int32] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotColormapData_GetTableOffsets(internal.ReinterpretCast[*C.ImPlotColormapData](selfArg)).Size, C.wrap_ImPlotColormapData_GetTableOffsets(internal.ReinterpretCast[*C.ImPlotColormapData](selfArg)).Capacity, (*int32)(C.wrap_ImPlotColormapData_GetTableOffsets(internal.ReinterpretCast[*C.ImPlotColormapData](selfArg)).Data))
 }
 
+// ImPlotColormapData_SetText sets value of ImPlotColormapData.Text
 func (self ColormapData) SetText(v imgui.TextBuffer) {
 	vArg, _ := v.C()
 
@@ -11271,6 +11409,7 @@ func (self ColormapData) SetText(v imgui.TextBuffer) {
 	C.wrap_ImPlotColormapData_SetText(selfArg, internal.ReinterpretCast[C.ImGuiTextBuffer](vArg))
 }
 
+// ImPlotColormapData_GetText returns value of ImPlotColormapData.Text
 func (self *ColormapData) Text() imgui.TextBuffer {
 	selfArg, selfFin := self.Handle()
 
@@ -11283,6 +11422,7 @@ func (self *ColormapData) Text() imgui.TextBuffer {
 	}())
 }
 
+// ImPlotColormapData_SetTextOffsets sets value of ImPlotColormapData.TextOffsets
 func (self ColormapData) SetTextOffsets(v vectors.Vector[int32]) {
 	vData := v.Data
 	vDataArg, _ := internal.WrapNumberPtr[C.int, int32](vData)
@@ -11297,6 +11437,7 @@ func (self ColormapData) SetTextOffsets(v vectors.Vector[int32]) {
 	C.wrap_ImPlotColormapData_SetTextOffsets(selfArg, *vVecArg)
 }
 
+// ImPlotColormapData_GetTextOffsets returns value of ImPlotColormapData.TextOffsets
 func (self *ColormapData) TextOffsets() vectors.Vector[int32] {
 	selfArg, selfFin := self.Handle()
 
@@ -11306,6 +11447,7 @@ func (self *ColormapData) TextOffsets() vectors.Vector[int32] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotColormapData_GetTextOffsets(internal.ReinterpretCast[*C.ImPlotColormapData](selfArg)).Size, C.wrap_ImPlotColormapData_GetTextOffsets(internal.ReinterpretCast[*C.ImPlotColormapData](selfArg)).Capacity, (*int32)(C.wrap_ImPlotColormapData_GetTextOffsets(internal.ReinterpretCast[*C.ImPlotColormapData](selfArg)).Data))
 }
 
+// ImPlotColormapData_SetQuals sets value of ImPlotColormapData.Quals
 func (self ColormapData) SetQuals(v vectors.Vector[bool]) {
 	vData := v.Data
 	vDataArg, _ := internal.WrapNumberPtr[C.bool, bool](vData)
@@ -11320,6 +11462,7 @@ func (self ColormapData) SetQuals(v vectors.Vector[bool]) {
 	C.wrap_ImPlotColormapData_SetQuals(selfArg, *vVecArg)
 }
 
+// ImPlotColormapData_GetQuals returns value of ImPlotColormapData.Quals
 func (self *ColormapData) Quals() vectors.Vector[bool] {
 	selfArg, selfFin := self.Handle()
 
@@ -11329,6 +11472,7 @@ func (self *ColormapData) Quals() vectors.Vector[bool] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotColormapData_GetQuals(internal.ReinterpretCast[*C.ImPlotColormapData](selfArg)).Size, C.wrap_ImPlotColormapData_GetQuals(internal.ReinterpretCast[*C.ImPlotColormapData](selfArg)).Capacity, (*bool)(C.wrap_ImPlotColormapData_GetQuals(internal.ReinterpretCast[*C.ImPlotColormapData](selfArg)).Data))
 }
 
+// ImPlotColormapData_SetMap sets value of ImPlotColormapData.Map
 func (self ColormapData) SetMap(v imgui.Storage) {
 	vArg, _ := v.C()
 
@@ -11337,6 +11481,7 @@ func (self ColormapData) SetMap(v imgui.Storage) {
 	C.wrap_ImPlotColormapData_SetMap(selfArg, internal.ReinterpretCast[C.ImGuiStorage](vArg))
 }
 
+// ImPlotColormapData_GetMap returns value of ImPlotColormapData.Map
 func (self *ColormapData) Map() imgui.Storage {
 	selfArg, selfFin := self.Handle()
 
@@ -11349,12 +11494,14 @@ func (self *ColormapData) Map() imgui.Storage {
 	}())
 }
 
+// ImPlotColormapData_SetCount sets value of ImPlotColormapData.Count
 func (self ColormapData) SetCount(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotColormapData_SetCount(selfArg, C.int(v))
 }
 
+// ImPlotColormapData_GetCount returns value of ImPlotColormapData.Count
 func (self *ColormapData) Count() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -11364,6 +11511,7 @@ func (self *ColormapData) Count() int32 {
 	return int32(C.wrap_ImPlotColormapData_GetCount(internal.ReinterpretCast[*C.ImPlotColormapData](selfArg)))
 }
 
+// ImPlotContext_SetCurrentPlot sets value of ImPlotContext.CurrentPlot
 func (self Context) SetCurrentPlot(v *Plot) {
 	vArg, _ := v.Handle()
 
@@ -11372,6 +11520,7 @@ func (self Context) SetCurrentPlot(v *Plot) {
 	C.wrap_ImPlotContext_SetCurrentPlot(selfArg, internal.ReinterpretCast[*C.ImPlotPlot](vArg))
 }
 
+// ImPlotContext_GetCurrentPlot returns value of ImPlotContext.CurrentPlot
 func (self *Context) CurrentPlot() *Plot {
 	selfArg, selfFin := self.Handle()
 
@@ -11381,6 +11530,7 @@ func (self *Context) CurrentPlot() *Plot {
 	return NewPlotFromC(C.wrap_ImPlotContext_GetCurrentPlot(internal.ReinterpretCast[*C.ImPlotContext](selfArg)))
 }
 
+// ImPlotContext_SetCurrentSubplot sets value of ImPlotContext.CurrentSubplot
 func (self Context) SetCurrentSubplot(v *Subplot) {
 	vArg, _ := v.Handle()
 
@@ -11389,6 +11539,7 @@ func (self Context) SetCurrentSubplot(v *Subplot) {
 	C.wrap_ImPlotContext_SetCurrentSubplot(selfArg, internal.ReinterpretCast[*C.ImPlotSubplot](vArg))
 }
 
+// ImPlotContext_GetCurrentSubplot returns value of ImPlotContext.CurrentSubplot
 func (self *Context) CurrentSubplot() *Subplot {
 	selfArg, selfFin := self.Handle()
 
@@ -11398,6 +11549,7 @@ func (self *Context) CurrentSubplot() *Subplot {
 	return NewSubplotFromC(C.wrap_ImPlotContext_GetCurrentSubplot(internal.ReinterpretCast[*C.ImPlotContext](selfArg)))
 }
 
+// ImPlotContext_SetCurrentItems sets value of ImPlotContext.CurrentItems
 func (self Context) SetCurrentItems(v *ItemGroup) {
 	vArg, _ := v.Handle()
 
@@ -11406,6 +11558,7 @@ func (self Context) SetCurrentItems(v *ItemGroup) {
 	C.wrap_ImPlotContext_SetCurrentItems(selfArg, internal.ReinterpretCast[*C.ImPlotItemGroup](vArg))
 }
 
+// ImPlotContext_GetCurrentItems returns value of ImPlotContext.CurrentItems
 func (self *Context) CurrentItems() *ItemGroup {
 	selfArg, selfFin := self.Handle()
 
@@ -11415,6 +11568,7 @@ func (self *Context) CurrentItems() *ItemGroup {
 	return NewItemGroupFromC(C.wrap_ImPlotContext_GetCurrentItems(internal.ReinterpretCast[*C.ImPlotContext](selfArg)))
 }
 
+// ImPlotContext_SetCurrentItem sets value of ImPlotContext.CurrentItem
 func (self Context) SetCurrentItem(v *Item) {
 	vArg, _ := v.Handle()
 
@@ -11423,6 +11577,7 @@ func (self Context) SetCurrentItem(v *Item) {
 	C.wrap_ImPlotContext_SetCurrentItem(selfArg, internal.ReinterpretCast[*C.ImPlotItem](vArg))
 }
 
+// ImPlotContext_GetCurrentItem returns value of ImPlotContext.CurrentItem
 func (self *Context) CurrentItem() *Item {
 	selfArg, selfFin := self.Handle()
 
@@ -11432,6 +11587,7 @@ func (self *Context) CurrentItem() *Item {
 	return NewItemFromC(C.wrap_ImPlotContext_GetCurrentItem(internal.ReinterpretCast[*C.ImPlotContext](selfArg)))
 }
 
+// ImPlotContext_SetPreviousItem sets value of ImPlotContext.PreviousItem
 func (self Context) SetPreviousItem(v *Item) {
 	vArg, _ := v.Handle()
 
@@ -11440,6 +11596,7 @@ func (self Context) SetPreviousItem(v *Item) {
 	C.wrap_ImPlotContext_SetPreviousItem(selfArg, internal.ReinterpretCast[*C.ImPlotItem](vArg))
 }
 
+// ImPlotContext_GetPreviousItem returns value of ImPlotContext.PreviousItem
 func (self *Context) PreviousItem() *Item {
 	selfArg, selfFin := self.Handle()
 
@@ -11449,6 +11606,7 @@ func (self *Context) PreviousItem() *Item {
 	return NewItemFromC(C.wrap_ImPlotContext_GetPreviousItem(internal.ReinterpretCast[*C.ImPlotContext](selfArg)))
 }
 
+// ImPlotContext_SetCTicker sets value of ImPlotContext.CTicker
 func (self Context) SetCTicker(v Ticker) {
 	vArg, _ := v.C()
 
@@ -11457,6 +11615,7 @@ func (self Context) SetCTicker(v Ticker) {
 	C.wrap_ImPlotContext_SetCTicker(selfArg, internal.ReinterpretCast[C.ImPlotTicker](vArg))
 }
 
+// ImPlotContext_GetCTicker returns value of ImPlotContext.CTicker
 func (self *Context) CTicker() Ticker {
 	selfArg, selfFin := self.Handle()
 
@@ -11469,6 +11628,7 @@ func (self *Context) CTicker() Ticker {
 	}())
 }
 
+// ImPlotContext_SetAnnotations sets value of ImPlotContext.Annotations
 func (self Context) SetAnnotations(v AnnotationCollection) {
 	vArg, _ := v.C()
 
@@ -11477,6 +11637,7 @@ func (self Context) SetAnnotations(v AnnotationCollection) {
 	C.wrap_ImPlotContext_SetAnnotations(selfArg, internal.ReinterpretCast[C.ImPlotAnnotationCollection](vArg))
 }
 
+// ImPlotContext_GetAnnotations returns value of ImPlotContext.Annotations
 func (self *Context) Annotations() AnnotationCollection {
 	selfArg, selfFin := self.Handle()
 
@@ -11489,6 +11650,7 @@ func (self *Context) Annotations() AnnotationCollection {
 	}())
 }
 
+// ImPlotContext_SetTags sets value of ImPlotContext.Tags
 func (self Context) SetTags(v TagCollection) {
 	vArg, _ := v.C()
 
@@ -11497,6 +11659,7 @@ func (self Context) SetTags(v TagCollection) {
 	C.wrap_ImPlotContext_SetTags(selfArg, internal.ReinterpretCast[C.ImPlotTagCollection](vArg))
 }
 
+// ImPlotContext_GetTags returns value of ImPlotContext.Tags
 func (self *Context) Tags() TagCollection {
 	selfArg, selfFin := self.Handle()
 
@@ -11509,6 +11672,7 @@ func (self *Context) Tags() TagCollection {
 	}())
 }
 
+// ImPlotContext_SetStyle sets value of ImPlotContext.Style
 func (self Context) SetStyle(v Style) {
 	vArg, _ := v.C()
 
@@ -11517,6 +11681,7 @@ func (self Context) SetStyle(v Style) {
 	C.wrap_ImPlotContext_SetStyle(selfArg, internal.ReinterpretCast[C.ImPlotStyle](vArg))
 }
 
+// ImPlotContext_GetStyle returns value of ImPlotContext.Style
 func (self *Context) Style() Style {
 	selfArg, selfFin := self.Handle()
 
@@ -11529,6 +11694,7 @@ func (self *Context) Style() Style {
 	}())
 }
 
+// ImPlotContext_SetColorModifiers sets value of ImPlotContext.ColorModifiers
 func (self Context) SetColorModifiers(v vectors.Vector[imgui.ColorMod]) {
 	vData := v.Data
 	vDataArg, _ := vData.Handle()
@@ -11543,6 +11709,7 @@ func (self Context) SetColorModifiers(v vectors.Vector[imgui.ColorMod]) {
 	C.wrap_ImPlotContext_SetColorModifiers(selfArg, *vVecArg)
 }
 
+// ImPlotContext_GetColorModifiers returns value of ImPlotContext.ColorModifiers
 func (self *Context) ColorModifiers() vectors.Vector[imgui.ColorMod] {
 	selfArg, selfFin := self.Handle()
 
@@ -11552,6 +11719,7 @@ func (self *Context) ColorModifiers() vectors.Vector[imgui.ColorMod] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotContext_GetColorModifiers(internal.ReinterpretCast[*C.ImPlotContext](selfArg)).Size, C.wrap_ImPlotContext_GetColorModifiers(internal.ReinterpretCast[*C.ImPlotContext](selfArg)).Capacity, imgui.NewColorModFromC(C.wrap_ImPlotContext_GetColorModifiers(internal.ReinterpretCast[*C.ImPlotContext](selfArg)).Data))
 }
 
+// ImPlotContext_SetStyleModifiers sets value of ImPlotContext.StyleModifiers
 func (self Context) SetStyleModifiers(v vectors.Vector[imgui.StyleMod]) {
 	vData := v.Data
 	vDataArg, _ := vData.Handle()
@@ -11566,6 +11734,7 @@ func (self Context) SetStyleModifiers(v vectors.Vector[imgui.StyleMod]) {
 	C.wrap_ImPlotContext_SetStyleModifiers(selfArg, *vVecArg)
 }
 
+// ImPlotContext_GetStyleModifiers returns value of ImPlotContext.StyleModifiers
 func (self *Context) StyleModifiers() vectors.Vector[imgui.StyleMod] {
 	selfArg, selfFin := self.Handle()
 
@@ -11575,6 +11744,7 @@ func (self *Context) StyleModifiers() vectors.Vector[imgui.StyleMod] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotContext_GetStyleModifiers(internal.ReinterpretCast[*C.ImPlotContext](selfArg)).Size, C.wrap_ImPlotContext_GetStyleModifiers(internal.ReinterpretCast[*C.ImPlotContext](selfArg)).Capacity, imgui.NewStyleModFromC(C.wrap_ImPlotContext_GetStyleModifiers(internal.ReinterpretCast[*C.ImPlotContext](selfArg)).Data))
 }
 
+// ImPlotContext_SetColormapData sets value of ImPlotContext.ColormapData
 func (self Context) SetColormapData(v ColormapData) {
 	vArg, _ := v.C()
 
@@ -11583,6 +11753,7 @@ func (self Context) SetColormapData(v ColormapData) {
 	C.wrap_ImPlotContext_SetColormapData(selfArg, internal.ReinterpretCast[C.ImPlotColormapData](vArg))
 }
 
+// ImPlotContext_GetColormapData returns value of ImPlotContext.ColormapData
 func (self *Context) ColormapData() ColormapData {
 	selfArg, selfFin := self.Handle()
 
@@ -11595,6 +11766,7 @@ func (self *Context) ColormapData() ColormapData {
 	}())
 }
 
+// ImPlotContext_SetColormapModifiers sets value of ImPlotContext.ColormapModifiers
 func (self Context) SetColormapModifiers(v vectors.Vector[Colormap]) {
 	vData := v.Data
 
@@ -11609,6 +11781,7 @@ func (self Context) SetColormapModifiers(v vectors.Vector[Colormap]) {
 	C.wrap_ImPlotContext_SetColormapModifiers(selfArg, *vVecArg)
 }
 
+// ImPlotContext_GetColormapModifiers returns value of ImPlotContext.ColormapModifiers
 func (self *Context) ColormapModifiers() vectors.Vector[Colormap] {
 	selfArg, selfFin := self.Handle()
 
@@ -11618,12 +11791,14 @@ func (self *Context) ColormapModifiers() vectors.Vector[Colormap] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotContext_GetColormapModifiers(internal.ReinterpretCast[*C.ImPlotContext](selfArg)).Size, C.wrap_ImPlotContext_GetColormapModifiers(internal.ReinterpretCast[*C.ImPlotContext](selfArg)).Capacity, (*Colormap)(C.wrap_ImPlotContext_GetColormapModifiers(internal.ReinterpretCast[*C.ImPlotContext](selfArg)).Data))
 }
 
+// ImPlotContext_SetTm sets value of ImPlotContext.Tm
 func (self Context) SetTm(v Tm) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotContext_SetTm(selfArg, internal.ReinterpretCast[C.struct_tm](v.ToC()))
 }
 
+// ImPlotContext_GetTm returns value of ImPlotContext.Tm
 func (self *Context) Tm() Tm {
 	selfArg, selfFin := self.Handle()
 
@@ -11636,6 +11811,7 @@ func (self *Context) Tm() Tm {
 	}()
 }
 
+// ImPlotContext_SetTempDouble1 sets value of ImPlotContext.TempDouble1
 func (self Context) SetTempDouble1(v vectors.Vector[float64]) {
 	vData := v.Data
 	vDataArg, _ := internal.WrapNumberPtr[C.double, float64](vData)
@@ -11650,6 +11826,7 @@ func (self Context) SetTempDouble1(v vectors.Vector[float64]) {
 	C.wrap_ImPlotContext_SetTempDouble1(selfArg, *vVecArg)
 }
 
+// ImPlotContext_GetTempDouble1 returns value of ImPlotContext.TempDouble1
 func (self *Context) TempDouble1() vectors.Vector[float64] {
 	selfArg, selfFin := self.Handle()
 
@@ -11659,6 +11836,7 @@ func (self *Context) TempDouble1() vectors.Vector[float64] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotContext_GetTempDouble1(internal.ReinterpretCast[*C.ImPlotContext](selfArg)).Size, C.wrap_ImPlotContext_GetTempDouble1(internal.ReinterpretCast[*C.ImPlotContext](selfArg)).Capacity, (*float64)(C.wrap_ImPlotContext_GetTempDouble1(internal.ReinterpretCast[*C.ImPlotContext](selfArg)).Data))
 }
 
+// ImPlotContext_SetTempDouble2 sets value of ImPlotContext.TempDouble2
 func (self Context) SetTempDouble2(v vectors.Vector[float64]) {
 	vData := v.Data
 	vDataArg, _ := internal.WrapNumberPtr[C.double, float64](vData)
@@ -11673,6 +11851,7 @@ func (self Context) SetTempDouble2(v vectors.Vector[float64]) {
 	C.wrap_ImPlotContext_SetTempDouble2(selfArg, *vVecArg)
 }
 
+// ImPlotContext_GetTempDouble2 returns value of ImPlotContext.TempDouble2
 func (self *Context) TempDouble2() vectors.Vector[float64] {
 	selfArg, selfFin := self.Handle()
 
@@ -11682,6 +11861,7 @@ func (self *Context) TempDouble2() vectors.Vector[float64] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotContext_GetTempDouble2(internal.ReinterpretCast[*C.ImPlotContext](selfArg)).Size, C.wrap_ImPlotContext_GetTempDouble2(internal.ReinterpretCast[*C.ImPlotContext](selfArg)).Capacity, (*float64)(C.wrap_ImPlotContext_GetTempDouble2(internal.ReinterpretCast[*C.ImPlotContext](selfArg)).Data))
 }
 
+// ImPlotContext_SetTempInt1 sets value of ImPlotContext.TempInt1
 func (self Context) SetTempInt1(v vectors.Vector[int32]) {
 	vData := v.Data
 	vDataArg, _ := internal.WrapNumberPtr[C.int, int32](vData)
@@ -11696,6 +11876,7 @@ func (self Context) SetTempInt1(v vectors.Vector[int32]) {
 	C.wrap_ImPlotContext_SetTempInt1(selfArg, *vVecArg)
 }
 
+// ImPlotContext_GetTempInt1 returns value of ImPlotContext.TempInt1
 func (self *Context) TempInt1() vectors.Vector[int32] {
 	selfArg, selfFin := self.Handle()
 
@@ -11705,12 +11886,14 @@ func (self *Context) TempInt1() vectors.Vector[int32] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotContext_GetTempInt1(internal.ReinterpretCast[*C.ImPlotContext](selfArg)).Size, C.wrap_ImPlotContext_GetTempInt1(internal.ReinterpretCast[*C.ImPlotContext](selfArg)).Capacity, (*int32)(C.wrap_ImPlotContext_GetTempInt1(internal.ReinterpretCast[*C.ImPlotContext](selfArg)).Data))
 }
 
+// ImPlotContext_SetDigitalPlotItemCnt sets value of ImPlotContext.DigitalPlotItemCnt
 func (self Context) SetDigitalPlotItemCnt(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotContext_SetDigitalPlotItemCnt(selfArg, C.int(v))
 }
 
+// ImPlotContext_GetDigitalPlotItemCnt returns value of ImPlotContext.DigitalPlotItemCnt
 func (self *Context) DigitalPlotItemCnt() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -11720,12 +11903,14 @@ func (self *Context) DigitalPlotItemCnt() int32 {
 	return int32(C.wrap_ImPlotContext_GetDigitalPlotItemCnt(internal.ReinterpretCast[*C.ImPlotContext](selfArg)))
 }
 
+// ImPlotContext_SetDigitalPlotOffset sets value of ImPlotContext.DigitalPlotOffset
 func (self Context) SetDigitalPlotOffset(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotContext_SetDigitalPlotOffset(selfArg, C.int(v))
 }
 
+// ImPlotContext_GetDigitalPlotOffset returns value of ImPlotContext.DigitalPlotOffset
 func (self *Context) DigitalPlotOffset() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -11735,6 +11920,7 @@ func (self *Context) DigitalPlotOffset() int32 {
 	return int32(C.wrap_ImPlotContext_GetDigitalPlotOffset(internal.ReinterpretCast[*C.ImPlotContext](selfArg)))
 }
 
+// ImPlotContext_SetNextPlotData sets value of ImPlotContext.NextPlotData
 func (self Context) SetNextPlotData(v NextPlotData) {
 	vArg, _ := v.C()
 
@@ -11743,6 +11929,7 @@ func (self Context) SetNextPlotData(v NextPlotData) {
 	C.wrap_ImPlotContext_SetNextPlotData(selfArg, internal.ReinterpretCast[C.ImPlotNextPlotData](vArg))
 }
 
+// ImPlotContext_GetNextPlotData returns value of ImPlotContext.NextPlotData
 func (self *Context) NextPlotData() NextPlotData {
 	selfArg, selfFin := self.Handle()
 
@@ -11755,6 +11942,7 @@ func (self *Context) NextPlotData() NextPlotData {
 	}())
 }
 
+// ImPlotContext_SetNextItemData sets value of ImPlotContext.NextItemData
 func (self Context) SetNextItemData(v NextItemData) {
 	vArg, _ := v.C()
 
@@ -11763,6 +11951,7 @@ func (self Context) SetNextItemData(v NextItemData) {
 	C.wrap_ImPlotContext_SetNextItemData(selfArg, internal.ReinterpretCast[C.ImPlotNextItemData](vArg))
 }
 
+// ImPlotContext_GetNextItemData returns value of ImPlotContext.NextItemData
 func (self *Context) NextItemData() NextItemData {
 	selfArg, selfFin := self.Handle()
 
@@ -11775,6 +11964,7 @@ func (self *Context) NextItemData() NextItemData {
 	}())
 }
 
+// ImPlotContext_SetInputMap sets value of ImPlotContext.InputMap
 func (self Context) SetInputMap(v InputMap) {
 	vArg, _ := v.C()
 
@@ -11783,6 +11973,7 @@ func (self Context) SetInputMap(v InputMap) {
 	C.wrap_ImPlotContext_SetInputMap(selfArg, internal.ReinterpretCast[C.ImPlotInputMap](vArg))
 }
 
+// ImPlotContext_GetInputMap returns value of ImPlotContext.InputMap
 func (self *Context) InputMap() InputMap {
 	selfArg, selfFin := self.Handle()
 
@@ -11795,12 +11986,14 @@ func (self *Context) InputMap() InputMap {
 	}())
 }
 
+// ImPlotContext_SetOpenContextThisFrame sets value of ImPlotContext.OpenContextThisFrame
 func (self Context) SetOpenContextThisFrame(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotContext_SetOpenContextThisFrame(selfArg, C.bool(v))
 }
 
+// ImPlotContext_GetOpenContextThisFrame returns value of ImPlotContext.OpenContextThisFrame
 func (self *Context) OpenContextThisFrame() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -11810,6 +12003,7 @@ func (self *Context) OpenContextThisFrame() bool {
 	return C.wrap_ImPlotContext_GetOpenContextThisFrame(internal.ReinterpretCast[*C.ImPlotContext](selfArg)) == C.bool(true)
 }
 
+// ImPlotContext_SetMousePosStringBuilder sets value of ImPlotContext.MousePosStringBuilder
 func (self Context) SetMousePosStringBuilder(v imgui.TextBuffer) {
 	vArg, _ := v.C()
 
@@ -11818,6 +12012,7 @@ func (self Context) SetMousePosStringBuilder(v imgui.TextBuffer) {
 	C.wrap_ImPlotContext_SetMousePosStringBuilder(selfArg, internal.ReinterpretCast[C.ImGuiTextBuffer](vArg))
 }
 
+// ImPlotContext_GetMousePosStringBuilder returns value of ImPlotContext.MousePosStringBuilder
 func (self *Context) MousePosStringBuilder() imgui.TextBuffer {
 	selfArg, selfFin := self.Handle()
 
@@ -11830,6 +12025,7 @@ func (self *Context) MousePosStringBuilder() imgui.TextBuffer {
 	}())
 }
 
+// ImPlotContext_SetSortItems sets value of ImPlotContext.SortItems
 func (self Context) SetSortItems(v *ItemGroup) {
 	vArg, _ := v.Handle()
 
@@ -11838,6 +12034,7 @@ func (self Context) SetSortItems(v *ItemGroup) {
 	C.wrap_ImPlotContext_SetSortItems(selfArg, internal.ReinterpretCast[*C.ImPlotItemGroup](vArg))
 }
 
+// ImPlotContext_GetSortItems returns value of ImPlotContext.SortItems
 func (self *Context) SortItems() *ItemGroup {
 	selfArg, selfFin := self.Handle()
 
@@ -11847,6 +12044,7 @@ func (self *Context) SortItems() *ItemGroup {
 	return NewItemGroupFromC(C.wrap_ImPlotContext_GetSortItems(internal.ReinterpretCast[*C.ImPlotContext](selfArg)))
 }
 
+// ImPlotContext_SetCurrentAlignmentH sets value of ImPlotContext.CurrentAlignmentH
 func (self Context) SetCurrentAlignmentH(v *AlignmentData) {
 	vArg, _ := v.Handle()
 
@@ -11855,6 +12053,7 @@ func (self Context) SetCurrentAlignmentH(v *AlignmentData) {
 	C.wrap_ImPlotContext_SetCurrentAlignmentH(selfArg, internal.ReinterpretCast[*C.ImPlotAlignmentData](vArg))
 }
 
+// ImPlotContext_GetCurrentAlignmentH returns value of ImPlotContext.CurrentAlignmentH
 func (self *Context) CurrentAlignmentH() *AlignmentData {
 	selfArg, selfFin := self.Handle()
 
@@ -11864,6 +12063,7 @@ func (self *Context) CurrentAlignmentH() *AlignmentData {
 	return NewAlignmentDataFromC(C.wrap_ImPlotContext_GetCurrentAlignmentH(internal.ReinterpretCast[*C.ImPlotContext](selfArg)))
 }
 
+// ImPlotContext_SetCurrentAlignmentV sets value of ImPlotContext.CurrentAlignmentV
 func (self Context) SetCurrentAlignmentV(v *AlignmentData) {
 	vArg, _ := v.Handle()
 
@@ -11872,6 +12072,7 @@ func (self Context) SetCurrentAlignmentV(v *AlignmentData) {
 	C.wrap_ImPlotContext_SetCurrentAlignmentV(selfArg, internal.ReinterpretCast[*C.ImPlotAlignmentData](vArg))
 }
 
+// ImPlotContext_GetCurrentAlignmentV returns value of ImPlotContext.CurrentAlignmentV
 func (self *Context) CurrentAlignmentV() *AlignmentData {
 	selfArg, selfFin := self.Handle()
 
@@ -11881,12 +12082,14 @@ func (self *Context) CurrentAlignmentV() *AlignmentData {
 	return NewAlignmentDataFromC(C.wrap_ImPlotContext_GetCurrentAlignmentV(internal.ReinterpretCast[*C.ImPlotContext](selfArg)))
 }
 
+// ImPlotDateTimeSpec_SetDate sets value of ImPlotDateTimeSpec.Date
 func (self DateTimeSpec) SetDate(v DateFmt) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotDateTimeSpec_SetDate(selfArg, C.ImPlotDateFmt(v))
 }
 
+// ImPlotDateTimeSpec_GetDate returns value of ImPlotDateTimeSpec.Date
 func (self *DateTimeSpec) Date() DateFmt {
 	selfArg, selfFin := self.Handle()
 
@@ -11896,12 +12099,14 @@ func (self *DateTimeSpec) Date() DateFmt {
 	return DateFmt(C.wrap_ImPlotDateTimeSpec_GetDate(internal.ReinterpretCast[*C.ImPlotDateTimeSpec](selfArg)))
 }
 
+// ImPlotDateTimeSpec_SetTime sets value of ImPlotDateTimeSpec.Time
 func (self DateTimeSpec) SetTime(v TimeFmt) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotDateTimeSpec_SetTime(selfArg, C.ImPlotTimeFmt(v))
 }
 
+// ImPlotDateTimeSpec_GetTime returns value of ImPlotDateTimeSpec.Time
 func (self *DateTimeSpec) Time() TimeFmt {
 	selfArg, selfFin := self.Handle()
 
@@ -11911,12 +12116,14 @@ func (self *DateTimeSpec) Time() TimeFmt {
 	return TimeFmt(C.wrap_ImPlotDateTimeSpec_GetTime(internal.ReinterpretCast[*C.ImPlotDateTimeSpec](selfArg)))
 }
 
+// ImPlotDateTimeSpec_SetUseISO8601 sets value of ImPlotDateTimeSpec.UseISO8601
 func (self DateTimeSpec) SetUseISO8601(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotDateTimeSpec_SetUseISO8601(selfArg, C.bool(v))
 }
 
+// ImPlotDateTimeSpec_GetUseISO8601 returns value of ImPlotDateTimeSpec.UseISO8601
 func (self *DateTimeSpec) UseISO8601() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -11926,12 +12133,14 @@ func (self *DateTimeSpec) UseISO8601() bool {
 	return C.wrap_ImPlotDateTimeSpec_GetUseISO8601(internal.ReinterpretCast[*C.ImPlotDateTimeSpec](selfArg)) == C.bool(true)
 }
 
+// ImPlotDateTimeSpec_SetUse24HourClock sets value of ImPlotDateTimeSpec.Use24HourClock
 func (self DateTimeSpec) SetUse24HourClock(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotDateTimeSpec_SetUse24HourClock(selfArg, C.bool(v))
 }
 
+// ImPlotDateTimeSpec_GetUse24HourClock returns value of ImPlotDateTimeSpec.Use24HourClock
 func (self *DateTimeSpec) Use24HourClock() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -11941,12 +12150,14 @@ func (self *DateTimeSpec) Use24HourClock() bool {
 	return C.wrap_ImPlotDateTimeSpec_GetUse24HourClock(internal.ReinterpretCast[*C.ImPlotDateTimeSpec](selfArg)) == C.bool(true)
 }
 
+// ImPlotInputMap_SetPan sets value of ImPlotInputMap.Pan
 func (self InputMap) SetPan(v imgui.MouseButton) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotInputMap_SetPan(selfArg, C.ImGuiMouseButton(v))
 }
 
+// ImPlotInputMap_GetPan returns value of ImPlotInputMap.Pan
 func (self *InputMap) Pan() imgui.MouseButton {
 	selfArg, selfFin := self.Handle()
 
@@ -11956,12 +12167,14 @@ func (self *InputMap) Pan() imgui.MouseButton {
 	return imgui.MouseButton(C.wrap_ImPlotInputMap_GetPan(internal.ReinterpretCast[*C.ImPlotInputMap](selfArg)))
 }
 
+// ImPlotInputMap_SetPanMod sets value of ImPlotInputMap.PanMod
 func (self InputMap) SetPanMod(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotInputMap_SetPanMod(selfArg, C.int(v))
 }
 
+// ImPlotInputMap_GetPanMod returns value of ImPlotInputMap.PanMod
 func (self *InputMap) PanMod() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -11971,12 +12184,14 @@ func (self *InputMap) PanMod() int32 {
 	return int32(C.wrap_ImPlotInputMap_GetPanMod(internal.ReinterpretCast[*C.ImPlotInputMap](selfArg)))
 }
 
+// ImPlotInputMap_SetFit sets value of ImPlotInputMap.Fit
 func (self InputMap) SetFit(v imgui.MouseButton) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotInputMap_SetFit(selfArg, C.ImGuiMouseButton(v))
 }
 
+// ImPlotInputMap_GetFit returns value of ImPlotInputMap.Fit
 func (self *InputMap) Fit() imgui.MouseButton {
 	selfArg, selfFin := self.Handle()
 
@@ -11986,12 +12201,14 @@ func (self *InputMap) Fit() imgui.MouseButton {
 	return imgui.MouseButton(C.wrap_ImPlotInputMap_GetFit(internal.ReinterpretCast[*C.ImPlotInputMap](selfArg)))
 }
 
+// ImPlotInputMap_SetSelect sets value of ImPlotInputMap.Select
 func (self InputMap) SetSelect(v imgui.MouseButton) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotInputMap_SetSelect(selfArg, C.ImGuiMouseButton(v))
 }
 
+// ImPlotInputMap_GetSelect returns value of ImPlotInputMap.Select
 func (self *InputMap) Select() imgui.MouseButton {
 	selfArg, selfFin := self.Handle()
 
@@ -12001,12 +12218,14 @@ func (self *InputMap) Select() imgui.MouseButton {
 	return imgui.MouseButton(C.wrap_ImPlotInputMap_GetSelect(internal.ReinterpretCast[*C.ImPlotInputMap](selfArg)))
 }
 
+// ImPlotInputMap_SetSelectCancel sets value of ImPlotInputMap.SelectCancel
 func (self InputMap) SetSelectCancel(v imgui.MouseButton) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotInputMap_SetSelectCancel(selfArg, C.ImGuiMouseButton(v))
 }
 
+// ImPlotInputMap_GetSelectCancel returns value of ImPlotInputMap.SelectCancel
 func (self *InputMap) SelectCancel() imgui.MouseButton {
 	selfArg, selfFin := self.Handle()
 
@@ -12016,12 +12235,14 @@ func (self *InputMap) SelectCancel() imgui.MouseButton {
 	return imgui.MouseButton(C.wrap_ImPlotInputMap_GetSelectCancel(internal.ReinterpretCast[*C.ImPlotInputMap](selfArg)))
 }
 
+// ImPlotInputMap_SetSelectMod sets value of ImPlotInputMap.SelectMod
 func (self InputMap) SetSelectMod(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotInputMap_SetSelectMod(selfArg, C.int(v))
 }
 
+// ImPlotInputMap_GetSelectMod returns value of ImPlotInputMap.SelectMod
 func (self *InputMap) SelectMod() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -12031,12 +12252,14 @@ func (self *InputMap) SelectMod() int32 {
 	return int32(C.wrap_ImPlotInputMap_GetSelectMod(internal.ReinterpretCast[*C.ImPlotInputMap](selfArg)))
 }
 
+// ImPlotInputMap_SetSelectHorzMod sets value of ImPlotInputMap.SelectHorzMod
 func (self InputMap) SetSelectHorzMod(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotInputMap_SetSelectHorzMod(selfArg, C.int(v))
 }
 
+// ImPlotInputMap_GetSelectHorzMod returns value of ImPlotInputMap.SelectHorzMod
 func (self *InputMap) SelectHorzMod() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -12046,12 +12269,14 @@ func (self *InputMap) SelectHorzMod() int32 {
 	return int32(C.wrap_ImPlotInputMap_GetSelectHorzMod(internal.ReinterpretCast[*C.ImPlotInputMap](selfArg)))
 }
 
+// ImPlotInputMap_SetSelectVertMod sets value of ImPlotInputMap.SelectVertMod
 func (self InputMap) SetSelectVertMod(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotInputMap_SetSelectVertMod(selfArg, C.int(v))
 }
 
+// ImPlotInputMap_GetSelectVertMod returns value of ImPlotInputMap.SelectVertMod
 func (self *InputMap) SelectVertMod() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -12061,12 +12286,14 @@ func (self *InputMap) SelectVertMod() int32 {
 	return int32(C.wrap_ImPlotInputMap_GetSelectVertMod(internal.ReinterpretCast[*C.ImPlotInputMap](selfArg)))
 }
 
+// ImPlotInputMap_SetMenu sets value of ImPlotInputMap.Menu
 func (self InputMap) SetMenu(v imgui.MouseButton) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotInputMap_SetMenu(selfArg, C.ImGuiMouseButton(v))
 }
 
+// ImPlotInputMap_GetMenu returns value of ImPlotInputMap.Menu
 func (self *InputMap) Menu() imgui.MouseButton {
 	selfArg, selfFin := self.Handle()
 
@@ -12076,12 +12303,14 @@ func (self *InputMap) Menu() imgui.MouseButton {
 	return imgui.MouseButton(C.wrap_ImPlotInputMap_GetMenu(internal.ReinterpretCast[*C.ImPlotInputMap](selfArg)))
 }
 
+// ImPlotInputMap_SetOverrideMod sets value of ImPlotInputMap.OverrideMod
 func (self InputMap) SetOverrideMod(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotInputMap_SetOverrideMod(selfArg, C.int(v))
 }
 
+// ImPlotInputMap_GetOverrideMod returns value of ImPlotInputMap.OverrideMod
 func (self *InputMap) OverrideMod() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -12091,12 +12320,14 @@ func (self *InputMap) OverrideMod() int32 {
 	return int32(C.wrap_ImPlotInputMap_GetOverrideMod(internal.ReinterpretCast[*C.ImPlotInputMap](selfArg)))
 }
 
+// ImPlotInputMap_SetZoomMod sets value of ImPlotInputMap.ZoomMod
 func (self InputMap) SetZoomMod(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotInputMap_SetZoomMod(selfArg, C.int(v))
 }
 
+// ImPlotInputMap_GetZoomMod returns value of ImPlotInputMap.ZoomMod
 func (self *InputMap) ZoomMod() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -12106,12 +12337,14 @@ func (self *InputMap) ZoomMod() int32 {
 	return int32(C.wrap_ImPlotInputMap_GetZoomMod(internal.ReinterpretCast[*C.ImPlotInputMap](selfArg)))
 }
 
+// ImPlotInputMap_SetZoomRate sets value of ImPlotInputMap.ZoomRate
 func (self InputMap) SetZoomRate(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotInputMap_SetZoomRate(selfArg, C.float(v))
 }
 
+// ImPlotInputMap_GetZoomRate returns value of ImPlotInputMap.ZoomRate
 func (self *InputMap) ZoomRate() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -12121,6 +12354,7 @@ func (self *InputMap) ZoomRate() float32 {
 	return float32(C.wrap_ImPlotInputMap_GetZoomRate(internal.ReinterpretCast[*C.ImPlotInputMap](selfArg)))
 }
 
+// ImPlotItem_SetID sets value of ImPlotItem.ID
 func (self Item) SetID(v imgui.ID) {
 	vArg, _ := v.C()
 
@@ -12129,6 +12363,7 @@ func (self Item) SetID(v imgui.ID) {
 	C.wrap_ImPlotItem_SetID(selfArg, internal.ReinterpretCast[C.ImGuiID](vArg))
 }
 
+// ImPlotItem_GetID returns value of ImPlotItem.ID
 func (self *Item) ID() imgui.ID {
 	selfArg, selfFin := self.Handle()
 
@@ -12141,12 +12376,14 @@ func (self *Item) ID() imgui.ID {
 	}())
 }
 
+// ImPlotItem_SetColor sets value of ImPlotItem.Color
 func (self Item) SetColor(v uint32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotItem_SetColor(selfArg, C.ImU32(v))
 }
 
+// ImPlotItem_GetColor returns value of ImPlotItem.Color
 func (self *Item) Color() uint32 {
 	selfArg, selfFin := self.Handle()
 
@@ -12156,12 +12393,14 @@ func (self *Item) Color() uint32 {
 	return uint32(C.wrap_ImPlotItem_GetColor(internal.ReinterpretCast[*C.ImPlotItem](selfArg)))
 }
 
+// ImPlotItem_SetLegendHoverRect sets value of ImPlotItem.LegendHoverRect
 func (self Item) SetLegendHoverRect(v imgui.Rect) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotItem_SetLegendHoverRect(selfArg, internal.ReinterpretCast[C.ImRect](v.ToC()))
 }
 
+// ImPlotItem_GetLegendHoverRect returns value of ImPlotItem.LegendHoverRect
 func (self *Item) LegendHoverRect() imgui.Rect {
 	selfArg, selfFin := self.Handle()
 
@@ -12174,12 +12413,14 @@ func (self *Item) LegendHoverRect() imgui.Rect {
 	}()
 }
 
+// ImPlotItem_SetNameOffset sets value of ImPlotItem.NameOffset
 func (self Item) SetNameOffset(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotItem_SetNameOffset(selfArg, C.int(v))
 }
 
+// ImPlotItem_GetNameOffset returns value of ImPlotItem.NameOffset
 func (self *Item) NameOffset() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -12189,12 +12430,14 @@ func (self *Item) NameOffset() int32 {
 	return int32(C.wrap_ImPlotItem_GetNameOffset(internal.ReinterpretCast[*C.ImPlotItem](selfArg)))
 }
 
+// ImPlotItem_SetShow sets value of ImPlotItem.Show
 func (self Item) SetShow(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotItem_SetShow(selfArg, C.bool(v))
 }
 
+// ImPlotItem_GetShow returns value of ImPlotItem.Show
 func (self *Item) Show() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -12204,12 +12447,14 @@ func (self *Item) Show() bool {
 	return C.wrap_ImPlotItem_GetShow(internal.ReinterpretCast[*C.ImPlotItem](selfArg)) == C.bool(true)
 }
 
+// ImPlotItem_SetLegendHovered sets value of ImPlotItem.LegendHovered
 func (self Item) SetLegendHovered(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotItem_SetLegendHovered(selfArg, C.bool(v))
 }
 
+// ImPlotItem_GetLegendHovered returns value of ImPlotItem.LegendHovered
 func (self *Item) LegendHovered() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -12219,12 +12464,14 @@ func (self *Item) LegendHovered() bool {
 	return C.wrap_ImPlotItem_GetLegendHovered(internal.ReinterpretCast[*C.ImPlotItem](selfArg)) == C.bool(true)
 }
 
+// ImPlotItem_SetSeenThisFrame sets value of ImPlotItem.SeenThisFrame
 func (self Item) SetSeenThisFrame(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotItem_SetSeenThisFrame(selfArg, C.bool(v))
 }
 
+// ImPlotItem_GetSeenThisFrame returns value of ImPlotItem.SeenThisFrame
 func (self *Item) SeenThisFrame() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -12234,6 +12481,7 @@ func (self *Item) SeenThisFrame() bool {
 	return C.wrap_ImPlotItem_GetSeenThisFrame(internal.ReinterpretCast[*C.ImPlotItem](selfArg)) == C.bool(true)
 }
 
+// ImPlotItemGroup_SetID sets value of ImPlotItemGroup.ID
 func (self ItemGroup) SetID(v imgui.ID) {
 	vArg, _ := v.C()
 
@@ -12242,6 +12490,7 @@ func (self ItemGroup) SetID(v imgui.ID) {
 	C.wrap_ImPlotItemGroup_SetID(selfArg, internal.ReinterpretCast[C.ImGuiID](vArg))
 }
 
+// ImPlotItemGroup_GetID returns value of ImPlotItemGroup.ID
 func (self *ItemGroup) ID() imgui.ID {
 	selfArg, selfFin := self.Handle()
 
@@ -12254,6 +12503,7 @@ func (self *ItemGroup) ID() imgui.ID {
 	}())
 }
 
+// ImPlotItemGroup_SetLegend sets value of ImPlotItemGroup.Legend
 func (self ItemGroup) SetLegend(v Legend) {
 	vArg, _ := v.C()
 
@@ -12262,6 +12512,7 @@ func (self ItemGroup) SetLegend(v Legend) {
 	C.wrap_ImPlotItemGroup_SetLegend(selfArg, internal.ReinterpretCast[C.ImPlotLegend](vArg))
 }
 
+// ImPlotItemGroup_GetLegend returns value of ImPlotItemGroup.Legend
 func (self *ItemGroup) Legend() Legend {
 	selfArg, selfFin := self.Handle()
 
@@ -12274,12 +12525,14 @@ func (self *ItemGroup) Legend() Legend {
 	}())
 }
 
+// ImPlotItemGroup_SetColormapIdx sets value of ImPlotItemGroup.ColormapIdx
 func (self ItemGroup) SetColormapIdx(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotItemGroup_SetColormapIdx(selfArg, C.int(v))
 }
 
+// ImPlotItemGroup_GetColormapIdx returns value of ImPlotItemGroup.ColormapIdx
 func (self *ItemGroup) ColormapIdx() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -12289,12 +12542,14 @@ func (self *ItemGroup) ColormapIdx() int32 {
 	return int32(C.wrap_ImPlotItemGroup_GetColormapIdx(internal.ReinterpretCast[*C.ImPlotItemGroup](selfArg)))
 }
 
+// ImPlotLegend_SetFlags sets value of ImPlotLegend.Flags
 func (self Legend) SetFlags(v LegendFlags) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotLegend_SetFlags(selfArg, C.ImPlotLegendFlags(v))
 }
 
+// ImPlotLegend_GetFlags returns value of ImPlotLegend.Flags
 func (self *Legend) Flags() LegendFlags {
 	selfArg, selfFin := self.Handle()
 
@@ -12304,12 +12559,14 @@ func (self *Legend) Flags() LegendFlags {
 	return LegendFlags(C.wrap_ImPlotLegend_GetFlags(internal.ReinterpretCast[*C.ImPlotLegend](selfArg)))
 }
 
+// ImPlotLegend_SetPreviousFlags sets value of ImPlotLegend.PreviousFlags
 func (self Legend) SetPreviousFlags(v LegendFlags) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotLegend_SetPreviousFlags(selfArg, C.ImPlotLegendFlags(v))
 }
 
+// ImPlotLegend_GetPreviousFlags returns value of ImPlotLegend.PreviousFlags
 func (self *Legend) PreviousFlags() LegendFlags {
 	selfArg, selfFin := self.Handle()
 
@@ -12319,12 +12576,14 @@ func (self *Legend) PreviousFlags() LegendFlags {
 	return LegendFlags(C.wrap_ImPlotLegend_GetPreviousFlags(internal.ReinterpretCast[*C.ImPlotLegend](selfArg)))
 }
 
+// ImPlotLegend_SetLocation sets value of ImPlotLegend.Location
 func (self Legend) SetLocation(v Location) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotLegend_SetLocation(selfArg, C.ImPlotLocation(v))
 }
 
+// ImPlotLegend_GetLocation returns value of ImPlotLegend.Location
 func (self *Legend) Location() Location {
 	selfArg, selfFin := self.Handle()
 
@@ -12334,12 +12593,14 @@ func (self *Legend) Location() Location {
 	return Location(C.wrap_ImPlotLegend_GetLocation(internal.ReinterpretCast[*C.ImPlotLegend](selfArg)))
 }
 
+// ImPlotLegend_SetPreviousLocation sets value of ImPlotLegend.PreviousLocation
 func (self Legend) SetPreviousLocation(v Location) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotLegend_SetPreviousLocation(selfArg, C.ImPlotLocation(v))
 }
 
+// ImPlotLegend_GetPreviousLocation returns value of ImPlotLegend.PreviousLocation
 func (self *Legend) PreviousLocation() Location {
 	selfArg, selfFin := self.Handle()
 
@@ -12349,12 +12610,14 @@ func (self *Legend) PreviousLocation() Location {
 	return Location(C.wrap_ImPlotLegend_GetPreviousLocation(internal.ReinterpretCast[*C.ImPlotLegend](selfArg)))
 }
 
+// ImPlotLegend_SetScroll sets value of ImPlotLegend.Scroll
 func (self Legend) SetScroll(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotLegend_SetScroll(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotLegend_GetScroll returns value of ImPlotLegend.Scroll
 func (self *Legend) Scroll() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -12367,6 +12630,7 @@ func (self *Legend) Scroll() imgui.Vec2 {
 	}()
 }
 
+// ImPlotLegend_SetIndices sets value of ImPlotLegend.Indices
 func (self Legend) SetIndices(v vectors.Vector[int32]) {
 	vData := v.Data
 	vDataArg, _ := internal.WrapNumberPtr[C.int, int32](vData)
@@ -12381,6 +12645,7 @@ func (self Legend) SetIndices(v vectors.Vector[int32]) {
 	C.wrap_ImPlotLegend_SetIndices(selfArg, *vVecArg)
 }
 
+// ImPlotLegend_GetIndices returns value of ImPlotLegend.Indices
 func (self *Legend) Indices() vectors.Vector[int32] {
 	selfArg, selfFin := self.Handle()
 
@@ -12390,6 +12655,7 @@ func (self *Legend) Indices() vectors.Vector[int32] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotLegend_GetIndices(internal.ReinterpretCast[*C.ImPlotLegend](selfArg)).Size, C.wrap_ImPlotLegend_GetIndices(internal.ReinterpretCast[*C.ImPlotLegend](selfArg)).Capacity, (*int32)(C.wrap_ImPlotLegend_GetIndices(internal.ReinterpretCast[*C.ImPlotLegend](selfArg)).Data))
 }
 
+// ImPlotLegend_SetLabels sets value of ImPlotLegend.Labels
 func (self Legend) SetLabels(v imgui.TextBuffer) {
 	vArg, _ := v.C()
 
@@ -12398,6 +12664,7 @@ func (self Legend) SetLabels(v imgui.TextBuffer) {
 	C.wrap_ImPlotLegend_SetLabels(selfArg, internal.ReinterpretCast[C.ImGuiTextBuffer](vArg))
 }
 
+// ImPlotLegend_GetLabels returns value of ImPlotLegend.Labels
 func (self *Legend) Labels() imgui.TextBuffer {
 	selfArg, selfFin := self.Handle()
 
@@ -12410,12 +12677,14 @@ func (self *Legend) Labels() imgui.TextBuffer {
 	}())
 }
 
+// ImPlotLegend_SetRect sets value of ImPlotLegend.Rect
 func (self Legend) SetRect(v imgui.Rect) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotLegend_SetRect(selfArg, internal.ReinterpretCast[C.ImRect](v.ToC()))
 }
 
+// ImPlotLegend_GetRect returns value of ImPlotLegend.Rect
 func (self *Legend) Rect() imgui.Rect {
 	selfArg, selfFin := self.Handle()
 
@@ -12428,12 +12697,14 @@ func (self *Legend) Rect() imgui.Rect {
 	}()
 }
 
+// ImPlotLegend_SetRectClamped sets value of ImPlotLegend.RectClamped
 func (self Legend) SetRectClamped(v imgui.Rect) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotLegend_SetRectClamped(selfArg, internal.ReinterpretCast[C.ImRect](v.ToC()))
 }
 
+// ImPlotLegend_GetRectClamped returns value of ImPlotLegend.RectClamped
 func (self *Legend) RectClamped() imgui.Rect {
 	selfArg, selfFin := self.Handle()
 
@@ -12446,12 +12717,14 @@ func (self *Legend) RectClamped() imgui.Rect {
 	}()
 }
 
+// ImPlotLegend_SetHovered sets value of ImPlotLegend.Hovered
 func (self Legend) SetHovered(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotLegend_SetHovered(selfArg, C.bool(v))
 }
 
+// ImPlotLegend_GetHovered returns value of ImPlotLegend.Hovered
 func (self *Legend) Hovered() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -12461,12 +12734,14 @@ func (self *Legend) Hovered() bool {
 	return C.wrap_ImPlotLegend_GetHovered(internal.ReinterpretCast[*C.ImPlotLegend](selfArg)) == C.bool(true)
 }
 
+// ImPlotLegend_SetHeld sets value of ImPlotLegend.Held
 func (self Legend) SetHeld(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotLegend_SetHeld(selfArg, C.bool(v))
 }
 
+// ImPlotLegend_GetHeld returns value of ImPlotLegend.Held
 func (self *Legend) Held() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -12476,12 +12751,14 @@ func (self *Legend) Held() bool {
 	return C.wrap_ImPlotLegend_GetHeld(internal.ReinterpretCast[*C.ImPlotLegend](selfArg)) == C.bool(true)
 }
 
+// ImPlotLegend_SetCanGoInside sets value of ImPlotLegend.CanGoInside
 func (self Legend) SetCanGoInside(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotLegend_SetCanGoInside(selfArg, C.bool(v))
 }
 
+// ImPlotLegend_GetCanGoInside returns value of ImPlotLegend.CanGoInside
 func (self *Legend) CanGoInside() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -12491,6 +12768,7 @@ func (self *Legend) CanGoInside() bool {
 	return C.wrap_ImPlotLegend_GetCanGoInside(internal.ReinterpretCast[*C.ImPlotLegend](selfArg)) == C.bool(true)
 }
 
+// ImPlotNextItemData_SetColors sets value of ImPlotNextItemData.Colors[5]
 func (self NextItemData) SetColors(v *[5]imgui.Vec4) {
 	vArg := make([]C.ImVec4, len(v))
 	for i, vV := range v {
@@ -12506,6 +12784,7 @@ func (self NextItemData) SetColors(v *[5]imgui.Vec4) {
 	}
 }
 
+// ImPlotNextItemData_GetColors returns value of ImPlotNextItemData.Colors[5]
 func (self *NextItemData) Colors() [5]imgui.Vec4 {
 	selfArg, selfFin := self.Handle()
 
@@ -12526,12 +12805,14 @@ func (self *NextItemData) Colors() [5]imgui.Vec4 {
 	}()
 }
 
+// ImPlotNextItemData_SetLineWeight sets value of ImPlotNextItemData.LineWeight
 func (self NextItemData) SetLineWeight(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotNextItemData_SetLineWeight(selfArg, C.float(v))
 }
 
+// ImPlotNextItemData_GetLineWeight returns value of ImPlotNextItemData.LineWeight
 func (self *NextItemData) LineWeight() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -12541,12 +12822,14 @@ func (self *NextItemData) LineWeight() float32 {
 	return float32(C.wrap_ImPlotNextItemData_GetLineWeight(internal.ReinterpretCast[*C.ImPlotNextItemData](selfArg)))
 }
 
+// ImPlotNextItemData_SetMarker sets value of ImPlotNextItemData.Marker
 func (self NextItemData) SetMarker(v Marker) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotNextItemData_SetMarker(selfArg, C.ImPlotMarker(v))
 }
 
+// ImPlotNextItemData_GetMarker returns value of ImPlotNextItemData.Marker
 func (self *NextItemData) Marker() Marker {
 	selfArg, selfFin := self.Handle()
 
@@ -12556,12 +12839,14 @@ func (self *NextItemData) Marker() Marker {
 	return Marker(C.wrap_ImPlotNextItemData_GetMarker(internal.ReinterpretCast[*C.ImPlotNextItemData](selfArg)))
 }
 
+// ImPlotNextItemData_SetMarkerSize sets value of ImPlotNextItemData.MarkerSize
 func (self NextItemData) SetMarkerSize(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotNextItemData_SetMarkerSize(selfArg, C.float(v))
 }
 
+// ImPlotNextItemData_GetMarkerSize returns value of ImPlotNextItemData.MarkerSize
 func (self *NextItemData) MarkerSize() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -12571,12 +12856,14 @@ func (self *NextItemData) MarkerSize() float32 {
 	return float32(C.wrap_ImPlotNextItemData_GetMarkerSize(internal.ReinterpretCast[*C.ImPlotNextItemData](selfArg)))
 }
 
+// ImPlotNextItemData_SetMarkerWeight sets value of ImPlotNextItemData.MarkerWeight
 func (self NextItemData) SetMarkerWeight(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotNextItemData_SetMarkerWeight(selfArg, C.float(v))
 }
 
+// ImPlotNextItemData_GetMarkerWeight returns value of ImPlotNextItemData.MarkerWeight
 func (self *NextItemData) MarkerWeight() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -12586,12 +12873,14 @@ func (self *NextItemData) MarkerWeight() float32 {
 	return float32(C.wrap_ImPlotNextItemData_GetMarkerWeight(internal.ReinterpretCast[*C.ImPlotNextItemData](selfArg)))
 }
 
+// ImPlotNextItemData_SetFillAlpha sets value of ImPlotNextItemData.FillAlpha
 func (self NextItemData) SetFillAlpha(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotNextItemData_SetFillAlpha(selfArg, C.float(v))
 }
 
+// ImPlotNextItemData_GetFillAlpha returns value of ImPlotNextItemData.FillAlpha
 func (self *NextItemData) FillAlpha() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -12601,12 +12890,14 @@ func (self *NextItemData) FillAlpha() float32 {
 	return float32(C.wrap_ImPlotNextItemData_GetFillAlpha(internal.ReinterpretCast[*C.ImPlotNextItemData](selfArg)))
 }
 
+// ImPlotNextItemData_SetErrorBarSize sets value of ImPlotNextItemData.ErrorBarSize
 func (self NextItemData) SetErrorBarSize(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotNextItemData_SetErrorBarSize(selfArg, C.float(v))
 }
 
+// ImPlotNextItemData_GetErrorBarSize returns value of ImPlotNextItemData.ErrorBarSize
 func (self *NextItemData) ErrorBarSize() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -12616,12 +12907,14 @@ func (self *NextItemData) ErrorBarSize() float32 {
 	return float32(C.wrap_ImPlotNextItemData_GetErrorBarSize(internal.ReinterpretCast[*C.ImPlotNextItemData](selfArg)))
 }
 
+// ImPlotNextItemData_SetErrorBarWeight sets value of ImPlotNextItemData.ErrorBarWeight
 func (self NextItemData) SetErrorBarWeight(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotNextItemData_SetErrorBarWeight(selfArg, C.float(v))
 }
 
+// ImPlotNextItemData_GetErrorBarWeight returns value of ImPlotNextItemData.ErrorBarWeight
 func (self *NextItemData) ErrorBarWeight() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -12631,12 +12924,14 @@ func (self *NextItemData) ErrorBarWeight() float32 {
 	return float32(C.wrap_ImPlotNextItemData_GetErrorBarWeight(internal.ReinterpretCast[*C.ImPlotNextItemData](selfArg)))
 }
 
+// ImPlotNextItemData_SetDigitalBitHeight sets value of ImPlotNextItemData.DigitalBitHeight
 func (self NextItemData) SetDigitalBitHeight(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotNextItemData_SetDigitalBitHeight(selfArg, C.float(v))
 }
 
+// ImPlotNextItemData_GetDigitalBitHeight returns value of ImPlotNextItemData.DigitalBitHeight
 func (self *NextItemData) DigitalBitHeight() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -12646,12 +12941,14 @@ func (self *NextItemData) DigitalBitHeight() float32 {
 	return float32(C.wrap_ImPlotNextItemData_GetDigitalBitHeight(internal.ReinterpretCast[*C.ImPlotNextItemData](selfArg)))
 }
 
+// ImPlotNextItemData_SetDigitalBitGap sets value of ImPlotNextItemData.DigitalBitGap
 func (self NextItemData) SetDigitalBitGap(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotNextItemData_SetDigitalBitGap(selfArg, C.float(v))
 }
 
+// ImPlotNextItemData_GetDigitalBitGap returns value of ImPlotNextItemData.DigitalBitGap
 func (self *NextItemData) DigitalBitGap() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -12661,12 +12958,14 @@ func (self *NextItemData) DigitalBitGap() float32 {
 	return float32(C.wrap_ImPlotNextItemData_GetDigitalBitGap(internal.ReinterpretCast[*C.ImPlotNextItemData](selfArg)))
 }
 
+// ImPlotNextItemData_SetRenderLine sets value of ImPlotNextItemData.RenderLine
 func (self NextItemData) SetRenderLine(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotNextItemData_SetRenderLine(selfArg, C.bool(v))
 }
 
+// ImPlotNextItemData_GetRenderLine returns value of ImPlotNextItemData.RenderLine
 func (self *NextItemData) RenderLine() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -12676,12 +12975,14 @@ func (self *NextItemData) RenderLine() bool {
 	return C.wrap_ImPlotNextItemData_GetRenderLine(internal.ReinterpretCast[*C.ImPlotNextItemData](selfArg)) == C.bool(true)
 }
 
+// ImPlotNextItemData_SetRenderFill sets value of ImPlotNextItemData.RenderFill
 func (self NextItemData) SetRenderFill(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotNextItemData_SetRenderFill(selfArg, C.bool(v))
 }
 
+// ImPlotNextItemData_GetRenderFill returns value of ImPlotNextItemData.RenderFill
 func (self *NextItemData) RenderFill() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -12691,12 +12992,14 @@ func (self *NextItemData) RenderFill() bool {
 	return C.wrap_ImPlotNextItemData_GetRenderFill(internal.ReinterpretCast[*C.ImPlotNextItemData](selfArg)) == C.bool(true)
 }
 
+// ImPlotNextItemData_SetRenderMarkerLine sets value of ImPlotNextItemData.RenderMarkerLine
 func (self NextItemData) SetRenderMarkerLine(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotNextItemData_SetRenderMarkerLine(selfArg, C.bool(v))
 }
 
+// ImPlotNextItemData_GetRenderMarkerLine returns value of ImPlotNextItemData.RenderMarkerLine
 func (self *NextItemData) RenderMarkerLine() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -12706,12 +13009,14 @@ func (self *NextItemData) RenderMarkerLine() bool {
 	return C.wrap_ImPlotNextItemData_GetRenderMarkerLine(internal.ReinterpretCast[*C.ImPlotNextItemData](selfArg)) == C.bool(true)
 }
 
+// ImPlotNextItemData_SetRenderMarkerFill sets value of ImPlotNextItemData.RenderMarkerFill
 func (self NextItemData) SetRenderMarkerFill(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotNextItemData_SetRenderMarkerFill(selfArg, C.bool(v))
 }
 
+// ImPlotNextItemData_GetRenderMarkerFill returns value of ImPlotNextItemData.RenderMarkerFill
 func (self *NextItemData) RenderMarkerFill() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -12721,12 +13026,14 @@ func (self *NextItemData) RenderMarkerFill() bool {
 	return C.wrap_ImPlotNextItemData_GetRenderMarkerFill(internal.ReinterpretCast[*C.ImPlotNextItemData](selfArg)) == C.bool(true)
 }
 
+// ImPlotNextItemData_SetHasHidden sets value of ImPlotNextItemData.HasHidden
 func (self NextItemData) SetHasHidden(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotNextItemData_SetHasHidden(selfArg, C.bool(v))
 }
 
+// ImPlotNextItemData_GetHasHidden returns value of ImPlotNextItemData.HasHidden
 func (self *NextItemData) HasHidden() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -12736,12 +13043,14 @@ func (self *NextItemData) HasHidden() bool {
 	return C.wrap_ImPlotNextItemData_GetHasHidden(internal.ReinterpretCast[*C.ImPlotNextItemData](selfArg)) == C.bool(true)
 }
 
+// ImPlotNextItemData_SetHidden sets value of ImPlotNextItemData.Hidden
 func (self NextItemData) SetHidden(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotNextItemData_SetHidden(selfArg, C.bool(v))
 }
 
+// ImPlotNextItemData_GetHidden returns value of ImPlotNextItemData.Hidden
 func (self *NextItemData) Hidden() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -12751,12 +13060,14 @@ func (self *NextItemData) Hidden() bool {
 	return C.wrap_ImPlotNextItemData_GetHidden(internal.ReinterpretCast[*C.ImPlotNextItemData](selfArg)) == C.bool(true)
 }
 
+// ImPlotNextItemData_SetHiddenCond sets value of ImPlotNextItemData.HiddenCond
 func (self NextItemData) SetHiddenCond(v Cond) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotNextItemData_SetHiddenCond(selfArg, C.ImPlotCond(v))
 }
 
+// ImPlotNextItemData_GetHiddenCond returns value of ImPlotNextItemData.HiddenCond
 func (self *NextItemData) HiddenCond() Cond {
 	selfArg, selfFin := self.Handle()
 
@@ -12766,6 +13077,7 @@ func (self *NextItemData) HiddenCond() Cond {
 	return Cond(C.wrap_ImPlotNextItemData_GetHiddenCond(internal.ReinterpretCast[*C.ImPlotNextItemData](selfArg)))
 }
 
+// ImPlotNextPlotData_SetRangeCond sets value of ImPlotNextPlotData.RangeCond[ImAxis_COUNT]
 func (self NextPlotData) SetRangeCond(v *[6]Cond) {
 	vArg := make([]C.ImPlotCond, len(v))
 	for i, vV := range v {
@@ -12781,6 +13093,7 @@ func (self NextPlotData) SetRangeCond(v *[6]Cond) {
 	}
 }
 
+// ImPlotNextPlotData_GetRangeCond returns value of ImPlotNextPlotData.RangeCond[ImAxis_COUNT]
 func (self *NextPlotData) RangeCond() [6]Cond {
 	selfArg, selfFin := self.Handle()
 
@@ -12798,6 +13111,7 @@ func (self *NextPlotData) RangeCond() [6]Cond {
 	}()
 }
 
+// ImPlotNextPlotData_SetRange sets value of ImPlotNextPlotData.Range[ImAxis_COUNT]
 func (self NextPlotData) SetRange(v *[6]Range) {
 	vArg := make([]C.ImPlotRange, len(v))
 	for i, vV := range v {
@@ -12814,6 +13128,7 @@ func (self NextPlotData) SetRange(v *[6]Range) {
 	}
 }
 
+// ImPlotNextPlotData_GetRange returns value of ImPlotNextPlotData.Range[ImAxis_COUNT]
 func (self *NextPlotData) Range() [6]Range {
 	selfArg, selfFin := self.Handle()
 
@@ -12831,6 +13146,7 @@ func (self *NextPlotData) Range() [6]Range {
 	}()
 }
 
+// ImPlotNextPlotData_SetHasRange sets value of ImPlotNextPlotData.HasRange[ImAxis_COUNT]
 func (self NextPlotData) SetHasRange(v *[6]bool) {
 	vArg := make([]C.bool, len(v))
 	for i, vV := range v {
@@ -12846,6 +13162,7 @@ func (self NextPlotData) SetHasRange(v *[6]bool) {
 	}
 }
 
+// ImPlotNextPlotData_GetHasRange returns value of ImPlotNextPlotData.HasRange[ImAxis_COUNT]
 func (self *NextPlotData) HasRange() [6]bool {
 	selfArg, selfFin := self.Handle()
 
@@ -12863,6 +13180,7 @@ func (self *NextPlotData) HasRange() [6]bool {
 	}()
 }
 
+// ImPlotNextPlotData_SetFit sets value of ImPlotNextPlotData.Fit[ImAxis_COUNT]
 func (self NextPlotData) SetFit(v *[6]bool) {
 	vArg := make([]C.bool, len(v))
 	for i, vV := range v {
@@ -12878,6 +13196,7 @@ func (self NextPlotData) SetFit(v *[6]bool) {
 	}
 }
 
+// ImPlotNextPlotData_GetFit returns value of ImPlotNextPlotData.Fit[ImAxis_COUNT]
 func (self *NextPlotData) Fit() [6]bool {
 	selfArg, selfFin := self.Handle()
 
@@ -12895,6 +13214,7 @@ func (self *NextPlotData) Fit() [6]bool {
 	}()
 }
 
+// ImPlotNextPlotData_SetLinkedMin sets value of ImPlotNextPlotData.LinkedMin[ImAxis_COUNT]
 func (self NextPlotData) SetLinkedMin(v *[6]*float64) {
 	vArg := make([]*C.double, len(v))
 	for i, vV := range v {
@@ -12911,6 +13231,7 @@ func (self NextPlotData) SetLinkedMin(v *[6]*float64) {
 	}
 }
 
+// ImPlotNextPlotData_GetLinkedMin returns value of ImPlotNextPlotData.LinkedMin[ImAxis_COUNT]
 func (self *NextPlotData) LinkedMin() [6]*float64 {
 	selfArg, selfFin := self.Handle()
 
@@ -12928,6 +13249,7 @@ func (self *NextPlotData) LinkedMin() [6]*float64 {
 	}()
 }
 
+// ImPlotNextPlotData_SetLinkedMax sets value of ImPlotNextPlotData.LinkedMax[ImAxis_COUNT]
 func (self NextPlotData) SetLinkedMax(v *[6]*float64) {
 	vArg := make([]*C.double, len(v))
 	for i, vV := range v {
@@ -12944,6 +13266,7 @@ func (self NextPlotData) SetLinkedMax(v *[6]*float64) {
 	}
 }
 
+// ImPlotNextPlotData_GetLinkedMax returns value of ImPlotNextPlotData.LinkedMax[ImAxis_COUNT]
 func (self *NextPlotData) LinkedMax() [6]*float64 {
 	selfArg, selfFin := self.Handle()
 
@@ -12961,6 +13284,7 @@ func (self *NextPlotData) LinkedMax() [6]*float64 {
 	}()
 }
 
+// ImPlotPlot_SetID sets value of ImPlotPlot.ID
 func (self Plot) SetID(v imgui.ID) {
 	vArg, _ := v.C()
 
@@ -12969,6 +13293,7 @@ func (self Plot) SetID(v imgui.ID) {
 	C.wrap_ImPlotPlot_SetID(selfArg, internal.ReinterpretCast[C.ImGuiID](vArg))
 }
 
+// ImPlotPlot_GetID returns value of ImPlotPlot.ID
 func (self *Plot) ID() imgui.ID {
 	selfArg, selfFin := self.Handle()
 
@@ -12981,12 +13306,14 @@ func (self *Plot) ID() imgui.ID {
 	}())
 }
 
+// ImPlotPlot_SetFlags sets value of ImPlotPlot.Flags
 func (self Plot) SetFlags(v Flags) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetFlags(selfArg, C.ImPlotFlags(v))
 }
 
+// ImPlotPlot_GetFlags returns value of ImPlotPlot.Flags
 func (self *Plot) Flags() Flags {
 	selfArg, selfFin := self.Handle()
 
@@ -12996,12 +13323,14 @@ func (self *Plot) Flags() Flags {
 	return Flags(C.wrap_ImPlotPlot_GetFlags(internal.ReinterpretCast[*C.ImPlotPlot](selfArg)))
 }
 
+// ImPlotPlot_SetPreviousFlags sets value of ImPlotPlot.PreviousFlags
 func (self Plot) SetPreviousFlags(v Flags) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetPreviousFlags(selfArg, C.ImPlotFlags(v))
 }
 
+// ImPlotPlot_GetPreviousFlags returns value of ImPlotPlot.PreviousFlags
 func (self *Plot) PreviousFlags() Flags {
 	selfArg, selfFin := self.Handle()
 
@@ -13011,12 +13340,14 @@ func (self *Plot) PreviousFlags() Flags {
 	return Flags(C.wrap_ImPlotPlot_GetPreviousFlags(internal.ReinterpretCast[*C.ImPlotPlot](selfArg)))
 }
 
+// ImPlotPlot_SetMouseTextLocation sets value of ImPlotPlot.MouseTextLocation
 func (self Plot) SetMouseTextLocation(v Location) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetMouseTextLocation(selfArg, C.ImPlotLocation(v))
 }
 
+// ImPlotPlot_GetMouseTextLocation returns value of ImPlotPlot.MouseTextLocation
 func (self *Plot) MouseTextLocation() Location {
 	selfArg, selfFin := self.Handle()
 
@@ -13026,12 +13357,14 @@ func (self *Plot) MouseTextLocation() Location {
 	return Location(C.wrap_ImPlotPlot_GetMouseTextLocation(internal.ReinterpretCast[*C.ImPlotPlot](selfArg)))
 }
 
+// ImPlotPlot_SetMouseTextFlags sets value of ImPlotPlot.MouseTextFlags
 func (self Plot) SetMouseTextFlags(v MouseTextFlags) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetMouseTextFlags(selfArg, C.ImPlotMouseTextFlags(v))
 }
 
+// ImPlotPlot_GetMouseTextFlags returns value of ImPlotPlot.MouseTextFlags
 func (self *Plot) MouseTextFlags() MouseTextFlags {
 	selfArg, selfFin := self.Handle()
 
@@ -13041,6 +13374,7 @@ func (self *Plot) MouseTextFlags() MouseTextFlags {
 	return MouseTextFlags(C.wrap_ImPlotPlot_GetMouseTextFlags(internal.ReinterpretCast[*C.ImPlotPlot](selfArg)))
 }
 
+// ImPlotPlot_SetAxes sets value of ImPlotPlot.Axes[ImAxis_COUNT]
 func (self Plot) SetAxes(v *[6]Axis) {
 	vArg := make([]C.ImPlotAxis, len(v))
 	for i, vV := range v {
@@ -13057,6 +13391,7 @@ func (self Plot) SetAxes(v *[6]Axis) {
 	}
 }
 
+// ImPlotPlot_GetAxes returns value of ImPlotPlot.Axes[ImAxis_COUNT]
 func (self *Plot) Axes() [6]Axis {
 	selfArg, selfFin := self.Handle()
 
@@ -13074,6 +13409,7 @@ func (self *Plot) Axes() [6]Axis {
 	}()
 }
 
+// ImPlotPlot_SetTextBuffer sets value of ImPlotPlot.TextBuffer
 func (self Plot) SetTextBuffer(v imgui.TextBuffer) {
 	vArg, _ := v.C()
 
@@ -13082,6 +13418,7 @@ func (self Plot) SetTextBuffer(v imgui.TextBuffer) {
 	C.wrap_ImPlotPlot_SetTextBuffer(selfArg, internal.ReinterpretCast[C.ImGuiTextBuffer](vArg))
 }
 
+// ImPlotPlot_GetTextBuffer returns value of ImPlotPlot.TextBuffer
 func (self *Plot) TextBuffer() imgui.TextBuffer {
 	selfArg, selfFin := self.Handle()
 
@@ -13094,6 +13431,7 @@ func (self *Plot) TextBuffer() imgui.TextBuffer {
 	}())
 }
 
+// ImPlotPlot_SetItems sets value of ImPlotPlot.Items
 func (self Plot) SetItems(v ItemGroup) {
 	vArg, _ := v.C()
 
@@ -13102,6 +13440,7 @@ func (self Plot) SetItems(v ItemGroup) {
 	C.wrap_ImPlotPlot_SetItems(selfArg, internal.ReinterpretCast[C.ImPlotItemGroup](vArg))
 }
 
+// ImPlotPlot_GetItems returns value of ImPlotPlot.Items
 func (self *Plot) Items() ItemGroup {
 	selfArg, selfFin := self.Handle()
 
@@ -13114,12 +13453,14 @@ func (self *Plot) Items() ItemGroup {
 	}())
 }
 
+// ImPlotPlot_SetCurrentX sets value of ImPlotPlot.CurrentX
 func (self Plot) SetCurrentX(v AxisEnum) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetCurrentX(selfArg, C.ImAxis(v))
 }
 
+// ImPlotPlot_GetCurrentX returns value of ImPlotPlot.CurrentX
 func (self *Plot) CurrentX() AxisEnum {
 	selfArg, selfFin := self.Handle()
 
@@ -13129,12 +13470,14 @@ func (self *Plot) CurrentX() AxisEnum {
 	return AxisEnum(C.wrap_ImPlotPlot_GetCurrentX(internal.ReinterpretCast[*C.ImPlotPlot](selfArg)))
 }
 
+// ImPlotPlot_SetCurrentY sets value of ImPlotPlot.CurrentY
 func (self Plot) SetCurrentY(v AxisEnum) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetCurrentY(selfArg, C.ImAxis(v))
 }
 
+// ImPlotPlot_GetCurrentY returns value of ImPlotPlot.CurrentY
 func (self *Plot) CurrentY() AxisEnum {
 	selfArg, selfFin := self.Handle()
 
@@ -13144,12 +13487,14 @@ func (self *Plot) CurrentY() AxisEnum {
 	return AxisEnum(C.wrap_ImPlotPlot_GetCurrentY(internal.ReinterpretCast[*C.ImPlotPlot](selfArg)))
 }
 
+// ImPlotPlot_SetFrameRect sets value of ImPlotPlot.FrameRect
 func (self Plot) SetFrameRect(v imgui.Rect) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetFrameRect(selfArg, internal.ReinterpretCast[C.ImRect](v.ToC()))
 }
 
+// ImPlotPlot_GetFrameRect returns value of ImPlotPlot.FrameRect
 func (self *Plot) FrameRect() imgui.Rect {
 	selfArg, selfFin := self.Handle()
 
@@ -13162,12 +13507,14 @@ func (self *Plot) FrameRect() imgui.Rect {
 	}()
 }
 
+// ImPlotPlot_SetCanvasRect sets value of ImPlotPlot.CanvasRect
 func (self Plot) SetCanvasRect(v imgui.Rect) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetCanvasRect(selfArg, internal.ReinterpretCast[C.ImRect](v.ToC()))
 }
 
+// ImPlotPlot_GetCanvasRect returns value of ImPlotPlot.CanvasRect
 func (self *Plot) CanvasRect() imgui.Rect {
 	selfArg, selfFin := self.Handle()
 
@@ -13180,12 +13527,14 @@ func (self *Plot) CanvasRect() imgui.Rect {
 	}()
 }
 
+// ImPlotPlot_SetPlotRect sets value of ImPlotPlot.PlotRect
 func (self Plot) SetPlotRect(v imgui.Rect) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetPlotRect(selfArg, internal.ReinterpretCast[C.ImRect](v.ToC()))
 }
 
+// ImPlotPlot_GetPlotRect returns value of ImPlotPlot.PlotRect
 func (self *Plot) PlotRect() imgui.Rect {
 	selfArg, selfFin := self.Handle()
 
@@ -13198,12 +13547,14 @@ func (self *Plot) PlotRect() imgui.Rect {
 	}()
 }
 
+// ImPlotPlot_SetAxesRect sets value of ImPlotPlot.AxesRect
 func (self Plot) SetAxesRect(v imgui.Rect) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetAxesRect(selfArg, internal.ReinterpretCast[C.ImRect](v.ToC()))
 }
 
+// ImPlotPlot_GetAxesRect returns value of ImPlotPlot.AxesRect
 func (self *Plot) AxesRect() imgui.Rect {
 	selfArg, selfFin := self.Handle()
 
@@ -13216,12 +13567,14 @@ func (self *Plot) AxesRect() imgui.Rect {
 	}()
 }
 
+// ImPlotPlot_SetSelectRect sets value of ImPlotPlot.SelectRect
 func (self Plot) SetSelectRect(v imgui.Rect) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetSelectRect(selfArg, internal.ReinterpretCast[C.ImRect](v.ToC()))
 }
 
+// ImPlotPlot_GetSelectRect returns value of ImPlotPlot.SelectRect
 func (self *Plot) SelectRect() imgui.Rect {
 	selfArg, selfFin := self.Handle()
 
@@ -13234,12 +13587,14 @@ func (self *Plot) SelectRect() imgui.Rect {
 	}()
 }
 
+// ImPlotPlot_SetSelectStart sets value of ImPlotPlot.SelectStart
 func (self Plot) SetSelectStart(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetSelectStart(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotPlot_GetSelectStart returns value of ImPlotPlot.SelectStart
 func (self *Plot) SelectStart() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -13252,12 +13607,14 @@ func (self *Plot) SelectStart() imgui.Vec2 {
 	}()
 }
 
+// ImPlotPlot_SetTitleOffset sets value of ImPlotPlot.TitleOffset
 func (self Plot) SetTitleOffset(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetTitleOffset(selfArg, C.int(v))
 }
 
+// ImPlotPlot_GetTitleOffset returns value of ImPlotPlot.TitleOffset
 func (self *Plot) TitleOffset() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -13267,12 +13624,14 @@ func (self *Plot) TitleOffset() int32 {
 	return int32(C.wrap_ImPlotPlot_GetTitleOffset(internal.ReinterpretCast[*C.ImPlotPlot](selfArg)))
 }
 
+// ImPlotPlot_SetJustCreated sets value of ImPlotPlot.JustCreated
 func (self Plot) SetJustCreated(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetJustCreated(selfArg, C.bool(v))
 }
 
+// ImPlotPlot_GetJustCreated returns value of ImPlotPlot.JustCreated
 func (self *Plot) JustCreated() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -13282,12 +13641,14 @@ func (self *Plot) JustCreated() bool {
 	return C.wrap_ImPlotPlot_GetJustCreated(internal.ReinterpretCast[*C.ImPlotPlot](selfArg)) == C.bool(true)
 }
 
+// ImPlotPlot_SetInitialized sets value of ImPlotPlot.Initialized
 func (self Plot) SetInitialized(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetInitialized(selfArg, C.bool(v))
 }
 
+// ImPlotPlot_GetInitialized returns value of ImPlotPlot.Initialized
 func (self *Plot) Initialized() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -13297,12 +13658,14 @@ func (self *Plot) Initialized() bool {
 	return C.wrap_ImPlotPlot_GetInitialized(internal.ReinterpretCast[*C.ImPlotPlot](selfArg)) == C.bool(true)
 }
 
+// ImPlotPlot_SetSetupLocked sets value of ImPlotPlot.SetupLocked
 func (self Plot) SetSetupLocked(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetSetupLocked(selfArg, C.bool(v))
 }
 
+// ImPlotPlot_GetSetupLocked returns value of ImPlotPlot.SetupLocked
 func (self *Plot) SetupLocked() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -13312,12 +13675,14 @@ func (self *Plot) SetupLocked() bool {
 	return C.wrap_ImPlotPlot_GetSetupLocked(internal.ReinterpretCast[*C.ImPlotPlot](selfArg)) == C.bool(true)
 }
 
+// ImPlotPlot_SetFitThisFrame sets value of ImPlotPlot.FitThisFrame
 func (self Plot) SetFitThisFrame(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetFitThisFrame(selfArg, C.bool(v))
 }
 
+// ImPlotPlot_GetFitThisFrame returns value of ImPlotPlot.FitThisFrame
 func (self *Plot) FitThisFrame() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -13327,12 +13692,14 @@ func (self *Plot) FitThisFrame() bool {
 	return C.wrap_ImPlotPlot_GetFitThisFrame(internal.ReinterpretCast[*C.ImPlotPlot](selfArg)) == C.bool(true)
 }
 
+// ImPlotPlot_SetHovered sets value of ImPlotPlot.Hovered
 func (self Plot) SetHovered(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetHovered(selfArg, C.bool(v))
 }
 
+// ImPlotPlot_GetHovered returns value of ImPlotPlot.Hovered
 func (self *Plot) Hovered() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -13342,12 +13709,14 @@ func (self *Plot) Hovered() bool {
 	return C.wrap_ImPlotPlot_GetHovered(internal.ReinterpretCast[*C.ImPlotPlot](selfArg)) == C.bool(true)
 }
 
+// ImPlotPlot_SetHeld sets value of ImPlotPlot.Held
 func (self Plot) SetHeld(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetHeld(selfArg, C.bool(v))
 }
 
+// ImPlotPlot_GetHeld returns value of ImPlotPlot.Held
 func (self *Plot) Held() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -13357,12 +13726,14 @@ func (self *Plot) Held() bool {
 	return C.wrap_ImPlotPlot_GetHeld(internal.ReinterpretCast[*C.ImPlotPlot](selfArg)) == C.bool(true)
 }
 
+// ImPlotPlot_SetSelecting sets value of ImPlotPlot.Selecting
 func (self Plot) SetSelecting(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetSelecting(selfArg, C.bool(v))
 }
 
+// ImPlotPlot_GetSelecting returns value of ImPlotPlot.Selecting
 func (self *Plot) Selecting() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -13372,12 +13743,14 @@ func (self *Plot) Selecting() bool {
 	return C.wrap_ImPlotPlot_GetSelecting(internal.ReinterpretCast[*C.ImPlotPlot](selfArg)) == C.bool(true)
 }
 
+// ImPlotPlot_SetSelected sets value of ImPlotPlot.Selected
 func (self Plot) SetSelected(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetSelected(selfArg, C.bool(v))
 }
 
+// ImPlotPlot_GetSelected returns value of ImPlotPlot.Selected
 func (self *Plot) Selected() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -13387,12 +13760,14 @@ func (self *Plot) Selected() bool {
 	return C.wrap_ImPlotPlot_GetSelected(internal.ReinterpretCast[*C.ImPlotPlot](selfArg)) == C.bool(true)
 }
 
+// ImPlotPlot_SetContextLocked sets value of ImPlotPlot.ContextLocked
 func (self Plot) SetContextLocked(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPlot_SetContextLocked(selfArg, C.bool(v))
 }
 
+// ImPlotPlot_GetContextLocked returns value of ImPlotPlot.ContextLocked
 func (self *Plot) ContextLocked() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -13402,12 +13777,14 @@ func (self *Plot) ContextLocked() bool {
 	return C.wrap_ImPlotPlot_GetContextLocked(internal.ReinterpretCast[*C.ImPlotPlot](selfArg)) == C.bool(true)
 }
 
+// ImPlotPointError_SetX sets value of ImPlotPointError.X
 func (self PointError) SetX(v float64) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPointError_SetX(selfArg, C.double(v))
 }
 
+// ImPlotPointError_GetX returns value of ImPlotPointError.X
 func (self *PointError) X() float64 {
 	selfArg, selfFin := self.Handle()
 
@@ -13417,12 +13794,14 @@ func (self *PointError) X() float64 {
 	return float64(C.wrap_ImPlotPointError_GetX(internal.ReinterpretCast[*C.ImPlotPointError](selfArg)))
 }
 
+// ImPlotPointError_SetY sets value of ImPlotPointError.Y
 func (self PointError) SetY(v float64) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPointError_SetY(selfArg, C.double(v))
 }
 
+// ImPlotPointError_GetY returns value of ImPlotPointError.Y
 func (self *PointError) Y() float64 {
 	selfArg, selfFin := self.Handle()
 
@@ -13432,12 +13811,14 @@ func (self *PointError) Y() float64 {
 	return float64(C.wrap_ImPlotPointError_GetY(internal.ReinterpretCast[*C.ImPlotPointError](selfArg)))
 }
 
+// ImPlotPointError_SetNeg sets value of ImPlotPointError.Neg
 func (self PointError) SetNeg(v float64) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPointError_SetNeg(selfArg, C.double(v))
 }
 
+// ImPlotPointError_GetNeg returns value of ImPlotPointError.Neg
 func (self *PointError) Neg() float64 {
 	selfArg, selfFin := self.Handle()
 
@@ -13447,12 +13828,14 @@ func (self *PointError) Neg() float64 {
 	return float64(C.wrap_ImPlotPointError_GetNeg(internal.ReinterpretCast[*C.ImPlotPointError](selfArg)))
 }
 
+// ImPlotPointError_SetPos sets value of ImPlotPointError.Pos
 func (self PointError) SetPos(v float64) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotPointError_SetPos(selfArg, C.double(v))
 }
 
+// ImPlotPointError_GetPos returns value of ImPlotPointError.Pos
 func (self *PointError) Pos() float64 {
 	selfArg, selfFin := self.Handle()
 
@@ -13462,12 +13845,14 @@ func (self *PointError) Pos() float64 {
 	return float64(C.wrap_ImPlotPointError_GetPos(internal.ReinterpretCast[*C.ImPlotPointError](selfArg)))
 }
 
+// ImPlotRange_SetMin sets value of ImPlotRange.Min
 func (self Range) SetMin(v float64) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotRange_SetMin(selfArg, C.double(v))
 }
 
+// ImPlotRange_GetMin returns value of ImPlotRange.Min
 func (self *Range) Min() float64 {
 	selfArg, selfFin := self.Handle()
 
@@ -13477,12 +13862,14 @@ func (self *Range) Min() float64 {
 	return float64(C.wrap_ImPlotRange_GetMin(internal.ReinterpretCast[*C.ImPlotRange](selfArg)))
 }
 
+// ImPlotRange_SetMax sets value of ImPlotRange.Max
 func (self Range) SetMax(v float64) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotRange_SetMax(selfArg, C.double(v))
 }
 
+// ImPlotRange_GetMax returns value of ImPlotRange.Max
 func (self *Range) Max() float64 {
 	selfArg, selfFin := self.Handle()
 
@@ -13492,6 +13879,7 @@ func (self *Range) Max() float64 {
 	return float64(C.wrap_ImPlotRange_GetMax(internal.ReinterpretCast[*C.ImPlotRange](selfArg)))
 }
 
+// ImPlotRect_SetX sets value of ImPlotRect.X
 func (self Rect) SetX(v Range) {
 	vArg, _ := v.C()
 
@@ -13500,6 +13888,7 @@ func (self Rect) SetX(v Range) {
 	C.wrap_ImPlotRect_SetX(selfArg, internal.ReinterpretCast[C.ImPlotRange](vArg))
 }
 
+// ImPlotRect_GetX returns value of ImPlotRect.X
 func (self *Rect) X() Range {
 	selfArg, selfFin := self.Handle()
 
@@ -13512,6 +13901,7 @@ func (self *Rect) X() Range {
 	}())
 }
 
+// ImPlotRect_SetY sets value of ImPlotRect.Y
 func (self Rect) SetY(v Range) {
 	vArg, _ := v.C()
 
@@ -13520,6 +13910,7 @@ func (self Rect) SetY(v Range) {
 	C.wrap_ImPlotRect_SetY(selfArg, internal.ReinterpretCast[C.ImPlotRange](vArg))
 }
 
+// ImPlotRect_GetY returns value of ImPlotRect.Y
 func (self *Rect) Y() Range {
 	selfArg, selfFin := self.Handle()
 
@@ -13532,12 +13923,14 @@ func (self *Rect) Y() Range {
 	}())
 }
 
+// ImPlotStyle_SetLineWeight sets value of ImPlotStyle.LineWeight
 func (self Style) SetLineWeight(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetLineWeight(selfArg, C.float(v))
 }
 
+// ImPlotStyle_GetLineWeight returns value of ImPlotStyle.LineWeight
 func (self *Style) LineWeight() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -13547,12 +13940,14 @@ func (self *Style) LineWeight() float32 {
 	return float32(C.wrap_ImPlotStyle_GetLineWeight(internal.ReinterpretCast[*C.ImPlotStyle](selfArg)))
 }
 
+// ImPlotStyle_SetMarker sets value of ImPlotStyle.Marker
 func (self Style) SetMarker(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetMarker(selfArg, C.int(v))
 }
 
+// ImPlotStyle_GetMarker returns value of ImPlotStyle.Marker
 func (self *Style) Marker() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -13562,12 +13957,14 @@ func (self *Style) Marker() int32 {
 	return int32(C.wrap_ImPlotStyle_GetMarker(internal.ReinterpretCast[*C.ImPlotStyle](selfArg)))
 }
 
+// ImPlotStyle_SetMarkerSize sets value of ImPlotStyle.MarkerSize
 func (self Style) SetMarkerSize(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetMarkerSize(selfArg, C.float(v))
 }
 
+// ImPlotStyle_GetMarkerSize returns value of ImPlotStyle.MarkerSize
 func (self *Style) MarkerSize() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -13577,12 +13974,14 @@ func (self *Style) MarkerSize() float32 {
 	return float32(C.wrap_ImPlotStyle_GetMarkerSize(internal.ReinterpretCast[*C.ImPlotStyle](selfArg)))
 }
 
+// ImPlotStyle_SetMarkerWeight sets value of ImPlotStyle.MarkerWeight
 func (self Style) SetMarkerWeight(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetMarkerWeight(selfArg, C.float(v))
 }
 
+// ImPlotStyle_GetMarkerWeight returns value of ImPlotStyle.MarkerWeight
 func (self *Style) MarkerWeight() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -13592,12 +13991,14 @@ func (self *Style) MarkerWeight() float32 {
 	return float32(C.wrap_ImPlotStyle_GetMarkerWeight(internal.ReinterpretCast[*C.ImPlotStyle](selfArg)))
 }
 
+// ImPlotStyle_SetFillAlpha sets value of ImPlotStyle.FillAlpha
 func (self Style) SetFillAlpha(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetFillAlpha(selfArg, C.float(v))
 }
 
+// ImPlotStyle_GetFillAlpha returns value of ImPlotStyle.FillAlpha
 func (self *Style) FillAlpha() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -13607,12 +14008,14 @@ func (self *Style) FillAlpha() float32 {
 	return float32(C.wrap_ImPlotStyle_GetFillAlpha(internal.ReinterpretCast[*C.ImPlotStyle](selfArg)))
 }
 
+// ImPlotStyle_SetErrorBarSize sets value of ImPlotStyle.ErrorBarSize
 func (self Style) SetErrorBarSize(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetErrorBarSize(selfArg, C.float(v))
 }
 
+// ImPlotStyle_GetErrorBarSize returns value of ImPlotStyle.ErrorBarSize
 func (self *Style) ErrorBarSize() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -13622,12 +14025,14 @@ func (self *Style) ErrorBarSize() float32 {
 	return float32(C.wrap_ImPlotStyle_GetErrorBarSize(internal.ReinterpretCast[*C.ImPlotStyle](selfArg)))
 }
 
+// ImPlotStyle_SetErrorBarWeight sets value of ImPlotStyle.ErrorBarWeight
 func (self Style) SetErrorBarWeight(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetErrorBarWeight(selfArg, C.float(v))
 }
 
+// ImPlotStyle_GetErrorBarWeight returns value of ImPlotStyle.ErrorBarWeight
 func (self *Style) ErrorBarWeight() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -13637,12 +14042,14 @@ func (self *Style) ErrorBarWeight() float32 {
 	return float32(C.wrap_ImPlotStyle_GetErrorBarWeight(internal.ReinterpretCast[*C.ImPlotStyle](selfArg)))
 }
 
+// ImPlotStyle_SetDigitalBitHeight sets value of ImPlotStyle.DigitalBitHeight
 func (self Style) SetDigitalBitHeight(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetDigitalBitHeight(selfArg, C.float(v))
 }
 
+// ImPlotStyle_GetDigitalBitHeight returns value of ImPlotStyle.DigitalBitHeight
 func (self *Style) DigitalBitHeight() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -13652,12 +14059,14 @@ func (self *Style) DigitalBitHeight() float32 {
 	return float32(C.wrap_ImPlotStyle_GetDigitalBitHeight(internal.ReinterpretCast[*C.ImPlotStyle](selfArg)))
 }
 
+// ImPlotStyle_SetDigitalBitGap sets value of ImPlotStyle.DigitalBitGap
 func (self Style) SetDigitalBitGap(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetDigitalBitGap(selfArg, C.float(v))
 }
 
+// ImPlotStyle_GetDigitalBitGap returns value of ImPlotStyle.DigitalBitGap
 func (self *Style) DigitalBitGap() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -13667,12 +14076,14 @@ func (self *Style) DigitalBitGap() float32 {
 	return float32(C.wrap_ImPlotStyle_GetDigitalBitGap(internal.ReinterpretCast[*C.ImPlotStyle](selfArg)))
 }
 
+// ImPlotStyle_SetPlotBorderSize sets value of ImPlotStyle.PlotBorderSize
 func (self Style) SetPlotBorderSize(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetPlotBorderSize(selfArg, C.float(v))
 }
 
+// ImPlotStyle_GetPlotBorderSize returns value of ImPlotStyle.PlotBorderSize
 func (self *Style) PlotBorderSize() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -13682,12 +14093,14 @@ func (self *Style) PlotBorderSize() float32 {
 	return float32(C.wrap_ImPlotStyle_GetPlotBorderSize(internal.ReinterpretCast[*C.ImPlotStyle](selfArg)))
 }
 
+// ImPlotStyle_SetMinorAlpha sets value of ImPlotStyle.MinorAlpha
 func (self Style) SetMinorAlpha(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetMinorAlpha(selfArg, C.float(v))
 }
 
+// ImPlotStyle_GetMinorAlpha returns value of ImPlotStyle.MinorAlpha
 func (self *Style) MinorAlpha() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -13697,12 +14110,14 @@ func (self *Style) MinorAlpha() float32 {
 	return float32(C.wrap_ImPlotStyle_GetMinorAlpha(internal.ReinterpretCast[*C.ImPlotStyle](selfArg)))
 }
 
+// ImPlotStyle_SetMajorTickLen sets value of ImPlotStyle.MajorTickLen
 func (self Style) SetMajorTickLen(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetMajorTickLen(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotStyle_GetMajorTickLen returns value of ImPlotStyle.MajorTickLen
 func (self *Style) MajorTickLen() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -13715,12 +14130,14 @@ func (self *Style) MajorTickLen() imgui.Vec2 {
 	}()
 }
 
+// ImPlotStyle_SetMinorTickLen sets value of ImPlotStyle.MinorTickLen
 func (self Style) SetMinorTickLen(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetMinorTickLen(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotStyle_GetMinorTickLen returns value of ImPlotStyle.MinorTickLen
 func (self *Style) MinorTickLen() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -13733,12 +14150,14 @@ func (self *Style) MinorTickLen() imgui.Vec2 {
 	}()
 }
 
+// ImPlotStyle_SetMajorTickSize sets value of ImPlotStyle.MajorTickSize
 func (self Style) SetMajorTickSize(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetMajorTickSize(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotStyle_GetMajorTickSize returns value of ImPlotStyle.MajorTickSize
 func (self *Style) MajorTickSize() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -13751,12 +14170,14 @@ func (self *Style) MajorTickSize() imgui.Vec2 {
 	}()
 }
 
+// ImPlotStyle_SetMinorTickSize sets value of ImPlotStyle.MinorTickSize
 func (self Style) SetMinorTickSize(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetMinorTickSize(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotStyle_GetMinorTickSize returns value of ImPlotStyle.MinorTickSize
 func (self *Style) MinorTickSize() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -13769,12 +14190,14 @@ func (self *Style) MinorTickSize() imgui.Vec2 {
 	}()
 }
 
+// ImPlotStyle_SetMajorGridSize sets value of ImPlotStyle.MajorGridSize
 func (self Style) SetMajorGridSize(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetMajorGridSize(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotStyle_GetMajorGridSize returns value of ImPlotStyle.MajorGridSize
 func (self *Style) MajorGridSize() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -13787,12 +14210,14 @@ func (self *Style) MajorGridSize() imgui.Vec2 {
 	}()
 }
 
+// ImPlotStyle_SetMinorGridSize sets value of ImPlotStyle.MinorGridSize
 func (self Style) SetMinorGridSize(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetMinorGridSize(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotStyle_GetMinorGridSize returns value of ImPlotStyle.MinorGridSize
 func (self *Style) MinorGridSize() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -13805,12 +14230,14 @@ func (self *Style) MinorGridSize() imgui.Vec2 {
 	}()
 }
 
+// ImPlotStyle_SetPlotPadding sets value of ImPlotStyle.PlotPadding
 func (self Style) SetPlotPadding(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetPlotPadding(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotStyle_GetPlotPadding returns value of ImPlotStyle.PlotPadding
 func (self *Style) PlotPadding() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -13823,12 +14250,14 @@ func (self *Style) PlotPadding() imgui.Vec2 {
 	}()
 }
 
+// ImPlotStyle_SetLabelPadding sets value of ImPlotStyle.LabelPadding
 func (self Style) SetLabelPadding(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetLabelPadding(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotStyle_GetLabelPadding returns value of ImPlotStyle.LabelPadding
 func (self *Style) LabelPadding() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -13841,12 +14270,14 @@ func (self *Style) LabelPadding() imgui.Vec2 {
 	}()
 }
 
+// ImPlotStyle_SetLegendPadding sets value of ImPlotStyle.LegendPadding
 func (self Style) SetLegendPadding(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetLegendPadding(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotStyle_GetLegendPadding returns value of ImPlotStyle.LegendPadding
 func (self *Style) LegendPadding() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -13859,12 +14290,14 @@ func (self *Style) LegendPadding() imgui.Vec2 {
 	}()
 }
 
+// ImPlotStyle_SetLegendInnerPadding sets value of ImPlotStyle.LegendInnerPadding
 func (self Style) SetLegendInnerPadding(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetLegendInnerPadding(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotStyle_GetLegendInnerPadding returns value of ImPlotStyle.LegendInnerPadding
 func (self *Style) LegendInnerPadding() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -13877,12 +14310,14 @@ func (self *Style) LegendInnerPadding() imgui.Vec2 {
 	}()
 }
 
+// ImPlotStyle_SetLegendSpacing sets value of ImPlotStyle.LegendSpacing
 func (self Style) SetLegendSpacing(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetLegendSpacing(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotStyle_GetLegendSpacing returns value of ImPlotStyle.LegendSpacing
 func (self *Style) LegendSpacing() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -13895,12 +14330,14 @@ func (self *Style) LegendSpacing() imgui.Vec2 {
 	}()
 }
 
+// ImPlotStyle_SetMousePosPadding sets value of ImPlotStyle.MousePosPadding
 func (self Style) SetMousePosPadding(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetMousePosPadding(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotStyle_GetMousePosPadding returns value of ImPlotStyle.MousePosPadding
 func (self *Style) MousePosPadding() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -13913,12 +14350,14 @@ func (self *Style) MousePosPadding() imgui.Vec2 {
 	}()
 }
 
+// ImPlotStyle_SetAnnotationPadding sets value of ImPlotStyle.AnnotationPadding
 func (self Style) SetAnnotationPadding(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetAnnotationPadding(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotStyle_GetAnnotationPadding returns value of ImPlotStyle.AnnotationPadding
 func (self *Style) AnnotationPadding() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -13931,12 +14370,14 @@ func (self *Style) AnnotationPadding() imgui.Vec2 {
 	}()
 }
 
+// ImPlotStyle_SetFitPadding sets value of ImPlotStyle.FitPadding
 func (self Style) SetFitPadding(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetFitPadding(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotStyle_GetFitPadding returns value of ImPlotStyle.FitPadding
 func (self *Style) FitPadding() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -13949,12 +14390,14 @@ func (self *Style) FitPadding() imgui.Vec2 {
 	}()
 }
 
+// ImPlotStyle_SetPlotDefaultSize sets value of ImPlotStyle.PlotDefaultSize
 func (self Style) SetPlotDefaultSize(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetPlotDefaultSize(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotStyle_GetPlotDefaultSize returns value of ImPlotStyle.PlotDefaultSize
 func (self *Style) PlotDefaultSize() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -13967,12 +14410,14 @@ func (self *Style) PlotDefaultSize() imgui.Vec2 {
 	}()
 }
 
+// ImPlotStyle_SetPlotMinSize sets value of ImPlotStyle.PlotMinSize
 func (self Style) SetPlotMinSize(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetPlotMinSize(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotStyle_GetPlotMinSize returns value of ImPlotStyle.PlotMinSize
 func (self *Style) PlotMinSize() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -13985,6 +14430,7 @@ func (self *Style) PlotMinSize() imgui.Vec2 {
 	}()
 }
 
+// ImPlotStyle_SetColors sets value of ImPlotStyle.Colors[ImPlotCol_COUNT]
 func (self Style) SetColors(v *[21]imgui.Vec4) {
 	vArg := make([]C.ImVec4, len(v))
 	for i, vV := range v {
@@ -14000,6 +14446,7 @@ func (self Style) SetColors(v *[21]imgui.Vec4) {
 	}
 }
 
+// ImPlotStyle_GetColors returns value of ImPlotStyle.Colors[ImPlotCol_COUNT]
 func (self *Style) Colors() [21]imgui.Vec4 {
 	selfArg, selfFin := self.Handle()
 
@@ -14020,12 +14467,14 @@ func (self *Style) Colors() [21]imgui.Vec4 {
 	}()
 }
 
+// ImPlotStyle_SetColormap sets value of ImPlotStyle.Colormap
 func (self Style) SetColormap(v Colormap) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetColormap(selfArg, C.ImPlotColormap(v))
 }
 
+// ImPlotStyle_GetColormap returns value of ImPlotStyle.Colormap
 func (self *Style) Colormap() Colormap {
 	selfArg, selfFin := self.Handle()
 
@@ -14035,12 +14484,14 @@ func (self *Style) Colormap() Colormap {
 	return Colormap(C.wrap_ImPlotStyle_GetColormap(internal.ReinterpretCast[*C.ImPlotStyle](selfArg)))
 }
 
+// ImPlotStyle_SetUseLocalTime sets value of ImPlotStyle.UseLocalTime
 func (self Style) SetUseLocalTime(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetUseLocalTime(selfArg, C.bool(v))
 }
 
+// ImPlotStyle_GetUseLocalTime returns value of ImPlotStyle.UseLocalTime
 func (self *Style) UseLocalTime() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -14050,12 +14501,14 @@ func (self *Style) UseLocalTime() bool {
 	return C.wrap_ImPlotStyle_GetUseLocalTime(internal.ReinterpretCast[*C.ImPlotStyle](selfArg)) == C.bool(true)
 }
 
+// ImPlotStyle_SetUseISO8601 sets value of ImPlotStyle.UseISO8601
 func (self Style) SetUseISO8601(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetUseISO8601(selfArg, C.bool(v))
 }
 
+// ImPlotStyle_GetUseISO8601 returns value of ImPlotStyle.UseISO8601
 func (self *Style) UseISO8601() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -14065,12 +14518,14 @@ func (self *Style) UseISO8601() bool {
 	return C.wrap_ImPlotStyle_GetUseISO8601(internal.ReinterpretCast[*C.ImPlotStyle](selfArg)) == C.bool(true)
 }
 
+// ImPlotStyle_SetUse24HourClock sets value of ImPlotStyle.Use24HourClock
 func (self Style) SetUse24HourClock(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotStyle_SetUse24HourClock(selfArg, C.bool(v))
 }
 
+// ImPlotStyle_GetUse24HourClock returns value of ImPlotStyle.Use24HourClock
 func (self *Style) Use24HourClock() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -14080,6 +14535,7 @@ func (self *Style) Use24HourClock() bool {
 	return C.wrap_ImPlotStyle_GetUse24HourClock(internal.ReinterpretCast[*C.ImPlotStyle](selfArg)) == C.bool(true)
 }
 
+// ImPlotSubplot_SetID sets value of ImPlotSubplot.ID
 func (self Subplot) SetID(v imgui.ID) {
 	vArg, _ := v.C()
 
@@ -14088,6 +14544,7 @@ func (self Subplot) SetID(v imgui.ID) {
 	C.wrap_ImPlotSubplot_SetID(selfArg, internal.ReinterpretCast[C.ImGuiID](vArg))
 }
 
+// ImPlotSubplot_GetID returns value of ImPlotSubplot.ID
 func (self *Subplot) ID() imgui.ID {
 	selfArg, selfFin := self.Handle()
 
@@ -14100,12 +14557,14 @@ func (self *Subplot) ID() imgui.ID {
 	}())
 }
 
+// ImPlotSubplot_SetFlags sets value of ImPlotSubplot.Flags
 func (self Subplot) SetFlags(v SubplotFlags) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotSubplot_SetFlags(selfArg, C.ImPlotSubplotFlags(v))
 }
 
+// ImPlotSubplot_GetFlags returns value of ImPlotSubplot.Flags
 func (self *Subplot) Flags() SubplotFlags {
 	selfArg, selfFin := self.Handle()
 
@@ -14115,12 +14574,14 @@ func (self *Subplot) Flags() SubplotFlags {
 	return SubplotFlags(C.wrap_ImPlotSubplot_GetFlags(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)))
 }
 
+// ImPlotSubplot_SetPreviousFlags sets value of ImPlotSubplot.PreviousFlags
 func (self Subplot) SetPreviousFlags(v SubplotFlags) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotSubplot_SetPreviousFlags(selfArg, C.ImPlotSubplotFlags(v))
 }
 
+// ImPlotSubplot_GetPreviousFlags returns value of ImPlotSubplot.PreviousFlags
 func (self *Subplot) PreviousFlags() SubplotFlags {
 	selfArg, selfFin := self.Handle()
 
@@ -14130,6 +14591,7 @@ func (self *Subplot) PreviousFlags() SubplotFlags {
 	return SubplotFlags(C.wrap_ImPlotSubplot_GetPreviousFlags(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)))
 }
 
+// ImPlotSubplot_SetItems sets value of ImPlotSubplot.Items
 func (self Subplot) SetItems(v ItemGroup) {
 	vArg, _ := v.C()
 
@@ -14138,6 +14600,7 @@ func (self Subplot) SetItems(v ItemGroup) {
 	C.wrap_ImPlotSubplot_SetItems(selfArg, internal.ReinterpretCast[C.ImPlotItemGroup](vArg))
 }
 
+// ImPlotSubplot_GetItems returns value of ImPlotSubplot.Items
 func (self *Subplot) Items() ItemGroup {
 	selfArg, selfFin := self.Handle()
 
@@ -14150,12 +14613,14 @@ func (self *Subplot) Items() ItemGroup {
 	}())
 }
 
+// ImPlotSubplot_SetRows sets value of ImPlotSubplot.Rows
 func (self Subplot) SetRows(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotSubplot_SetRows(selfArg, C.int(v))
 }
 
+// ImPlotSubplot_GetRows returns value of ImPlotSubplot.Rows
 func (self *Subplot) Rows() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -14165,12 +14630,14 @@ func (self *Subplot) Rows() int32 {
 	return int32(C.wrap_ImPlotSubplot_GetRows(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)))
 }
 
+// ImPlotSubplot_SetCols sets value of ImPlotSubplot.Cols
 func (self Subplot) SetCols(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotSubplot_SetCols(selfArg, C.int(v))
 }
 
+// ImPlotSubplot_GetCols returns value of ImPlotSubplot.Cols
 func (self *Subplot) Cols() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -14180,12 +14647,14 @@ func (self *Subplot) Cols() int32 {
 	return int32(C.wrap_ImPlotSubplot_GetCols(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)))
 }
 
+// ImPlotSubplot_SetCurrentIdx sets value of ImPlotSubplot.CurrentIdx
 func (self Subplot) SetCurrentIdx(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotSubplot_SetCurrentIdx(selfArg, C.int(v))
 }
 
+// ImPlotSubplot_GetCurrentIdx returns value of ImPlotSubplot.CurrentIdx
 func (self *Subplot) CurrentIdx() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -14195,12 +14664,14 @@ func (self *Subplot) CurrentIdx() int32 {
 	return int32(C.wrap_ImPlotSubplot_GetCurrentIdx(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)))
 }
 
+// ImPlotSubplot_SetFrameRect sets value of ImPlotSubplot.FrameRect
 func (self Subplot) SetFrameRect(v imgui.Rect) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotSubplot_SetFrameRect(selfArg, internal.ReinterpretCast[C.ImRect](v.ToC()))
 }
 
+// ImPlotSubplot_GetFrameRect returns value of ImPlotSubplot.FrameRect
 func (self *Subplot) FrameRect() imgui.Rect {
 	selfArg, selfFin := self.Handle()
 
@@ -14213,12 +14684,14 @@ func (self *Subplot) FrameRect() imgui.Rect {
 	}()
 }
 
+// ImPlotSubplot_SetGridRect sets value of ImPlotSubplot.GridRect
 func (self Subplot) SetGridRect(v imgui.Rect) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotSubplot_SetGridRect(selfArg, internal.ReinterpretCast[C.ImRect](v.ToC()))
 }
 
+// ImPlotSubplot_GetGridRect returns value of ImPlotSubplot.GridRect
 func (self *Subplot) GridRect() imgui.Rect {
 	selfArg, selfFin := self.Handle()
 
@@ -14231,12 +14704,14 @@ func (self *Subplot) GridRect() imgui.Rect {
 	}()
 }
 
+// ImPlotSubplot_SetCellSize sets value of ImPlotSubplot.CellSize
 func (self Subplot) SetCellSize(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotSubplot_SetCellSize(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotSubplot_GetCellSize returns value of ImPlotSubplot.CellSize
 func (self *Subplot) CellSize() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -14249,6 +14724,7 @@ func (self *Subplot) CellSize() imgui.Vec2 {
 	}()
 }
 
+// ImPlotSubplot_SetRowAlignmentData sets value of ImPlotSubplot.RowAlignmentData
 func (self Subplot) SetRowAlignmentData(v vectors.Vector[AlignmentData]) {
 	vData := v.Data
 	vDataArg, _ := vData.Handle()
@@ -14263,6 +14739,7 @@ func (self Subplot) SetRowAlignmentData(v vectors.Vector[AlignmentData]) {
 	C.wrap_ImPlotSubplot_SetRowAlignmentData(selfArg, *vVecArg)
 }
 
+// ImPlotSubplot_GetRowAlignmentData returns value of ImPlotSubplot.RowAlignmentData
 func (self *Subplot) RowAlignmentData() vectors.Vector[AlignmentData] {
 	selfArg, selfFin := self.Handle()
 
@@ -14272,6 +14749,7 @@ func (self *Subplot) RowAlignmentData() vectors.Vector[AlignmentData] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotSubplot_GetRowAlignmentData(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)).Size, C.wrap_ImPlotSubplot_GetRowAlignmentData(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)).Capacity, NewAlignmentDataFromC(C.wrap_ImPlotSubplot_GetRowAlignmentData(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)).Data))
 }
 
+// ImPlotSubplot_SetColAlignmentData sets value of ImPlotSubplot.ColAlignmentData
 func (self Subplot) SetColAlignmentData(v vectors.Vector[AlignmentData]) {
 	vData := v.Data
 	vDataArg, _ := vData.Handle()
@@ -14286,6 +14764,7 @@ func (self Subplot) SetColAlignmentData(v vectors.Vector[AlignmentData]) {
 	C.wrap_ImPlotSubplot_SetColAlignmentData(selfArg, *vVecArg)
 }
 
+// ImPlotSubplot_GetColAlignmentData returns value of ImPlotSubplot.ColAlignmentData
 func (self *Subplot) ColAlignmentData() vectors.Vector[AlignmentData] {
 	selfArg, selfFin := self.Handle()
 
@@ -14295,6 +14774,7 @@ func (self *Subplot) ColAlignmentData() vectors.Vector[AlignmentData] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotSubplot_GetColAlignmentData(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)).Size, C.wrap_ImPlotSubplot_GetColAlignmentData(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)).Capacity, NewAlignmentDataFromC(C.wrap_ImPlotSubplot_GetColAlignmentData(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)).Data))
 }
 
+// ImPlotSubplot_SetRowRatios sets value of ImPlotSubplot.RowRatios
 func (self Subplot) SetRowRatios(v vectors.Vector[float32]) {
 	vData := v.Data
 	vDataArg, _ := internal.WrapNumberPtr[C.float, float32](vData)
@@ -14309,6 +14789,7 @@ func (self Subplot) SetRowRatios(v vectors.Vector[float32]) {
 	C.wrap_ImPlotSubplot_SetRowRatios(selfArg, *vVecArg)
 }
 
+// ImPlotSubplot_GetRowRatios returns value of ImPlotSubplot.RowRatios
 func (self *Subplot) RowRatios() vectors.Vector[float32] {
 	selfArg, selfFin := self.Handle()
 
@@ -14318,6 +14799,7 @@ func (self *Subplot) RowRatios() vectors.Vector[float32] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotSubplot_GetRowRatios(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)).Size, C.wrap_ImPlotSubplot_GetRowRatios(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)).Capacity, (*float32)(C.wrap_ImPlotSubplot_GetRowRatios(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)).Data))
 }
 
+// ImPlotSubplot_SetColRatios sets value of ImPlotSubplot.ColRatios
 func (self Subplot) SetColRatios(v vectors.Vector[float32]) {
 	vData := v.Data
 	vDataArg, _ := internal.WrapNumberPtr[C.float, float32](vData)
@@ -14332,6 +14814,7 @@ func (self Subplot) SetColRatios(v vectors.Vector[float32]) {
 	C.wrap_ImPlotSubplot_SetColRatios(selfArg, *vVecArg)
 }
 
+// ImPlotSubplot_GetColRatios returns value of ImPlotSubplot.ColRatios
 func (self *Subplot) ColRatios() vectors.Vector[float32] {
 	selfArg, selfFin := self.Handle()
 
@@ -14341,6 +14824,7 @@ func (self *Subplot) ColRatios() vectors.Vector[float32] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotSubplot_GetColRatios(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)).Size, C.wrap_ImPlotSubplot_GetColRatios(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)).Capacity, (*float32)(C.wrap_ImPlotSubplot_GetColRatios(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)).Data))
 }
 
+// ImPlotSubplot_SetRowLinkData sets value of ImPlotSubplot.RowLinkData
 func (self Subplot) SetRowLinkData(v vectors.Vector[Range]) {
 	vData := v.Data
 	vDataArg, _ := vData.Handle()
@@ -14355,6 +14839,7 @@ func (self Subplot) SetRowLinkData(v vectors.Vector[Range]) {
 	C.wrap_ImPlotSubplot_SetRowLinkData(selfArg, *vVecArg)
 }
 
+// ImPlotSubplot_GetRowLinkData returns value of ImPlotSubplot.RowLinkData
 func (self *Subplot) RowLinkData() vectors.Vector[Range] {
 	selfArg, selfFin := self.Handle()
 
@@ -14364,6 +14849,7 @@ func (self *Subplot) RowLinkData() vectors.Vector[Range] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotSubplot_GetRowLinkData(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)).Size, C.wrap_ImPlotSubplot_GetRowLinkData(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)).Capacity, NewRangeFromC(C.wrap_ImPlotSubplot_GetRowLinkData(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)).Data))
 }
 
+// ImPlotSubplot_SetColLinkData sets value of ImPlotSubplot.ColLinkData
 func (self Subplot) SetColLinkData(v vectors.Vector[Range]) {
 	vData := v.Data
 	vDataArg, _ := vData.Handle()
@@ -14378,6 +14864,7 @@ func (self Subplot) SetColLinkData(v vectors.Vector[Range]) {
 	C.wrap_ImPlotSubplot_SetColLinkData(selfArg, *vVecArg)
 }
 
+// ImPlotSubplot_GetColLinkData returns value of ImPlotSubplot.ColLinkData
 func (self *Subplot) ColLinkData() vectors.Vector[Range] {
 	selfArg, selfFin := self.Handle()
 
@@ -14387,6 +14874,7 @@ func (self *Subplot) ColLinkData() vectors.Vector[Range] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotSubplot_GetColLinkData(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)).Size, C.wrap_ImPlotSubplot_GetColLinkData(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)).Capacity, NewRangeFromC(C.wrap_ImPlotSubplot_GetColLinkData(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)).Data))
 }
 
+// ImPlotSubplot_SetTempSizes sets value of ImPlotSubplot.TempSizes[2]
 func (self Subplot) SetTempSizes(v *[2]float32) {
 	vArg := make([]C.float, len(v))
 	for i, vV := range v {
@@ -14402,6 +14890,7 @@ func (self Subplot) SetTempSizes(v *[2]float32) {
 	}
 }
 
+// ImPlotSubplot_GetTempSizes returns value of ImPlotSubplot.TempSizes[2]
 func (self *Subplot) TempSizes() [2]float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -14419,12 +14908,14 @@ func (self *Subplot) TempSizes() [2]float32 {
 	}()
 }
 
+// ImPlotSubplot_SetFrameHovered sets value of ImPlotSubplot.FrameHovered
 func (self Subplot) SetFrameHovered(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotSubplot_SetFrameHovered(selfArg, C.bool(v))
 }
 
+// ImPlotSubplot_GetFrameHovered returns value of ImPlotSubplot.FrameHovered
 func (self *Subplot) FrameHovered() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -14434,12 +14925,14 @@ func (self *Subplot) FrameHovered() bool {
 	return C.wrap_ImPlotSubplot_GetFrameHovered(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)) == C.bool(true)
 }
 
+// ImPlotSubplot_SetHasTitle sets value of ImPlotSubplot.HasTitle
 func (self Subplot) SetHasTitle(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotSubplot_SetHasTitle(selfArg, C.bool(v))
 }
 
+// ImPlotSubplot_GetHasTitle returns value of ImPlotSubplot.HasTitle
 func (self *Subplot) HasTitle() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -14449,12 +14942,14 @@ func (self *Subplot) HasTitle() bool {
 	return C.wrap_ImPlotSubplot_GetHasTitle(internal.ReinterpretCast[*C.ImPlotSubplot](selfArg)) == C.bool(true)
 }
 
+// ImPlotTag_SetAxis sets value of ImPlotTag.Axis
 func (self Tag) SetAxis(v AxisEnum) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotTag_SetAxis(selfArg, C.ImAxis(v))
 }
 
+// ImPlotTag_GetAxis returns value of ImPlotTag.Axis
 func (self *Tag) Axis() AxisEnum {
 	selfArg, selfFin := self.Handle()
 
@@ -14464,12 +14959,14 @@ func (self *Tag) Axis() AxisEnum {
 	return AxisEnum(C.wrap_ImPlotTag_GetAxis(internal.ReinterpretCast[*C.ImPlotTag](selfArg)))
 }
 
+// ImPlotTag_SetValue sets value of ImPlotTag.Value
 func (self Tag) SetValue(v float64) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotTag_SetValue(selfArg, C.double(v))
 }
 
+// ImPlotTag_GetValue returns value of ImPlotTag.Value
 func (self *Tag) Value() float64 {
 	selfArg, selfFin := self.Handle()
 
@@ -14479,12 +14976,14 @@ func (self *Tag) Value() float64 {
 	return float64(C.wrap_ImPlotTag_GetValue(internal.ReinterpretCast[*C.ImPlotTag](selfArg)))
 }
 
+// ImPlotTag_SetColorBg sets value of ImPlotTag.ColorBg
 func (self Tag) SetColorBg(v uint32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotTag_SetColorBg(selfArg, C.ImU32(v))
 }
 
+// ImPlotTag_GetColorBg returns value of ImPlotTag.ColorBg
 func (self *Tag) ColorBg() uint32 {
 	selfArg, selfFin := self.Handle()
 
@@ -14494,12 +14993,14 @@ func (self *Tag) ColorBg() uint32 {
 	return uint32(C.wrap_ImPlotTag_GetColorBg(internal.ReinterpretCast[*C.ImPlotTag](selfArg)))
 }
 
+// ImPlotTag_SetColorFg sets value of ImPlotTag.ColorFg
 func (self Tag) SetColorFg(v uint32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotTag_SetColorFg(selfArg, C.ImU32(v))
 }
 
+// ImPlotTag_GetColorFg returns value of ImPlotTag.ColorFg
 func (self *Tag) ColorFg() uint32 {
 	selfArg, selfFin := self.Handle()
 
@@ -14509,12 +15010,14 @@ func (self *Tag) ColorFg() uint32 {
 	return uint32(C.wrap_ImPlotTag_GetColorFg(internal.ReinterpretCast[*C.ImPlotTag](selfArg)))
 }
 
+// ImPlotTag_SetTextOffset sets value of ImPlotTag.TextOffset
 func (self Tag) SetTextOffset(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotTag_SetTextOffset(selfArg, C.int(v))
 }
 
+// ImPlotTag_GetTextOffset returns value of ImPlotTag.TextOffset
 func (self *Tag) TextOffset() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -14524,6 +15027,7 @@ func (self *Tag) TextOffset() int32 {
 	return int32(C.wrap_ImPlotTag_GetTextOffset(internal.ReinterpretCast[*C.ImPlotTag](selfArg)))
 }
 
+// ImPlotTagCollection_SetTags sets value of ImPlotTagCollection.Tags
 func (self TagCollection) SetTags(v vectors.Vector[Tag]) {
 	vData := v.Data
 	vDataArg, _ := vData.Handle()
@@ -14538,6 +15042,7 @@ func (self TagCollection) SetTags(v vectors.Vector[Tag]) {
 	C.wrap_ImPlotTagCollection_SetTags(selfArg, *vVecArg)
 }
 
+// ImPlotTagCollection_GetTags returns value of ImPlotTagCollection.Tags
 func (self *TagCollection) Tags() vectors.Vector[Tag] {
 	selfArg, selfFin := self.Handle()
 
@@ -14547,6 +15052,7 @@ func (self *TagCollection) Tags() vectors.Vector[Tag] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotTagCollection_GetTags(internal.ReinterpretCast[*C.ImPlotTagCollection](selfArg)).Size, C.wrap_ImPlotTagCollection_GetTags(internal.ReinterpretCast[*C.ImPlotTagCollection](selfArg)).Capacity, NewTagFromC(C.wrap_ImPlotTagCollection_GetTags(internal.ReinterpretCast[*C.ImPlotTagCollection](selfArg)).Data))
 }
 
+// ImPlotTagCollection_SetTextBuffer sets value of ImPlotTagCollection.TextBuffer
 func (self TagCollection) SetTextBuffer(v imgui.TextBuffer) {
 	vArg, _ := v.C()
 
@@ -14555,6 +15061,7 @@ func (self TagCollection) SetTextBuffer(v imgui.TextBuffer) {
 	C.wrap_ImPlotTagCollection_SetTextBuffer(selfArg, internal.ReinterpretCast[C.ImGuiTextBuffer](vArg))
 }
 
+// ImPlotTagCollection_GetTextBuffer returns value of ImPlotTagCollection.TextBuffer
 func (self *TagCollection) TextBuffer() imgui.TextBuffer {
 	selfArg, selfFin := self.Handle()
 
@@ -14567,12 +15074,14 @@ func (self *TagCollection) TextBuffer() imgui.TextBuffer {
 	}())
 }
 
+// ImPlotTagCollection_SetSize sets value of ImPlotTagCollection.Size
 func (self TagCollection) SetSize(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotTagCollection_SetSize(selfArg, C.int(v))
 }
 
+// ImPlotTagCollection_GetSize returns value of ImPlotTagCollection.Size
 func (self *TagCollection) Size() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -14582,12 +15091,14 @@ func (self *TagCollection) Size() int32 {
 	return int32(C.wrap_ImPlotTagCollection_GetSize(internal.ReinterpretCast[*C.ImPlotTagCollection](selfArg)))
 }
 
+// ImPlotTick_SetPlotPos sets value of ImPlotTick.PlotPos
 func (self Tick) SetPlotPos(v float64) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotTick_SetPlotPos(selfArg, C.double(v))
 }
 
+// ImPlotTick_GetPlotPos returns value of ImPlotTick.PlotPos
 func (self *Tick) PlotPos() float64 {
 	selfArg, selfFin := self.Handle()
 
@@ -14597,12 +15108,14 @@ func (self *Tick) PlotPos() float64 {
 	return float64(C.wrap_ImPlotTick_GetPlotPos(internal.ReinterpretCast[*C.ImPlotTick](selfArg)))
 }
 
+// ImPlotTick_SetPixelPos sets value of ImPlotTick.PixelPos
 func (self Tick) SetPixelPos(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotTick_SetPixelPos(selfArg, C.float(v))
 }
 
+// ImPlotTick_GetPixelPos returns value of ImPlotTick.PixelPos
 func (self *Tick) PixelPos() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -14612,12 +15125,14 @@ func (self *Tick) PixelPos() float32 {
 	return float32(C.wrap_ImPlotTick_GetPixelPos(internal.ReinterpretCast[*C.ImPlotTick](selfArg)))
 }
 
+// ImPlotTick_SetLabelSize sets value of ImPlotTick.LabelSize
 func (self Tick) SetLabelSize(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotTick_SetLabelSize(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotTick_GetLabelSize returns value of ImPlotTick.LabelSize
 func (self *Tick) LabelSize() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -14630,12 +15145,14 @@ func (self *Tick) LabelSize() imgui.Vec2 {
 	}()
 }
 
+// ImPlotTick_SetTextOffset sets value of ImPlotTick.TextOffset
 func (self Tick) SetTextOffset(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotTick_SetTextOffset(selfArg, C.int(v))
 }
 
+// ImPlotTick_GetTextOffset returns value of ImPlotTick.TextOffset
 func (self *Tick) TextOffset() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -14645,12 +15162,14 @@ func (self *Tick) TextOffset() int32 {
 	return int32(C.wrap_ImPlotTick_GetTextOffset(internal.ReinterpretCast[*C.ImPlotTick](selfArg)))
 }
 
+// ImPlotTick_SetMajor sets value of ImPlotTick.Major
 func (self Tick) SetMajor(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotTick_SetMajor(selfArg, C.bool(v))
 }
 
+// ImPlotTick_GetMajor returns value of ImPlotTick.Major
 func (self *Tick) Major() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -14660,12 +15179,14 @@ func (self *Tick) Major() bool {
 	return C.wrap_ImPlotTick_GetMajor(internal.ReinterpretCast[*C.ImPlotTick](selfArg)) == C.bool(true)
 }
 
+// ImPlotTick_SetShowLabel sets value of ImPlotTick.ShowLabel
 func (self Tick) SetShowLabel(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotTick_SetShowLabel(selfArg, C.bool(v))
 }
 
+// ImPlotTick_GetShowLabel returns value of ImPlotTick.ShowLabel
 func (self *Tick) ShowLabel() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -14675,12 +15196,14 @@ func (self *Tick) ShowLabel() bool {
 	return C.wrap_ImPlotTick_GetShowLabel(internal.ReinterpretCast[*C.ImPlotTick](selfArg)) == C.bool(true)
 }
 
+// ImPlotTick_SetLevel sets value of ImPlotTick.Level
 func (self Tick) SetLevel(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotTick_SetLevel(selfArg, C.int(v))
 }
 
+// ImPlotTick_GetLevel returns value of ImPlotTick.Level
 func (self *Tick) Level() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -14690,12 +15213,14 @@ func (self *Tick) Level() int32 {
 	return int32(C.wrap_ImPlotTick_GetLevel(internal.ReinterpretCast[*C.ImPlotTick](selfArg)))
 }
 
+// ImPlotTick_SetIdx sets value of ImPlotTick.Idx
 func (self Tick) SetIdx(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotTick_SetIdx(selfArg, C.int(v))
 }
 
+// ImPlotTick_GetIdx returns value of ImPlotTick.Idx
 func (self *Tick) Idx() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -14705,6 +15230,7 @@ func (self *Tick) Idx() int32 {
 	return int32(C.wrap_ImPlotTick_GetIdx(internal.ReinterpretCast[*C.ImPlotTick](selfArg)))
 }
 
+// ImPlotTicker_SetTicks sets value of ImPlotTicker.Ticks
 func (self Ticker) SetTicks(v vectors.Vector[Tick]) {
 	vData := v.Data
 	vDataArg, _ := vData.Handle()
@@ -14719,6 +15245,7 @@ func (self Ticker) SetTicks(v vectors.Vector[Tick]) {
 	C.wrap_ImPlotTicker_SetTicks(selfArg, *vVecArg)
 }
 
+// ImPlotTicker_GetTicks returns value of ImPlotTicker.Ticks
 func (self *Ticker) Ticks() vectors.Vector[Tick] {
 	selfArg, selfFin := self.Handle()
 
@@ -14728,6 +15255,7 @@ func (self *Ticker) Ticks() vectors.Vector[Tick] {
 	return vectors.NewVectorFromC(C.wrap_ImPlotTicker_GetTicks(internal.ReinterpretCast[*C.ImPlotTicker](selfArg)).Size, C.wrap_ImPlotTicker_GetTicks(internal.ReinterpretCast[*C.ImPlotTicker](selfArg)).Capacity, NewTickFromC(C.wrap_ImPlotTicker_GetTicks(internal.ReinterpretCast[*C.ImPlotTicker](selfArg)).Data))
 }
 
+// ImPlotTicker_SetTextBuffer sets value of ImPlotTicker.TextBuffer
 func (self Ticker) SetTextBuffer(v imgui.TextBuffer) {
 	vArg, _ := v.C()
 
@@ -14736,6 +15264,7 @@ func (self Ticker) SetTextBuffer(v imgui.TextBuffer) {
 	C.wrap_ImPlotTicker_SetTextBuffer(selfArg, internal.ReinterpretCast[C.ImGuiTextBuffer](vArg))
 }
 
+// ImPlotTicker_GetTextBuffer returns value of ImPlotTicker.TextBuffer
 func (self *Ticker) TextBuffer() imgui.TextBuffer {
 	selfArg, selfFin := self.Handle()
 
@@ -14748,12 +15277,14 @@ func (self *Ticker) TextBuffer() imgui.TextBuffer {
 	}())
 }
 
+// ImPlotTicker_SetMaxSize sets value of ImPlotTicker.MaxSize
 func (self Ticker) SetMaxSize(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotTicker_SetMaxSize(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotTicker_GetMaxSize returns value of ImPlotTicker.MaxSize
 func (self *Ticker) MaxSize() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -14766,12 +15297,14 @@ func (self *Ticker) MaxSize() imgui.Vec2 {
 	}()
 }
 
+// ImPlotTicker_SetLateSize sets value of ImPlotTicker.LateSize
 func (self Ticker) SetLateSize(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotTicker_SetLateSize(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImPlotTicker_GetLateSize returns value of ImPlotTicker.LateSize
 func (self *Ticker) LateSize() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -14784,12 +15317,14 @@ func (self *Ticker) LateSize() imgui.Vec2 {
 	}()
 }
 
+// ImPlotTicker_SetLevels sets value of ImPlotTicker.Levels
 func (self Ticker) SetLevels(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImPlotTicker_SetLevels(selfArg, C.int(v))
 }
 
+// ImPlotTicker_GetLevels returns value of ImPlotTicker.Levels
 func (self *Ticker) Levels() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -14799,6 +15334,7 @@ func (self *Ticker) Levels() int32 {
 	return int32(C.wrap_ImPlotTicker_GetLevels(internal.ReinterpretCast[*C.ImPlotTicker](selfArg)))
 }
 
+// ImPlotTime_GetS returns value of ImPlotTime.S
 func (self *PlotTime) S() uint64 {
 	selfArg, selfFin := internal.Wrap(self)
 
@@ -14808,6 +15344,7 @@ func (self *PlotTime) S() uint64 {
 	return uint64(C.wrap_ImPlotTime_GetS(internal.ReinterpretCast[*C.ImPlotTime](selfArg)))
 }
 
+// ImPlotTime_GetUs returns value of ImPlotTime.Us
 func (self *PlotTime) Us() int32 {
 	selfArg, selfFin := internal.Wrap(self)
 

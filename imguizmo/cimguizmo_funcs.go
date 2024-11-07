@@ -294,12 +294,18 @@ func SetDrawlist() {
 	C.wrap_ImGuizmo_SetDrawlist()
 }
 
+// Style_SetTranslationLineThickness sets value of Style.TranslationLineThickness
+//
+// Thickness of lines for translation gizmo
 func (self Style) SetTranslationLineThickness(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Style_SetTranslationLineThickness(selfArg, C.float(v))
 }
 
+// Style_GetTranslationLineThickness returns value of Style.TranslationLineThickness
+//
+// Thickness of lines for translation gizmo
 func (self *Style) TranslationLineThickness() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -309,12 +315,18 @@ func (self *Style) TranslationLineThickness() float32 {
 	return float32(C.wrap_Style_GetTranslationLineThickness(internal.ReinterpretCast[*C.Style](selfArg)))
 }
 
+// Style_SetTranslationLineArrowSize sets value of Style.TranslationLineArrowSize
+//
+// Size of arrow at the end of lines for translation gizmo
 func (self Style) SetTranslationLineArrowSize(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Style_SetTranslationLineArrowSize(selfArg, C.float(v))
 }
 
+// Style_GetTranslationLineArrowSize returns value of Style.TranslationLineArrowSize
+//
+// Size of arrow at the end of lines for translation gizmo
 func (self *Style) TranslationLineArrowSize() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -324,12 +336,18 @@ func (self *Style) TranslationLineArrowSize() float32 {
 	return float32(C.wrap_Style_GetTranslationLineArrowSize(internal.ReinterpretCast[*C.Style](selfArg)))
 }
 
+// Style_SetRotationLineThickness sets value of Style.RotationLineThickness
+//
+// Thickness of lines for rotation gizmo
 func (self Style) SetRotationLineThickness(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Style_SetRotationLineThickness(selfArg, C.float(v))
 }
 
+// Style_GetRotationLineThickness returns value of Style.RotationLineThickness
+//
+// Thickness of lines for rotation gizmo
 func (self *Style) RotationLineThickness() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -339,12 +357,18 @@ func (self *Style) RotationLineThickness() float32 {
 	return float32(C.wrap_Style_GetRotationLineThickness(internal.ReinterpretCast[*C.Style](selfArg)))
 }
 
+// Style_SetRotationOuterLineThickness sets value of Style.RotationOuterLineThickness
+//
+// Thickness of line surrounding the rotation gizmo
 func (self Style) SetRotationOuterLineThickness(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Style_SetRotationOuterLineThickness(selfArg, C.float(v))
 }
 
+// Style_GetRotationOuterLineThickness returns value of Style.RotationOuterLineThickness
+//
+// Thickness of line surrounding the rotation gizmo
 func (self *Style) RotationOuterLineThickness() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -354,12 +378,18 @@ func (self *Style) RotationOuterLineThickness() float32 {
 	return float32(C.wrap_Style_GetRotationOuterLineThickness(internal.ReinterpretCast[*C.Style](selfArg)))
 }
 
+// Style_SetScaleLineThickness sets value of Style.ScaleLineThickness
+//
+// Thickness of lines for scale gizmo
 func (self Style) SetScaleLineThickness(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Style_SetScaleLineThickness(selfArg, C.float(v))
 }
 
+// Style_GetScaleLineThickness returns value of Style.ScaleLineThickness
+//
+// Thickness of lines for scale gizmo
 func (self *Style) ScaleLineThickness() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -369,12 +399,18 @@ func (self *Style) ScaleLineThickness() float32 {
 	return float32(C.wrap_Style_GetScaleLineThickness(internal.ReinterpretCast[*C.Style](selfArg)))
 }
 
+// Style_SetScaleLineCircleSize sets value of Style.ScaleLineCircleSize
+//
+// Size of circle at the end of lines for scale gizmo
 func (self Style) SetScaleLineCircleSize(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Style_SetScaleLineCircleSize(selfArg, C.float(v))
 }
 
+// Style_GetScaleLineCircleSize returns value of Style.ScaleLineCircleSize
+//
+// Size of circle at the end of lines for scale gizmo
 func (self *Style) ScaleLineCircleSize() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -384,12 +420,18 @@ func (self *Style) ScaleLineCircleSize() float32 {
 	return float32(C.wrap_Style_GetScaleLineCircleSize(internal.ReinterpretCast[*C.Style](selfArg)))
 }
 
+// Style_SetHatchedAxisLineThickness sets value of Style.HatchedAxisLineThickness
+//
+// Thickness of hatched axis lines
 func (self Style) SetHatchedAxisLineThickness(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Style_SetHatchedAxisLineThickness(selfArg, C.float(v))
 }
 
+// Style_GetHatchedAxisLineThickness returns value of Style.HatchedAxisLineThickness
+//
+// Thickness of hatched axis lines
 func (self *Style) HatchedAxisLineThickness() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -399,12 +441,18 @@ func (self *Style) HatchedAxisLineThickness() float32 {
 	return float32(C.wrap_Style_GetHatchedAxisLineThickness(internal.ReinterpretCast[*C.Style](selfArg)))
 }
 
+// Style_SetCenterCircleSize sets value of Style.CenterCircleSize
+//
+// Size of circle at the center of the translate/scale gizmo
 func (self Style) SetCenterCircleSize(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Style_SetCenterCircleSize(selfArg, C.float(v))
 }
 
+// Style_GetCenterCircleSize returns value of Style.CenterCircleSize
+//
+// Size of circle at the center of the translate/scale gizmo
 func (self *Style) CenterCircleSize() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -414,6 +462,7 @@ func (self *Style) CenterCircleSize() float32 {
 	return float32(C.wrap_Style_GetCenterCircleSize(internal.ReinterpretCast[*C.Style](selfArg)))
 }
 
+// Style_SetColors sets value of Style.Colors[COUNT]
 func (self Style) SetColors(v *[15]imgui.Vec4) {
 	vArg := make([]C.ImVec4, len(v))
 	for i, vV := range v {
@@ -429,6 +478,7 @@ func (self Style) SetColors(v *[15]imgui.Vec4) {
 	}
 }
 
+// Style_GetColors returns value of Style.Colors[COUNT]
 func (self *Style) Colors() [15]imgui.Vec4 {
 	selfArg, selfFin := self.Handle()
 

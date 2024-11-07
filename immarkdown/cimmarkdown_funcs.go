@@ -148,12 +148,14 @@ func RenderTextWrapped(self *TextRegion, text_ string) {
 	text_Fin()
 }
 
+// Emphasis_SetState sets value of Emphasis.state
 func (self Emphasis) SetState(v EmphasisState) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Emphasis_SetState(selfArg, C.EmphasisState(v))
 }
 
+// Emphasis_GetState returns value of Emphasis.state
 func (self *Emphasis) State() EmphasisState {
 	selfArg, selfFin := self.Handle()
 
@@ -163,6 +165,7 @@ func (self *Emphasis) State() EmphasisState {
 	return EmphasisState(C.wrap_Emphasis_GetState(internal.ReinterpretCast[*C.Emphasis](selfArg)))
 }
 
+// Emphasis_SetText sets value of Emphasis.text
 func (self Emphasis) SetText(v TextBlock) {
 	vArg, _ := v.C()
 
@@ -171,6 +174,7 @@ func (self Emphasis) SetText(v TextBlock) {
 	C.wrap_Emphasis_SetText(selfArg, internal.ReinterpretCast[C.TextBlock](vArg))
 }
 
+// Emphasis_GetText returns value of Emphasis.text
 func (self *Emphasis) Text() TextBlock {
 	selfArg, selfFin := self.Handle()
 
@@ -183,12 +187,14 @@ func (self *Emphasis) Text() TextBlock {
 	}())
 }
 
+// Emphasis_SetSym sets value of Emphasis.sym
 func (self Emphasis) SetSym(v rune) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Emphasis_SetSym(selfArg, C.char(v))
 }
 
+// Emphasis_GetSym returns value of Emphasis.sym
 func (self *Emphasis) Sym() rune {
 	selfArg, selfFin := self.Handle()
 
@@ -198,12 +204,14 @@ func (self *Emphasis) Sym() rune {
 	return rune(C.wrap_Emphasis_GetSym(internal.ReinterpretCast[*C.Emphasis](selfArg)))
 }
 
+// Line_SetIsHeading sets value of Line.isHeading
 func (self Line) SetIsHeading(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Line_SetIsHeading(selfArg, C.bool(v))
 }
 
+// Line_GetIsHeading returns value of Line.isHeading
 func (self *Line) IsHeading() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -213,12 +221,14 @@ func (self *Line) IsHeading() bool {
 	return C.wrap_Line_GetIsHeading(internal.ReinterpretCast[*C.Line](selfArg)) == C.bool(true)
 }
 
+// Line_SetIsEmphasis sets value of Line.isEmphasis
 func (self Line) SetIsEmphasis(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Line_SetIsEmphasis(selfArg, C.bool(v))
 }
 
+// Line_GetIsEmphasis returns value of Line.isEmphasis
 func (self *Line) IsEmphasis() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -228,12 +238,14 @@ func (self *Line) IsEmphasis() bool {
 	return C.wrap_Line_GetIsEmphasis(internal.ReinterpretCast[*C.Line](selfArg)) == C.bool(true)
 }
 
+// Line_SetIsUnorderedListStart sets value of Line.isUnorderedListStart
 func (self Line) SetIsUnorderedListStart(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Line_SetIsUnorderedListStart(selfArg, C.bool(v))
 }
 
+// Line_GetIsUnorderedListStart returns value of Line.isUnorderedListStart
 func (self *Line) IsUnorderedListStart() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -243,12 +255,14 @@ func (self *Line) IsUnorderedListStart() bool {
 	return C.wrap_Line_GetIsUnorderedListStart(internal.ReinterpretCast[*C.Line](selfArg)) == C.bool(true)
 }
 
+// Line_SetIsLeadingSpace sets value of Line.isLeadingSpace
 func (self Line) SetIsLeadingSpace(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Line_SetIsLeadingSpace(selfArg, C.bool(v))
 }
 
+// Line_GetIsLeadingSpace returns value of Line.isLeadingSpace
 func (self *Line) IsLeadingSpace() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -258,12 +272,14 @@ func (self *Line) IsLeadingSpace() bool {
 	return C.wrap_Line_GetIsLeadingSpace(internal.ReinterpretCast[*C.Line](selfArg)) == C.bool(true)
 }
 
+// Line_SetLeadSpaceCount sets value of Line.leadSpaceCount
 func (self Line) SetLeadSpaceCount(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Line_SetLeadSpaceCount(selfArg, C.int(v))
 }
 
+// Line_GetLeadSpaceCount returns value of Line.leadSpaceCount
 func (self *Line) LeadSpaceCount() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -273,12 +289,14 @@ func (self *Line) LeadSpaceCount() int32 {
 	return int32(C.wrap_Line_GetLeadSpaceCount(internal.ReinterpretCast[*C.Line](selfArg)))
 }
 
+// Line_SetHeadingCount sets value of Line.headingCount
 func (self Line) SetHeadingCount(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Line_SetHeadingCount(selfArg, C.int(v))
 }
 
+// Line_GetHeadingCount returns value of Line.headingCount
 func (self *Line) HeadingCount() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -288,12 +306,14 @@ func (self *Line) HeadingCount() int32 {
 	return int32(C.wrap_Line_GetHeadingCount(internal.ReinterpretCast[*C.Line](selfArg)))
 }
 
+// Line_SetEmphasisCount sets value of Line.emphasisCount
 func (self Line) SetEmphasisCount(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Line_SetEmphasisCount(selfArg, C.int(v))
 }
 
+// Line_GetEmphasisCount returns value of Line.emphasisCount
 func (self *Line) EmphasisCount() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -303,12 +323,14 @@ func (self *Line) EmphasisCount() int32 {
 	return int32(C.wrap_Line_GetEmphasisCount(internal.ReinterpretCast[*C.Line](selfArg)))
 }
 
+// Line_SetLineStart sets value of Line.lineStart
 func (self Line) SetLineStart(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Line_SetLineStart(selfArg, C.int(v))
 }
 
+// Line_GetLineStart returns value of Line.lineStart
 func (self *Line) LineStart() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -318,12 +340,14 @@ func (self *Line) LineStart() int32 {
 	return int32(C.wrap_Line_GetLineStart(internal.ReinterpretCast[*C.Line](selfArg)))
 }
 
+// Line_SetLineEnd sets value of Line.lineEnd
 func (self Line) SetLineEnd(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Line_SetLineEnd(selfArg, C.int(v))
 }
 
+// Line_GetLineEnd returns value of Line.lineEnd
 func (self *Line) LineEnd() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -333,12 +357,14 @@ func (self *Line) LineEnd() int32 {
 	return int32(C.wrap_Line_GetLineEnd(internal.ReinterpretCast[*C.Line](selfArg)))
 }
 
+// Line_SetLastRenderPosition sets value of Line.lastRenderPosition
 func (self Line) SetLastRenderPosition(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Line_SetLastRenderPosition(selfArg, C.int(v))
 }
 
+// Line_GetLastRenderPosition returns value of Line.lastRenderPosition
 func (self *Line) LastRenderPosition() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -348,12 +374,14 @@ func (self *Line) LastRenderPosition() int32 {
 	return int32(C.wrap_Line_GetLastRenderPosition(internal.ReinterpretCast[*C.Line](selfArg)))
 }
 
+// Link_SetState sets value of Link.state
 func (self Link) SetState(v LinkState) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Link_SetState(selfArg, C.LinkState(v))
 }
 
+// Link_GetState returns value of Link.state
 func (self *Link) State() LinkState {
 	selfArg, selfFin := self.Handle()
 
@@ -363,6 +391,7 @@ func (self *Link) State() LinkState {
 	return LinkState(C.wrap_Link_GetState(internal.ReinterpretCast[*C.Link](selfArg)))
 }
 
+// Link_SetText sets value of Link.text
 func (self Link) SetText(v TextBlock) {
 	vArg, _ := v.C()
 
@@ -371,6 +400,7 @@ func (self Link) SetText(v TextBlock) {
 	C.wrap_Link_SetText(selfArg, internal.ReinterpretCast[C.TextBlock](vArg))
 }
 
+// Link_GetText returns value of Link.text
 func (self *Link) Text() TextBlock {
 	selfArg, selfFin := self.Handle()
 
@@ -383,6 +413,7 @@ func (self *Link) Text() TextBlock {
 	}())
 }
 
+// Link_SetUrl sets value of Link.url
 func (self Link) SetUrl(v TextBlock) {
 	vArg, _ := v.C()
 
@@ -391,6 +422,7 @@ func (self Link) SetUrl(v TextBlock) {
 	C.wrap_Link_SetUrl(selfArg, internal.ReinterpretCast[C.TextBlock](vArg))
 }
 
+// Link_GetUrl returns value of Link.url
 func (self *Link) Url() TextBlock {
 	selfArg, selfFin := self.Handle()
 
@@ -403,12 +435,14 @@ func (self *Link) Url() TextBlock {
 	}())
 }
 
+// Link_SetIsImage sets value of Link.isImage
 func (self Link) SetIsImage(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Link_SetIsImage(selfArg, C.bool(v))
 }
 
+// Link_GetIsImage returns value of Link.isImage
 func (self *Link) IsImage() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -418,12 +452,14 @@ func (self *Link) IsImage() bool {
 	return C.wrap_Link_GetIsImage(internal.ReinterpretCast[*C.Link](selfArg)) == C.bool(true)
 }
 
+// Link_SetNum_brackets_open sets value of Link.num_brackets_open
 func (self Link) SetNumbracketsopen(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_Link_SetNum_brackets_open(selfArg, C.int(v))
 }
 
+// Link_GetNum_brackets_open returns value of Link.num_brackets_open
 func (self *Link) Numbracketsopen() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -433,6 +469,7 @@ func (self *Link) Numbracketsopen() int32 {
 	return int32(C.wrap_Link_GetNum_brackets_open(internal.ReinterpretCast[*C.Link](selfArg)))
 }
 
+// MarkdownConfig_SetLinkIcon sets value of MarkdownConfig.linkIcon
 func (self MarkdownConfig) SetLinkIcon(v string) {
 	vArg, _ := internal.WrapString[C.char](v)
 
@@ -441,6 +478,7 @@ func (self MarkdownConfig) SetLinkIcon(v string) {
 	C.wrap_MarkdownConfig_SetLinkIcon(selfArg, vArg)
 }
 
+// MarkdownConfig_GetLinkIcon returns value of MarkdownConfig.linkIcon
 func (self *MarkdownConfig) LinkIcon() string {
 	selfArg, selfFin := self.Handle()
 
@@ -454,6 +492,7 @@ func (self *MarkdownConfig) LinkIcon() string {
 	}()
 }
 
+// MarkdownConfig_SetHeadingFormats sets value of MarkdownConfig.headingFormats[NUMHEADINGS]
 func (self MarkdownConfig) SetHeadingFormats(v *[3]MarkdownHeadingFormat) {
 	vArg := make([]C.MarkdownHeadingFormat, len(v))
 	for i, vV := range v {
@@ -470,6 +509,7 @@ func (self MarkdownConfig) SetHeadingFormats(v *[3]MarkdownHeadingFormat) {
 	}
 }
 
+// MarkdownConfig_GetHeadingFormats returns value of MarkdownConfig.headingFormats[NUMHEADINGS]
 func (self *MarkdownConfig) HeadingFormats() [3]MarkdownHeadingFormat {
 	selfArg, selfFin := self.Handle()
 
@@ -490,12 +530,14 @@ func (self *MarkdownConfig) HeadingFormats() [3]MarkdownHeadingFormat {
 	}()
 }
 
+// MarkdownConfig_SetUserData sets value of MarkdownConfig.userData
 func (self MarkdownConfig) SetUserData(v uintptr) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_MarkdownConfig_SetUserData(selfArg, C.uintptr_t(v))
 }
 
+// MarkdownConfig_GetUserData returns value of MarkdownConfig.userData
 func (self *MarkdownConfig) UserData() uintptr {
 	selfArg, selfFin := self.Handle()
 
@@ -505,12 +547,14 @@ func (self *MarkdownConfig) UserData() uintptr {
 	return uintptr(C.wrap_MarkdownConfig_GetUserData(internal.ReinterpretCast[*C.MarkdownConfig](selfArg)))
 }
 
+// MarkdownFormatInfo_SetType sets value of MarkdownFormatInfo.type
 func (self MarkdownFormatInfo) SetType(v MarkdownFormatType) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_MarkdownFormatInfo_SetType(selfArg, C.MarkdownFormatType(v))
 }
 
+// MarkdownFormatInfo_GetType returns value of MarkdownFormatInfo.type
 func (self *MarkdownFormatInfo) Type() MarkdownFormatType {
 	selfArg, selfFin := self.Handle()
 
@@ -520,12 +564,14 @@ func (self *MarkdownFormatInfo) Type() MarkdownFormatType {
 	return MarkdownFormatType(C.wrap_MarkdownFormatInfo_GetType(internal.ReinterpretCast[*C.MarkdownFormatInfo](selfArg)))
 }
 
+// MarkdownFormatInfo_SetLevel sets value of MarkdownFormatInfo.level
 func (self MarkdownFormatInfo) SetLevel(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_MarkdownFormatInfo_SetLevel(selfArg, C.int32_t(v))
 }
 
+// MarkdownFormatInfo_GetLevel returns value of MarkdownFormatInfo.level
 func (self *MarkdownFormatInfo) Level() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -535,12 +581,14 @@ func (self *MarkdownFormatInfo) Level() int32 {
 	return int32(C.wrap_MarkdownFormatInfo_GetLevel(internal.ReinterpretCast[*C.MarkdownFormatInfo](selfArg)))
 }
 
+// MarkdownFormatInfo_SetItemHovered sets value of MarkdownFormatInfo.itemHovered
 func (self MarkdownFormatInfo) SetItemHovered(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_MarkdownFormatInfo_SetItemHovered(selfArg, C.bool(v))
 }
 
+// MarkdownFormatInfo_GetItemHovered returns value of MarkdownFormatInfo.itemHovered
 func (self *MarkdownFormatInfo) ItemHovered() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -550,6 +598,7 @@ func (self *MarkdownFormatInfo) ItemHovered() bool {
 	return C.wrap_MarkdownFormatInfo_GetItemHovered(internal.ReinterpretCast[*C.MarkdownFormatInfo](selfArg)) == C.bool(true)
 }
 
+// MarkdownFormatInfo_SetConfig sets value of MarkdownFormatInfo.config
 func (self MarkdownFormatInfo) SetConfig(v *MarkdownConfig) {
 	vArg, _ := v.Handle()
 
@@ -558,6 +607,7 @@ func (self MarkdownFormatInfo) SetConfig(v *MarkdownConfig) {
 	C.wrap_MarkdownFormatInfo_SetConfig(selfArg, internal.ReinterpretCast[*C.MarkdownConfig](vArg))
 }
 
+// MarkdownFormatInfo_GetConfig returns value of MarkdownFormatInfo.config
 func (self *MarkdownFormatInfo) Config() *MarkdownConfig {
 	selfArg, selfFin := self.Handle()
 
@@ -567,6 +617,7 @@ func (self *MarkdownFormatInfo) Config() *MarkdownConfig {
 	return NewMarkdownConfigFromC(C.wrap_MarkdownFormatInfo_GetConfig(internal.ReinterpretCast[*C.MarkdownFormatInfo](selfArg)))
 }
 
+// MarkdownHeadingFormat_SetFont sets value of MarkdownHeadingFormat.font
 func (self MarkdownHeadingFormat) SetFont(v *imgui.Font) {
 	vArg, _ := v.Handle()
 
@@ -575,6 +626,7 @@ func (self MarkdownHeadingFormat) SetFont(v *imgui.Font) {
 	C.wrap_MarkdownHeadingFormat_SetFont(selfArg, internal.ReinterpretCast[*C.ImFont](vArg))
 }
 
+// MarkdownHeadingFormat_GetFont returns value of MarkdownHeadingFormat.font
 func (self *MarkdownHeadingFormat) Font() *imgui.Font {
 	selfArg, selfFin := self.Handle()
 
@@ -584,12 +636,14 @@ func (self *MarkdownHeadingFormat) Font() *imgui.Font {
 	return imgui.NewFontFromC(C.wrap_MarkdownHeadingFormat_GetFont(internal.ReinterpretCast[*C.MarkdownHeadingFormat](selfArg)))
 }
 
+// MarkdownHeadingFormat_SetSeparator sets value of MarkdownHeadingFormat.separator
 func (self MarkdownHeadingFormat) SetSeparator(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_MarkdownHeadingFormat_SetSeparator(selfArg, C.bool(v))
 }
 
+// MarkdownHeadingFormat_GetSeparator returns value of MarkdownHeadingFormat.separator
 func (self *MarkdownHeadingFormat) Separator() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -599,12 +653,14 @@ func (self *MarkdownHeadingFormat) Separator() bool {
 	return C.wrap_MarkdownHeadingFormat_GetSeparator(internal.ReinterpretCast[*C.MarkdownHeadingFormat](selfArg)) == C.bool(true)
 }
 
+// MarkdownImageData_SetIsValid sets value of MarkdownImageData.isValid
 func (self MarkdownImageData) SetIsValid(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_MarkdownImageData_SetIsValid(selfArg, C.bool(v))
 }
 
+// MarkdownImageData_GetIsValid returns value of MarkdownImageData.isValid
 func (self *MarkdownImageData) IsValid() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -614,12 +670,14 @@ func (self *MarkdownImageData) IsValid() bool {
 	return C.wrap_MarkdownImageData_GetIsValid(internal.ReinterpretCast[*C.MarkdownImageData](selfArg)) == C.bool(true)
 }
 
+// MarkdownImageData_SetUseLinkCallback sets value of MarkdownImageData.useLinkCallback
 func (self MarkdownImageData) SetUseLinkCallback(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_MarkdownImageData_SetUseLinkCallback(selfArg, C.bool(v))
 }
 
+// MarkdownImageData_GetUseLinkCallback returns value of MarkdownImageData.useLinkCallback
 func (self *MarkdownImageData) UseLinkCallback() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -629,6 +687,7 @@ func (self *MarkdownImageData) UseLinkCallback() bool {
 	return C.wrap_MarkdownImageData_GetUseLinkCallback(internal.ReinterpretCast[*C.MarkdownImageData](selfArg)) == C.bool(true)
 }
 
+// MarkdownImageData_SetUser_texture_id sets value of MarkdownImageData.user_texture_id
 func (self MarkdownImageData) SetUsertextureid(v imgui.TextureID) {
 	vArg, _ := v.C()
 
@@ -637,6 +696,7 @@ func (self MarkdownImageData) SetUsertextureid(v imgui.TextureID) {
 	C.wrap_MarkdownImageData_SetUser_texture_id(selfArg, internal.ReinterpretCast[C.ImTextureID](vArg))
 }
 
+// MarkdownImageData_GetUser_texture_id returns value of MarkdownImageData.user_texture_id
 func (self *MarkdownImageData) Usertextureid() imgui.TextureID {
 	selfArg, selfFin := self.Handle()
 
@@ -649,12 +709,14 @@ func (self *MarkdownImageData) Usertextureid() imgui.TextureID {
 	}())
 }
 
+// MarkdownImageData_SetSize sets value of MarkdownImageData.size
 func (self MarkdownImageData) SetSize(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_MarkdownImageData_SetSize(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// MarkdownImageData_GetSize returns value of MarkdownImageData.size
 func (self *MarkdownImageData) Size() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -667,12 +729,14 @@ func (self *MarkdownImageData) Size() imgui.Vec2 {
 	}()
 }
 
+// MarkdownImageData_SetUv0 sets value of MarkdownImageData.uv0
 func (self MarkdownImageData) SetUv0(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_MarkdownImageData_SetUv0(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// MarkdownImageData_GetUv0 returns value of MarkdownImageData.uv0
 func (self *MarkdownImageData) Uv0() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -685,12 +749,14 @@ func (self *MarkdownImageData) Uv0() imgui.Vec2 {
 	}()
 }
 
+// MarkdownImageData_SetUv1 sets value of MarkdownImageData.uv1
 func (self MarkdownImageData) SetUv1(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_MarkdownImageData_SetUv1(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// MarkdownImageData_GetUv1 returns value of MarkdownImageData.uv1
 func (self *MarkdownImageData) Uv1() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -703,12 +769,14 @@ func (self *MarkdownImageData) Uv1() imgui.Vec2 {
 	}()
 }
 
+// MarkdownImageData_SetTint_col sets value of MarkdownImageData.tint_col
 func (self MarkdownImageData) SetTintcol(v imgui.Vec4) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_MarkdownImageData_SetTint_col(selfArg, internal.ReinterpretCast[C.ImVec4](v.ToC()))
 }
 
+// MarkdownImageData_GetTint_col returns value of MarkdownImageData.tint_col
 func (self *MarkdownImageData) Tintcol() imgui.Vec4 {
 	selfArg, selfFin := self.Handle()
 
@@ -721,12 +789,14 @@ func (self *MarkdownImageData) Tintcol() imgui.Vec4 {
 	}()
 }
 
+// MarkdownImageData_SetBorder_col sets value of MarkdownImageData.border_col
 func (self MarkdownImageData) SetBordercol(v imgui.Vec4) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_MarkdownImageData_SetBorder_col(selfArg, internal.ReinterpretCast[C.ImVec4](v.ToC()))
 }
 
+// MarkdownImageData_GetBorder_col returns value of MarkdownImageData.border_col
 func (self *MarkdownImageData) Bordercol() imgui.Vec4 {
 	selfArg, selfFin := self.Handle()
 
@@ -739,6 +809,7 @@ func (self *MarkdownImageData) Bordercol() imgui.Vec4 {
 	}()
 }
 
+// MarkdownLinkCallbackData_SetText sets value of MarkdownLinkCallbackData.text
 func (self MarkdownLinkCallbackData) SetText(v string) {
 	vArg, _ := internal.WrapString[C.char](v)
 
@@ -747,6 +818,7 @@ func (self MarkdownLinkCallbackData) SetText(v string) {
 	C.wrap_MarkdownLinkCallbackData_SetText(selfArg, vArg)
 }
 
+// MarkdownLinkCallbackData_GetText returns value of MarkdownLinkCallbackData.text
 func (self *MarkdownLinkCallbackData) Text() string {
 	selfArg, selfFin := self.Handle()
 
@@ -760,12 +832,14 @@ func (self *MarkdownLinkCallbackData) Text() string {
 	}()
 }
 
+// MarkdownLinkCallbackData_SetTextLength sets value of MarkdownLinkCallbackData.textLength
 func (self MarkdownLinkCallbackData) SetTextLength(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_MarkdownLinkCallbackData_SetTextLength(selfArg, C.int(v))
 }
 
+// MarkdownLinkCallbackData_GetTextLength returns value of MarkdownLinkCallbackData.textLength
 func (self *MarkdownLinkCallbackData) TextLength() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -775,6 +849,7 @@ func (self *MarkdownLinkCallbackData) TextLength() int32 {
 	return int32(C.wrap_MarkdownLinkCallbackData_GetTextLength(internal.ReinterpretCast[*C.MarkdownLinkCallbackData](selfArg)))
 }
 
+// MarkdownLinkCallbackData_SetLink sets value of MarkdownLinkCallbackData.link
 func (self MarkdownLinkCallbackData) SetLink(v string) {
 	vArg, _ := internal.WrapString[C.char](v)
 
@@ -783,6 +858,7 @@ func (self MarkdownLinkCallbackData) SetLink(v string) {
 	C.wrap_MarkdownLinkCallbackData_SetLink(selfArg, vArg)
 }
 
+// MarkdownLinkCallbackData_GetLink returns value of MarkdownLinkCallbackData.link
 func (self *MarkdownLinkCallbackData) Link() string {
 	selfArg, selfFin := self.Handle()
 
@@ -796,12 +872,14 @@ func (self *MarkdownLinkCallbackData) Link() string {
 	}()
 }
 
+// MarkdownLinkCallbackData_SetLinkLength sets value of MarkdownLinkCallbackData.linkLength
 func (self MarkdownLinkCallbackData) SetLinkLength(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_MarkdownLinkCallbackData_SetLinkLength(selfArg, C.int(v))
 }
 
+// MarkdownLinkCallbackData_GetLinkLength returns value of MarkdownLinkCallbackData.linkLength
 func (self *MarkdownLinkCallbackData) LinkLength() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -811,12 +889,14 @@ func (self *MarkdownLinkCallbackData) LinkLength() int32 {
 	return int32(C.wrap_MarkdownLinkCallbackData_GetLinkLength(internal.ReinterpretCast[*C.MarkdownLinkCallbackData](selfArg)))
 }
 
+// MarkdownLinkCallbackData_SetUserData sets value of MarkdownLinkCallbackData.userData
 func (self MarkdownLinkCallbackData) SetUserData(v uintptr) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_MarkdownLinkCallbackData_SetUserData(selfArg, C.uintptr_t(v))
 }
 
+// MarkdownLinkCallbackData_GetUserData returns value of MarkdownLinkCallbackData.userData
 func (self *MarkdownLinkCallbackData) UserData() uintptr {
 	selfArg, selfFin := self.Handle()
 
@@ -826,12 +906,14 @@ func (self *MarkdownLinkCallbackData) UserData() uintptr {
 	return uintptr(C.wrap_MarkdownLinkCallbackData_GetUserData(internal.ReinterpretCast[*C.MarkdownLinkCallbackData](selfArg)))
 }
 
+// MarkdownLinkCallbackData_SetIsImage sets value of MarkdownLinkCallbackData.isImage
 func (self MarkdownLinkCallbackData) SetIsImage(v bool) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_MarkdownLinkCallbackData_SetIsImage(selfArg, C.bool(v))
 }
 
+// MarkdownLinkCallbackData_GetIsImage returns value of MarkdownLinkCallbackData.isImage
 func (self *MarkdownLinkCallbackData) IsImage() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -841,6 +923,7 @@ func (self *MarkdownLinkCallbackData) IsImage() bool {
 	return C.wrap_MarkdownLinkCallbackData_GetIsImage(internal.ReinterpretCast[*C.MarkdownLinkCallbackData](selfArg)) == C.bool(true)
 }
 
+// MarkdownTooltipCallbackData_SetLinkData sets value of MarkdownTooltipCallbackData.linkData
 func (self MarkdownTooltipCallbackData) SetLinkData(v MarkdownLinkCallbackData) {
 	vArg, _ := v.C()
 
@@ -849,6 +932,7 @@ func (self MarkdownTooltipCallbackData) SetLinkData(v MarkdownLinkCallbackData) 
 	C.wrap_MarkdownTooltipCallbackData_SetLinkData(selfArg, internal.ReinterpretCast[C.MarkdownLinkCallbackData](vArg))
 }
 
+// MarkdownTooltipCallbackData_GetLinkData returns value of MarkdownTooltipCallbackData.linkData
 func (self *MarkdownTooltipCallbackData) LinkData() MarkdownLinkCallbackData {
 	selfArg, selfFin := self.Handle()
 
@@ -861,6 +945,7 @@ func (self *MarkdownTooltipCallbackData) LinkData() MarkdownLinkCallbackData {
 	}())
 }
 
+// MarkdownTooltipCallbackData_SetLinkIcon sets value of MarkdownTooltipCallbackData.linkIcon
 func (self MarkdownTooltipCallbackData) SetLinkIcon(v string) {
 	vArg, _ := internal.WrapString[C.char](v)
 
@@ -869,6 +954,7 @@ func (self MarkdownTooltipCallbackData) SetLinkIcon(v string) {
 	C.wrap_MarkdownTooltipCallbackData_SetLinkIcon(selfArg, vArg)
 }
 
+// MarkdownTooltipCallbackData_GetLinkIcon returns value of MarkdownTooltipCallbackData.linkIcon
 func (self *MarkdownTooltipCallbackData) LinkIcon() string {
 	selfArg, selfFin := self.Handle()
 
@@ -882,12 +968,14 @@ func (self *MarkdownTooltipCallbackData) LinkIcon() string {
 	}()
 }
 
+// TextBlock_SetStart sets value of TextBlock.start
 func (self TextBlock) SetStart(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_TextBlock_SetStart(selfArg, C.int(v))
 }
 
+// TextBlock_GetStart returns value of TextBlock.start
 func (self *TextBlock) Start() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -897,12 +985,14 @@ func (self *TextBlock) Start() int32 {
 	return int32(C.wrap_TextBlock_GetStart(internal.ReinterpretCast[*C.TextBlock](selfArg)))
 }
 
+// TextBlock_SetStop sets value of TextBlock.stop
 func (self TextBlock) SetStop(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_TextBlock_SetStop(selfArg, C.int(v))
 }
 
+// TextBlock_GetStop returns value of TextBlock.stop
 func (self *TextBlock) Stop() int32 {
 	selfArg, selfFin := self.Handle()
 

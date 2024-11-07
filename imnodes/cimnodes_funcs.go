@@ -662,6 +662,7 @@ func StyleColorsLight() {
 	C.wrap_imnodes_StyleColorsLight()
 }
 
+// EmulateThreeButtonMouse_SetModifier sets value of EmulateThreeButtonMouse.Modifier
 func (self EmulateThreeButtonMouse) SetModifier(v *bool) {
 	vArg, _ := internal.WrapNumberPtr[C.bool, bool](v)
 
@@ -670,6 +671,7 @@ func (self EmulateThreeButtonMouse) SetModifier(v *bool) {
 	C.wrap_EmulateThreeButtonMouse_SetModifier(selfArg, vArg)
 }
 
+// EmulateThreeButtonMouse_GetModifier returns value of EmulateThreeButtonMouse.Modifier
 func (self *EmulateThreeButtonMouse) Modifier() *bool {
 	selfArg, selfFin := self.Handle()
 
@@ -679,6 +681,7 @@ func (self *EmulateThreeButtonMouse) Modifier() *bool {
 	return (*bool)(C.wrap_EmulateThreeButtonMouse_GetModifier(internal.ReinterpretCast[*C.EmulateThreeButtonMouse](selfArg)))
 }
 
+// ImNodesIO_SetEmulateThreeButtonMouse sets value of ImNodesIO.EmulateThreeButtonMouse
 func (self IO) SetEmulateThreeButtonMouse(v EmulateThreeButtonMouse) {
 	vArg, _ := v.C()
 
@@ -687,6 +690,7 @@ func (self IO) SetEmulateThreeButtonMouse(v EmulateThreeButtonMouse) {
 	C.wrap_ImNodesIO_SetEmulateThreeButtonMouse(selfArg, internal.ReinterpretCast[C.EmulateThreeButtonMouse](vArg))
 }
 
+// ImNodesIO_GetEmulateThreeButtonMouse returns value of ImNodesIO.EmulateThreeButtonMouse
 func (self *IO) EmulateThreeButtonMouse() EmulateThreeButtonMouse {
 	selfArg, selfFin := self.Handle()
 
@@ -699,6 +703,7 @@ func (self *IO) EmulateThreeButtonMouse() EmulateThreeButtonMouse {
 	}())
 }
 
+// ImNodesIO_SetLinkDetachWithModifierClick sets value of ImNodesIO.LinkDetachWithModifierClick
 func (self IO) SetLinkDetachWithModifierClick(v LinkDetachWithModifierClick) {
 	vArg, _ := v.C()
 
@@ -707,6 +712,7 @@ func (self IO) SetLinkDetachWithModifierClick(v LinkDetachWithModifierClick) {
 	C.wrap_ImNodesIO_SetLinkDetachWithModifierClick(selfArg, internal.ReinterpretCast[C.LinkDetachWithModifierClick](vArg))
 }
 
+// ImNodesIO_GetLinkDetachWithModifierClick returns value of ImNodesIO.LinkDetachWithModifierClick
 func (self *IO) LinkDetachWithModifierClick() LinkDetachWithModifierClick {
 	selfArg, selfFin := self.Handle()
 
@@ -719,6 +725,7 @@ func (self *IO) LinkDetachWithModifierClick() LinkDetachWithModifierClick {
 	}())
 }
 
+// ImNodesIO_SetMultipleSelectModifier sets value of ImNodesIO.MultipleSelectModifier
 func (self IO) SetMultipleSelectModifier(v MultipleSelectModifier) {
 	vArg, _ := v.C()
 
@@ -727,6 +734,7 @@ func (self IO) SetMultipleSelectModifier(v MultipleSelectModifier) {
 	C.wrap_ImNodesIO_SetMultipleSelectModifier(selfArg, internal.ReinterpretCast[C.MultipleSelectModifier](vArg))
 }
 
+// ImNodesIO_GetMultipleSelectModifier returns value of ImNodesIO.MultipleSelectModifier
 func (self *IO) MultipleSelectModifier() MultipleSelectModifier {
 	selfArg, selfFin := self.Handle()
 
@@ -739,12 +747,14 @@ func (self *IO) MultipleSelectModifier() MultipleSelectModifier {
 	}())
 }
 
+// ImNodesIO_SetAltMouseButton sets value of ImNodesIO.AltMouseButton
 func (self IO) SetAltMouseButton(v int32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImNodesIO_SetAltMouseButton(selfArg, C.int(v))
 }
 
+// ImNodesIO_GetAltMouseButton returns value of ImNodesIO.AltMouseButton
 func (self *IO) AltMouseButton() int32 {
 	selfArg, selfFin := self.Handle()
 
@@ -754,12 +764,14 @@ func (self *IO) AltMouseButton() int32 {
 	return int32(C.wrap_ImNodesIO_GetAltMouseButton(internal.ReinterpretCast[*C.ImNodesIO](selfArg)))
 }
 
+// ImNodesIO_SetAutoPanningSpeed sets value of ImNodesIO.AutoPanningSpeed
 func (self IO) SetAutoPanningSpeed(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImNodesIO_SetAutoPanningSpeed(selfArg, C.float(v))
 }
 
+// ImNodesIO_GetAutoPanningSpeed returns value of ImNodesIO.AutoPanningSpeed
 func (self *IO) AutoPanningSpeed() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -769,12 +781,14 @@ func (self *IO) AutoPanningSpeed() float32 {
 	return float32(C.wrap_ImNodesIO_GetAutoPanningSpeed(internal.ReinterpretCast[*C.ImNodesIO](selfArg)))
 }
 
+// ImNodesStyle_SetGridSpacing sets value of ImNodesStyle.GridSpacing
 func (self Style) SetGridSpacing(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImNodesStyle_SetGridSpacing(selfArg, C.float(v))
 }
 
+// ImNodesStyle_GetGridSpacing returns value of ImNodesStyle.GridSpacing
 func (self *Style) GridSpacing() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -784,12 +798,14 @@ func (self *Style) GridSpacing() float32 {
 	return float32(C.wrap_ImNodesStyle_GetGridSpacing(internal.ReinterpretCast[*C.ImNodesStyle](selfArg)))
 }
 
+// ImNodesStyle_SetNodeCornerRounding sets value of ImNodesStyle.NodeCornerRounding
 func (self Style) SetNodeCornerRounding(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImNodesStyle_SetNodeCornerRounding(selfArg, C.float(v))
 }
 
+// ImNodesStyle_GetNodeCornerRounding returns value of ImNodesStyle.NodeCornerRounding
 func (self *Style) NodeCornerRounding() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -799,12 +815,14 @@ func (self *Style) NodeCornerRounding() float32 {
 	return float32(C.wrap_ImNodesStyle_GetNodeCornerRounding(internal.ReinterpretCast[*C.ImNodesStyle](selfArg)))
 }
 
+// ImNodesStyle_SetNodePadding sets value of ImNodesStyle.NodePadding
 func (self Style) SetNodePadding(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImNodesStyle_SetNodePadding(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImNodesStyle_GetNodePadding returns value of ImNodesStyle.NodePadding
 func (self *Style) NodePadding() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -817,12 +835,14 @@ func (self *Style) NodePadding() imgui.Vec2 {
 	}()
 }
 
+// ImNodesStyle_SetNodeBorderThickness sets value of ImNodesStyle.NodeBorderThickness
 func (self Style) SetNodeBorderThickness(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImNodesStyle_SetNodeBorderThickness(selfArg, C.float(v))
 }
 
+// ImNodesStyle_GetNodeBorderThickness returns value of ImNodesStyle.NodeBorderThickness
 func (self *Style) NodeBorderThickness() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -832,12 +852,14 @@ func (self *Style) NodeBorderThickness() float32 {
 	return float32(C.wrap_ImNodesStyle_GetNodeBorderThickness(internal.ReinterpretCast[*C.ImNodesStyle](selfArg)))
 }
 
+// ImNodesStyle_SetLinkThickness sets value of ImNodesStyle.LinkThickness
 func (self Style) SetLinkThickness(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImNodesStyle_SetLinkThickness(selfArg, C.float(v))
 }
 
+// ImNodesStyle_GetLinkThickness returns value of ImNodesStyle.LinkThickness
 func (self *Style) LinkThickness() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -847,12 +869,14 @@ func (self *Style) LinkThickness() float32 {
 	return float32(C.wrap_ImNodesStyle_GetLinkThickness(internal.ReinterpretCast[*C.ImNodesStyle](selfArg)))
 }
 
+// ImNodesStyle_SetLinkLineSegmentsPerLength sets value of ImNodesStyle.LinkLineSegmentsPerLength
 func (self Style) SetLinkLineSegmentsPerLength(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImNodesStyle_SetLinkLineSegmentsPerLength(selfArg, C.float(v))
 }
 
+// ImNodesStyle_GetLinkLineSegmentsPerLength returns value of ImNodesStyle.LinkLineSegmentsPerLength
 func (self *Style) LinkLineSegmentsPerLength() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -862,12 +886,14 @@ func (self *Style) LinkLineSegmentsPerLength() float32 {
 	return float32(C.wrap_ImNodesStyle_GetLinkLineSegmentsPerLength(internal.ReinterpretCast[*C.ImNodesStyle](selfArg)))
 }
 
+// ImNodesStyle_SetLinkHoverDistance sets value of ImNodesStyle.LinkHoverDistance
 func (self Style) SetLinkHoverDistance(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImNodesStyle_SetLinkHoverDistance(selfArg, C.float(v))
 }
 
+// ImNodesStyle_GetLinkHoverDistance returns value of ImNodesStyle.LinkHoverDistance
 func (self *Style) LinkHoverDistance() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -877,12 +903,14 @@ func (self *Style) LinkHoverDistance() float32 {
 	return float32(C.wrap_ImNodesStyle_GetLinkHoverDistance(internal.ReinterpretCast[*C.ImNodesStyle](selfArg)))
 }
 
+// ImNodesStyle_SetPinCircleRadius sets value of ImNodesStyle.PinCircleRadius
 func (self Style) SetPinCircleRadius(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImNodesStyle_SetPinCircleRadius(selfArg, C.float(v))
 }
 
+// ImNodesStyle_GetPinCircleRadius returns value of ImNodesStyle.PinCircleRadius
 func (self *Style) PinCircleRadius() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -892,12 +920,14 @@ func (self *Style) PinCircleRadius() float32 {
 	return float32(C.wrap_ImNodesStyle_GetPinCircleRadius(internal.ReinterpretCast[*C.ImNodesStyle](selfArg)))
 }
 
+// ImNodesStyle_SetPinQuadSideLength sets value of ImNodesStyle.PinQuadSideLength
 func (self Style) SetPinQuadSideLength(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImNodesStyle_SetPinQuadSideLength(selfArg, C.float(v))
 }
 
+// ImNodesStyle_GetPinQuadSideLength returns value of ImNodesStyle.PinQuadSideLength
 func (self *Style) PinQuadSideLength() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -907,12 +937,14 @@ func (self *Style) PinQuadSideLength() float32 {
 	return float32(C.wrap_ImNodesStyle_GetPinQuadSideLength(internal.ReinterpretCast[*C.ImNodesStyle](selfArg)))
 }
 
+// ImNodesStyle_SetPinTriangleSideLength sets value of ImNodesStyle.PinTriangleSideLength
 func (self Style) SetPinTriangleSideLength(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImNodesStyle_SetPinTriangleSideLength(selfArg, C.float(v))
 }
 
+// ImNodesStyle_GetPinTriangleSideLength returns value of ImNodesStyle.PinTriangleSideLength
 func (self *Style) PinTriangleSideLength() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -922,12 +954,14 @@ func (self *Style) PinTriangleSideLength() float32 {
 	return float32(C.wrap_ImNodesStyle_GetPinTriangleSideLength(internal.ReinterpretCast[*C.ImNodesStyle](selfArg)))
 }
 
+// ImNodesStyle_SetPinLineThickness sets value of ImNodesStyle.PinLineThickness
 func (self Style) SetPinLineThickness(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImNodesStyle_SetPinLineThickness(selfArg, C.float(v))
 }
 
+// ImNodesStyle_GetPinLineThickness returns value of ImNodesStyle.PinLineThickness
 func (self *Style) PinLineThickness() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -937,12 +971,14 @@ func (self *Style) PinLineThickness() float32 {
 	return float32(C.wrap_ImNodesStyle_GetPinLineThickness(internal.ReinterpretCast[*C.ImNodesStyle](selfArg)))
 }
 
+// ImNodesStyle_SetPinHoverRadius sets value of ImNodesStyle.PinHoverRadius
 func (self Style) SetPinHoverRadius(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImNodesStyle_SetPinHoverRadius(selfArg, C.float(v))
 }
 
+// ImNodesStyle_GetPinHoverRadius returns value of ImNodesStyle.PinHoverRadius
 func (self *Style) PinHoverRadius() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -952,12 +988,14 @@ func (self *Style) PinHoverRadius() float32 {
 	return float32(C.wrap_ImNodesStyle_GetPinHoverRadius(internal.ReinterpretCast[*C.ImNodesStyle](selfArg)))
 }
 
+// ImNodesStyle_SetPinOffset sets value of ImNodesStyle.PinOffset
 func (self Style) SetPinOffset(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImNodesStyle_SetPinOffset(selfArg, C.float(v))
 }
 
+// ImNodesStyle_GetPinOffset returns value of ImNodesStyle.PinOffset
 func (self *Style) PinOffset() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -967,12 +1005,14 @@ func (self *Style) PinOffset() float32 {
 	return float32(C.wrap_ImNodesStyle_GetPinOffset(internal.ReinterpretCast[*C.ImNodesStyle](selfArg)))
 }
 
+// ImNodesStyle_SetMiniMapPadding sets value of ImNodesStyle.MiniMapPadding
 func (self Style) SetMiniMapPadding(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImNodesStyle_SetMiniMapPadding(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImNodesStyle_GetMiniMapPadding returns value of ImNodesStyle.MiniMapPadding
 func (self *Style) MiniMapPadding() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -985,12 +1025,14 @@ func (self *Style) MiniMapPadding() imgui.Vec2 {
 	}()
 }
 
+// ImNodesStyle_SetMiniMapOffset sets value of ImNodesStyle.MiniMapOffset
 func (self Style) SetMiniMapOffset(v imgui.Vec2) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImNodesStyle_SetMiniMapOffset(selfArg, internal.ReinterpretCast[C.ImVec2](v.ToC()))
 }
 
+// ImNodesStyle_GetMiniMapOffset returns value of ImNodesStyle.MiniMapOffset
 func (self *Style) MiniMapOffset() imgui.Vec2 {
 	selfArg, selfFin := self.Handle()
 
@@ -1003,12 +1045,14 @@ func (self *Style) MiniMapOffset() imgui.Vec2 {
 	}()
 }
 
+// ImNodesStyle_SetFlags sets value of ImNodesStyle.Flags
 func (self Style) SetFlags(v StyleFlags) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
 	C.wrap_ImNodesStyle_SetFlags(selfArg, C.ImNodesStyleFlags(v))
 }
 
+// ImNodesStyle_GetFlags returns value of ImNodesStyle.Flags
 func (self *Style) Flags() StyleFlags {
 	selfArg, selfFin := self.Handle()
 
@@ -1018,6 +1062,7 @@ func (self *Style) Flags() StyleFlags {
 	return StyleFlags(C.wrap_ImNodesStyle_GetFlags(internal.ReinterpretCast[*C.ImNodesStyle](selfArg)))
 }
 
+// ImNodesStyle_SetColors sets value of ImNodesStyle.Colors[ImNodesCol_COUNT]
 func (self Style) SetColors(v *[29]uint32) {
 	vArg := make([]C.uint, len(v))
 	for i, vV := range v {
@@ -1033,6 +1078,7 @@ func (self Style) SetColors(v *[29]uint32) {
 	}
 }
 
+// ImNodesStyle_GetColors returns value of ImNodesStyle.Colors[ImNodesCol_COUNT]
 func (self *Style) Colors() [29]uint32 {
 	selfArg, selfFin := self.Handle()
 
@@ -1050,6 +1096,7 @@ func (self *Style) Colors() [29]uint32 {
 	}()
 }
 
+// LinkDetachWithModifierClick_SetModifier sets value of LinkDetachWithModifierClick.Modifier
 func (self LinkDetachWithModifierClick) SetModifier(v *bool) {
 	vArg, _ := internal.WrapNumberPtr[C.bool, bool](v)
 
@@ -1058,6 +1105,7 @@ func (self LinkDetachWithModifierClick) SetModifier(v *bool) {
 	C.wrap_LinkDetachWithModifierClick_SetModifier(selfArg, vArg)
 }
 
+// LinkDetachWithModifierClick_GetModifier returns value of LinkDetachWithModifierClick.Modifier
 func (self *LinkDetachWithModifierClick) Modifier() *bool {
 	selfArg, selfFin := self.Handle()
 
@@ -1067,6 +1115,7 @@ func (self *LinkDetachWithModifierClick) Modifier() *bool {
 	return (*bool)(C.wrap_LinkDetachWithModifierClick_GetModifier(internal.ReinterpretCast[*C.LinkDetachWithModifierClick](selfArg)))
 }
 
+// MultipleSelectModifier_SetModifier sets value of MultipleSelectModifier.Modifier
 func (self MultipleSelectModifier) SetModifier(v *bool) {
 	vArg, _ := internal.WrapNumberPtr[C.bool, bool](v)
 
@@ -1075,6 +1124,7 @@ func (self MultipleSelectModifier) SetModifier(v *bool) {
 	C.wrap_MultipleSelectModifier_SetModifier(selfArg, vArg)
 }
 
+// MultipleSelectModifier_GetModifier returns value of MultipleSelectModifier.Modifier
 func (self *MultipleSelectModifier) Modifier() *bool {
 	selfArg, selfFin := self.Handle()
 
