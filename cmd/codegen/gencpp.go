@@ -502,6 +502,7 @@ extern "C" {
 				Destructor:       false,
 				StructSetter:     true,
 				Ret:              "void",
+				Comment:          fmt.Sprintf("%s sets value of %s.%s\n%s\n%s", setterFuncName, s.Name, m.Name, m.Comment.Above, m.Comment.Sameline),
 			}
 			structAccessorFuncs = append(structAccessorFuncs, setterFuncDef)
 
@@ -555,7 +556,8 @@ extern "C" {
 				Constructor:      false,
 				Destructor:       false,
 				StructSetter:     false, StructGetter: true,
-				Ret: memberType + CIdentifier(getSizeArg(m.Size)),
+				Ret:     memberType + CIdentifier(getSizeArg(m.Size)),
+				Comment: fmt.Sprintf("%s returns value of %s.%s\n%s\n%s", getterFuncName, s.Name, m.Name, m.Comment.Above, m.Comment.Sameline),
 			}
 
 			structAccessorFuncs = append(structAccessorFuncs, getterFuncDef)
