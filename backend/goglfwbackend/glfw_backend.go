@@ -8,6 +8,8 @@ import (
 
 	"github.com/AllenDang/cimgui-go/backend"
 	"github.com/AllenDang/cimgui-go/imgui"
+	glfwimpl "github.com/AllenDang/cimgui-go/impl/glfw"
+	"github.com/AllenDang/cimgui-go/impl/opengl3"
 	"github.com/go-gl/glfw/v3.3/glfw"
 )
 
@@ -64,80 +66,85 @@ func (G GLFWBackend) SetBgColor(color imgui.Vec4) {
 
 func (G GLFWBackend) Run(f func()) {
 	G.window.MakeContextCurrent()
+	io := imgui.CurrentIO()
+	_ = io
+	// previousTime := glfw.GetTime()
+	for !G.window.ShouldClose() {
+	}
 }
 
 func (G GLFWBackend) Refresh() {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (G GLFWBackend) SetWindowPos(x, y int) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (G GLFWBackend) GetWindowPos() (x, y int32) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (G GLFWBackend) SetWindowSize(width, height int) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (G GLFWBackend) SetWindowSizeLimits(minWidth, minHeight, maxWidth, maxHeight int) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (G GLFWBackend) SetWindowTitle(title string) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (G GLFWBackend) DisplaySize() (width, height int32) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (G GLFWBackend) SetShouldClose(b bool) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (G GLFWBackend) ContentScale() (xScale, yScale float32) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (G GLFWBackend) SetTargetFPS(fps uint) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (G GLFWBackend) SetDropCallback(callback backend.DropCallback) {
-	//TODO implement me
+	// TODO implement me
 	log.Print("implement me")
 }
 
 func (G GLFWBackend) SetCloseCallback(callback backend.WindowCloseCallback) {
-	//TODO implement me
+	// TODO implement me
 	log.Print("implement me")
 }
 
 func (G GLFWBackend) SetKeyCallback(callback backend.KeyCallback) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (G GLFWBackend) SetSizeChangeCallback(callback backend.SizeChangeCallback) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (G GLFWBackend) SetWindowFlags(flag GLFWWindowFlags, value int) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
@@ -146,17 +153,17 @@ func (G GLFWBackend) SetIcons(icons ...image.Image) {
 }
 
 func (G GLFWBackend) SetSwapInterval(interval GLFWWindowFlags) error {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (G GLFWBackend) SetCursorPos(x, y float64) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (G GLFWBackend) SetInputMode(mode GLFWWindowFlags, value GLFWWindowFlags) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
@@ -165,23 +172,34 @@ func (G *GLFWBackend) CreateWindow(title string, width, height int) {
 	G.window, err = glfw.CreateWindow(width, height, title, nil, nil)
 	if err != nil {
 		panic(err)
-
 	}
 
-	if 
+	G.window.MakeContextCurrent()
+	glfw.SwapInterval(1) // Enable vsync
+	imgui.CreateContext()
+
+	if G.afterCreateContext != nil {
+		G.afterCreateContext()
+	}
+
+	// TODO: initialize IO
+
+	glfwimpl.ImplGlfwInitForOpenGL(glfwimpl.NewGLFWwindowFromC(G.window.Handle()), true)
+	opengl3.ImplOpenGL3Init()
+	// TODO: refresh callback here
 }
 
 func (G GLFWBackend) CreateTexture(pixels unsafe.Pointer, width, Height int) imgui.TextureID {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (G GLFWBackend) CreateTextureRgba(img *image.RGBA, width, height int) imgui.TextureID {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (G GLFWBackend) DeleteTexture(id imgui.TextureID) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
