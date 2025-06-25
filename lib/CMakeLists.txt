@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 
 project(cimgui)
 
-set (CMAKE_CXX_STANDARD 14)
+set (CMAKE_CXX_STANDARD 17)
 
 if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../cwrappers/imgui/imgui_tables.cpp)
 	set(TABLES_SOURCE "../cwrappers/imgui/imgui_tables.cpp")
@@ -33,6 +33,8 @@ file(GLOB IMGUI_SOURCES
     ../cwrappers/ImGuiColorTextEdit/UnitTests.cpp
     ../cwrappers/ImGuiColorTextEdit/ImGuiDebugPanel.cpp
     ../cwrappers/cimCTE.cpp
+    ../cwrappers/imspinner/imspinner.cpp
+    ../cwrappers/cimspinner.cpp
 	${TABLES_SOURCE}
 )
 
