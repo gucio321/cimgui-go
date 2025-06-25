@@ -113,6 +113,15 @@ endef
 imcte: setup
 	$(call imcte)
 
+define imspinner
+	$(call generate,imspinner,cwrappers/cimspinner.h,cwrappers/cimspinner_templates/definitions.json,cwrappers/cimspinner_templates/structs_and_enums.json,cwrappers/cimspinner_templates/typedefs_dict.json,-re ../cwrappers/cimgui_templates/structs_and_enums.json -rt ../cwrappers/cimgui_templates/typedefs_dict.json)
+endef
+
+## imspinner: generate imspinner binding
+.PHONY: imspinner
+imspinner: setup
+	$(call imspinner)
+
 ## generate: generates both bindings (equal to `all`)
 .PHONY: generate
 generate: imgui implot imnodes immarkdown imguizmo imcte impl
@@ -166,6 +175,12 @@ update: setup
 	$(call imcte)
 	$(call vendor-eliminate)
 	$(call dummy)
+
+test:
+	rm -rf tmp/*
+	cp -r ../cimgui tmp/
+	rm -rf cwrappers/cimspinner_templates
+	$(call update,cimspinner,https://github.com/gucio321/cimspinner,imspinner,master)
 
 # dummy creates dummy.go files to baypass GO vendor policy that excludes everything that has no .go files (including our C source).
 define dummy
