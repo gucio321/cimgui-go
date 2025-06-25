@@ -10,3 +10,11 @@ cimguizmo (https://github.com/cimgui/cimguizmo) HEAD is on: c3ade65dbda9750536a6
 cimguizmo/ImGuizmo HEAD is on: 2310acda820d7383d4c4884b7945ada92cd16a47
 cimCTE (https://github.com/cimgui/cimcte) HEAD is on: d1c27ebb0e1af785f781fd7076be943ceee8d26c
 cimCTE/ImGuiColorTextEdit HEAD is on: 8360032799e7310dbe173d87228ecc8409a9c889
+cimspinner (https://github.com/gucio321/cimspinner) HEAD is on: 3f31cf005a6556b1a0a1be4c0095ee8df466ffdd
+cimspinner/imspinner HEAD is on: 34e4040ec4cf3d90031eb4e1379060baa9c62b33
+cimspinner (https://github.com/gucio321/cimspinner) HEAD is on: c29613da01bb0efb7ec915f2c09614b0c439e88b
+cimspinner/imspinner HEAD is on: 34e4040ec4cf3d90031eb4e1379060baa9c62b33
+cimspinner (https://github.com/gucio321/cimspinner) HEAD is on: 0d2d116dfb246bf10704c5810d10beac255b0da5
+cimspinner/imspinner HEAD is on: 34e4040ec4cf3d90031eb4e1379060baa9c62b33
+cimspinner (https://github.com/gucio321/cimspinner) HEAD is on: dcda878846cfe60237108a0b930163f89535d5d4
+cimspinner/imspinner HEAD is on: 34e4040ec4cf3d90031eb4e1379060baa9c62b33

@@ -1,0 +1,315 @@
+{
+  "enums": {
+    "SpinnerTypeT": [
+      {
+        "calc_value": 0,
+        "name": "e_st_rainbow",
+        "value": "0"
+      },
+      {
+        "calc_value": 1,
+        "name": "e_st_angle",
+        "value": "1"
+      },
+      {
+        "calc_value": 2,
+        "name": "e_st_dots",
+        "value": "2"
+      },
+      {
+        "calc_value": 3,
+        "name": "e_st_ang",
+        "value": "3"
+      },
+      {
+        "calc_value": 4,
+        "name": "e_st_vdots",
+        "value": "4"
+      },
+      {
+        "calc_value": 5,
+        "name": "e_st_bounce_ball",
+        "value": "5"
+      },
+      {
+        "calc_value": 6,
+        "name": "e_st_eclipse",
+        "value": "6"
+      },
+      {
+        "calc_value": 7,
+        "name": "e_st_ingyang",
+        "value": "7"
+      },
+      {
+        "calc_value": 8,
+        "name": "e_st_barchartsine",
+        "value": "8"
+      },
+      {
+        "calc_value": 9,
+        "name": "e_st_count",
+        "value": "9"
+      }
+    ],
+    "ease_mode": [
+      {
+        "calc_value": 0,
+        "name": "e_ease_none",
+        "value": "0"
+      },
+      {
+        "calc_value": 1,
+        "name": "e_ease_inoutquad",
+        "value": "1"
+      },
+      {
+        "calc_value": 2,
+        "name": "e_ease_inoutexpo",
+        "value": "2"
+      },
+      {
+        "calc_value": 3,
+        "name": "e_ease_spring",
+        "value": "3"
+      },
+      {
+        "calc_value": 4,
+        "name": "e_ease_gravity",
+        "value": "4"
+      },
+      {
+        "calc_value": 5,
+        "name": "e_ease_infinity",
+        "value": "5"
+      },
+      {
+        "calc_value": 6,
+        "name": "e_ease_elastic",
+        "value": "6"
+      },
+      {
+        "calc_value": 7,
+        "name": "e_ease_sine",
+        "value": "7"
+      }
+    ]
+  },
+  "enumtypes": [],
+  "locations": {
+    "AltColor": "imspinner:87",
+    "Angle": "imspinner:88",
+    "AngleMax": "imspinner:90",
+    "AngleMin": "imspinner:89",
+    "BgColor": "imspinner:86",
+    "Color": "imspinner:85",
+    "Delta": "imspinner:96",
+    "Dots": "imspinner:92",
+    "FloatPtr": "imspinner:91",
+    "MiddleDots": "imspinner:93",
+    "MinThickness": "imspinner:94",
+    "Mode": "imspinner:97",
+    "Radius": "imspinner:82",
+    "Reverse": "imspinner:95",
+    "Speed": "imspinner:83",
+    "SpinnerConfig": "imspinner:134",
+    "SpinnerType": "imspinner:81",
+    "SpinnerTypeT": "imspinner:60",
+    "Thickness": "imspinner:84",
+    "ease_mode": "imspinner:238"
+  },
+  "nonPOD": {
+    "AltColor": true,
+    "Angle": true,
+    "AngleMax": true,
+    "AngleMin": true,
+    "BgColor": true,
+    "Color": true,
+    "Delta": true,
+    "Dots": true,
+    "FloatPtr": true,
+    "MiddleDots": true,
+    "MinThickness": true,
+    "Mode": true,
+    "Radius": true,
+    "Reverse": true,
+    "Speed": true,
+    "SpinnerConfig": true,
+    "SpinnerType": true,
+    "Thickness": true
+  },
+  "structs": {
+    "AltColor": [
+      {
+        "name": "value",
+        "type": "ImColor"
+      }
+    ],
+    "Angle": [
+      {
+        "name": "value",
+        "type": "float"
+      }
+    ],
+    "AngleMax": [
+      {
+        "name": "value",
+        "type": "float"
+      }
+    ],
+    "AngleMin": [
+      {
+        "name": "value",
+        "type": "float"
+      }
+    ],
+    "BgColor": [
+      {
+        "name": "value",
+        "type": "ImColor"
+      }
+    ],
+    "Color": [
+      {
+        "name": "value",
+        "type": "ImColor"
+      }
+    ],
+    "Delta": [
+      {
+        "name": "value",
+        "type": "float"
+      }
+    ],
+    "Dots": [
+      {
+        "name": "value",
+        "type": "int"
+      }
+    ],
+    "FloatPtr": [
+      {
+        "name": "value",
+        "type": "float_ptr"
+      }
+    ],
+    "MiddleDots": [
+      {
+        "name": "value",
+        "type": "int"
+      }
+    ],
+    "MinThickness": [
+      {
+        "name": "value",
+        "type": "float"
+      }
+    ],
+    "Mode": [
+      {
+        "name": "value",
+        "type": "int"
+      }
+    ],
+    "Radius": [
+      {
+        "name": "value",
+        "type": "float"
+      }
+    ],
+    "Reverse": [
+      {
+        "name": "value",
+        "type": "bool"
+      }
+    ],
+    "Speed": [
+      {
+        "name": "value",
+        "type": "float"
+      }
+    ],
+    "SpinnerConfig": [
+      {
+        "name": "m_SpinnerType",
+        "type": "SpinnerTypeT"
+      },
+      {
+        "name": "m_Radius",
+        "type": "float"
+      },
+      {
+        "name": "m_Speed",
+        "type": "float"
+      },
+      {
+        "name": "m_Thickness",
+        "type": "float"
+      },
+      {
+        "name": "m_Color",
+        "type": "ImColor"
+      },
+      {
+        "name": "m_BgColor",
+        "type": "ImColor"
+      },
+      {
+        "name": "m_AltColor",
+        "type": "ImColor"
+      },
+      {
+        "name": "m_Angle",
+        "type": "float"
+      },
+      {
+        "name": "m_AngleMin",
+        "type": "float"
+      },
+      {
+        "name": "m_AngleMax",
+        "type": "float"
+      },
+      {
+        "name": "m_FloatPtr",
+        "type": "float_ptr"
+      },
+      {
+        "name": "m_Dots",
+        "type": "int"
+      },
+      {
+        "name": "m_MiddleDots",
+        "type": "int"
+      },
+      {
+        "name": "m_MinThickness",
+        "type": "float"
+      },
+      {
+        "name": "m_Reverse",
+        "type": "bool"
+      },
+      {
+        "name": "m_Delta",
+        "type": "float"
+      },
+      {
+        "name": "m_Mode",
+        "type": "int"
+      }
+    ],
+    "SpinnerType": [
+      {
+        "name": "value",
+        "type": "SpinnerTypeT"
+      }
+    ],
+    "Thickness": [
+      {
+        "name": "value",
+        "type": "float"
+      }
+    ]
+  }
+}
