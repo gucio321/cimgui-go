@@ -35,7 +35,7 @@ jobs:
 
       # for SDL2
       - name: configure sdl
-        run: cmake -S . -Bbuild
+        run: cmake -S . -B build -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_POSITION_INDEPENDENT_CODE=ON
         working-directory: ./thirdparty/SDL
 
       - name: make sdl
@@ -44,7 +44,7 @@ jobs:
 
       - name: copy sdl to lib
         run: |
-          cp -f ./thirdparty/SDL/build//libSDL2.a ./lib/linux/x64
+          cp -f ./thirdparty/SDL/build//libSDL3.a ./lib/linux/x64
 
       # for cimgui
       - name: configure cimgui
@@ -107,7 +107,7 @@ jobs:
 
       # sdl
       - name: configure sdl for x64
-        run: cmake -S . -Bbuild -DCMAKE_OSX_ARCHITECTURES=x86_64
+        run: cmake -S . -Bbuild -DCMAKE_OSX_ARCHITECTURES=x86_64 -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_POSITION_INDEPENDENT_CODE=ON
         working-directory: ./thirdparty/SDL
 
       - name: make sdl x84
@@ -116,7 +116,7 @@ jobs:
 
       - name: copy sdl to lib
         run: |
-          cp -f ./thirdparty/SDL/build/libSDL2.a ./lib/macos/x64
+          cp -f ./thirdparty/SDL/build/libSDL3.a ./lib/macos/x64
 
       - name: clean sdl
         run: cmake --build ./build --target clean
@@ -127,7 +127,7 @@ jobs:
         run: rm -rf build
 
       - name: configure sdl for arm64
-        run: cmake -S . -Bbuild -DCMAKE_OSX_ARCHITECTURES=arm64
+        run: cmake -S . -Bbuild -DCMAKE_OSX_ARCHITECTURES=arm64  -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_POSITION_INDEPENDENT_CODE=ON
         working-directory: ./thirdparty/SDL
 
       - name: make sdl arm64
@@ -136,7 +136,7 @@ jobs:
 
       - name: copy sdl to lib
         run: |
-          cp -f ./thirdparty/SDL/build/libSDL2.a ./lib/macos/arm64
+          cp -f ./thirdparty/SDL/build/libSDL3.a ./lib/macos/arm64
 
       # cimgui
       - name: configure cimgui for x64
@@ -215,7 +215,7 @@ jobs:
 
       # sdl
       - name: configure sdl
-        run: cmake -G Ninja -S . -B build -DCMAKE_BUILD_TYPE=Release
+        run: cmake -G Ninja -S . -B build  -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_POSITION_INDEPENDENT_CODE=ON
         working-directory: ./thirdparty/SDL
 
       - name: make sdl
@@ -223,7 +223,7 @@ jobs:
         working-directory: ./thirdparty/SDL
 
       - name: copy sdl to lib
-        run: cp -f ./thirdparty/SDL/build/libSDL2.a ./lib/windows/x64
+        run: cp -f ./thirdparty/SDL/build/libSDL3.a ./lib/windows/x64
 
       # cimgui
       - name: configure cimgui
