@@ -79,7 +79,7 @@ extern "C" {
 				(a.Name == "self" && a.Type == "ImVector*") {
 				shouldSkip = true
 				if ctx.flags.ShowNotGenerated {
-					glg.Debugf("Skipped (arg type): %v %v", f.FuncName, a.Type)
+					glg.Debugf("Skipped %v (arg type): \"%v\"", f.FuncName, a.Type)
 				}
 
 				break
