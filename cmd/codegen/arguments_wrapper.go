@@ -114,7 +114,8 @@ func getArgWrapper(
 		return
 	}
 
-	pureType := TrimPrefix(a.Type, "const ")
+	pureType := TrimPrefix(a.Type, " ")
+	pureType = TrimPrefix(pureType, "const ")
 
 	if v, ok := argWrapperMap[pureType]; ok {
 		arg := v(*a)
