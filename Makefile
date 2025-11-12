@@ -43,7 +43,7 @@ define generate
 		preset="$7"; \
 	fi; \
 	cd $(1); \
-		$$src/codegen --preset $$preset --package $$pkgname --include ../$(2) --definitions ../$(3) --enums ../$(4) --typedefs ../$(5) $(6)
+		$$src/codegen --verbose --preset $$preset --package $$pkgname --include ../$(2) --definitions ../$(3) --enums ../$(4) --typedefs ../$(5) $(6)
 endef
 
 define imgui
@@ -156,7 +156,7 @@ endef
 .PHONY: update
 update: setup
 	rm -rf cwrappers/*
-	$(call update,cimgui,https://github.com/cimgui/cimgui,,imgui,docking, --cflags "glfw opengl3 opengl2 sdl2 -DIMGUI_USE_WCHAR32")
+	$(call update,cimgui,https://github.com/cimgui/cimgui,conv3,imgui,docking, --cflags "glfw opengl3 opengl2 sdl2 -DIMGUI_USE_WCHAR32")
 	cat templates/assert.h >> cwrappers/imgui/imconfig.h
 	$(call imgui)
 	$(call impl)

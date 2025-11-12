@@ -187,6 +187,7 @@
   "ImGuiViewportFlags": "int",
   "ImGuiViewportP": "struct ImGuiViewportP",
   "ImGuiWindow": "struct ImGuiWindow",
+  "ImGuiWindowBgClickFlags": "int",
   "ImGuiWindowClass": "struct ImGuiWindowClass",
   "ImGuiWindowDockStyle": "struct ImGuiWindowDockStyle",
   "ImGuiWindowFlags": "int",
