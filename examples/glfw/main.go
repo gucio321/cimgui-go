@@ -15,6 +15,7 @@ var currentBackend backend.Backend[glfwbackend.GLFWWindowFlags]
 
 func init() {
 	runtime.LockOSThread()
+	imgui.dupa()
 }
 
 func main() {
