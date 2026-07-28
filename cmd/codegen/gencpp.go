@@ -286,10 +286,15 @@ extern "C" {
 				}
 			}
 
+			suffix := CIdentifier(ctx.preset.ExtendedArgsSuffix)
+			if s, ok := ctx.preset.ExtendedArgsSuffixReplace[funcName]; ok {
+				suffix = CIdentifier(s)
+			}
+
 			// Generate new function
 			funcDefs = append(funcDefs, FuncDef{
 				FuncName:         funcName,
-				OriginalFuncName: funcName + "V",
+				OriginalFuncName: funcName + suffix,
 				Args:             fmt.Sprintf("(%s)", strings.Join(newArgs, ",")),
 				ArgsT:            newArgsT,
 				InvocationStmt:   invocationStmt,
@@ -302,13 +307,13 @@ extern "C" {
 				Ret:              ret,
 				StName:           f.StName,
 				NonUDT:           f.NonUDT,
-				CWrapperFuncName: cWrapperFuncName + "V",
+				CWrapperFuncName: cWrapperFuncName + suffix,
 				AllCallArgs:      f.AllCallArgs,
 			})
 
 			// Add V as suffix to current function name
-			funcName += "V"
-			cWrapperFuncName += "V"
+			funcName += suffix
+			cWrapperFuncName += suffix
 		}
 
 		actualCallArgsStr := fmt.Sprintf("(%s)", Join(actualCallArgs, ","))
@@ -586,12 +591,14 @@ extern "C" {
 
 			// here we change void* to uintptr_t for .go handling
 			if m.Type == "void*" {
-				fmt.Fprintf(sbCpp,
+				fmt.Fprintf(
+					sbCpp,
 					"%s%s %s(%s *self) { return (uintptr_t)self->%s; }\n",
 					memberType, getPtrIfSize(m.Size), getterFuncDef.CWrapperFuncName, s.Name, Split(m.Name, "[")[0],
 				)
 			} else {
-				fmt.Fprintf(sbCpp,
+				fmt.Fprintf(
+					sbCpp,
 					"%s%s %s(%s *self) { return self->%s; }\n",
 					memberType, getPtrIfSize(m.Size), getterFuncDef.CWrapperFuncName, s.Name, Split(m.Name, "[")[0],
 				)
@@ -666,7 +673,8 @@ func AddArrayIndexGetter(t CIdentifier, sbHeader, sbCpp *strings.Builder, contex
 		Split(t, "[")[0], getterFuncName,
 	)
 
-	fmt.Fprintf(sbCpp,
+	fmt.Fprintf(
+		sbCpp,
 		"%[1]s %[2]s(%[1]s *self, int index) { return self[index]; }\n",
 		t, getterFuncName,
 	)
