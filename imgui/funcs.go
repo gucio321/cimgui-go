@@ -360,9 +360,9 @@ func (self *DrawList) AddImageRoundedV(tex_ref TextureRef, p_min, p_max, uv_min,
 	tex_refFin()
 }
 
-// AddLineV parameter default value hint:
+// AddLineArgs parameter default value hint:
 // thickness: 1.0f
-func (self *DrawList) AddLineV(p1, p2 Vec2, col uint32, thickness float32) {
+func (self *DrawList) AddLineArgs(p1, p2 Vec2, col uint32, thickness float32) {
 	selfArg, selfFin := self.Handle()
 	C.ImDrawList_AddLine(internal.ReinterpretCast[*C.ImDrawList](selfArg), internal.ReinterpretCast[C.ImVec2_c](p1.ToC()), internal.ReinterpretCast[C.ImVec2_c](p2.ToC()), C.ImU32(col), C.float(thickness))
 
