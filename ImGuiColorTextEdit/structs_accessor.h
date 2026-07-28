@@ -9,30 +9,38 @@
 extern "C" {
 #endif
 
-extern void wrap_CursorPosition_SetLine(CursorPosition *CursorPositionPtr, int v);
-extern void wrap_CursorPosition_SetColumn(CursorPosition *CursorPositionPtr, int v);
-extern int wrap_CursorPosition_GetLine(CursorPosition *self);
-extern int wrap_CursorPosition_GetColumn(CursorPosition *self);
-extern void wrap_CursorSelection_SetStart(CursorSelection *CursorSelectionPtr, CursorPosition_c v);
-extern void wrap_CursorSelection_SetEnd(CursorSelection *CursorSelectionPtr, CursorPosition_c v);
-extern CursorPosition_c wrap_CursorSelection_GetStart(CursorSelection *self);
-extern CursorPosition_c wrap_CursorSelection_GetEnd(CursorSelection *self);
-extern void wrap_Decorator_SetLine(Decorator *DecoratorPtr, int v);
+extern void wrap_Decorator_SetLine(Decorator *DecoratorPtr, size_t v);
 extern void wrap_Decorator_SetWidth(Decorator *DecoratorPtr, float v);
 extern void wrap_Decorator_SetHeight(Decorator *DecoratorPtr, float v);
 extern void wrap_Decorator_SetGlyphSize(Decorator *DecoratorPtr, ImVec2 v);
 extern void wrap_Decorator_SetUserData(Decorator *DecoratorPtr, uintptr_t v);
-extern int wrap_Decorator_GetLine(Decorator *self);
+extern size_t wrap_Decorator_GetLine(Decorator *self);
 extern float wrap_Decorator_GetWidth(Decorator *self);
 extern float wrap_Decorator_GetHeight(Decorator *self);
 extern ImVec2 wrap_Decorator_GetGlyphSize(Decorator *self);
 extern uintptr_t wrap_Decorator_GetUserData(Decorator *self);
+extern void wrap_DocPos_SetLine(DocPos *DocPosPtr, size_t v);
+extern void wrap_DocPos_SetIndex(DocPos *DocPosPtr, size_t v);
+extern size_t wrap_DocPos_GetLine(DocPos *self);
+extern size_t wrap_DocPos_GetIndex(DocPos *self);
+extern void wrap_DocSelection_SetStart(DocSelection *DocSelectionPtr, DocPos_c v);
+extern void wrap_DocSelection_SetEnd(DocSelection *DocSelectionPtr, DocPos_c v);
+extern DocPos_c wrap_DocSelection_GetStart(DocSelection *self);
+extern DocPos_c wrap_DocSelection_GetEnd(DocSelection *self);
 extern void wrap_Glyph_SetCodepoint(Glyph *GlyphPtr, ImWchar v);
 extern void wrap_Glyph_SetColor(Glyph *GlyphPtr, Color v);
+extern void wrap_Glyph_SetBreakOption(Glyph *GlyphPtr, BreakOption v);
 extern ImWchar wrap_Glyph_GetCodepoint(Glyph *self);
 extern Color wrap_Glyph_GetColor(Glyph *self);
-extern void wrap_TextDiff_Set_TextEditor(TextDiff *TextDiffPtr, TextEditor v);
-extern TextEditor wrap_TextDiff_Get_TextEditor(TextDiff *self);
+extern BreakOption wrap_Glyph_GetBreakOption(Glyph *self);
+extern void wrap_PopupData_SetPos(PopupData *PopupDataPtr, DocPos_c v);
+extern void wrap_PopupData_SetUserData(PopupData *PopupDataPtr, uintptr_t v);
+extern DocPos_c wrap_PopupData_GetPos(PopupData *self);
+extern uintptr_t wrap_PopupData_GetUserData(PopupData *self);
+extern void wrap_VisPos_SetRow(VisPos *VisPosPtr, size_t v);
+extern void wrap_VisPos_SetColumn(VisPos *VisPosPtr, size_t v);
+extern size_t wrap_VisPos_GetRow(VisPos *self);
+extern size_t wrap_VisPos_GetColumn(VisPos *self);
 
 #ifdef __cplusplus
 }

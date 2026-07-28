@@ -1,5 +1,27 @@
 {
   "enums": {
+    "BreakOption": [
+      {
+        "calc_value": 0,
+        "name": "mustBreak",
+        "value": "0"
+      },
+      {
+        "calc_value": 1,
+        "name": "allowBreak",
+        "value": "1"
+      },
+      {
+        "calc_value": 2,
+        "name": "noBreak",
+        "value": "2"
+      },
+      {
+        "calc_value": 3,
+        "name": "undefined",
+        "value": "3"
+      }
+    ],
     "Color": [
       {
         "calc_value": 0,
@@ -133,32 +155,61 @@
         "name": "alignBottom",
         "value": "2"
       }
+    ],
+    "Type": [
+      {
+        "calc_value": 0,
+        "name": "success",
+        "value": "0"
+      },
+      {
+        "calc_value": 1,
+        "name": "warning",
+        "value": "1"
+      },
+      {
+        "calc_value": 2,
+        "name": "error",
+        "value": "2"
+      },
+      {
+        "calc_value": 3,
+        "name": "info",
+        "value": "3"
+      }
     ]
   },
   "enumtypes": {
+    "BreakOption": "char",
     "Color": "char"
   },
   "locations": {
-    "AutoCompleteConfig": "TextEditor:525",
-    "AutoCompleteState": "TextEditor:490",
-    "Change": "TextEditor:246",
-    "CodePoint": "TextEditor:628",
-    "Color": "TextEditor:327",
-    "CursorPosition": "TextEditor:152",
-    "CursorSelection": "TextEditor:159",
-    "Decorator": "TextEditor:282",
-    "Glyph": "TextEditor:367",
-    "Iterator": "TextEditor:381",
-    "Language": "TextEditor:411",
-    "Palette": "TextEditor:353",
-    "Scroll": "TextEditor:176",
+    "AutoCompleteConfig": "TextEditor:629",
+    "AutoCompleteState": "TextEditor:599",
+    "BreakOption": "TextEditor:440",
+    "Change": "TextEditor:301",
+    "CodePoint": "TextEditor:683",
+    "Color": "TextEditor:401",
+    "Decorator": "TextEditor:333",
+    "DocPos": "TextEditor:44",
+    "DocSelection": "TextEditor:63",
+    "Glyph": "TextEditor:448",
+    "Iterator": "TextEditor:467",
+    "Language": "TextEditor:497",
+    "LineBreakConfig": "TextEditor:766",
+    "Notifications": "Notifications:37",
+    "Palette": "TextEditor:427",
+    "PopupData": "TextEditor:355",
+    "Scroll": "TextEditor:216",
     "TextDiff": "TextDiff:22",
     "TextEditor": "TextEditor:34",
-    "Trie": "TextEditor:578"
+    "TrieAutoComplete": "TrieAutoComplete:36",
+    "Type": "Notifications:40",
+    "VisPos": "TextEditor:71"
   },
   "nonPOD": {
-    "CursorPosition": true,
-    "CursorSelection": true,
+    "DocPos": true,
+    "DocSelection": true,
     "Glyph": true,
     "ImBitArray": "inherited",
     "ImColor": "inherited",
@@ -207,6 +258,7 @@
     "ImGuiOldColumnData": "inherited",
     "ImGuiOldColumns": "inherited",
     "ImGuiOnceUponAFrame": "inherited",
+    "ImGuiPackedDate": "inherited",
     "ImGuiPayload": "inherited",
     "ImGuiPlatformIO": "inherited",
     "ImGuiPlatformImeData": "inherited",
@@ -253,14 +305,17 @@
     "ImVec4": "inherited",
     "ImVector": "inherited",
     "Iterator": true,
+    "Notifications": true,
     "TextDiff": true,
     "TextEditor": true,
-    "Trie": true
+    "TrieAutoComplete": true,
+    "VisPos": true
   },
   "nonPOD_used": {
-    "CursorPosition": true,
-    "CursorSelection": true,
-    "ImVec2": "inherited"
+    "DocPos": true,
+    "DocSelection": true,
+    "ImVec2": "inherited",
+    "VisPos": true
   },
   "opaque_structs": {
     "AutoCompleteConfig": "TextEditor::AutoCompleteConfig",
@@ -268,6 +323,7 @@
     "Change": "TextEditor::Change",
     "Iterator": "TextEditor::Iterator",
     "Language": "TextEditor::Language",
+    "LineBreakConfig": "TextEditor::LineBreakConfig",
     "Palette": "TextEditor::Palette"
   },
   "structs": {
@@ -275,30 +331,10 @@
     "AutoCompleteState": [],
     "Change": [],
     "CodePoint": [],
-    "CursorPosition": [
-      {
-        "name": "line",
-        "type": "int"
-      },
-      {
-        "name": "column",
-        "type": "int"
-      }
-    ],
-    "CursorSelection": [
-      {
-        "name": "start",
-        "type": "CursorPosition"
-      },
-      {
-        "name": "end",
-        "type": "CursorPosition"
-      }
-    ],
     "Decorator": [
       {
         "name": "line",
-        "type": "int"
+        "type": "size_t"
       },
       {
         "name": "width",
@@ -317,6 +353,26 @@
         "type": "void*"
       }
     ],
+    "DocPos": [
+      {
+        "name": "line",
+        "type": "size_t"
+      },
+      {
+        "name": "index",
+        "type": "size_t"
+      }
+    ],
+    "DocSelection": [
+      {
+        "name": "start",
+        "type": "DocPos"
+      },
+      {
+        "name": "end",
+        "type": "DocPos"
+      }
+    ],
     "Glyph": [
       {
         "name": "codepoint",
@@ -325,18 +381,39 @@
       {
         "name": "color",
         "type": "Color"
+      },
+      {
+        "name": "breakOption",
+        "type": "BreakOption"
       }
     ],
     "Iterator": [],
     "Language": [],
+    "LineBreakConfig": [],
+    "Notifications": [],
     "Palette": [],
-    "TextDiff": [
+    "PopupData": [
       {
-        "name": "_TextEditor",
-        "type": "TextEditor"
+        "name": "pos",
+        "type": "DocPos"
+      },
+      {
+        "name": "userData",
+        "type": "void*"
       }
     ],
+    "TextDiff": [],
     "TextEditor": [],
-    "Trie": []
+    "TrieAutoComplete": [],
+    "VisPos": [
+      {
+        "name": "row",
+        "type": "size_t"
+      },
+      {
+        "name": "column",
+        "type": "size_t"
+      }
+    ]
   }
 }

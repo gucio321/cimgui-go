@@ -3,6 +3,16 @@
 
 package ImGuiColorTextEdit
 
+// original name: BreakOption
+type BreakOption int32
+
+const (
+	mustBreak  BreakOption = 0
+	allowBreak BreakOption = 1
+	noBreak    BreakOption = 2
+	undefined  BreakOption = 3
+)
+
 // original name: Color
 type Color int32
 
@@ -39,4 +49,14 @@ const (
 	alignTop    Scroll = 0
 	alignMiddle Scroll = 1
 	alignBottom Scroll = 2
+)
+
+// original name: Type
+type Type int32
+
+const (
+	success Type = 0
+	warning Type = 1
+	error   Type = 2
+	info    Type = 3
 )

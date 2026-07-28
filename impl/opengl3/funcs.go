@@ -21,9 +21,9 @@ func DestroyDeviceObjects() {
 	C.ImGui_ImplOpenGL3_DestroyDeviceObjects()
 }
 
-// InitV parameter default value hint:
+// Init parameter default value hint:
 // glsl_version: nullptr
-func InitV(glsl_version string) bool {
+func Init(glsl_version string) bool {
 	glsl_versionArg, glsl_versionFin := internal.WrapString[C.char](glsl_version)
 
 	defer func() {

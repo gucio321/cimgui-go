@@ -229,6 +229,7 @@ ImU32 wrap_igGetColorU32_U32(ImU32 col) { return igGetColorU32_U32(col,1.0f); }
 float wrap_igGetColumnOffset() { return igGetColumnOffset(-1); }
 float wrap_igGetColumnWidth() { return igGetColumnWidth(-1); }
 ImDrawList* wrap_igGetForegroundDrawList_ViewportPtr() { return igGetForegroundDrawList_ViewportPtr(0); }
+int wrap_igGetItemClickedCountWithSingleClickDelay() { return igGetItemClickedCountWithSingleClickDelay(0,-1.0f); }
 ImVec2_c wrap_igGetMouseDragDelta() { return igGetMouseDragDelta(0,-1.0f); }
 ImGuiTypingSelectRequest* wrap_igGetTypingSelectRequest() { return igGetTypingSelectRequest(ImGuiTypingSelectFlags_None); }
 uintptr_t wrap_igImFileLoadToMemory(const char* filename,const char* mode) { return wrap_igImFileLoadToMemoryV(filename,mode,0,0); }
@@ -271,6 +272,7 @@ bool wrap_igIsMouseDragPastThreshold(ImGuiMouseButton button) { return igIsMouse
 bool wrap_igIsMouseDragging(ImGuiMouseButton button) { return igIsMouseDragging(button,-1.0f); }
 bool wrap_igIsMouseHoveringRect(const ImVec2 r_min,const ImVec2 r_max) { return igIsMouseHoveringRect(r_min,r_max,true); }
 bool wrap_igIsMousePosValid() { return igIsMousePosValid(0); }
+bool wrap_igIsMouseReleasedWithDelay(ImGuiMouseButton button) { return igIsMouseReleasedWithDelay(button,-1.f); }
 bool wrap_igIsPopupOpen_Str(const char* str_id) { return igIsPopupOpen_Str(str_id,0); }
 bool wrap_igIsWindowContentHoverable(ImGuiWindow* window) { return igIsWindowContentHoverable(window,0); }
 bool wrap_igIsWindowFocused() { return igIsWindowFocused(0); }
@@ -288,10 +290,11 @@ void wrap_igLogToTTY() { igLogToTTY(-1); }
 bool wrap_igMenuItemEx(const char* label,const char* icon) { return igMenuItemEx(label,icon,0,false,true); }
 bool wrap_igMenuItem_Bool(const char* label) { return igMenuItem_Bool(label,0,false,true); }
 bool wrap_igMenuItem_BoolPtr(const char* label,const char* shortcut,bool* p_selected) { return igMenuItem_BoolPtr(label,shortcut,p_selected,true); }
-void wrap_igOpenPopupEx(ImGuiID id) { igOpenPopupEx(id,ImGuiPopupFlags_None); }
-void wrap_igOpenPopupOnItemClick() { igOpenPopupOnItemClick(0,0); }
-void wrap_igOpenPopup_ID(ImGuiID id) { igOpenPopup_ID(id,0); }
-void wrap_igOpenPopup_Str(const char* str_id) { igOpenPopup_Str(str_id,0); }
+void wrap_igMultiSelectItemFooter(ImGuiID id,bool* p_selected,bool* p_pressed) { igMultiSelectItemFooter(id,p_selected,p_pressed,0); }
+bool wrap_igOpenPopupEx(ImGuiID id) { return igOpenPopupEx(id,ImGuiPopupFlags_None); }
+bool wrap_igOpenPopupOnItemClick() { return igOpenPopupOnItemClick(0,0); }
+bool wrap_igOpenPopup_ID(ImGuiID id) { return igOpenPopup_ID(id,0); }
+bool wrap_igOpenPopup_Str(const char* str_id) { return igOpenPopup_Str(str_id,0); }
 void wrap_igPlotHistogram_FloatPtr(const char* label,const float* values,int values_count) { igPlotHistogram_FloatPtr(label,values,values_count,0,0,igGET_FLT_MAX(),igGET_FLT_MAX(),(ImVec2){0,0},sizeof(float)); }
 void wrap_igPlotLines_FloatPtr(const char* label,const float* values,int values_count) { igPlotLines_FloatPtr(label,values,values_count,0,0,igGET_FLT_MAX(),igGET_FLT_MAX(),(ImVec2){0,0},sizeof(float)); }
 void wrap_igPopStyleColor() { igPopStyleColor(1); }
@@ -302,7 +305,7 @@ void wrap_igRenderArrow(ImDrawList* draw_list,ImVec2 pos,ImU32 col,ImGuiDir dir)
 void wrap_igRenderColorRectWithAlphaCheckerboard(ImDrawList* draw_list,ImVec2 p_min,ImVec2 p_max,ImU32 fill_col,float grid_step,ImVec2 grid_off) { igRenderColorRectWithAlphaCheckerboard(draw_list,p_min,p_max,fill_col,grid_step,grid_off,0.0f,0); }
 void wrap_igRenderFrame(ImVec2 p_min,ImVec2 p_max,ImU32 fill_col) { igRenderFrame(p_min,p_max,fill_col,true,0.0f); }
 void wrap_igRenderFrameBorder(ImVec2 p_min,ImVec2 p_max) { igRenderFrameBorder(p_min,p_max,0.0f); }
-void wrap_igRenderNavCursor(const ImRect bb,ImGuiID id) { igRenderNavCursor(bb,id,ImGuiNavRenderCursorFlags_None); }
+void wrap_igRenderNavCursor(const ImRect bb,ImGuiID id) { igRenderNavCursor(bb,id,ImGuiNavRenderCursorFlags_None,-1.0f); }
 void wrap_igRenderPlatformWindowsDefault() { wrap_igRenderPlatformWindowsDefaultV(0,0); }
 void wrap_igRenderText(ImVec2 pos,const char* text,const int text_len) { wrap_igRenderTextV(pos,text,text_len,true); }
 void wrap_igRenderTextClipped(const ImVec2 pos_min,const ImVec2 pos_max,const char* text,const int text_len,const ImVec2* text_size_if_known) { wrap_igRenderTextClippedV(pos_min,pos_max,text,text_len,text_size_if_known,(ImVec2){0,0},0); }

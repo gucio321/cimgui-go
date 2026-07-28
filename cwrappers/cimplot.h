@@ -40,8 +40,7 @@ typedef int ImPlotSubplotFlags;
 typedef int ImPlotLegendFlags;
 typedef int ImPlotMouseTextFlags;
 typedef int ImPlotDragToolFlags;
-typedef int ImPlotColormapScaleFlags;
-typedef int ImPlotItemFlags;
+typedef int ImPlotColormapScaleFlags;typedef int ImPlotItemFlags;
 typedef int ImPlotLineFlags;
 typedef int ImPlotScatterFlags;
 typedef int ImPlotBubblesFlags;
@@ -59,8 +58,7 @@ typedef int ImPlotHistogramFlags;
 typedef int ImPlotDigitalFlags;
 typedef int ImPlotImageFlags;
 typedef int ImPlotTextFlags;
-typedef int ImPlotDummyFlags;
-typedef int ImPlotCond;
+typedef int ImPlotDummyFlags;typedef int ImPlotCond;
 typedef int ImPlotCol;
 typedef int ImPlotStyleVar;
 typedef int ImPlotScale;
@@ -326,6 +324,8 @@ typedef enum {
     ImPlotMarker_Cross,
     ImPlotMarker_Plus,
     ImPlotMarker_Asterisk,
+    ImPlotMarker_Vertical,
+    ImPlotMarker_Horizontal,
     ImPlotMarker_COUNT
 }ImPlotMarker_;
 typedef enum {
@@ -449,16 +449,14 @@ typedef ImPlotPoint_c (*ImPlotGetter)(int idx, void* user_data);
 typedef double (*ImPlotTransform)(double value, void* user_data);
 static const double IMPLOT_MIN_TIME = 0;
 static const double IMPLOT_MAX_TIME = 32503680000;
-static const int IMPLOT_LABEL_MAX_SIZE = 32;
-struct ImPlotTick_c;
+static const int IMPLOT_LABEL_MAX_SIZE = 32;struct ImPlotTick_c;
 struct ImPlotAxis_c;
 struct ImPlotAxisColor;
 struct ImPlotItem;
 struct ImPlotLegend;
 struct ImPlotPlot;
 struct ImPlotNextPlotData;
-struct ImPlotTicker;
-typedef int ImPlotTimeUnit;
+struct ImPlotTicker;typedef int ImPlotTimeUnit;
 typedef int ImPlotDateFmt;
 typedef int ImPlotTimeFmt;
 typedef int ImPlotMarkerInternal;
@@ -547,8 +545,7 @@ typedef struct ImPlotAnnotationCollection ImPlotAnnotationCollection;
 typedef struct ImVector_ImPlotAnnotation {int Size;int Capacity;ImPlotAnnotation* Data;} ImVector_ImPlotAnnotation;
 
 struct ImPlotAnnotationCollection
-{
-    ImVector_ImPlotAnnotation Annotations;
+{    ImVector_ImPlotAnnotation Annotations;
     ImGuiTextBuffer TextBuffer;
     int Size;
 };
@@ -565,8 +562,7 @@ typedef struct ImPlotTagCollection ImPlotTagCollection;
 typedef struct ImVector_ImPlotTag {int Size;int Capacity;ImPlotTag* Data;} ImVector_ImPlotTag;
 
 struct ImPlotTagCollection
-{
-    ImVector_ImPlotTag Tags;
+{    ImVector_ImPlotTag Tags;
     ImGuiTextBuffer TextBuffer;
     int Size;
 };
@@ -602,27 +598,21 @@ struct ImPlotAxis_c
     ImPlotRange_c FitExtents;
     ImPlotAxis_c* OrthoAxis;
     ImPlotRange_c ConstraintRange;
-    ImPlotRange_c ConstraintZoom;
-    ImPlotTicker Ticker;
+    ImPlotRange_c ConstraintZoom;    ImPlotTicker Ticker;
     ImPlotFormatter Formatter;
     void* FormatterData;
     char FormatSpec[16];
-    ImPlotLocator Locator;
-    double* LinkedMin;
-    double* LinkedMax;
-    int PickerLevel;
-    ImPlotTime_c PickerTimeMin, PickerTimeMax;
-    ImPlotTransform TransformForward;
+    ImPlotLocator Locator;    double* LinkedMin;
+    double* LinkedMax;    int PickerLevel;
+    ImPlotTime_c PickerTimeMin, PickerTimeMax;    ImPlotTransform TransformForward;
     ImPlotTransform TransformInverse;
     void* TransformData;
     float PixelMin, PixelMax;
     double ScaleMin, ScaleMax;
     double ScaleToPixel;
-    float Datum1, Datum2;
-    ImRect_c HoverRect;
+    float Datum1, Datum2;    ImRect_c HoverRect;
     int LabelOffset;
-    ImU32 ColorMaj, ColorMin, ColorTick, ColorTxt, ColorBg, ColorHov, ColorAct, ColorHiLi;
-    bool Enabled;
+    ImU32 ColorMaj, ColorMin, ColorTick, ColorTxt, ColorBg, ColorHov, ColorAct, ColorHiLi;    bool Enabled;
     bool Vertical;
     bool FitThisFrame;
     bool HasRange;

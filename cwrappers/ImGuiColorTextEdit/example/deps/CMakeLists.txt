@@ -6,6 +6,10 @@
 
 include(FetchContent)
 
-add_subdirectory(sdl)
+if(NOT D3D11)
+	add_subdirectory(sdl)
+endif()
+
 add_subdirectory(imgui)
 add_subdirectory(imguifiledialog)
+add_subdirectory(lsp)

@@ -49,6 +49,8 @@ const (
 	DrawListFlagsAntiAliasedFill DrawListFlags = 4
 	// Can emit 'VtxOffset > 0' to allow large meshes. Set when 'ImGuiBackendFlags_RendererHasVtxOffset' is enabled.
 	DrawListFlagsAllowVtxOffset DrawListFlags = 8
+	// Disable automatically snapping AddText() calls to pixel boundaries.
+	DrawListFlagsTextNoPixelSnap DrawListFlags = 16
 )
 
 // Helpers: High-level text functions (DO NOT USE!!! THIS IS A MINIMAL SUBSET OF LARGER UPCOMING CHANGES)
@@ -402,16 +404,18 @@ const (
 	ColorEditFlagsPickerHueBar ColorEditFlags = 33554432
 	// [Picker]     // ColorPicker: wheel for Hue, triangle for Sat/Value.
 	ColorEditFlagsPickerHueWheel ColorEditFlags = 67108864
+	// [Picker]     // ColorPicker: disable rotating Sat/Value triangle. Best set in io.ConfigColorEditFlags once.
+	ColorEditFlagsPickerNoRotate ColorEditFlags = 134217728
 	// [Input]      // ColorEdit, ColorPicker: input and output data in RGB format.
-	ColorEditFlagsInputRGB ColorEditFlags = 134217728
+	ColorEditFlagsInputRGB ColorEditFlags = 268435456
 	// [Input]      // ColorEdit, ColorPicker: input and output data in HSV format.
-	ColorEditFlagsInputHSV       ColorEditFlags = 268435456
-	ColorEditFlagsDefaultOptions ColorEditFlags = 177209344
+	ColorEditFlagsInputHSV       ColorEditFlags = 536870912
+	ColorEditFlagsDefaultOptions ColorEditFlags = 311427072
 	ColorEditFlagsAlphaMask      ColorEditFlags = 28674
 	ColorEditFlagsDisplayMask    ColorEditFlags = 7340032
 	ColorEditFlagsDataTypeMask   ColorEditFlags = 25165824
 	ColorEditFlagsPickerMask     ColorEditFlags = 100663296
-	ColorEditFlagsInputMask      ColorEditFlags = 402653184
+	ColorEditFlagsInputMask      ColorEditFlags = 805306368
 )
 
 // Extend ImGuiComboFlags_
@@ -578,7 +582,8 @@ const (
 	DebugLogFlagsEventInputRouting DebugLogFlags = 512
 	DebugLogFlagsEventDocking      DebugLogFlags = 1024
 	DebugLogFlagsEventViewport     DebugLogFlags = 2048
-	DebugLogFlagsEventMask         DebugLogFlags = 4095
+	DebugLogFlagsEventTable        DebugLogFlags = 4096
+	DebugLogFlagsEventMask         DebugLogFlags = 8191
 	// Also send output to TTY
 	DebugLogFlagsOutputToTTY DebugLogFlags = 1048576
 	// Also send output to Debugger Console [Windows only]
@@ -956,7 +961,7 @@ const (
 	InputTextFlagsCharsNoBlank InputTextFlags = 16
 	// Pressing TAB input a '\t' character into the text field
 	InputTextFlagsAllowTabInput InputTextFlags = 32
-	// Return 'true' when Enter is pressed (as opposed to every time the value was modified). Consider using IsItemDeactivatedAfterEdit() instead!
+	// Return 'true' when Enter is pressed (as opposed to every time the value was modified). Consider disabling LiveEdit! or using IsItemDeactivatedAfterEdit() instead!
 	InputTextFlagsEnterReturnsTrue InputTextFlags = 64
 	// Escape key clears content if not empty, and deactivate otherwise (contrast to default behavior of Escape to revert)
 	InputTextFlagsEscapeClearsAll InputTextFlags = 128
@@ -1024,7 +1029,7 @@ const (
 	// false     // Set by SetNextItemSelectionUserData()
 	ItemFlagsIsMultiSelect ItemFlagsPrivate = 4194304
 	// Please don't change, use PushItemFlag() instead.
-	ItemFlagsDefault ItemFlagsPrivate = 16
+	ItemFlagsDefault ItemFlagsPrivate = 144
 )
 
 // Flags for ImGui::PushItemFlag()
@@ -1033,11 +1038,11 @@ const (
 type ItemFlags int32
 
 const (
-	// (Default)
+	// Default:
 	ItemFlagsNone ItemFlags = 0
 	// false    // Disable keyboard tabbing. This is a "lighter" version of ImGuiItemFlags_NoNav.
 	ItemFlagsNoTabStop ItemFlags = 1
-	// false    // Disable any form of focusing (keyboard/gamepad directional navigation and SetKeyboardFocusHere() calls).
+	// false    // Disable any form of focusing: keyboard/gamepad directional navigation and SetKeyboardFocusHere() calls.
 	ItemFlagsNoNav ItemFlags = 2
 	// false    // Disable item being a candidate for default focus (e.g. used by title bar items).
 	ItemFlagsNoNavDefaultFocus ItemFlags = 4
@@ -1049,6 +1054,11 @@ const (
 	ItemFlagsAllowDuplicateId ItemFlags = 32
 	// false    // [Internal] Disable interactions. DOES NOT affect visuals. This is used by BeginDisabled()/EndDisabled() and only provided here so you can read back via GetItemFlags().
 	ItemFlagsDisabled ItemFlags = 64
+	// true     // InputText: apply keyboard edits to backing value while typing. Otherwise, edits are applied when validating, tabbing out or losing focus.
+	ItemFlagsLiveEditOnInputText ItemFlags = 128
+	// false    // DragXXX, SliderXXX, InputScalar: apply keyboard edits to backing value while typing. Otherwise, edits are applied when validating, tabbing out or losing focus.
+	ItemFlagsLiveEditOnInputScalar ItemFlags = 256
+	ItemFlagsLiveEditOnInput       ItemFlags = 384
 )
 
 // Status flags for an already submitted item
@@ -1335,16 +1345,18 @@ const (
 	LocKeyTableSizeOne                  LocKey = 1
 	LocKeyTableSizeAllFit               LocKey = 2
 	LocKeyTableSizeAllDefault           LocKey = 3
-	LocKeyTableResetOrder               LocKey = 4
-	LocKeyWindowingMainMenuBar          LocKey = 5
-	LocKeyWindowingPopup                LocKey = 6
-	LocKeyWindowingUntitled             LocKey = 7
-	LocKeyOpenLinks                     LocKey = 8
-	LocKeyCopyLink                      LocKey = 9
-	LocKeyDockingHideTabBar             LocKey = 10
-	LocKeyDockingHoldShiftToDock        LocKey = 11
-	LocKeyDockingDragToUndockOrMoveNode LocKey = 12
-	LocKeyCOUNT                         LocKey = 13
+	LocKeyTableReset                    LocKey = 4
+	LocKeyTableResetOrder               LocKey = 5
+	LocKeyTableResetVisibility          LocKey = 6
+	LocKeyWindowingMainMenuBar          LocKey = 7
+	LocKeyWindowingPopup                LocKey = 8
+	LocKeyWindowingUntitled             LocKey = 9
+	LocKeyOpenLinks                     LocKey = 10
+	LocKeyCopyLink                      LocKey = 11
+	LocKeyDockingHideTabBar             LocKey = 12
+	LocKeyDockingHoldShiftToDock        LocKey = 13
+	LocKeyDockingDragToUndockOrMoveNode LocKey = 14
+	LocKeyCOUNT                         LocKey = 15
 )
 
 // Flags for LogBegin() text capturing function
@@ -1463,6 +1475,8 @@ const (
 	// Disable default right-click processing, which selects item on mouse down, and is designed for context-menus.
 	MultiSelectFlagsNoSelectOnRightClick MultiSelectFlags = 131072
 	MultiSelectFlagsSelectOnMask         MultiSelectFlags = 57344
+	// [Internal]
+	MultiSelectFlagsCheckboxMode MultiSelectFlags = 1048576
 )
 
 // original name: ImGuiNavLayer
@@ -1523,7 +1537,6 @@ const (
 	NavRenderCursorFlagsCompact NavRenderCursorFlags = 2
 	// Draw rectangular highlight if (g.NavId == id) even when g.NavCursorVisible == false, aka even when using the mouse.
 	NavRenderCursorFlagsAlwaysDraw NavRenderCursorFlags = 4
-	NavRenderCursorFlagsNoRounding NavRenderCursorFlags = 8
 )
 
 // original name: ImGuiNextItemDataFlags_
@@ -1629,6 +1642,7 @@ const (
 )
 
 // Early work-in-progress API for ScrollToItem()
+// FIXME: Missing flags to request making both edges visible when possible.
 // original name: ImGuiScrollFlags_
 type ScrollFlags int32
 
@@ -1853,23 +1867,27 @@ const (
 	StyleVarTreeLinesSize StyleVar = 33
 	// float     TreeLinesRounding
 	StyleVarTreeLinesRounding StyleVar = 34
+	// float     MenuItemRounding
+	StyleVarMenuItemRounding StyleVar = 35
+	// float     SelectableRounding
+	StyleVarSelectableRounding StyleVar = 36
 	// float     DragDropTargetRounding
-	StyleVarDragDropTargetRounding StyleVar = 35
+	StyleVarDragDropTargetRounding StyleVar = 37
 	// ImVec2    ButtonTextAlign
-	StyleVarButtonTextAlign StyleVar = 36
+	StyleVarButtonTextAlign StyleVar = 38
 	// ImVec2    SelectableTextAlign
-	StyleVarSelectableTextAlign StyleVar = 37
+	StyleVarSelectableTextAlign StyleVar = 39
 	// float     SeparatorSize
-	StyleVarSeparatorSize StyleVar = 38
+	StyleVarSeparatorSize StyleVar = 40
 	// float     SeparatorTextBorderSize
-	StyleVarSeparatorTextBorderSize StyleVar = 39
+	StyleVarSeparatorTextBorderSize StyleVar = 41
 	// ImVec2    SeparatorTextAlign
-	StyleVarSeparatorTextAlign StyleVar = 40
+	StyleVarSeparatorTextAlign StyleVar = 42
 	// ImVec2    SeparatorTextPadding
-	StyleVarSeparatorTextPadding StyleVar = 41
+	StyleVarSeparatorTextPadding StyleVar = 43
 	// float     DockingSeparatorSize
-	StyleVarDockingSeparatorSize StyleVar = 42
-	StyleVarCOUNT                StyleVar = 43
+	StyleVarDockingSeparatorSize StyleVar = 44
+	StyleVarCOUNT                StyleVar = 45
 )
 
 // Extend ImGuiTabBarFlags_

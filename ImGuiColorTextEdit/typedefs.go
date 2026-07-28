@@ -37,58 +37,6 @@ func NewCodePointFromC[SRC any](cvalue SRC) *CodePoint {
 	return &CodePoint{CData: internal.ReinterpretCast[*C.CodePoint](cvalue)}
 }
 
-type CursorPosition struct {
-	CData *C.CursorPosition
-}
-
-// Handle returns C version of CursorPosition and its finalizer func.
-func (self *CursorPosition) Handle() (result *C.CursorPosition, fin func()) {
-	return self.CData, func() {}
-}
-
-// C is like Handle but returns plain type instead of pointer.
-func (self CursorPosition) C() (C.CursorPosition, func()) {
-	result, fn := self.Handle()
-	return *result, fn
-}
-
-// NewEmptyCursorPosition creates CursorPosition with its 0 value.
-func NewEmptyCursorPosition() *CursorPosition {
-	return &CursorPosition{CData: new(C.CursorPosition)}
-}
-
-// NewCursorPositionFromC creates CursorPosition from its C pointer.
-// SRC ~= *C.CursorPosition
-func NewCursorPositionFromC[SRC any](cvalue SRC) *CursorPosition {
-	return &CursorPosition{CData: internal.ReinterpretCast[*C.CursorPosition](cvalue)}
-}
-
-type CursorSelection struct {
-	CData *C.CursorSelection
-}
-
-// Handle returns C version of CursorSelection and its finalizer func.
-func (self *CursorSelection) Handle() (result *C.CursorSelection, fin func()) {
-	return self.CData, func() {}
-}
-
-// C is like Handle but returns plain type instead of pointer.
-func (self CursorSelection) C() (C.CursorSelection, func()) {
-	result, fn := self.Handle()
-	return *result, fn
-}
-
-// NewEmptyCursorSelection creates CursorSelection with its 0 value.
-func NewEmptyCursorSelection() *CursorSelection {
-	return &CursorSelection{CData: new(C.CursorSelection)}
-}
-
-// NewCursorSelectionFromC creates CursorSelection from its C pointer.
-// SRC ~= *C.CursorSelection
-func NewCursorSelectionFromC[SRC any](cvalue SRC) *CursorSelection {
-	return &CursorSelection{CData: internal.ReinterpretCast[*C.CursorSelection](cvalue)}
-}
-
 type Decorator struct {
 	CData *C.Decorator
 }
@@ -115,6 +63,58 @@ func NewDecoratorFromC[SRC any](cvalue SRC) *Decorator {
 	return &Decorator{CData: internal.ReinterpretCast[*C.Decorator](cvalue)}
 }
 
+type DocPos struct {
+	CData *C.DocPos
+}
+
+// Handle returns C version of DocPos and its finalizer func.
+func (self *DocPos) Handle() (result *C.DocPos, fin func()) {
+	return self.CData, func() {}
+}
+
+// C is like Handle but returns plain type instead of pointer.
+func (self DocPos) C() (C.DocPos, func()) {
+	result, fn := self.Handle()
+	return *result, fn
+}
+
+// NewEmptyDocPos creates DocPos with its 0 value.
+func NewEmptyDocPos() *DocPos {
+	return &DocPos{CData: new(C.DocPos)}
+}
+
+// NewDocPosFromC creates DocPos from its C pointer.
+// SRC ~= *C.DocPos
+func NewDocPosFromC[SRC any](cvalue SRC) *DocPos {
+	return &DocPos{CData: internal.ReinterpretCast[*C.DocPos](cvalue)}
+}
+
+type DocSelection struct {
+	CData *C.DocSelection
+}
+
+// Handle returns C version of DocSelection and its finalizer func.
+func (self *DocSelection) Handle() (result *C.DocSelection, fin func()) {
+	return self.CData, func() {}
+}
+
+// C is like Handle but returns plain type instead of pointer.
+func (self DocSelection) C() (C.DocSelection, func()) {
+	result, fn := self.Handle()
+	return *result, fn
+}
+
+// NewEmptyDocSelection creates DocSelection with its 0 value.
+func NewEmptyDocSelection() *DocSelection {
+	return &DocSelection{CData: new(C.DocSelection)}
+}
+
+// NewDocSelectionFromC creates DocSelection from its C pointer.
+// SRC ~= *C.DocSelection
+func NewDocSelectionFromC[SRC any](cvalue SRC) *DocSelection {
+	return &DocSelection{CData: internal.ReinterpretCast[*C.DocSelection](cvalue)}
+}
+
 type Glyph struct {
 	CData *C.Glyph
 }
@@ -139,6 +139,58 @@ func NewEmptyGlyph() *Glyph {
 // SRC ~= *C.Glyph
 func NewGlyphFromC[SRC any](cvalue SRC) *Glyph {
 	return &Glyph{CData: internal.ReinterpretCast[*C.Glyph](cvalue)}
+}
+
+type Notifications struct {
+	CData *C.Notifications
+}
+
+// Handle returns C version of Notifications and its finalizer func.
+func (self *Notifications) Handle() (result *C.Notifications, fin func()) {
+	return self.CData, func() {}
+}
+
+// C is like Handle but returns plain type instead of pointer.
+func (self Notifications) C() (C.Notifications, func()) {
+	result, fn := self.Handle()
+	return *result, fn
+}
+
+// NewEmptyNotifications creates Notifications with its 0 value.
+func NewEmptyNotifications() *Notifications {
+	return &Notifications{CData: new(C.Notifications)}
+}
+
+// NewNotificationsFromC creates Notifications from its C pointer.
+// SRC ~= *C.Notifications
+func NewNotificationsFromC[SRC any](cvalue SRC) *Notifications {
+	return &Notifications{CData: internal.ReinterpretCast[*C.Notifications](cvalue)}
+}
+
+type PopupData struct {
+	CData *C.PopupData
+}
+
+// Handle returns C version of PopupData and its finalizer func.
+func (self *PopupData) Handle() (result *C.PopupData, fin func()) {
+	return self.CData, func() {}
+}
+
+// C is like Handle but returns plain type instead of pointer.
+func (self PopupData) C() (C.PopupData, func()) {
+	result, fn := self.Handle()
+	return *result, fn
+}
+
+// NewEmptyPopupData creates PopupData with its 0 value.
+func NewEmptyPopupData() *PopupData {
+	return &PopupData{CData: new(C.PopupData)}
+}
+
+// NewPopupDataFromC creates PopupData from its C pointer.
+// SRC ~= *C.PopupData
+func NewPopupDataFromC[SRC any](cvalue SRC) *PopupData {
+	return &PopupData{CData: internal.ReinterpretCast[*C.PopupData](cvalue)}
 }
 
 type TextDiff struct {
@@ -193,28 +245,54 @@ func NewTextEditorFromC[SRC any](cvalue SRC) *TextEditor {
 	return &TextEditor{CData: internal.ReinterpretCast[*C.TextEditor](cvalue)}
 }
 
-type Trie struct {
-	CData *C.Trie
+type TrieAutoComplete struct {
+	CData *C.TrieAutoComplete
 }
 
-// Handle returns C version of Trie and its finalizer func.
-func (self *Trie) Handle() (result *C.Trie, fin func()) {
+// Handle returns C version of TrieAutoComplete and its finalizer func.
+func (self *TrieAutoComplete) Handle() (result *C.TrieAutoComplete, fin func()) {
 	return self.CData, func() {}
 }
 
 // C is like Handle but returns plain type instead of pointer.
-func (self Trie) C() (C.Trie, func()) {
+func (self TrieAutoComplete) C() (C.TrieAutoComplete, func()) {
 	result, fn := self.Handle()
 	return *result, fn
 }
 
-// NewEmptyTrie creates Trie with its 0 value.
-func NewEmptyTrie() *Trie {
-	return &Trie{CData: new(C.Trie)}
+// NewEmptyTrieAutoComplete creates TrieAutoComplete with its 0 value.
+func NewEmptyTrieAutoComplete() *TrieAutoComplete {
+	return &TrieAutoComplete{CData: new(C.TrieAutoComplete)}
 }
 
-// NewTrieFromC creates Trie from its C pointer.
-// SRC ~= *C.Trie
-func NewTrieFromC[SRC any](cvalue SRC) *Trie {
-	return &Trie{CData: internal.ReinterpretCast[*C.Trie](cvalue)}
+// NewTrieAutoCompleteFromC creates TrieAutoComplete from its C pointer.
+// SRC ~= *C.TrieAutoComplete
+func NewTrieAutoCompleteFromC[SRC any](cvalue SRC) *TrieAutoComplete {
+	return &TrieAutoComplete{CData: internal.ReinterpretCast[*C.TrieAutoComplete](cvalue)}
+}
+
+type VisPos struct {
+	CData *C.VisPos
+}
+
+// Handle returns C version of VisPos and its finalizer func.
+func (self *VisPos) Handle() (result *C.VisPos, fin func()) {
+	return self.CData, func() {}
+}
+
+// C is like Handle but returns plain type instead of pointer.
+func (self VisPos) C() (C.VisPos, func()) {
+	result, fn := self.Handle()
+	return *result, fn
+}
+
+// NewEmptyVisPos creates VisPos with its 0 value.
+func NewEmptyVisPos() *VisPos {
+	return &VisPos{CData: new(C.VisPos)}
+}
+
+// NewVisPosFromC creates VisPos from its C pointer.
+// SRC ~= *C.VisPos
+func NewVisPosFromC[SRC any](cvalue SRC) *VisPos {
+	return &VisPos{CData: internal.ReinterpretCast[*C.VisPos](cvalue)}
 }

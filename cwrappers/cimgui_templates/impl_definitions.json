@@ -642,6 +642,23 @@
       "stname": ""
     }
   ],
+  "ImGui_ImplOpenGL3_GetRenderState": [
+    {
+      "args": "()",
+      "argsT": [],
+      "argsoriginal": "()",
+      "call_args": "()",
+      "call_args_old": "()",
+      "cimguiname": "ImGui_ImplOpenGL3_GetRenderState",
+      "defaults": {},
+      "funcname": "ImGui_ImplOpenGL3_GetRenderState",
+      "location": "imgui_impl_opengl3:80",
+      "ov_cimguiname": "ImGui_ImplOpenGL3_GetRenderState",
+      "ret": "ImGui_ImplOpenGL3_RenderState*",
+      "signature": "()",
+      "stname": ""
+    }
+  ],
   "ImGui_ImplOpenGL3_Init": [
     {
       "args": "(const char* glsl_version)",
