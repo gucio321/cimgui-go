@@ -3,6 +3,7 @@ package main
 import (
 	"sort"
 	"strings"
+	"unicode"
 )
 
 func HasPrefix[s ~string](str s, prefix string) bool {
@@ -103,4 +104,10 @@ func MapContainsAny[T ~string, S ~string](key T, dict []S) bool {
 	}
 
 	return false
+}
+
+func ToTitle[T ~string](t T) T {
+	s := []rune(t)
+	s[0] = unicode.ToUpper(s[0])
+	return T(s)
 }
