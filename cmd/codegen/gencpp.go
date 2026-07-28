@@ -69,6 +69,14 @@ extern "C" {
 				f.Args = ReplaceAll(f.Args, a.Type, a.CustomType)
 				f.ArgsT[i].Type = a.CustomType
 			}
+
+			if err := f.ArgsT[i].Type.validateCType(); err != nil {
+				if ctx.flags.Verbose {
+					glg.Debugf("Invalid member %s type %s: %w", f.ArgsT[i].Name, f.ArgsT[i].Type, err)
+				}
+
+				shouldSkip = true
+			}
 		}
 
 		// Check args (some arg formats are skipped)
@@ -456,6 +464,12 @@ extern "C" {
 				continue
 			}
 
+			if err := m.Type.validateCType(); err != nil {
+				if context.flags.Verbose {
+					glg.Debugf("Invalid member %s type %s: %w", m.Name, m.Type, err)
+				}
+			}
+
 			setterFuncName := CIdentifier(fmt.Sprintf("%[1]s_Set%[2]s", s.Name, Capitalize(Split(m.Name, "[")[0])))
 			if skipFuncNames[setterFuncName] || context.ShouldSkipFunc(setterFuncName) {
 				if context.flags.ShowNotGenerated {
@@ -536,6 +550,12 @@ extern "C" {
 		for _, m := range s.Members {
 			if Contains(m.Type, "(") || Contains(m.Type, "union") {
 				continue
+			}
+
+			if err := m.Type.validateCType(); err != nil {
+				if context.flags.Verbose {
+					glg.Debugf("Invalid member %s type %s: %w", m.Name, m.Type, err)
+				}
 			}
 
 			getterFuncName := CIdentifier(fmt.Sprintf("%[1]s_Get%[2]s", s.Name, Capitalize(Split(m.Name, "[")[0])))
