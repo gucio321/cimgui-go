@@ -26,12 +26,12 @@ file(GLOB IMGUI_SOURCES
     ../cwrappers/cimnodes.cpp
     ../cwrappers/cimmarkdown.cpp
     ../cwrappers/imgui_markdown/imgui_markdown.h
-    ../cwrappers/ImGuizmo/ImGuizmo.cpp
+    ../cwrappers/ImGuizmo/src/ImGuizmo.cpp
     ../cwrappers/cimguizmo.cpp
     ../cwrappers/ImGuiColorTextEdit/TextEditor.cpp
-    ../cwrappers/ImGuiColorTextEdit/LanguageDefinitions.cpp
-    ../cwrappers/ImGuiColorTextEdit/UnitTests.cpp
-    ../cwrappers/ImGuiColorTextEdit/ImGuiDebugPanel.cpp
+    ../cwrappers/ImGuiColorTextEdit/TextDiff.cpp
+    ../cwrappers/ImGuiColorTextEdit/extras/TrieAutoComplete.cpp
+    ../cwrappers/ImGuiColorTextEdit/example/dejavu.cpp # TODO: consider if this is really needed. ATM it is included in "manual" section of cimCTE
     ../cwrappers/cimCTE.cpp
 	${TABLES_SOURCE}
 )
