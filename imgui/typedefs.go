@@ -2052,6 +2052,32 @@ func NewOnceUponAFrameFromC[SRC any](cvalue SRC) *OnceUponAFrame {
 	return &OnceUponAFrame{CData: internal.ReinterpretCast[*C.ImGuiOnceUponAFrame](cvalue)}
 }
 
+type PackedDate struct {
+	CData *C.ImGuiPackedDate
+}
+
+// Handle returns C version of PackedDate and its finalizer func.
+func (self *PackedDate) Handle() (result *C.ImGuiPackedDate, fin func()) {
+	return self.CData, func() {}
+}
+
+// C is like Handle but returns plain type instead of pointer.
+func (self PackedDate) C() (C.ImGuiPackedDate, func()) {
+	result, fn := self.Handle()
+	return *result, fn
+}
+
+// NewEmptyPackedDate creates PackedDate with its 0 value.
+func NewEmptyPackedDate() *PackedDate {
+	return &PackedDate{CData: new(C.ImGuiPackedDate)}
+}
+
+// NewPackedDateFromC creates PackedDate from its C pointer.
+// SRC ~= *C.ImGuiPackedDate
+func NewPackedDateFromC[SRC any](cvalue SRC) *PackedDate {
+	return &PackedDate{CData: internal.ReinterpretCast[*C.ImGuiPackedDate](cvalue)}
+}
+
 type Payload struct {
 	CData *C.ImGuiPayload
 }
@@ -2304,6 +2330,32 @@ func (self SelectionUserData) C() (C.ImGuiSelectionUserData, func()) {
 // SRC ~= *C.ImGuiSelectionUserData
 func NewSelectionUserDataFromC[SRC any](cvalue SRC) *SelectionUserData {
 	return (*SelectionUserData)((*int64)(internal.ReinterpretCast[*C.ImGuiSelectionUserData](cvalue)))
+}
+
+type SettingsCleanupArgs struct {
+	CData *C.ImGuiSettingsCleanupArgs
+}
+
+// Handle returns C version of SettingsCleanupArgs and its finalizer func.
+func (self *SettingsCleanupArgs) Handle() (result *C.ImGuiSettingsCleanupArgs, fin func()) {
+	return self.CData, func() {}
+}
+
+// C is like Handle but returns plain type instead of pointer.
+func (self SettingsCleanupArgs) C() (C.ImGuiSettingsCleanupArgs, func()) {
+	result, fn := self.Handle()
+	return *result, fn
+}
+
+// NewEmptySettingsCleanupArgs creates SettingsCleanupArgs with its 0 value.
+func NewEmptySettingsCleanupArgs() *SettingsCleanupArgs {
+	return &SettingsCleanupArgs{CData: new(C.ImGuiSettingsCleanupArgs)}
+}
+
+// NewSettingsCleanupArgsFromC creates SettingsCleanupArgs from its C pointer.
+// SRC ~= *C.ImGuiSettingsCleanupArgs
+func NewSettingsCleanupArgsFromC[SRC any](cvalue SRC) *SettingsCleanupArgs {
+	return &SettingsCleanupArgs{CData: internal.ReinterpretCast[*C.ImGuiSettingsCleanupArgs](cvalue)}
 }
 
 type SettingsHandler struct {
@@ -2827,6 +2879,32 @@ func NewEmptyTableInstanceData() *TableInstanceData {
 // SRC ~= *C.ImGuiTableInstanceData
 func NewTableInstanceDataFromC[SRC any](cvalue SRC) *TableInstanceData {
 	return &TableInstanceData{CData: internal.ReinterpretCast[*C.ImGuiTableInstanceData](cvalue)}
+}
+
+type TableReconcileColumnData struct {
+	CData *C.ImGuiTableReconcileColumnData
+}
+
+// Handle returns C version of TableReconcileColumnData and its finalizer func.
+func (self *TableReconcileColumnData) Handle() (result *C.ImGuiTableReconcileColumnData, fin func()) {
+	return self.CData, func() {}
+}
+
+// C is like Handle but returns plain type instead of pointer.
+func (self TableReconcileColumnData) C() (C.ImGuiTableReconcileColumnData, func()) {
+	result, fn := self.Handle()
+	return *result, fn
+}
+
+// NewEmptyTableReconcileColumnData creates TableReconcileColumnData with its 0 value.
+func NewEmptyTableReconcileColumnData() *TableReconcileColumnData {
+	return &TableReconcileColumnData{CData: new(C.ImGuiTableReconcileColumnData)}
+}
+
+// NewTableReconcileColumnDataFromC creates TableReconcileColumnData from its C pointer.
+// SRC ~= *C.ImGuiTableReconcileColumnData
+func NewTableReconcileColumnDataFromC[SRC any](cvalue SRC) *TableReconcileColumnData {
+	return &TableReconcileColumnData{CData: internal.ReinterpretCast[*C.ImGuiTableReconcileColumnData](cvalue)}
 }
 
 type TableSettings struct {

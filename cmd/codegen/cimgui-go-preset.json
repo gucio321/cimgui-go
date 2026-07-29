@@ -53,6 +53,10 @@
         "TypedefsPoolSize": 32,
         "TypedefsCustomPoolSizes": {
         },
+        "ExtendedArgsSuffix": "V",
+        "ExtendedArgsSuffixReplace": {
+            "ImDrawList_AddLine": "Args"
+        },
         "Replace": {
                 "igGetDrawData":           "CurrentDrawData",
                 "igGetDrawListSharedData": "CurrentDrawListSharedData",
