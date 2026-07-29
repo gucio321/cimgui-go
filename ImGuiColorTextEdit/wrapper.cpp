@@ -6,11 +6,10 @@
 
 uintptr_t wrap_TextEditor_GetUserData(TextEditor* self,size_t line) { return (uintptr_t)TextEditor_GetUserData(self,line); }
 void wrap_TextEditor_SetUserData(TextEditor* self,size_t line,uintptr_t data) { TextEditor_SetUserData(self,line,(void*)(uintptr_t)data); }
-void wrap_Notifications_Add(Notifications* self,Type type,const std::string message) { Notifications_Add(self,type,message,4000); }
+void wrap_Notifications_Add(Notifications* self,Type type,const char* message) { Notifications_Add(self,type,message,4000); }
 void wrap_TextDiff_Render(TextDiff* self,const char* title) { TextDiff_Render(self,title,(ImVec2){},0,ImGuiWindowFlags_NoNavInputs | ImGuiWindowFlags_NoMove); }
 void wrap_TextEditor_Render(TextEditor* self,const char* title) { TextEditor_Render(self,title,(ImVec2){},0,ImGuiWindowFlags_NoNavInputs | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_HorizontalScrollbar); }
-void wrap_TextEditor_SelectAllOccurrencesOf(TextEditor* self,const std::string_view text) { TextEditor_SelectAllOccurrencesOf(self,text,true,false); }
-void wrap_TextEditor_SelectFirstOccurrenceOf(TextEditor* self,const std::string_view text) { TextEditor_SelectFirstOccurrenceOf(self,text,true,false); }
-void wrap_TextEditor_SelectNextOccurrenceOf(TextEditor* self,const std::string_view text) { TextEditor_SelectNextOccurrenceOf(self,text,true,false); }
+void wrap_TextEditor_SelectAllOccurrencesOf(TextEditor* self,const char* text) { TextEditor_SelectAllOccurrencesOf(self,text,true,false); }
+void wrap_TextEditor_SelectFirstOccurrenceOf(TextEditor* self,const char* text) { TextEditor_SelectFirstOccurrenceOf(self,text,true,false); }
+void wrap_TextEditor_SelectNextOccurrenceOf(TextEditor* self,const char* text) { TextEditor_SelectNextOccurrenceOf(self,text,true,false); }
 void wrap_TextEditor_SelectToBrackets(TextEditor* self) { TextEditor_SelectToBrackets(self,true); }
-void wrap_TextEditor_SetChangeCallback(TextEditor* self,std::function_void__ callback) { TextEditor_SetChangeCallback(self,callback,0); }

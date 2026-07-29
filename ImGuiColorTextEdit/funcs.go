@@ -156,6 +156,81 @@ func (self *Glyph) Destroy() {
 	selfFin()
 }
 
+func NewIteratorGlyphPtr(g *Glyph) *Iterator {
+	gArg, gFin := g.Handle()
+
+	defer func() {
+		gFin()
+	}()
+	return NewIteratorFromC(C.Iterator_Iterator_GlyphPtr(internal.ReinterpretCast[*C.Glyph](gArg)))
+}
+
+func NewIteratorNil() *Iterator {
+	return NewIteratorFromC(C.Iterator_Iterator_Nil())
+}
+
+func (self *Iterator) Destroy() {
+	selfArg, selfFin := self.Handle()
+	C.Iterator_destroy(internal.ReinterpretCast[*C.Iterator](selfArg))
+
+	selfFin()
+}
+
+func LanguageAngelScript() *Language {
+	return NewLanguageFromC(C.Language_AngelScript())
+}
+
+func LanguageC() *Language {
+	return NewLanguageFromC(C.Language_C())
+}
+
+func LanguageCpp() *Language {
+	return NewLanguageFromC(C.Language_Cpp())
+}
+
+func LanguageCs() *Language {
+	return NewLanguageFromC(C.Language_Cs())
+}
+
+func LanguageGlsl() *Language {
+	return NewLanguageFromC(C.Language_Glsl())
+}
+
+func LanguageHlsl() *Language {
+	return NewLanguageFromC(C.Language_Hlsl())
+}
+
+func LanguageJson() *Language {
+	return NewLanguageFromC(C.Language_Json())
+}
+
+func LanguageLua() *Language {
+	return NewLanguageFromC(C.Language_Lua())
+}
+
+func LanguageMarkdown() *Language {
+	return NewLanguageFromC(C.Language_Markdown())
+}
+
+func LanguagePython() *Language {
+	return NewLanguageFromC(C.Language_Python())
+}
+
+func LanguageSql() *Language {
+	return NewLanguageFromC(C.Language_Sql())
+}
+
+// AddV parameter default value hint:
+// dismissTime: 4000
+func (self *Notifications) AddV(typeArg Type, message string, dismissTime int32) {
+	selfArg, selfFin := self.Handle()
+	messageArg, messageFin := internal.WrapString[C.char](message)
+	C.Notifications_Add(internal.ReinterpretCast[*C.Notifications](selfArg), C.Type(typeArg), messageArg, C.int(dismissTime))
+
+	selfFin()
+	messageFin()
+}
+
 func NewNotifications() *Notifications {
 	return NewNotificationsFromC(C.Notifications_Notifications())
 }
@@ -174,6 +249,15 @@ func (self *Notifications) Destroy() {
 	selfFin()
 }
 
+func (self *TextDiff) Language() *Language {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return NewLanguageFromC(C.TextDiff_GetLanguage(internal.ReinterpretCast[*C.TextDiff](selfArg)))
+}
+
 func (self *TextDiff) LineSpacing() float32 {
 	selfArg, selfFin := self.Handle()
 
@@ -181,6 +265,15 @@ func (self *TextDiff) LineSpacing() float32 {
 		selfFin()
 	}()
 	return float32(C.TextDiff_GetLineSpacing(internal.ReinterpretCast[*C.TextDiff](selfArg)))
+}
+
+func (self *TextDiff) Palette() *Palette {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return NewPaletteFromC(C.TextDiff_GetPalette(internal.ReinterpretCast[*C.TextDiff](selfArg)))
 }
 
 func (self *TextDiff) SideBySideMode() bool {
@@ -273,11 +366,29 @@ func (self *TextDiff) SetFocus() {
 	selfFin()
 }
 
+func (self *TextDiff) SetLanguage(language *Language) {
+	selfArg, selfFin := self.Handle()
+	languageArg, languageFin := language.Handle()
+	C.TextDiff_SetLanguage(internal.ReinterpretCast[*C.TextDiff](selfArg), internal.ReinterpretCast[*C.Language](languageArg))
+
+	selfFin()
+	languageFin()
+}
+
 func (self *TextDiff) SetLineSpacing(value float32) {
 	selfArg, selfFin := self.Handle()
 	C.TextDiff_SetLineSpacing(internal.ReinterpretCast[*C.TextDiff](selfArg), C.float(value))
 
 	selfFin()
+}
+
+func (self *TextDiff) SetPalette(newPalette *Palette) {
+	selfArg, selfFin := self.Handle()
+	newPaletteArg, newPaletteFin := newPalette.Handle()
+	C.TextDiff_SetPalette(internal.ReinterpretCast[*C.TextDiff](selfArg), internal.ReinterpretCast[*C.Palette](newPaletteArg))
+
+	selfFin()
+	newPaletteFin()
 }
 
 func (self *TextDiff) SetShowScrollbarMiniMapEnabled(value bool) {
@@ -322,6 +433,17 @@ func (self *TextDiff) SetTabSize(value uint64) {
 	selfFin()
 }
 
+func (self *TextDiff) SetText(left, right string) {
+	selfArg, selfFin := self.Handle()
+	leftArg, leftFin := internal.WrapString[C.char](left)
+	rightArg, rightFin := internal.WrapString[C.char](right)
+	C.TextDiff_SetText(internal.ReinterpretCast[*C.TextDiff](selfArg), leftArg, rightArg)
+
+	selfFin()
+	leftFin()
+	rightFin()
+}
+
 func (self *TextDiff) SetWordWrapEnabled(value bool) {
 	selfArg, selfFin := self.Handle()
 	C.TextDiff_SetWordWrapEnabled(internal.ReinterpretCast[*C.TextDiff](selfArg), C.bool(value))
@@ -338,6 +460,17 @@ func (self *TextDiff) Destroy() {
 	C.TextDiff_destroy(internal.ReinterpretCast[*C.TextDiff](selfArg))
 
 	selfFin()
+}
+
+func (self *TextEditor) AddMarker(line uint64, lineNumberColor, textColor uint32, lineNumberTooltip, textTooltip string) {
+	selfArg, selfFin := self.Handle()
+	lineNumberTooltipArg, lineNumberTooltipFin := internal.WrapString[C.char](lineNumberTooltip)
+	textTooltipArg, textTooltipFin := internal.WrapString[C.char](textTooltip)
+	C.TextEditor_AddMarker(internal.ReinterpretCast[*C.TextEditor](selfArg), C.xulong(line), C.ImU32(lineNumberColor), C.ImU32(textColor), lineNumberTooltipArg, textTooltipArg)
+
+	selfFin()
+	lineNumberTooltipFin()
+	textTooltipFin()
 }
 
 func (self *TextEditor) AddNextOccurrence() {
@@ -561,6 +694,10 @@ func (self *TextEditor) CursorText(cursor uint64) string {
 	return C.GoString(C.TextEditor_GetCursorText(internal.ReinterpretCast[*C.TextEditor](selfArg), C.xulong(cursor)))
 }
 
+func TextEditorGetDarkPalette() *Palette {
+	return NewPaletteFromC(C.TextEditor_GetDarkPalette())
+}
+
 func (self *TextEditor) DecorationLeftMargin() uint64 {
 	selfArg, selfFin := self.Handle()
 
@@ -568,6 +705,10 @@ func (self *TextEditor) DecorationLeftMargin() uint64 {
 		selfFin()
 	}()
 	return uint64(C.TextEditor_GetDecorationLeftMargin(internal.ReinterpretCast[*C.TextEditor](selfArg)))
+}
+
+func TextEditorGetDefaultPalette() *Palette {
+	return NewPaletteFromC(C.TextEditor_GetDefaultPalette())
 }
 
 func (self *TextEditor) DocPosAtMousePos(mousePos imgui.Vec2) DocPos {
@@ -609,6 +750,15 @@ func (self *TextEditor) GlyphWidth() float32 {
 	return float32(C.TextEditor_GetGlyphWidth(internal.ReinterpretCast[*C.TextEditor](selfArg)))
 }
 
+func (self *TextEditor) Language() *Language {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return NewLanguageFromC(C.TextEditor_GetLanguage(internal.ReinterpretCast[*C.TextEditor](selfArg)))
+}
+
 func (self *TextEditor) LanguageName() string {
 	selfArg, selfFin := self.Handle()
 
@@ -634,6 +784,10 @@ func (self *TextEditor) LastVisibleRow() uint64 {
 		selfFin()
 	}()
 	return uint64(C.TextEditor_GetLastVisibleRow(internal.ReinterpretCast[*C.TextEditor](selfArg)))
+}
+
+func TextEditorGetLightPalette() *Palette {
+	return NewPaletteFromC(C.TextEditor_GetLightPalette())
 }
 
 func (self *TextEditor) LineCount() uint64 {
@@ -721,6 +875,15 @@ func (self *TextEditor) NumberOfCursors() uint64 {
 		selfFin()
 	}()
 	return uint64(C.TextEditor_GetNumberOfCursors(internal.ReinterpretCast[*C.TextEditor](selfArg)))
+}
+
+func (self *TextEditor) Palette() *Palette {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return NewPaletteFromC(C.TextEditor_GetPalette(internal.ReinterpretCast[*C.TextEditor](selfArg)))
 }
 
 func (self *TextEditor) SectionTextDocPos(start, end DocPos) string {
@@ -1158,6 +1321,48 @@ func (self *TextEditor) RenderV(title string, size imgui.Vec2, childFlags imgui.
 	titleFin()
 }
 
+func (self *TextEditor) ReplaceSectionTextDocPos(start, end DocPos, text string) {
+	selfArg, selfFin := self.Handle()
+	startArg, startFin := start.C()
+	endArg, endFin := end.C()
+	textArg, textFin := internal.WrapString[C.char](text)
+	C.TextEditor_ReplaceSectionText_DocPos(internal.ReinterpretCast[*C.TextEditor](selfArg), internal.ReinterpretCast[C.DocPos](startArg), internal.ReinterpretCast[C.DocPos](endArg), textArg)
+
+	selfFin()
+	startFin()
+	endFin()
+	textFin()
+}
+
+func (self *TextEditor) ReplaceSectionTextDocSelection(selection DocSelection, text string) {
+	selfArg, selfFin := self.Handle()
+	selectionArg, selectionFin := selection.C()
+	textArg, textFin := internal.WrapString[C.char](text)
+	C.TextEditor_ReplaceSectionText_DocSelection(internal.ReinterpretCast[*C.TextEditor](selfArg), internal.ReinterpretCast[C.DocSelection](selectionArg), textArg)
+
+	selfFin()
+	selectionFin()
+	textFin()
+}
+
+func (self *TextEditor) ReplaceTextInAllCursors(text string) {
+	selfArg, selfFin := self.Handle()
+	textArg, textFin := internal.WrapString[C.char](text)
+	C.TextEditor_ReplaceTextInAllCursors(internal.ReinterpretCast[*C.TextEditor](selfArg), textArg)
+
+	selfFin()
+	textFin()
+}
+
+func (self *TextEditor) ReplaceTextInCurrentCursor(text string) {
+	selfArg, selfFin := self.Handle()
+	textArg, textFin := internal.WrapString[C.char](text)
+	C.TextEditor_ReplaceTextInCurrentCursor(internal.ReinterpretCast[*C.TextEditor](selfArg), textArg)
+
+	selfFin()
+	textFin()
+}
+
 func (self *TextEditor) ScrollToLine(line uint64, alignment Scroll) {
 	selfArg, selfFin := self.Handle()
 	C.TextEditor_ScrollToLine(internal.ReinterpretCast[*C.TextEditor](selfArg), C.xulong(line), C.Scroll(alignment))
@@ -1179,6 +1384,30 @@ func (self *TextEditor) SelectAllOccurrences() {
 	selfFin()
 }
 
+// SelectAllOccurrencesOfV parameter default value hint:
+// caseSensitive: true
+// wholeWord: false
+func (self *TextEditor) SelectAllOccurrencesOfV(text string, caseSensitive, wholeWord bool) {
+	selfArg, selfFin := self.Handle()
+	textArg, textFin := internal.WrapString[C.char](text)
+	C.TextEditor_SelectAllOccurrencesOf(internal.ReinterpretCast[*C.TextEditor](selfArg), textArg, C.bool(caseSensitive), C.bool(wholeWord))
+
+	selfFin()
+	textFin()
+}
+
+// SelectFirstOccurrenceOfV parameter default value hint:
+// caseSensitive: true
+// wholeWord: false
+func (self *TextEditor) SelectFirstOccurrenceOfV(text string, caseSensitive, wholeWord bool) {
+	selfArg, selfFin := self.Handle()
+	textArg, textFin := internal.WrapString[C.char](text)
+	C.TextEditor_SelectFirstOccurrenceOf(internal.ReinterpretCast[*C.TextEditor](selfArg), textArg, C.bool(caseSensitive), C.bool(wholeWord))
+
+	selfFin()
+	textFin()
+}
+
 func (self *TextEditor) SelectLine(line uint64) {
 	selfArg, selfFin := self.Handle()
 	C.TextEditor_SelectLine(internal.ReinterpretCast[*C.TextEditor](selfArg), C.xulong(line))
@@ -1191,6 +1420,18 @@ func (self *TextEditor) SelectLines(start, end uint64) {
 	C.TextEditor_SelectLines(internal.ReinterpretCast[*C.TextEditor](selfArg), C.xulong(start), C.xulong(end))
 
 	selfFin()
+}
+
+// SelectNextOccurrenceOfV parameter default value hint:
+// caseSensitive: true
+// wholeWord: false
+func (self *TextEditor) SelectNextOccurrenceOfV(text string, caseSensitive, wholeWord bool) {
+	selfArg, selfFin := self.Handle()
+	textArg, textFin := internal.WrapString[C.char](text)
+	C.TextEditor_SelectNextOccurrenceOf(internal.ReinterpretCast[*C.TextEditor](selfArg), textArg, C.bool(caseSensitive), C.bool(wholeWord))
+
+	selfFin()
+	textFin()
 }
 
 func (self *TextEditor) SelectRegion(start, end DocPos) {
@@ -1225,6 +1466,15 @@ func (self *TextEditor) SelectionToUpperCase() {
 	C.TextEditor_SelectionToUpperCase(internal.ReinterpretCast[*C.TextEditor](selfArg))
 
 	selfFin()
+}
+
+func (self *TextEditor) SetAutoCompleteConfig(autoCompleteConfig *AutoCompleteConfig) {
+	selfArg, selfFin := self.Handle()
+	autoCompleteConfigArg, autoCompleteConfigFin := autoCompleteConfig.Handle()
+	C.TextEditor_SetAutoCompleteConfig(internal.ReinterpretCast[*C.TextEditor](selfArg), internal.ReinterpretCast[*C.AutoCompleteConfig](autoCompleteConfigArg))
+
+	selfFin()
+	autoCompleteConfigFin()
 }
 
 func (self *TextEditor) SetAutoIndentEnabled(value bool) {
@@ -1264,6 +1514,31 @@ func (self *TextEditor) SetDecorationLeftMargin(value uint64) {
 	selfFin()
 }
 
+func TextEditorSetDefaultPalette(aValue *Palette) {
+	aValueArg, aValueFin := aValue.Handle()
+	C.TextEditor_SetDefaultPalette(internal.ReinterpretCast[*C.Palette](aValueArg))
+
+	aValueFin()
+}
+
+func (self *TextEditor) SetFindAllButtonLabel(label string) {
+	selfArg, selfFin := self.Handle()
+	labelArg, labelFin := internal.WrapString[C.char](label)
+	C.TextEditor_SetFindAllButtonLabel(internal.ReinterpretCast[*C.TextEditor](selfArg), labelArg)
+
+	selfFin()
+	labelFin()
+}
+
+func (self *TextEditor) SetFindButtonLabel(label string) {
+	selfArg, selfFin := self.Handle()
+	labelArg, labelFin := internal.WrapString[C.char](label)
+	C.TextEditor_SetFindButtonLabel(internal.ReinterpretCast[*C.TextEditor](selfArg), labelArg)
+
+	selfFin()
+	labelFin()
+}
+
 func (self *TextEditor) SetFocus() {
 	selfArg, selfFin := self.Handle()
 	C.TextEditor_SetFocus(internal.ReinterpretCast[*C.TextEditor](selfArg))
@@ -1283,6 +1558,24 @@ func (self *TextEditor) SetInsertSpacesOnTabs(value bool) {
 	C.TextEditor_SetInsertSpacesOnTabs(internal.ReinterpretCast[*C.TextEditor](selfArg), C.bool(value))
 
 	selfFin()
+}
+
+func (self *TextEditor) SetLanguage(language *Language) {
+	selfArg, selfFin := self.Handle()
+	languageArg, languageFin := language.Handle()
+	C.TextEditor_SetLanguage(internal.ReinterpretCast[*C.TextEditor](selfArg), internal.ReinterpretCast[*C.Language](languageArg))
+
+	selfFin()
+	languageFin()
+}
+
+func (self *TextEditor) SetLineBreakConfig(newConfig *LineBreakConfig) {
+	selfArg, selfFin := self.Handle()
+	newConfigArg, newConfigFin := newConfig.Handle()
+	C.TextEditor_SetLineBreakConfig(internal.ReinterpretCast[*C.TextEditor](selfArg), internal.ReinterpretCast[*C.LineBreakConfig](newConfigArg))
+
+	selfFin()
+	newConfigFin()
 }
 
 func (self *TextEditor) SetLineFoldingEnabled(value bool) {
@@ -1334,11 +1627,38 @@ func (self *TextEditor) SetOverwriteEnabled(value bool) {
 	selfFin()
 }
 
+func (self *TextEditor) SetPalette(newPalette *Palette) {
+	selfArg, selfFin := self.Handle()
+	newPaletteArg, newPaletteFin := newPalette.Handle()
+	C.TextEditor_SetPalette(internal.ReinterpretCast[*C.TextEditor](selfArg), internal.ReinterpretCast[*C.Palette](newPaletteArg))
+
+	selfFin()
+	newPaletteFin()
+}
+
 func (self *TextEditor) SetReadOnlyEnabled(value bool) {
 	selfArg, selfFin := self.Handle()
 	C.TextEditor_SetReadOnlyEnabled(internal.ReinterpretCast[*C.TextEditor](selfArg), C.bool(value))
 
 	selfFin()
+}
+
+func (self *TextEditor) SetReplaceAllButtonLabel(label string) {
+	selfArg, selfFin := self.Handle()
+	labelArg, labelFin := internal.WrapString[C.char](label)
+	C.TextEditor_SetReplaceAllButtonLabel(internal.ReinterpretCast[*C.TextEditor](selfArg), labelArg)
+
+	selfFin()
+	labelFin()
+}
+
+func (self *TextEditor) SetReplaceButtonLabel(label string) {
+	selfArg, selfFin := self.Handle()
+	labelArg, labelFin := internal.WrapString[C.char](label)
+	C.TextEditor_SetReplaceButtonLabel(internal.ReinterpretCast[*C.TextEditor](selfArg), labelArg)
+
+	selfFin()
+	labelFin()
 }
 
 func (self *TextEditor) SetShowLineNumbersEnabled(value bool) {
@@ -1402,6 +1722,15 @@ func (self *TextEditor) SetTabSize(value uint64) {
 	C.TextEditor_SetTabSize(internal.ReinterpretCast[*C.TextEditor](selfArg), C.xulong(value))
 
 	selfFin()
+}
+
+func (self *TextEditor) SetText(text string) {
+	selfArg, selfFin := self.Handle()
+	textArg, textFin := internal.WrapString[C.char](text)
+	C.TextEditor_SetText(internal.ReinterpretCast[*C.TextEditor](selfArg), textArg)
+
+	selfFin()
+	textFin()
 }
 
 func (self *TextEditor) SetTextLeftMargin(value uint64) {
@@ -1564,6 +1893,15 @@ func (self *VisPos) Destroy() {
 	selfFin()
 }
 
+func (self *Notifications) Add(typeArg Type, message string) {
+	selfArg, selfFin := self.Handle()
+	messageArg, messageFin := internal.WrapString[C.char](message)
+	C.wrap_Notifications_Add(internal.ReinterpretCast[*C.Notifications](selfArg), C.Type(typeArg), messageArg)
+
+	selfFin()
+	messageFin()
+}
+
 func (self *TextDiff) Render(title string) {
 	selfArg, selfFin := self.Handle()
 	titleArg, titleFin := internal.WrapString[C.char](title)
@@ -1580,6 +1918,33 @@ func (self *TextEditor) Render(title string) {
 
 	selfFin()
 	titleFin()
+}
+
+func (self *TextEditor) SelectAllOccurrencesOf(text string) {
+	selfArg, selfFin := self.Handle()
+	textArg, textFin := internal.WrapString[C.char](text)
+	C.wrap_TextEditor_SelectAllOccurrencesOf(internal.ReinterpretCast[*C.TextEditor](selfArg), textArg)
+
+	selfFin()
+	textFin()
+}
+
+func (self *TextEditor) SelectFirstOccurrenceOf(text string) {
+	selfArg, selfFin := self.Handle()
+	textArg, textFin := internal.WrapString[C.char](text)
+	C.wrap_TextEditor_SelectFirstOccurrenceOf(internal.ReinterpretCast[*C.TextEditor](selfArg), textArg)
+
+	selfFin()
+	textFin()
+}
+
+func (self *TextEditor) SelectNextOccurrenceOf(text string) {
+	selfArg, selfFin := self.Handle()
+	textArg, textFin := internal.WrapString[C.char](text)
+	C.wrap_TextEditor_SelectNextOccurrenceOf(internal.ReinterpretCast[*C.TextEditor](selfArg), textArg)
+
+	selfFin()
+	textFin()
 }
 
 func (self *TextEditor) SelectToBrackets() {

@@ -7,56 +7,56 @@ package ImGuiColorTextEdit
 type BreakOption int32
 
 const (
-	mustBreak  BreakOption = 0
-	allowBreak BreakOption = 1
-	noBreak    BreakOption = 2
-	undefined  BreakOption = 3
+	MustBreak  BreakOption = 0
+	AllowBreak BreakOption = 1
+	NoBreak    BreakOption = 2
+	Undefined  BreakOption = 3
 )
 
 // original name: Color
 type Color int32
 
 const (
-	text                      Color = 0
-	keyword                   Color = 1
-	declaration               Color = 2
-	number                    Color = 3
-	string                    Color = 4
-	punctuation               Color = 5
-	preprocessor              Color = 6
-	identifier                Color = 7
-	knownIdentifier           Color = 8
-	comment                   Color = 9
-	background                Color = 10
-	cursor                    Color = 11
-	selection                 Color = 12
-	whitespace                Color = 13
-	matchingBracketBackground Color = 14
-	matchingBracketActive     Color = 15
-	matchingBracketLevel1     Color = 16
-	matchingBracketLevel2     Color = 17
-	matchingBracketLevel3     Color = 18
-	matchingBracketError      Color = 19
-	lineNumber                Color = 20
-	currentLineNumber         Color = 21
-	count                     Color = 22
+	Text                      Color = 0
+	Keyword                   Color = 1
+	Declaration               Color = 2
+	Number                    Color = 3
+	String                    Color = 4
+	Punctuation               Color = 5
+	Preprocessor              Color = 6
+	Identifier                Color = 7
+	KnownIdentifier           Color = 8
+	Comment                   Color = 9
+	Background                Color = 10
+	Cursor                    Color = 11
+	Selection                 Color = 12
+	Whitespace                Color = 13
+	MatchingBracketBackground Color = 14
+	MatchingBracketActive     Color = 15
+	MatchingBracketLevel1     Color = 16
+	MatchingBracketLevel2     Color = 17
+	MatchingBracketLevel3     Color = 18
+	MatchingBracketError      Color = 19
+	LineNumber                Color = 20
+	CurrentLineNumber         Color = 21
+	Count                     Color = 22
 )
 
 // original name: Scroll
 type Scroll int32
 
 const (
-	alignTop    Scroll = 0
-	alignMiddle Scroll = 1
-	alignBottom Scroll = 2
+	AlignTop    Scroll = 0
+	AlignMiddle Scroll = 1
+	AlignBottom Scroll = 2
 )
 
 // original name: Type
 type Type int32
 
 const (
-	success Type = 0
-	warning Type = 1
-	error   Type = 2
-	info    Type = 3
+	Success Type = 0
+	Warning Type = 1
+	Error   Type = 2
+	Info    Type = 3
 )

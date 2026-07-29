@@ -11,6 +11,51 @@ package ImGuiColorTextEdit
 import "C"
 import "github.com/AllenDang/cimgui-go/internal"
 
+type AutoCompleteConfig struct {
+	CData *C.AutoCompleteConfig
+}
+
+// Handle returns C version of AutoCompleteConfig and its finalizer func.
+func (self *AutoCompleteConfig) Handle() (result *C.AutoCompleteConfig, fin func()) {
+	return self.CData, func() {}
+}
+
+// NewAutoCompleteConfigFromC creates AutoCompleteConfig from its C pointer.
+// SRC ~= *C.AutoCompleteConfig
+func NewAutoCompleteConfigFromC[SRC any](cvalue SRC) *AutoCompleteConfig {
+	return &AutoCompleteConfig{CData: internal.ReinterpretCast[*C.AutoCompleteConfig](cvalue)}
+}
+
+type AutoCompleteState struct {
+	CData *C.AutoCompleteState
+}
+
+// Handle returns C version of AutoCompleteState and its finalizer func.
+func (self *AutoCompleteState) Handle() (result *C.AutoCompleteState, fin func()) {
+	return self.CData, func() {}
+}
+
+// NewAutoCompleteStateFromC creates AutoCompleteState from its C pointer.
+// SRC ~= *C.AutoCompleteState
+func NewAutoCompleteStateFromC[SRC any](cvalue SRC) *AutoCompleteState {
+	return &AutoCompleteState{CData: internal.ReinterpretCast[*C.AutoCompleteState](cvalue)}
+}
+
+type Change struct {
+	CData *C.Change
+}
+
+// Handle returns C version of Change and its finalizer func.
+func (self *Change) Handle() (result *C.Change, fin func()) {
+	return self.CData, func() {}
+}
+
+// NewChangeFromC creates Change from its C pointer.
+// SRC ~= *C.Change
+func NewChangeFromC[SRC any](cvalue SRC) *Change {
+	return &Change{CData: internal.ReinterpretCast[*C.Change](cvalue)}
+}
+
 type CodePoint struct {
 	CData *C.CodePoint
 }
@@ -141,6 +186,51 @@ func NewGlyphFromC[SRC any](cvalue SRC) *Glyph {
 	return &Glyph{CData: internal.ReinterpretCast[*C.Glyph](cvalue)}
 }
 
+type Iterator struct {
+	CData *C.Iterator
+}
+
+// Handle returns C version of Iterator and its finalizer func.
+func (self *Iterator) Handle() (result *C.Iterator, fin func()) {
+	return self.CData, func() {}
+}
+
+// NewIteratorFromC creates Iterator from its C pointer.
+// SRC ~= *C.Iterator
+func NewIteratorFromC[SRC any](cvalue SRC) *Iterator {
+	return &Iterator{CData: internal.ReinterpretCast[*C.Iterator](cvalue)}
+}
+
+type Language struct {
+	CData *C.Language
+}
+
+// Handle returns C version of Language and its finalizer func.
+func (self *Language) Handle() (result *C.Language, fin func()) {
+	return self.CData, func() {}
+}
+
+// NewLanguageFromC creates Language from its C pointer.
+// SRC ~= *C.Language
+func NewLanguageFromC[SRC any](cvalue SRC) *Language {
+	return &Language{CData: internal.ReinterpretCast[*C.Language](cvalue)}
+}
+
+type LineBreakConfig struct {
+	CData *C.LineBreakConfig
+}
+
+// Handle returns C version of LineBreakConfig and its finalizer func.
+func (self *LineBreakConfig) Handle() (result *C.LineBreakConfig, fin func()) {
+	return self.CData, func() {}
+}
+
+// NewLineBreakConfigFromC creates LineBreakConfig from its C pointer.
+// SRC ~= *C.LineBreakConfig
+func NewLineBreakConfigFromC[SRC any](cvalue SRC) *LineBreakConfig {
+	return &LineBreakConfig{CData: internal.ReinterpretCast[*C.LineBreakConfig](cvalue)}
+}
+
 type Notifications struct {
 	CData *C.Notifications
 }
@@ -165,6 +255,21 @@ func NewEmptyNotifications() *Notifications {
 // SRC ~= *C.Notifications
 func NewNotificationsFromC[SRC any](cvalue SRC) *Notifications {
 	return &Notifications{CData: internal.ReinterpretCast[*C.Notifications](cvalue)}
+}
+
+type Palette struct {
+	CData *C.Palette
+}
+
+// Handle returns C version of Palette and its finalizer func.
+func (self *Palette) Handle() (result *C.Palette, fin func()) {
+	return self.CData, func() {}
+}
+
+// NewPaletteFromC creates Palette from its C pointer.
+// SRC ~= *C.Palette
+func NewPaletteFromC[SRC any](cvalue SRC) *Palette {
+	return &Palette{CData: internal.ReinterpretCast[*C.Palette](cvalue)}
 }
 
 type PopupData struct {
