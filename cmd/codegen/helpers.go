@@ -77,8 +77,8 @@ func SliceToMap[T comparable](s []T) map[T]bool {
 	return m
 }
 
-func MergeMaps[T comparable](maps ...map[T]bool) map[T]bool {
-	result := make(map[T]bool)
+func MergeMaps[T comparable, S any](maps ...map[T]S) map[T]S {
+	result := make(map[T]S)
 	for _, m := range maps {
 		for k, v := range m {
 			result[k] = v
