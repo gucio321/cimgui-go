@@ -6,7 +6,7 @@ require (
 	github.com/cosiner/flag v0.5.2
 	github.com/kpango/glg v1.6.15
 	golang.org/x/tools v0.48.0
-	mvdan.cc/gofumpt v0.10.0
+	mvdan.cc/gofumpt v0.11.0
 )
 
 require (
