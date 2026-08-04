@@ -144,15 +144,9 @@ public:
 	inline void SetText(const std::string_view& text) { setText(text); }
 	inline std::string GetText() const { return document.getText(); }
 
-	inline std::string GetCursorText(size_t cursor) const {
-		return cursor < cursors.size() ? document.getSectionText(cursors[cursor].getSelectionStart(), cursors[cursor].getSelectionEnd()) : "";
-	}
-
-	inline std::string GetLineText(size_t line) const {
-		return line < document.size() ? document.getLineText(line) : "";
-	}
-
-	inline std::string GetSectionText(DocPos start, DocPos end) const { return document.getSectionText(normalizePos(start), normalizePos(end)); }
+	inline std::string GetCursorText(size_t cursor) const { return cursor < cursors.size() ? document.getSectionText(cursors[cursor].getSelectionStart(), cursors[cursor].getSelectionEnd()) : ""; }
+	inline std::string GetLineText(size_t line) const { return line < document.size() ? document.getLineText(line) : ""; }
+ 	inline std::string GetSectionText(DocPos start, DocPos end) const { return document.getSectionText(normalizePos(start), normalizePos(end)); }
 	inline std::string GetSectionText(const DocSelection& selection) const { return GetSectionText(selection.start, selection.end); }
 	inline void ReplaceSectionText(DocPos start, DocPos end, const std::string_view& text) { replaceSectionText(normalizePos(start), normalizePos(end), text); }
 	inline void ReplaceSectionText(const DocSelection& selection, const std::string_view& text) { ReplaceSectionText(selection.start, selection.end, text); }
@@ -165,10 +159,9 @@ public:
 	// render the text editor in a Dear ImGui context
 	// note: if you overwrite windowFlags to for instance add ImGuiWindowFlags_NoSavedSettings
 	// ensure you keep the default as they are required for the editor
-	// - ImGuiWindowFlags_NoNavInputs to ensure cursor keys are passed to the editor
 	// - ImGuiWindowFlags_NoMove to ensure mouse drag event are passed to the editor
 	// - ImGuiWindowFlags_HorizontalScrollbar to ensure a horizontal scrollbar is rendered when required
-	inline void Render(const char* title, const ImVec2& size=ImVec2(), ImGuiChildFlags childFlags=0, ImGuiWindowFlags windowFlags=ImGuiWindowFlags_NoNavInputs | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_HorizontalScrollbar) { render(title, size, childFlags, windowFlags); }
+	inline void Render(const char* title, const ImVec2& size=ImVec2(), ImGuiChildFlags childFlags=0, ImGuiWindowFlags windowFlags=ImGuiWindowFlags_NoMove | ImGuiWindowFlags_HorizontalScrollbar) { render(title, size, childFlags, windowFlags); }
 
 	// programmatically set focus on the editor
 	inline void SetFocus() { focusOnEditor = true; }
@@ -185,7 +178,7 @@ public:
 
 	// manipulate cursors and selections (line numbers are zero-based)
 	inline void SelectAll() { selectAll(); }
-	inline void SelectLine(size_t line) { if (line < document.size()) selectLine(line); }
+	inline void SelectLine(size_t line) { selectLine(normalizeLine(line)); }
 	inline void SelectLines(size_t start, size_t end) { if (end < document.size() && start <= end) { selectLines(start, end); }}
 	inline void SelectRegion(DocPos start, DocPos end) { selectRegion(normalizePos(start), normalizePos(end)); }
 	inline void SelectToBrackets(bool includeBrackets=true) { selectToBrackets(includeBrackets); }
@@ -219,7 +212,7 @@ public:
 		alignBottom
 	};
 
-	inline void ScrollToLine(size_t line, Scroll alignment) { scrollToLine(line, alignment); }
+	inline void ScrollToLine(size_t line, Scroll alignment) { scrollToLine(normalizeLine(line), alignment); }
 	inline size_t GetFirstVisibleRow() const { return firstVisibleRow; }
 	inline size_t GetLastVisibleRow() const { return lastVisibleRow; }
 	inline size_t GetFirstVisibleColumn() const { return firstVisibleColumn; }
@@ -227,7 +220,7 @@ public:
 
 	// specify a new cursor position and scroll to it (if required)
 	// if the new position is currently in a folded region, it will be automatically unfolded
-	inline void SetCursor(DocPos pos) { setCursor(pos); }
+	inline void SetCursor(DocPos pos) { setCursor(normalizePos(pos)); }
 
 	// note on setting scrolling and cursor position
 	//
@@ -257,7 +250,7 @@ public:
 	inline bool IsDocPosVisible(DocPos pos) const { return isDocPosVisible(normalizePos(pos)); }
 
 	// see if a visual position covers a glyph
-	inline bool IsVisPosOverGlyph(VisPos pos) const { return typeSetter.isVisPosOverGlyph(pos); }
+	inline bool IsVisPosOverGlyph(VisPos pos) const { return typeSetter.isVisPosOverGlyph(normalizePos(pos)); }
 
 	// find/replace support
 	inline void SelectFirstOccurrenceOf(const std::string_view& text, bool caseSensitive=true, bool wholeWord=false) { selectFirstOccurrenceOf(text, caseSensitive, wholeWord); }
@@ -277,9 +270,20 @@ public:
 	inline void FindAll() { findAll(); }
 
 	// access markers (line numbers are zero-based)
-	inline void AddMarker(size_t line, ImU32 lineNumberColor, ImU32 textColor, const std::string_view& lineNumberTooltip, const std::string_view& textTooltip) { addMarker(line, lineNumberColor, textColor, lineNumberTooltip, textTooltip); }
+	// markers are attached to lines and are not effected by inserts or deletes before
+	// if a line with a marker is deleted, undo doesn't restore it
+	inline void AddMarker(size_t line, ImU32 lineNumberColor, ImU32 textColor, const std::string_view& lineNumberTooltip, const std::string_view& textTooltip) { addMarker(normalizeLine(line), lineNumberColor, textColor, lineNumberTooltip, textTooltip); }
 	inline void ClearMarkers() { clearMarkers(); }
 	inline bool HasMarkers() const { return markers.size() != 0; }
+
+	// access squiggly underlines
+	// squigglies are attached to glyphs and are not effected  by inserts or deletes before
+	// if a glyph with a squiggle is deleted, undo doesn't restore it
+	inline void AddSquiggle(DocPos start, DocPos end, size_t type, ImU32 color, const std::string_view& tooltip = std::string_view()) { addSquiggle(normalizePos(start), normalizePos(end), type, color, tooltip); }
+	inline void ClearSquiggles(DocPos start, DocPos end) { clearSquiggles(normalizePos(start), normalizePos(end)); }
+	inline void ClearSquiggles(size_t type) { clearSquiggles(type); }
+	inline void ClearSquiggles() { clearSquiggles(); }
+	inline bool HasSquiggles() const { return squiggles.size() != 0; }
 
 	// specify a change callback (called when changes are made (including undo/redo))
 	// the delay parameter specifies a time in miliseconds that the editor will wait for before calling
@@ -325,8 +329,8 @@ public:
 	// user data is attached to a line and insertions/deletions don't effect this
 	// if a line with user data is removed, it won't come back on a redo
 	// the deletor callback (if specified) is called when a line is deleted (see above)
-	inline void SetUserData(size_t line, void* data) { document.setUserData(line, data); }
-	inline void* GetUserData(size_t line) const { return document.getUserData(line); }
+	inline void SetUserData(size_t line, void* data) { document.setUserData(normalizeLine(line), data); }
+	inline void* GetUserData(size_t line) const { return document.getUserData(normalizeLine(line)); }
 	inline void IterateUserData(std::function<void(size_t line, void* data)> callback) const { document.iterateUserData(callback); }
 
 	// line-based decoration
@@ -460,6 +464,9 @@ public:
 
 		// maintained by the TypeSetter overlay
 		BreakOption breakOption = BreakOption::undefined;
+
+		// squiggle reference
+		size_t squiggle = 0;
 	};
 
 	// iterator used in language-specific tokenizers
@@ -954,6 +961,7 @@ protected:
 		void* userData = nullptr;
 	};
 
+
 	// the document being edited (Lines of Glyphs)
 	class Document : public std::vector<Line> {
 	public:
@@ -971,6 +979,9 @@ protected:
 		std::string getLineText(size_t line) const;
 		std::string getSectionText(DocPos start, DocPos end) const;
 		ImWchar getCodePoint(DocPos location) const;
+
+		// iterate through glyphs between two positions
+		void iterateGlyphs(DocPos start, DocPos end, std::function<void(Glyph& glyph)> callback);
 
 		// get line or color state
 		inline LineState getLineState(size_t line) const { return at(line).state; }
@@ -1179,7 +1190,7 @@ protected:
 	};
 
 	// a collection of actions for a complete transaction
- 	class Transaction : public std::vector<Action> {
+	class Transaction : public std::vector<Action> {
 	public:
 		// access state before/after transactions
 		inline void setBeforeState(const Cursors& cursors) { before = cursors; }
@@ -1198,7 +1209,7 @@ protected:
 	};
 
 	// overlay for managing the transaction list to support do/undo/redo
- 	class Transactions : public std::vector<std::shared_ptr<Transaction>> {
+	class Transactions : public std::vector<std::shared_ptr<Transaction>> {
 	public:
 		// reset the transactions
 		void reset();
@@ -1442,10 +1453,10 @@ protected:
 			size_t endColumn);
 	} miniMap;
 
-	// the list of text markers
+	// list of text markers
 	struct Marker {
-		Marker(ImU32 lc, ImU32 tc, const std::string_view& lt, const std::string_view& tt) :
-			lineNumberColor(lc), textColor(tc), lineNumberTooltip(lt), textTooltip(tt) {}
+		Marker(ImU32 lineNumberColor, ImU32 textColor, const std::string_view& lineNumberTooltip, const std::string_view& textTooltip) :
+			lineNumberColor(lineNumberColor), textColor(textColor), lineNumberTooltip(lineNumberTooltip), textTooltip(textTooltip) {}
 
 		ImU32 lineNumberColor;
 		ImU32 textColor;
@@ -1455,6 +1466,17 @@ protected:
 
 	using Markers = std::vector<Marker>;
 	Markers markers;
+
+	// list of squiggles
+	struct Squiggle {
+		Squiggle(size_t type, ImU32 color, const std::string_view& tooltip) : type(type), color(color), tooltip(tooltip) {}
+		size_t type;
+		ImU32 color;
+		std::string tooltip;
+	};
+
+	using Squiggles = std::vector<Squiggle>;
+	Squiggles squiggles;
 
 	// autocomplete support
 	class AutoComplete {
@@ -1513,6 +1535,7 @@ protected:
 	void renderSelections();
 	void renderTextMarkers();
 	void renderMatchingBracketLines();
+	void renderSquiggles();
 	void renderText();
 	void renderCursors();
 	void renderLineNumberMarkers();
@@ -1569,7 +1592,7 @@ protected:
 
 	// scrolling support
 	void setCursor(DocPos pos);
-	void scrollToLine(size_t line, Scroll alignment);
+	void scrollToLine(size_t line, Scroll alignment, float fraction=0.0f);
 	void handlePossibleScrolling();
 	void makeCursorVisible();
 
@@ -1595,6 +1618,14 @@ protected:
 	// marker support
 	void addMarker(size_t line, ImU32 lineNumberColor, ImU32 textColor, const std::string_view& lineNumberTooltip, const std::string_view& textTooltip);
 	void clearMarkers();
+	void compressMarkers();
+
+	// squiggle support
+	void addSquiggle(DocPos start, DocPos end, size_t type, ImU32 color, const std::string_view& tooltip);
+	void clearSquiggles(size_t type);
+	void clearSquiggles(DocPos start, DocPos end);
+	void clearSquiggles();
+	void compressSquiggles();
 
 	// cursor/selection functions
 	void moveUp(size_t rows, bool select);
@@ -1662,6 +1693,7 @@ protected:
 
 	ImFont* font;
 	float fontSize;
+	float fontScaleDpi;
 	ImVec2 glyphSize;
 
 	float lineNumberLeftOffset;
@@ -1696,6 +1728,7 @@ protected:
 	float cursorAnimationTimer = 0.0f;
 	size_t scrollToLineNumber = invalidLine;
 	Scroll scrollToAlignment = Scroll::alignMiddle;
+	float scrollToFraction = 0.0f;
 	DocPos ensureVisiblePos{invalidLine, 0};
 
 	size_t decoratorWidth = 0;

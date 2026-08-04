@@ -3525,5 +3525,66 @@ void wrap_ImVec4_SetX(ImVec4 *ImVec4Ptr, float v) { ImVec4Ptr->x = v; }
 void wrap_ImVec4_SetY(ImVec4 *ImVec4Ptr, float v) { ImVec4Ptr->y = v; }
 void wrap_ImVec4_SetZ(ImVec4 *ImVec4Ptr, float v) { ImVec4Ptr->z = v; }
 void wrap_ImVec4_SetW(ImVec4 *ImVec4Ptr, float v) { ImVec4Ptr->w = v; }
+void wrap_STB_TexteditState_SetCursor(STB_TexteditState *STB_TexteditStatePtr, int v) { STB_TexteditStatePtr->cursor = v; }
+void wrap_STB_TexteditState_SetSelect_start(STB_TexteditState *STB_TexteditStatePtr, int v) { STB_TexteditStatePtr->select_start = v; }
+void wrap_STB_TexteditState_SetSelect_end(STB_TexteditState *STB_TexteditStatePtr, int v) { STB_TexteditStatePtr->select_end = v; }
+void wrap_STB_TexteditState_SetInsert_mode(STB_TexteditState *STB_TexteditStatePtr, unsigned char v) { STB_TexteditStatePtr->insert_mode = v; }
+void wrap_STB_TexteditState_SetRow_count_per_page(STB_TexteditState *STB_TexteditStatePtr, int v) { STB_TexteditStatePtr->row_count_per_page = v; }
+void wrap_STB_TexteditState_SetCursor_at_end_of_line(STB_TexteditState *STB_TexteditStatePtr, unsigned char v) { STB_TexteditStatePtr->cursor_at_end_of_line = v; }
+void wrap_STB_TexteditState_SetInitialized(STB_TexteditState *STB_TexteditStatePtr, unsigned char v) { STB_TexteditStatePtr->initialized = v; }
+void wrap_STB_TexteditState_SetHas_preferred_x(STB_TexteditState *STB_TexteditStatePtr, unsigned char v) { STB_TexteditStatePtr->has_preferred_x = v; }
+void wrap_STB_TexteditState_SetSingle_line(STB_TexteditState *STB_TexteditStatePtr, unsigned char v) { STB_TexteditStatePtr->single_line = v; }
+void wrap_STB_TexteditState_SetPadding1(STB_TexteditState *STB_TexteditStatePtr, unsigned char v) { STB_TexteditStatePtr->padding1 = v; }
+void wrap_STB_TexteditState_SetPadding2(STB_TexteditState *STB_TexteditStatePtr, unsigned char v) { STB_TexteditStatePtr->padding2 = v; }
+void wrap_STB_TexteditState_SetPadding3(STB_TexteditState *STB_TexteditStatePtr, unsigned char v) { STB_TexteditStatePtr->padding3 = v; }
+void wrap_STB_TexteditState_SetPreferred_x(STB_TexteditState *STB_TexteditStatePtr, float v) { STB_TexteditStatePtr->preferred_x = v; }
+void wrap_STB_TexteditState_SetUndostate(STB_TexteditState *STB_TexteditStatePtr, StbUndoState v) { STB_TexteditStatePtr->undostate = v; }
+int wrap_STB_TexteditState_GetCursor(STB_TexteditState *self) { return self->cursor; }
+int wrap_STB_TexteditState_GetSelect_start(STB_TexteditState *self) { return self->select_start; }
+int wrap_STB_TexteditState_GetSelect_end(STB_TexteditState *self) { return self->select_end; }
+unsigned char wrap_STB_TexteditState_GetInsert_mode(STB_TexteditState *self) { return self->insert_mode; }
+int wrap_STB_TexteditState_GetRow_count_per_page(STB_TexteditState *self) { return self->row_count_per_page; }
+unsigned char wrap_STB_TexteditState_GetCursor_at_end_of_line(STB_TexteditState *self) { return self->cursor_at_end_of_line; }
+unsigned char wrap_STB_TexteditState_GetInitialized(STB_TexteditState *self) { return self->initialized; }
+unsigned char wrap_STB_TexteditState_GetHas_preferred_x(STB_TexteditState *self) { return self->has_preferred_x; }
+unsigned char wrap_STB_TexteditState_GetSingle_line(STB_TexteditState *self) { return self->single_line; }
+unsigned char wrap_STB_TexteditState_GetPadding1(STB_TexteditState *self) { return self->padding1; }
+unsigned char wrap_STB_TexteditState_GetPadding2(STB_TexteditState *self) { return self->padding2; }
+unsigned char wrap_STB_TexteditState_GetPadding3(STB_TexteditState *self) { return self->padding3; }
+float wrap_STB_TexteditState_GetPreferred_x(STB_TexteditState *self) { return self->preferred_x; }
+StbUndoState wrap_STB_TexteditState_GetUndostate(STB_TexteditState *self) { return self->undostate; }
+void wrap_StbTexteditRow_SetX0(StbTexteditRow *StbTexteditRowPtr, float v) { StbTexteditRowPtr->x0 = v; }
+void wrap_StbTexteditRow_SetX1(StbTexteditRow *StbTexteditRowPtr, float v) { StbTexteditRowPtr->x1 = v; }
+void wrap_StbTexteditRow_SetBaseline_y_delta(StbTexteditRow *StbTexteditRowPtr, float v) { StbTexteditRowPtr->baseline_y_delta = v; }
+void wrap_StbTexteditRow_SetYmin(StbTexteditRow *StbTexteditRowPtr, float v) { StbTexteditRowPtr->ymin = v; }
+void wrap_StbTexteditRow_SetYmax(StbTexteditRow *StbTexteditRowPtr, float v) { StbTexteditRowPtr->ymax = v; }
+void wrap_StbTexteditRow_SetNum_chars(StbTexteditRow *StbTexteditRowPtr, int v) { StbTexteditRowPtr->num_chars = v; }
+float wrap_StbTexteditRow_GetX0(StbTexteditRow *self) { return self->x0; }
+float wrap_StbTexteditRow_GetX1(StbTexteditRow *self) { return self->x1; }
+float wrap_StbTexteditRow_GetBaseline_y_delta(StbTexteditRow *self) { return self->baseline_y_delta; }
+float wrap_StbTexteditRow_GetYmin(StbTexteditRow *self) { return self->ymin; }
+float wrap_StbTexteditRow_GetYmax(StbTexteditRow *self) { return self->ymax; }
+int wrap_StbTexteditRow_GetNum_chars(StbTexteditRow *self) { return self->num_chars; }
+void wrap_StbUndoRecord_SetWhere(StbUndoRecord *StbUndoRecordPtr, int v) { StbUndoRecordPtr->where = v; }
+void wrap_StbUndoRecord_SetInsert_length(StbUndoRecord *StbUndoRecordPtr, int v) { StbUndoRecordPtr->insert_length = v; }
+void wrap_StbUndoRecord_SetDelete_length(StbUndoRecord *StbUndoRecordPtr, int v) { StbUndoRecordPtr->delete_length = v; }
+void wrap_StbUndoRecord_SetChar_storage(StbUndoRecord *StbUndoRecordPtr, int v) { StbUndoRecordPtr->char_storage = v; }
+int wrap_StbUndoRecord_GetWhere(StbUndoRecord *self) { return self->where; }
+int wrap_StbUndoRecord_GetInsert_length(StbUndoRecord *self) { return self->insert_length; }
+int wrap_StbUndoRecord_GetDelete_length(StbUndoRecord *self) { return self->delete_length; }
+int wrap_StbUndoRecord_GetChar_storage(StbUndoRecord *self) { return self->char_storage; }
+void wrap_StbUndoState_SetUndo_rec(StbUndoState *StbUndoStatePtr, StbUndoRecord* v) { memcpy(StbUndoStatePtr->undo_rec, v, sizeof(StbUndoRecord)*99); }
+void wrap_StbUndoState_SetUndo_char(StbUndoState *StbUndoStatePtr, char* v) { memcpy(StbUndoStatePtr->undo_char, v, sizeof(char)*999); }
+void wrap_StbUndoState_SetUndo_point(StbUndoState *StbUndoStatePtr, short v) { StbUndoStatePtr->undo_point = v; }
+void wrap_StbUndoState_SetRedo_point(StbUndoState *StbUndoStatePtr, short v) { StbUndoStatePtr->redo_point = v; }
+void wrap_StbUndoState_SetUndo_char_point(StbUndoState *StbUndoStatePtr, int v) { StbUndoStatePtr->undo_char_point = v; }
+void wrap_StbUndoState_SetRedo_char_point(StbUndoState *StbUndoStatePtr, int v) { StbUndoStatePtr->redo_char_point = v; }
+StbUndoRecord* wrap_StbUndoState_GetUndo_rec(StbUndoState *self) { return self->undo_rec; }
+StbUndoRecord imgui_StbUndoRecord_GetAtIdx(StbUndoRecord *self, int index) { return self[index]; }
+char* wrap_StbUndoState_GetUndo_char(StbUndoState *self) { return self->undo_char; }
+short wrap_StbUndoState_GetUndo_point(StbUndoState *self) { return self->undo_point; }
+short wrap_StbUndoState_GetRedo_point(StbUndoState *self) { return self->redo_point; }
+int wrap_StbUndoState_GetUndo_char_point(StbUndoState *self) { return self->undo_char_point; }
+int wrap_StbUndoState_GetRedo_char_point(StbUndoState *self) { return self->redo_char_point; }
 void wrap_stbrp_context_opaque_SetData(stbrp_context_opaque *stbrp_context_opaquePtr, char* v) { memcpy(stbrp_context_opaquePtr->data, v, sizeof(char)*80); }
 char* wrap_stbrp_context_opaque_GetData(stbrp_context_opaque *self) { return self->data; }

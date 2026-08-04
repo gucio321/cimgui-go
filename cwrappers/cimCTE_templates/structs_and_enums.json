@@ -184,23 +184,23 @@
     "Color": "char"
   },
   "locations": {
-    "AutoCompleteConfig": "TextEditor:629",
-    "AutoCompleteState": "TextEditor:599",
-    "BreakOption": "TextEditor:440",
-    "Change": "TextEditor:301",
-    "CodePoint": "TextEditor:683",
-    "Color": "TextEditor:401",
-    "Decorator": "TextEditor:333",
+    "AutoCompleteConfig": "TextEditor:636",
+    "AutoCompleteState": "TextEditor:606",
+    "BreakOption": "TextEditor:444",
+    "Change": "TextEditor:305",
+    "CodePoint": "TextEditor:690",
+    "Color": "TextEditor:405",
+    "Decorator": "TextEditor:337",
     "DocPos": "TextEditor:44",
     "DocSelection": "TextEditor:63",
-    "Glyph": "TextEditor:448",
-    "Iterator": "TextEditor:467",
-    "Language": "TextEditor:497",
-    "LineBreakConfig": "TextEditor:766",
+    "Glyph": "TextEditor:452",
+    "Iterator": "TextEditor:474",
+    "Language": "TextEditor:504",
+    "LineBreakConfig": "TextEditor:773",
     "Notifications": "Notifications:37",
-    "Palette": "TextEditor:427",
-    "PopupData": "TextEditor:355",
-    "Scroll": "TextEditor:216",
+    "Palette": "TextEditor:431",
+    "PopupData": "TextEditor:359",
+    "Scroll": "TextEditor:209",
     "TextDiff": "TextDiff:22",
     "TextEditor": "TextEditor:34",
     "TrieAutoComplete": "TrieAutoComplete:36",
@@ -385,6 +385,10 @@
       {
         "name": "breakOption",
         "type": "BreakOption"
+      },
+      {
+        "name": "squiggle",
+        "type": "size_t"
       }
     ],
     "Iterator": [],

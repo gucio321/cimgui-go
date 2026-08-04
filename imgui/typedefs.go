@@ -3594,10 +3594,99 @@ func (self *STBTexteditState) Handle() (result *C.STB_TexteditState, fin func())
 	return self.CData, func() {}
 }
 
+// C is like Handle but returns plain type instead of pointer.
+func (self STBTexteditState) C() (C.STB_TexteditState, func()) {
+	result, fn := self.Handle()
+	return *result, fn
+}
+
+// NewEmptySTBTexteditState creates STBTexteditState with its 0 value.
+func NewEmptySTBTexteditState() *STBTexteditState {
+	return &STBTexteditState{CData: new(C.STB_TexteditState)}
+}
+
 // NewSTBTexteditStateFromC creates STBTexteditState from its C pointer.
 // SRC ~= *C.STB_TexteditState
 func NewSTBTexteditStateFromC[SRC any](cvalue SRC) *STBTexteditState {
 	return &STBTexteditState{CData: internal.ReinterpretCast[*C.STB_TexteditState](cvalue)}
+}
+
+type StbTexteditRow struct {
+	CData *C.StbTexteditRow
+}
+
+// Handle returns C version of StbTexteditRow and its finalizer func.
+func (self *StbTexteditRow) Handle() (result *C.StbTexteditRow, fin func()) {
+	return self.CData, func() {}
+}
+
+// C is like Handle but returns plain type instead of pointer.
+func (self StbTexteditRow) C() (C.StbTexteditRow, func()) {
+	result, fn := self.Handle()
+	return *result, fn
+}
+
+// NewEmptyStbTexteditRow creates StbTexteditRow with its 0 value.
+func NewEmptyStbTexteditRow() *StbTexteditRow {
+	return &StbTexteditRow{CData: new(C.StbTexteditRow)}
+}
+
+// NewStbTexteditRowFromC creates StbTexteditRow from its C pointer.
+// SRC ~= *C.StbTexteditRow
+func NewStbTexteditRowFromC[SRC any](cvalue SRC) *StbTexteditRow {
+	return &StbTexteditRow{CData: internal.ReinterpretCast[*C.StbTexteditRow](cvalue)}
+}
+
+type StbUndoRecord struct {
+	CData *C.StbUndoRecord
+}
+
+// Handle returns C version of StbUndoRecord and its finalizer func.
+func (self *StbUndoRecord) Handle() (result *C.StbUndoRecord, fin func()) {
+	return self.CData, func() {}
+}
+
+// C is like Handle but returns plain type instead of pointer.
+func (self StbUndoRecord) C() (C.StbUndoRecord, func()) {
+	result, fn := self.Handle()
+	return *result, fn
+}
+
+// NewEmptyStbUndoRecord creates StbUndoRecord with its 0 value.
+func NewEmptyStbUndoRecord() *StbUndoRecord {
+	return &StbUndoRecord{CData: new(C.StbUndoRecord)}
+}
+
+// NewStbUndoRecordFromC creates StbUndoRecord from its C pointer.
+// SRC ~= *C.StbUndoRecord
+func NewStbUndoRecordFromC[SRC any](cvalue SRC) *StbUndoRecord {
+	return &StbUndoRecord{CData: internal.ReinterpretCast[*C.StbUndoRecord](cvalue)}
+}
+
+type StbUndoState struct {
+	CData *C.StbUndoState
+}
+
+// Handle returns C version of StbUndoState and its finalizer func.
+func (self *StbUndoState) Handle() (result *C.StbUndoState, fin func()) {
+	return self.CData, func() {}
+}
+
+// C is like Handle but returns plain type instead of pointer.
+func (self StbUndoState) C() (C.StbUndoState, func()) {
+	result, fn := self.Handle()
+	return *result, fn
+}
+
+// NewEmptyStbUndoState creates StbUndoState with its 0 value.
+func NewEmptyStbUndoState() *StbUndoState {
+	return &StbUndoState{CData: new(C.StbUndoState)}
+}
+
+// NewStbUndoStateFromC creates StbUndoState from its C pointer.
+// SRC ~= *C.StbUndoState
+func NewStbUndoStateFromC[SRC any](cvalue SRC) *StbUndoState {
+	return &StbUndoState{CData: internal.ReinterpretCast[*C.StbUndoState](cvalue)}
 }
 
 type stbrpcontextopaque struct {
