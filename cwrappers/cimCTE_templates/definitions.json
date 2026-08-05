@@ -4640,7 +4640,7 @@
       "location": "TextEditor:164",
       "namespace": "TextEditor",
       "ov_cimguiname": "TextEditor_Render",
-      "ret": "void",
+      "ret": "bool",
       "signature": "(const char*,const ImVec2,ImGuiChildFlags,ImGuiWindowFlags)",
       "stname": "TextEditor"
     }

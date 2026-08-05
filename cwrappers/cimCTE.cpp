@@ -356,7 +356,7 @@ CIMGUI_API size_t TextEditor_GetLineCount(TextEditor* self)
 {
     return self->GetLineCount();
 }
-CIMGUI_API void TextEditor_Render(TextEditor* self,const char* title,const ImVec2_c size,ImGuiChildFlags childFlags,ImGuiWindowFlags windowFlags)
+CIMGUI_API bool TextEditor_Render(TextEditor* self,const char* title,const ImVec2_c size,ImGuiChildFlags childFlags,ImGuiWindowFlags windowFlags)
 {
     return self->Render(title,ConvertToCPP_ImVec2(size),childFlags,windowFlags);
 }

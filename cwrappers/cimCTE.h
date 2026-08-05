@@ -255,7 +255,7 @@ CIMGUI_API void TextEditor_ReplaceSectionText_DocSelection(TextEditor* self,cons
 CIMGUI_API void TextEditor_ClearText(TextEditor* self);
 CIMGUI_API bool TextEditor_IsEmpty(TextEditor* self);
 CIMGUI_API size_t TextEditor_GetLineCount(TextEditor* self);
-CIMGUI_API void TextEditor_Render(TextEditor* self,const char* title,const ImVec2_c size,ImGuiChildFlags childFlags,ImGuiWindowFlags windowFlags);
+CIMGUI_API bool TextEditor_Render(TextEditor* self,const char* title,const ImVec2_c size,ImGuiChildFlags childFlags,ImGuiWindowFlags windowFlags);
 CIMGUI_API void TextEditor_SetFocus(TextEditor* self);
 CIMGUI_API void TextEditor_Cut(TextEditor* self);
 CIMGUI_API void TextEditor_Copy(TextEditor* self);

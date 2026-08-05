@@ -41,6 +41,7 @@ void TextEditor::setText(const std::string_view& text) {
 	transactions.reset();
 	cursors.clearAll();
 	clearMarkers();
+	clearSquiggles();
 	makeCursorVisible();
 }
 
@@ -49,7 +50,26 @@ void TextEditor::setText(const std::string_view& text) {
 //	TextEditor::render
 //
 
-void TextEditor::render(const char* title, const ImVec2& size, ImGuiChildFlags childFlags, ImGuiWindowFlags windowFlags) {
+bool TextEditor::render(const char* title, const ImVec2& size, ImGuiChildFlags childFlags, ImGuiWindowFlags windowFlags) {
+	// ensure we are visible
+	ImGuiWindow* parentWindow = ImGui::GetCurrentWindow();
+
+	if (parentWindow->SkipItems) {
+		return false;
+	}
+
+	ImGui::BeginGroup();
+
+	// declare item bounding box for clipping and interaction
+	ImGuiContext& g = *GImGui;
+	ImGuiID id = parentWindow->GetID(title);
+	ImRect frameBB(parentWindow->DC.CursorPos, parentWindow->DC.CursorPos + size);
+
+	if (!ImGui::ItemAdd(frameBB, id)) {
+		ImGui::EndGroup();
+		return false;
+	}
+
 	// get font information
 	font = ImGui::GetFont();
 	fontSize = ImGui::GetFontSize();
@@ -58,7 +78,7 @@ void TextEditor::render(const char* title, const ImVec2& size, ImGuiChildFlags c
 	glyphSize = ImVec2(ImGui::CalcTextSize("#").x, ImGui::GetTextLineHeightWithSpacing() * config.lineSpacing);
 
 	// ensure editor has focus (if required)
-	if (focusOnEditor) {
+	if (!firstFrame && focusOnEditor) {
 		ImGui::SetNextWindowFocus();
 		focusOnEditor = false;
 	}
@@ -67,9 +87,17 @@ void TextEditor::render(const char* title, const ImVec2& size, ImGuiChildFlags c
 	ImGui::SetNextWindowContentSize(totalSize);
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
 	ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::ColorConvertU32ToFloat4(palette.get(Color::background)));
-	editorVisible = ImGui::BeginChild(title, size, childFlags, windowFlags);
+	auto editorVisible = ImGui::BeginChild(title, size, childFlags, windowFlags);
 
 	if (editorVisible) {
+		// make sure the focus is correct for navigation
+		if (firstFrame) {
+			firstFrame = false;
+
+		} else if (ImGui::IsWindowFocused() && g.ActiveId != id) {
+			ImGui::SetFocusID(id, g.CurrentWindow);
+		}
+
 		// determine current position and visible size
 		cursorScreenPos = ImGui::GetCursorScreenPos();
 		visibleSize = ImGui::GetCurrentWindow()->InnerRect.GetSize();
@@ -186,6 +214,14 @@ void TextEditor::render(const char* title, const ImVec2& size, ImGuiChildFlags c
 		handlePossibleScrolling();
 	}
 
+	// ensure that EndChild will display a navigation highlight so we can "enter" into it
+	g.CurrentWindow->DC.NavLayersActiveMaskNext |= (1 << g.CurrentWindow->DC.NavLayerCurrent);
+
+	ImGui::EndChild();
+	ImGui::PopStyleColor();
+	ImGui::PopStyleVar();
+	ImGui::EndGroup();
+
 	// handle change tracking if there is a callback in place
 	if (delayedChangeCallback && delayedChangeDetected) {
 		if (std::chrono::system_clock::now() > delayedChangeReportTime) {
@@ -194,9 +230,7 @@ void TextEditor::render(const char* title, const ImVec2& size, ImGuiChildFlags c
 		}
 	}
 
-	ImGui::EndChild();
-	ImGui::PopStyleColor();
-	ImGui::PopStyleVar();
+	return editorVisible;
 }
 
 
@@ -1077,6 +1111,19 @@ void TextEditor::updateState() {
 		}
 	}
 
+	// compress marker and squiggle lists (if required)
+	if (deletesHappened) {
+		if (markers.size()) {
+			compressMarkers();
+		}
+
+		if (squiggles.size()) {
+			compressSquiggles();
+		}
+
+		deletesHappened = false;
+	}
+
 	// reset overlay "dirty" flags
 	document.resetUpdated();
 	bracketeer.resetUpdated();
@@ -1248,7 +1295,7 @@ void TextEditor::handleKeyboardInputs() {
 		}
 
 		// handle escape key
-		else if (ImGui::Shortcut(ImGuiKey_Escape)) {
+		else if ((autocomplete.isActive() || findReplaceVisible || cursors.hasMultiple()) && ImGui::Shortcut(ImGuiKey_Escape)) {
 			if (autocomplete.isActive()) {
 				autocomplete.cancel();
 
@@ -2134,7 +2181,7 @@ void TextEditor::clearSquiggles() {
 		}
 	}
 
-	markers.clear();
+	squiggles.clear();
 }
 
 
@@ -3087,6 +3134,7 @@ void TextEditor::deleteText(std::shared_ptr<Transaction> transaction, DocPos sta
 	document.deleteText(config, start, end);
 	transaction->addDelete(start, end, text);
 	makeCursorVisible();
+	deletesHappened = true;
 }
 
 
