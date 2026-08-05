@@ -20,6 +20,8 @@ import (
 	_ "github.com/AllenDang/cimgui-go/cwrappers/imgui/examples/example_glfw_wgpu"
 	_ "github.com/AllenDang/cimgui-go/cwrappers/imgui/examples/example_glut_opengl2"
 	_ "github.com/AllenDang/cimgui-go/cwrappers/imgui/examples/example_null"
+	_ "github.com/AllenDang/cimgui-go/cwrappers/imgui/examples/example_qnx_opengl3"
+	_ "github.com/AllenDang/cimgui-go/cwrappers/imgui/examples/example_qnx_vulkan"
 	_ "github.com/AllenDang/cimgui-go/cwrappers/imgui/examples/example_sdl2_directx11"
 	_ "github.com/AllenDang/cimgui-go/cwrappers/imgui/examples/example_sdl2_opengl2"
 	_ "github.com/AllenDang/cimgui-go/cwrappers/imgui/examples/example_sdl2_opengl3"

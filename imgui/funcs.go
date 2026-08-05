@@ -887,6 +887,13 @@ func (self *DrawList) SetDrawListSharedData(data *DrawListSharedData) {
 	dataFin()
 }
 
+func (self *DrawList) SetPixelDensity(pixel_density float32) {
+	selfArg, selfFin := self.Handle()
+	C.ImDrawList__SetPixelDensity(internal.ReinterpretCast[*C.ImDrawList](selfArg), C.float(pixel_density))
+
+	selfFin()
+}
+
 func (self *DrawList) SetTexture(tex_ref TextureRef) {
 	selfArg, selfFin := self.Handle()
 	tex_refArg, tex_refFin := tex_ref.C()
@@ -6871,10 +6878,6 @@ func GetFontBaked() *FontBaked {
 	return NewFontBakedFromC(C.igGetFontBaked())
 }
 
-func InternalFontRasterizerDensity() float32 {
-	return float32(C.igGetFontRasterizerDensity())
-}
-
 // get current scaled font size (= height in pixels). AFTER global scale factors applied. *IMPORTANT* DO NOT PASS THIS VALUE TO PushFont()! Use ImGui::GetStyle().FontSizeBase to get value before global scale factors.
 func FontSize() float32 {
 	return float32(C.igGetFontSize())
@@ -7172,6 +7175,10 @@ func InternalNavTweakPressedAmount(axis Axis) float32 {
 	return float32(C.igGetNavTweakPressedAmount(C.ImGuiAxis(axis)))
 }
 
+func InternalPixelDensity() float32 {
+	return float32(C.igGetPixelDensity())
+}
+
 func InternalPlatformIOContextPtr(ctx *Context) *PlatformIO {
 	ctxArg, ctxFin := ctx.Handle()
 
@@ -7458,10 +7465,10 @@ func InternalImBezierCubicClosestPoint(p1, p2, p3, p4, p Vec2, num_segments int3
 	}()
 }
 
-// For auto-tessellated curves you can use tess_tol = style.CurveTessellationTol
-func InternalImBezierCubicClosestPointCasteljau(p1, p2, p3, p4, p Vec2, tess_tol float32) Vec2 {
+// For auto-tessellated curves you can use max_error = style.CurveTessellationMaxError
+func InternalImBezierCubicClosestPointCasteljau(p1, p2, p3, p4, p Vec2, max_error float32) Vec2 {
 	return func() Vec2 {
-		out := C.igImBezierCubicClosestPointCasteljau(internal.ReinterpretCast[C.ImVec2_c](p1.ToC()), internal.ReinterpretCast[C.ImVec2_c](p2.ToC()), internal.ReinterpretCast[C.ImVec2_c](p3.ToC()), internal.ReinterpretCast[C.ImVec2_c](p4.ToC()), internal.ReinterpretCast[C.ImVec2_c](p.ToC()), C.float(tess_tol))
+		out := C.igImBezierCubicClosestPointCasteljau(internal.ReinterpretCast[C.ImVec2_c](p1.ToC()), internal.ReinterpretCast[C.ImVec2_c](p2.ToC()), internal.ReinterpretCast[C.ImVec2_c](p3.ToC()), internal.ReinterpretCast[C.ImVec2_c](p4.ToC()), internal.ReinterpretCast[C.ImVec2_c](p.ToC()), C.float(max_error))
 		return *(&Vec2{}).FromC(unsafe.Pointer(&out))
 	}()
 }
@@ -10837,10 +10844,6 @@ func InternalSetFocusID(id ID, window *Window) {
 	windowFin()
 }
 
-func InternalSetFontRasterizerDensity(rasterizer_density float32) {
-	C.igSetFontRasterizerDensity(C.float(rasterizer_density))
-}
-
 func InternalSetHoveredID(id ID) {
 	idArg, idFin := id.C()
 	C.igSetHoveredID(internal.ReinterpretCast[C.ImGuiID](idArg))
@@ -11098,6 +11101,11 @@ func SetNextWindowViewport(viewport_id ID) {
 	C.igSetNextWindowViewport(internal.ReinterpretCast[C.ImGuiID](viewport_idArg))
 
 	viewport_idFin()
+}
+
+// was SetFontRasterizerDensity()
+func InternalSetPixelDensity(pixel_density float32) {
+	C.igSetPixelDensity(C.float(pixel_density))
 }
 
 // adjust scrolling amount to make given position visible. Generally GetCursorStartPos() + offset to compute a valid position.
@@ -16168,6 +16176,12 @@ func (self DrawList) SetFringeScale(v float32) {
 	C.wrap_ImDrawList_Set_FringeScale(selfArg, C.float(v))
 }
 
+func (self DrawList) SetInvFringeScale(v float32) {
+	selfArg, selfFin := self.Handle()
+	defer selfFin()
+	C.wrap_ImDrawList_Set_InvFringeScale(selfArg, C.float(v))
+}
+
 func (self DrawList) SetOwnerName(v string) {
 	vArg, _ := internal.WrapString[C.char](v)
 
@@ -16324,6 +16338,15 @@ func (self *DrawList) FringeScale() float32 {
 	return float32(C.wrap_ImDrawList_Get_FringeScale(internal.ReinterpretCast[*C.ImDrawList](selfArg)))
 }
 
+func (self *DrawList) InvFringeScale() float32 {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return float32(C.wrap_ImDrawList_Get_InvFringeScale(internal.ReinterpretCast[*C.ImDrawList](selfArg)))
+}
+
 func (self *DrawList) OwnerName() string {
 	selfArg, selfFin := self.Handle()
 
@@ -16375,16 +16398,10 @@ func (self DrawListSharedData) SetFontScale(v float32) {
 	C.wrap_ImDrawListSharedData_SetFontScale(selfArg, C.float(v))
 }
 
-func (self DrawListSharedData) SetCurveTessellationTol(v float32) {
+func (self DrawListSharedData) SetCurveTessellationMaxError(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
-	C.wrap_ImDrawListSharedData_SetCurveTessellationTol(selfArg, C.float(v))
-}
-
-func (self DrawListSharedData) SetInitialFringeScale(v float32) {
-	selfArg, selfFin := self.Handle()
-	defer selfFin()
-	C.wrap_ImDrawListSharedData_SetInitialFringeScale(selfArg, C.float(v))
+	C.wrap_ImDrawListSharedData_SetCurveTessellationMaxError(selfArg, C.float(v))
 }
 
 func (self DrawListSharedData) SetInitialFlags(v DrawListFlags) {
@@ -16514,13 +16531,13 @@ func (self *DrawListSharedData) FontScale() float32 {
 	return float32(C.wrap_ImDrawListSharedData_GetFontScale(internal.ReinterpretCast[*C.ImDrawListSharedData](selfArg)))
 }
 
-func (self *DrawListSharedData) CurveTessellationTol() float32 {
+func (self *DrawListSharedData) CurveTessellationMaxError() float32 {
 	selfArg, selfFin := self.Handle()
 
 	defer func() {
 		selfFin()
 	}()
-	return float32(C.wrap_ImDrawListSharedData_GetCurveTessellationTol(internal.ReinterpretCast[*C.ImDrawListSharedData](selfArg)))
+	return float32(C.wrap_ImDrawListSharedData_GetCurveTessellationMaxError(internal.ReinterpretCast[*C.ImDrawListSharedData](selfArg)))
 }
 
 func (self *DrawListSharedData) CircleTessellationMaxError() float32 {
@@ -16530,15 +16547,6 @@ func (self *DrawListSharedData) CircleTessellationMaxError() float32 {
 		selfFin()
 	}()
 	return float32(C.wrap_ImDrawListSharedData_GetCircleTessellationMaxError(internal.ReinterpretCast[*C.ImDrawListSharedData](selfArg)))
-}
-
-func (self *DrawListSharedData) InitialFringeScale() float32 {
-	selfArg, selfFin := self.Handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return float32(C.wrap_ImDrawListSharedData_GetInitialFringeScale(internal.ReinterpretCast[*C.ImDrawListSharedData](selfArg)))
 }
 
 func (self *DrawListSharedData) InitialFlags() DrawListFlags {
@@ -19593,10 +19601,10 @@ func (self Context) SetFontBakedScale(v float32) {
 	C.wrap_ImGuiContext_SetFontBakedScale(selfArg, C.float(v))
 }
 
-func (self Context) SetFontRasterizerDensity(v float32) {
+func (self Context) SetCurrentPixelDensity(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
-	C.wrap_ImGuiContext_SetFontRasterizerDensity(selfArg, C.float(v))
+	C.wrap_ImGuiContext_SetCurrentPixelDensity(selfArg, C.float(v))
 }
 
 func (self Context) SetCurrentDpiScale(v float32) {
@@ -22076,13 +22084,13 @@ func (self *Context) FontBakedScale() float32 {
 	return float32(C.wrap_ImGuiContext_GetFontBakedScale(internal.ReinterpretCast[*C.ImGuiContext](selfArg)))
 }
 
-func (self *Context) FontRasterizerDensity() float32 {
+func (self *Context) CurrentPixelDensity() float32 {
 	selfArg, selfFin := self.Handle()
 
 	defer func() {
 		selfFin()
 	}()
-	return float32(C.wrap_ImGuiContext_GetFontRasterizerDensity(internal.ReinterpretCast[*C.ImGuiContext](selfArg)))
+	return float32(C.wrap_ImGuiContext_GetCurrentPixelDensity(internal.ReinterpretCast[*C.ImGuiContext](selfArg)))
 }
 
 func (self *Context) CurrentDpiScale() float32 {
@@ -34537,10 +34545,10 @@ func (self Style) SetAntiAliasedFill(v bool) {
 	C.wrap_ImGuiStyle_SetAntiAliasedFill(selfArg, C.bool(v))
 }
 
-func (self Style) SetCurveTessellationTol(v float32) {
+func (self Style) SetCurveTessellationMaxError(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
-	C.wrap_ImGuiStyle_SetCurveTessellationTol(selfArg, C.float(v))
+	C.wrap_ImGuiStyle_SetCurveTessellationMaxError(selfArg, C.float(v))
 }
 
 func (self Style) SetCircleTessellationMaxError(v float32) {
@@ -35263,13 +35271,13 @@ func (self *Style) AntiAliasedFill() bool {
 	return C.wrap_ImGuiStyle_GetAntiAliasedFill(internal.ReinterpretCast[*C.ImGuiStyle](selfArg)) == C.bool(true)
 }
 
-func (self *Style) CurveTessellationTol() float32 {
+func (self *Style) CurveTessellationMaxError() float32 {
 	selfArg, selfFin := self.Handle()
 
 	defer func() {
 		selfFin()
 	}()
-	return float32(C.wrap_ImGuiStyle_GetCurveTessellationTol(internal.ReinterpretCast[*C.ImGuiStyle](selfArg)))
+	return float32(C.wrap_ImGuiStyle_GetCurveTessellationMaxError(internal.ReinterpretCast[*C.ImGuiStyle](selfArg)))
 }
 
 func (self *Style) CircleTessellationMaxError() float32 {

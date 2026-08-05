@@ -78,6 +78,7 @@ void wrap_ImDrawList_Set_ClipRectStack(ImDrawList *ImDrawListPtr, ImVector_ImVec
 void wrap_ImDrawList_Set_TextureStack(ImDrawList *ImDrawListPtr, ImVector_ImTextureRef v) { ImDrawListPtr->_TextureStack = v; }
 void wrap_ImDrawList_Set_CallbacksDataBuf(ImDrawList *ImDrawListPtr, ImVector_ImU8 v) { ImDrawListPtr->_CallbacksDataBuf = v; }
 void wrap_ImDrawList_Set_FringeScale(ImDrawList *ImDrawListPtr, float v) { ImDrawListPtr->_FringeScale = v; }
+void wrap_ImDrawList_Set_InvFringeScale(ImDrawList *ImDrawListPtr, float v) { ImDrawListPtr->_InvFringeScale = v; }
 void wrap_ImDrawList_Set_OwnerName(ImDrawList *ImDrawListPtr, const char* v) { ImDrawListPtr->_OwnerName = v; }
 ImVector_ImDrawCmd wrap_ImDrawList_GetCmdBuffer(ImDrawList *self) { return self->CmdBuffer; }
 ImVector_ImDrawIdx wrap_ImDrawList_GetIdxBuffer(ImDrawList *self) { return self->IdxBuffer; }
@@ -94,6 +95,7 @@ ImVector_ImVec4 wrap_ImDrawList_Get_ClipRectStack(ImDrawList *self) { return sel
 ImVector_ImTextureRef wrap_ImDrawList_Get_TextureStack(ImDrawList *self) { return self->_TextureStack; }
 ImVector_ImU8 wrap_ImDrawList_Get_CallbacksDataBuf(ImDrawList *self) { return self->_CallbacksDataBuf; }
 float wrap_ImDrawList_Get_FringeScale(ImDrawList *self) { return self->_FringeScale; }
+float wrap_ImDrawList_Get_InvFringeScale(ImDrawList *self) { return self->_InvFringeScale; }
 const char* wrap_ImDrawList_Get_OwnerName(ImDrawList *self) { return self->_OwnerName; }
 void wrap_ImDrawListSharedData_SetTexUvWhitePixel(ImDrawListSharedData *ImDrawListSharedDataPtr, ImVec2 v) { ImDrawListSharedDataPtr->TexUvWhitePixel = v; }
 void wrap_ImDrawListSharedData_SetTexUvLines(ImDrawListSharedData *ImDrawListSharedDataPtr, const ImVec4* v) { ImDrawListSharedDataPtr->TexUvLines = v; }
@@ -101,8 +103,7 @@ void wrap_ImDrawListSharedData_SetFontAtlas(ImDrawListSharedData *ImDrawListShar
 void wrap_ImDrawListSharedData_SetFont(ImDrawListSharedData *ImDrawListSharedDataPtr, ImFont* v) { ImDrawListSharedDataPtr->Font = v; }
 void wrap_ImDrawListSharedData_SetFontSize(ImDrawListSharedData *ImDrawListSharedDataPtr, float v) { ImDrawListSharedDataPtr->FontSize = v; }
 void wrap_ImDrawListSharedData_SetFontScale(ImDrawListSharedData *ImDrawListSharedDataPtr, float v) { ImDrawListSharedDataPtr->FontScale = v; }
-void wrap_ImDrawListSharedData_SetCurveTessellationTol(ImDrawListSharedData *ImDrawListSharedDataPtr, float v) { ImDrawListSharedDataPtr->CurveTessellationTol = v; }
-void wrap_ImDrawListSharedData_SetInitialFringeScale(ImDrawListSharedData *ImDrawListSharedDataPtr, float v) { ImDrawListSharedDataPtr->InitialFringeScale = v; }
+void wrap_ImDrawListSharedData_SetCurveTessellationMaxError(ImDrawListSharedData *ImDrawListSharedDataPtr, float v) { ImDrawListSharedDataPtr->CurveTessellationMaxError = v; }
 void wrap_ImDrawListSharedData_SetInitialFlags(ImDrawListSharedData *ImDrawListSharedDataPtr, ImDrawListFlags v) { ImDrawListSharedDataPtr->InitialFlags = v; }
 void wrap_ImDrawListSharedData_SetClipRectFullscreen(ImDrawListSharedData *ImDrawListSharedDataPtr, ImVec4 v) { ImDrawListSharedDataPtr->ClipRectFullscreen = v; }
 void wrap_ImDrawListSharedData_SetTempBuffer(ImDrawListSharedData *ImDrawListSharedDataPtr, ImVector_ImVec2 v) { ImDrawListSharedDataPtr->TempBuffer = v; }
@@ -117,9 +118,8 @@ ImFontAtlas* wrap_ImDrawListSharedData_GetFontAtlas(ImDrawListSharedData *self) 
 ImFont* wrap_ImDrawListSharedData_GetFont(ImDrawListSharedData *self) { return self->Font; }
 float wrap_ImDrawListSharedData_GetFontSize(ImDrawListSharedData *self) { return self->FontSize; }
 float wrap_ImDrawListSharedData_GetFontScale(ImDrawListSharedData *self) { return self->FontScale; }
-float wrap_ImDrawListSharedData_GetCurveTessellationTol(ImDrawListSharedData *self) { return self->CurveTessellationTol; }
+float wrap_ImDrawListSharedData_GetCurveTessellationMaxError(ImDrawListSharedData *self) { return self->CurveTessellationMaxError; }
 float wrap_ImDrawListSharedData_GetCircleTessellationMaxError(ImDrawListSharedData *self) { return self->CircleTessellationMaxError; }
-float wrap_ImDrawListSharedData_GetInitialFringeScale(ImDrawListSharedData *self) { return self->InitialFringeScale; }
 ImDrawListFlags wrap_ImDrawListSharedData_GetInitialFlags(ImDrawListSharedData *self) { return self->InitialFlags; }
 ImVec4_c wrap_ImDrawListSharedData_GetClipRectFullscreen(ImDrawListSharedData *self) { return self->ClipRectFullscreen; }
 ImVector_ImVec2 wrap_ImDrawListSharedData_GetTempBuffer(ImDrawListSharedData *self) { return self->TempBuffer; }
@@ -499,7 +499,7 @@ void wrap_ImGuiContext_SetFontBaked(ImGuiContext *ImGuiContextPtr, ImFontBaked* 
 void wrap_ImGuiContext_SetFontSize(ImGuiContext *ImGuiContextPtr, float v) { ImGuiContextPtr->FontSize = v; }
 void wrap_ImGuiContext_SetFontSizeBase(ImGuiContext *ImGuiContextPtr, float v) { ImGuiContextPtr->FontSizeBase = v; }
 void wrap_ImGuiContext_SetFontBakedScale(ImGuiContext *ImGuiContextPtr, float v) { ImGuiContextPtr->FontBakedScale = v; }
-void wrap_ImGuiContext_SetFontRasterizerDensity(ImGuiContext *ImGuiContextPtr, float v) { ImGuiContextPtr->FontRasterizerDensity = v; }
+void wrap_ImGuiContext_SetCurrentPixelDensity(ImGuiContext *ImGuiContextPtr, float v) { ImGuiContextPtr->CurrentPixelDensity = v; }
 void wrap_ImGuiContext_SetCurrentDpiScale(ImGuiContext *ImGuiContextPtr, float v) { ImGuiContextPtr->CurrentDpiScale = v; }
 void wrap_ImGuiContext_SetDrawListSharedData(ImGuiContext *ImGuiContextPtr, ImDrawListSharedData v) { ImGuiContextPtr->DrawListSharedData = v; }
 void wrap_ImGuiContext_SetWithinEndChildID(ImGuiContext *ImGuiContextPtr, ImGuiID v) { ImGuiContextPtr->WithinEndChildID = v; }
@@ -833,7 +833,7 @@ ImFontBaked* wrap_ImGuiContext_GetFontBaked(ImGuiContext *self) { return self->F
 float wrap_ImGuiContext_GetFontSize(ImGuiContext *self) { return self->FontSize; }
 float wrap_ImGuiContext_GetFontSizeBase(ImGuiContext *self) { return self->FontSizeBase; }
 float wrap_ImGuiContext_GetFontBakedScale(ImGuiContext *self) { return self->FontBakedScale; }
-float wrap_ImGuiContext_GetFontRasterizerDensity(ImGuiContext *self) { return self->FontRasterizerDensity; }
+float wrap_ImGuiContext_GetCurrentPixelDensity(ImGuiContext *self) { return self->CurrentPixelDensity; }
 float wrap_ImGuiContext_GetCurrentDpiScale(ImGuiContext *self) { return self->CurrentDpiScale; }
 ImDrawListSharedData wrap_ImGuiContext_GetDrawListSharedData(ImGuiContext *self) { return self->DrawListSharedData; }
 ImGuiID wrap_ImGuiContext_GetWithinEndChildID(ImGuiContext *self) { return self->WithinEndChildID; }
@@ -2283,7 +2283,7 @@ void wrap_ImGuiStyle_SetMouseCursorScale(ImGuiStyle *ImGuiStylePtr, float v) { I
 void wrap_ImGuiStyle_SetAntiAliasedLines(ImGuiStyle *ImGuiStylePtr, bool v) { ImGuiStylePtr->AntiAliasedLines = v; }
 void wrap_ImGuiStyle_SetAntiAliasedLinesUseTex(ImGuiStyle *ImGuiStylePtr, bool v) { ImGuiStylePtr->AntiAliasedLinesUseTex = v; }
 void wrap_ImGuiStyle_SetAntiAliasedFill(ImGuiStyle *ImGuiStylePtr, bool v) { ImGuiStylePtr->AntiAliasedFill = v; }
-void wrap_ImGuiStyle_SetCurveTessellationTol(ImGuiStyle *ImGuiStylePtr, float v) { ImGuiStylePtr->CurveTessellationTol = v; }
+void wrap_ImGuiStyle_SetCurveTessellationMaxError(ImGuiStyle *ImGuiStylePtr, float v) { ImGuiStylePtr->CurveTessellationMaxError = v; }
 void wrap_ImGuiStyle_SetCircleTessellationMaxError(ImGuiStyle *ImGuiStylePtr, float v) { ImGuiStylePtr->CircleTessellationMaxError = v; }
 void wrap_ImGuiStyle_SetColors(ImGuiStyle *ImGuiStylePtr, ImVec4* v) { memcpy(ImGuiStylePtr->Colors, v, sizeof(ImVec4)*63); }
 void wrap_ImGuiStyle_SetHoverStationaryDelay(ImGuiStyle *ImGuiStylePtr, float v) { ImGuiStylePtr->HoverStationaryDelay = v; }
@@ -2361,7 +2361,7 @@ float wrap_ImGuiStyle_GetMouseCursorScale(ImGuiStyle *self) { return self->Mouse
 bool wrap_ImGuiStyle_GetAntiAliasedLines(ImGuiStyle *self) { return self->AntiAliasedLines; }
 bool wrap_ImGuiStyle_GetAntiAliasedLinesUseTex(ImGuiStyle *self) { return self->AntiAliasedLinesUseTex; }
 bool wrap_ImGuiStyle_GetAntiAliasedFill(ImGuiStyle *self) { return self->AntiAliasedFill; }
-float wrap_ImGuiStyle_GetCurveTessellationTol(ImGuiStyle *self) { return self->CurveTessellationTol; }
+float wrap_ImGuiStyle_GetCurveTessellationMaxError(ImGuiStyle *self) { return self->CurveTessellationMaxError; }
 float wrap_ImGuiStyle_GetCircleTessellationMaxError(ImGuiStyle *self) { return self->CircleTessellationMaxError; }
 ImVec4_c* wrap_ImGuiStyle_GetColors(ImGuiStyle *self) { return self->Colors; }
 float wrap_ImGuiStyle_GetHoverStationaryDelay(ImGuiStyle *self) { return self->HoverStationaryDelay; }

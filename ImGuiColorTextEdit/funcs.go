@@ -1417,13 +1417,15 @@ func (self *TextEditor) Redo() {
 // size: ImVec2()
 // childFlags: 0
 // windowFlags: ImGuiWindowFlags_NoMove | ImGuiWindowFlags_HorizontalScrollbar
-func (self *TextEditor) RenderV(title string, size imgui.Vec2, childFlags imgui.ChildFlags, windowFlags imgui.WindowFlags) {
+func (self *TextEditor) RenderV(title string, size imgui.Vec2, childFlags imgui.ChildFlags, windowFlags imgui.WindowFlags) bool {
 	selfArg, selfFin := self.Handle()
 	titleArg, titleFin := internal.WrapString[C.char](title)
-	C.TextEditor_Render(internal.ReinterpretCast[*C.TextEditor](selfArg), titleArg, internal.ReinterpretCast[C.ImVec2_c](size.ToC()), C.ImGuiChildFlags(childFlags), C.ImGuiWindowFlags(windowFlags))
 
-	selfFin()
-	titleFin()
+	defer func() {
+		selfFin()
+		titleFin()
+	}()
+	return C.TextEditor_Render(internal.ReinterpretCast[*C.TextEditor](selfArg), titleArg, internal.ReinterpretCast[C.ImVec2_c](size.ToC()), C.ImGuiChildFlags(childFlags), C.ImGuiWindowFlags(windowFlags)) == C.bool(true)
 }
 
 func (self *TextEditor) ReplaceSectionTextDocPos(start, end DocPos, text string) {
@@ -2027,13 +2029,15 @@ func (self *TextEditor) AddSquiggle(start, end DocPos, typeArg uint64, color uin
 	endFin()
 }
 
-func (self *TextEditor) Render(title string) {
+func (self *TextEditor) Render(title string) bool {
 	selfArg, selfFin := self.Handle()
 	titleArg, titleFin := internal.WrapString[C.char](title)
-	C.wrap_TextEditor_Render(internal.ReinterpretCast[*C.TextEditor](selfArg), titleArg)
 
-	selfFin()
-	titleFin()
+	defer func() {
+		selfFin()
+		titleFin()
+	}()
+	return C.wrap_TextEditor_Render(internal.ReinterpretCast[*C.TextEditor](selfArg), titleArg) == C.bool(true)
 }
 
 func (self *TextEditor) SelectAllOccurrencesOf(text string) {
