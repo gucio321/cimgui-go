@@ -231,9 +231,9 @@ extern "C" {
 			for _, a := range f.ArgsT {
 				invocationArgs = append(invocationArgs, a.Name)
 
-				call, hasDefault := f.Defaults[string(a.Name)]
+				_, hasDefault := f.Defaults[string(a.Name)]
 
-				if !hasDefault || !ValidateCCall(call) { // also check if the C call is valid. If it isn't, this arg will be added as before
+				if !hasDefault {
 					newArgsT = append(newArgsT, a)
 				}
 			}
@@ -692,8 +692,4 @@ func AddArrayIndexGetter(t CIdentifier, sbHeader, sbCpp *strings.Builder, contex
 		"%[1]s %[2]s(%[1]s *self, int index) { return self[index]; }\n",
 		t, getterFuncName,
 	)
-}
-
-func ValidateCCall(call string) bool {
-	return !Contains(call, cNamespaceSeparator)
 }
