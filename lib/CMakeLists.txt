@@ -40,6 +40,7 @@ set(CMAKE_BUILD_TYPE "Release")
 set(IMGUI_STATIC "on" CACHE STRING "Build as a static library")
 set(IMGUI_FREETYPE "no" CACHE STRING "Build with freetype library")
 set(IMGUI_LIBRARIES )
+add_definitions(-DCIMGUI_VARGS0)
 add_definitions(-DIMNODES_NAMESPACE=imnodes)
 add_definitions(-DIMGUI_MARKDOWN_NAMESPACE=ImMarkdown)
 
