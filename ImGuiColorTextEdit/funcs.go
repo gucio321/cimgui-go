@@ -2018,15 +2018,17 @@ func (self *TextDiff) Render(title string) {
 	titleFin()
 }
 
-func (self *TextEditor) AddSquiggle(start, end DocPos, typeArg uint64, color uint32) {
+func (self *TextEditor) AddSquiggle(start, end DocPos, typeArg uint64, color uint32, tooltip string) {
 	selfArg, selfFin := self.Handle()
 	startArg, startFin := start.C()
 	endArg, endFin := end.C()
-	C.wrap_TextEditor_AddSquiggle(internal.ReinterpretCast[*C.TextEditor](selfArg), internal.ReinterpretCast[C.DocPos](startArg), internal.ReinterpretCast[C.DocPos](endArg), C.xulong(typeArg), C.ImU32(color))
+	tooltipArg, tooltipFin := internal.WrapString[C.char](tooltip)
+	C.wrap_TextEditor_AddSquiggle(internal.ReinterpretCast[*C.TextEditor](selfArg), internal.ReinterpretCast[C.DocPos](startArg), internal.ReinterpretCast[C.DocPos](endArg), C.xulong(typeArg), C.ImU32(color), tooltipArg)
 
 	selfFin()
 	startFin()
 	endFin()
+	tooltipFin()
 }
 
 func (self *TextEditor) Render(title string) bool {
