@@ -887,6 +887,13 @@ func (self *DrawList) SetDrawListSharedData(data *DrawListSharedData) {
 	dataFin()
 }
 
+func (self *DrawList) SetPixelDensity(pixel_density float32) {
+	selfArg, selfFin := self.Handle()
+	C.ImDrawList__SetPixelDensity(internal.ReinterpretCast[*C.ImDrawList](selfArg), C.float(pixel_density))
+
+	selfFin()
+}
+
 func (self *DrawList) SetTexture(tex_ref TextureRef) {
 	selfArg, selfFin := self.Handle()
 	tex_refArg, tex_refFin := tex_ref.C()
@@ -3081,6 +3088,24 @@ func (self *TextBuffer) AppendV(str, str_end string) {
 	str_endFin()
 }
 
+func (self *TextBuffer) Appendf(fmt string) {
+	selfArg, selfFin := self.Handle()
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+	C.wrap_ImGuiTextBuffer_appendf(internal.ReinterpretCast[*C.ImGuiTextBuffer](selfArg), fmtArg)
+
+	selfFin()
+	fmtFin()
+}
+
+func (self *TextBuffer) Appendf0(fmt string) {
+	selfArg, selfFin := self.Handle()
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+	C.ImGuiTextBuffer_appendf0(internal.ReinterpretCast[*C.ImGuiTextBuffer](selfArg), fmtArg)
+
+	selfFin()
+	fmtFin()
+}
+
 func (self *TextBuffer) Begin() string {
 	selfArg, selfFin := self.Handle()
 
@@ -4690,6 +4715,14 @@ func BulletText(fmt string) {
 	fmtFin()
 }
 
+// shortcut for Bullet()+Text()
+func BulletText0(fmt string) {
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+	C.igBulletText0(fmtArg)
+
+	fmtFin()
+}
+
 //	// Widgets: Main
 //	// - Most widgets return true when the value has been changed or when pressed/selected
 //	// - You may also use one of the many IsItemXXX functions (e.g. IsItemActive, IsItemHovered, etc.) to query widget state.// button
@@ -5326,6 +5359,14 @@ func InternalDebugLocateItemResolveWithLastItem() {
 func DebugLog(fmt string) {
 	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
 	C.wrap_igDebugLog(fmtArg)
+
+	fmtFin()
+}
+
+// Call via IMGUI_DEBUG_LOG() for maximum stripping in caller code!
+func DebugLog0(fmt string) {
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+	C.igDebugLog0(fmtArg)
 
 	fmtFin()
 }
@@ -6837,10 +6878,6 @@ func GetFontBaked() *FontBaked {
 	return NewFontBakedFromC(C.igGetFontBaked())
 }
 
-func InternalFontRasterizerDensity() float32 {
-	return float32(C.igGetFontRasterizerDensity())
-}
-
 // get current scaled font size (= height in pixels). AFTER global scale factors applied. *IMPORTANT* DO NOT PASS THIS VALUE TO PushFont()! Use ImGui::GetStyle().FontSizeBase to get value before global scale factors.
 func FontSize() float32 {
 	return float32(C.igGetFontSize())
@@ -7138,6 +7175,10 @@ func InternalNavTweakPressedAmount(axis Axis) float32 {
 	return float32(C.igGetNavTweakPressedAmount(C.ImGuiAxis(axis)))
 }
 
+func InternalPixelDensity() float32 {
+	return float32(C.igGetPixelDensity())
+}
+
 func InternalPlatformIOContextPtr(ctx *Context) *PlatformIO {
 	ctxArg, ctxFin := ctx.Handle()
 
@@ -7424,10 +7465,10 @@ func InternalImBezierCubicClosestPoint(p1, p2, p3, p4, p Vec2, num_segments int3
 	}()
 }
 
-// For auto-tessellated curves you can use tess_tol = style.CurveTessellationTol
-func InternalImBezierCubicClosestPointCasteljau(p1, p2, p3, p4, p Vec2, tess_tol float32) Vec2 {
+// For auto-tessellated curves you can use max_error = style.CurveTessellationMaxError
+func InternalImBezierCubicClosestPointCasteljau(p1, p2, p3, p4, p Vec2, max_error float32) Vec2 {
 	return func() Vec2 {
-		out := C.igImBezierCubicClosestPointCasteljau(internal.ReinterpretCast[C.ImVec2_c](p1.ToC()), internal.ReinterpretCast[C.ImVec2_c](p2.ToC()), internal.ReinterpretCast[C.ImVec2_c](p3.ToC()), internal.ReinterpretCast[C.ImVec2_c](p4.ToC()), internal.ReinterpretCast[C.ImVec2_c](p.ToC()), C.float(tess_tol))
+		out := C.igImBezierCubicClosestPointCasteljau(internal.ReinterpretCast[C.ImVec2_c](p1.ToC()), internal.ReinterpretCast[C.ImVec2_c](p2.ToC()), internal.ReinterpretCast[C.ImVec2_c](p3.ToC()), internal.ReinterpretCast[C.ImVec2_c](p4.ToC()), internal.ReinterpretCast[C.ImVec2_c](p.ToC()), C.float(max_error))
 		return *(&Vec2{}).FromC(unsafe.Pointer(&out))
 	}()
 }
@@ -8146,11 +8187,34 @@ func InternalImFormatString(buf string, buf_size uint64, fmt string) int32 {
 	return int32(C.wrap_igImFormatString(bufArg, C.xulong(buf_size), fmtArg))
 }
 
+// Helpers: Formatting
+func InternalImFormatString0(buf string, buf_size uint64, fmt string) int32 {
+	bufArg, bufFin := internal.WrapString[C.char](buf)
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+
+	defer func() {
+		bufFin()
+		fmtFin()
+	}()
+	return int32(C.igImFormatString0(bufArg, C.xulong(buf_size), fmtArg))
+}
+
 func InternalImFormatStringToTempBuffer(out_buf, out_buf_end []string, fmt string) {
 	out_bufArg, out_bufFin := internal.WrapStringList[C.char](out_buf)
 	out_buf_endArg, out_buf_endFin := internal.WrapStringList[C.char](out_buf_end)
 	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
 	C.wrap_igImFormatStringToTempBuffer(out_bufArg, out_buf_endArg, fmtArg)
+
+	out_bufFin()
+	out_buf_endFin()
+	fmtFin()
+}
+
+func InternalImFormatStringToTempBuffer0(out_buf, out_buf_end []string, fmt string) {
+	out_bufArg, out_bufFin := internal.WrapStringList[C.char](out_buf)
+	out_buf_endArg, out_buf_endFin := internal.WrapStringList[C.char](out_buf_end)
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+	C.igImFormatStringToTempBuffer0(out_bufArg, out_buf_endArg, fmtArg)
 
 	out_bufFin()
 	out_buf_endFin()
@@ -9617,6 +9681,16 @@ func LabelText(label, fmt string) {
 	fmtFin()
 }
 
+// display text+label aligned the same way as value+label widgets
+func LabelText0(label, fmt string) {
+	labelArg, labelFin := internal.WrapString[C.char](label)
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+	C.igLabelText0(labelArg, fmtArg)
+
+	labelFin()
+	fmtFin()
+}
+
 // ListBoxStrarrV parameter default value hint:
 // height_in_items: -1
 func ListBoxStrarrV(label string, current_item *int32, items []string, items_count, height_in_items int32) bool {
@@ -9703,6 +9777,14 @@ func InternalLogSetNextTextDecoration(prefix, suffix string) {
 func LogText(fmt string) {
 	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
 	C.wrap_igLogText(fmtArg)
+
+	fmtFin()
+}
+
+// pass text data straight to log (without being displayed)
+func LogText0(fmt string) {
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+	C.igLogText0(fmtArg)
 
 	fmtFin()
 }
@@ -10762,10 +10844,6 @@ func InternalSetFocusID(id ID, window *Window) {
 	windowFin()
 }
 
-func InternalSetFontRasterizerDensity(rasterizer_density float32) {
-	C.igSetFontRasterizerDensity(C.float(rasterizer_density))
-}
-
 func InternalSetHoveredID(id ID) {
 	idArg, idFin := id.C()
 	C.igSetHoveredID(internal.ReinterpretCast[C.ImGuiID](idArg))
@@ -10797,6 +10875,14 @@ func SetItemKeyOwner(key Key) bool {
 func SetItemTooltip(fmt string) {
 	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
 	C.wrap_igSetItemTooltip(fmtArg)
+
+	fmtFin()
+}
+
+// set a text-only tooltip if preceding item was hovered. override any previous call to SetTooltip().
+func SetItemTooltip0(fmt string) {
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+	C.igSetItemTooltip0(fmtArg)
 
 	fmtFin()
 }
@@ -11017,6 +11103,11 @@ func SetNextWindowViewport(viewport_id ID) {
 	viewport_idFin()
 }
 
+// was SetFontRasterizerDensity()
+func InternalSetPixelDensity(pixel_density float32) {
+	C.igSetPixelDensity(C.float(pixel_density))
+}
+
 // adjust scrolling amount to make given position visible. Generally GetCursorStartPos() + offset to compute a valid position.
 // SetScrollFromPosXFloatV parameter default value hint:
 // center_x_ratio: 0.5f
@@ -11116,6 +11207,14 @@ func SetTabItemClosed(tab_or_docked_window_label string) {
 func SetTooltip(fmt string) {
 	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
 	C.wrap_igSetTooltip(fmtArg)
+
+	fmtFin()
+}
+
+// set a text-only tooltip. Often used after a ImGui::IsItemHovered() check. Override any previous call to SetTooltip().
+func SetTooltip0(fmt string) {
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+	C.igSetTooltip0(fmtArg)
 
 	fmtFin()
 }
@@ -12601,10 +12700,26 @@ func Text(fmt string) {
 	fmtFin()
 }
 
+// formatted text
+func Text0(fmt string) {
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+	C.igText0(fmtArg)
+
+	fmtFin()
+}
+
 // FIXME-WIP: Works but API is likely to be reworked. This is designed for 1 item on the line. (#7024)
 func InternalTextAligned(align_x, size_x float32, fmt string) {
 	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
 	C.wrap_igTextAligned(C.float(align_x), C.float(size_x), fmtArg)
+
+	fmtFin()
+}
+
+// FIXME-WIP: Works but API is likely to be reworked. This is designed for 1 item on the line. (#7024)
+func InternalTextAligned0(align_x, size_x float32, fmt string) {
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+	C.igTextAligned0(C.float(align_x), C.float(size_x), fmtArg)
 
 	fmtFin()
 }
@@ -12617,10 +12732,26 @@ func TextColored(col Vec4, fmt string) {
 	fmtFin()
 }
 
+// shortcut for PushStyleColor(ImGuiCol_Text, col); Text(fmt, ...); PopStyleColor();
+func TextColored0(col Vec4, fmt string) {
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+	C.igTextColored0(internal.ReinterpretCast[C.ImVec4_c](col.ToC()), fmtArg)
+
+	fmtFin()
+}
+
 // shortcut for PushStyleColor(ImGuiCol_Text, style.Colors[ImGuiCol_TextDisabled]); Text(fmt, ...); PopStyleColor();
 func TextDisabled(fmt string) {
 	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
 	C.wrap_igTextDisabled(fmtArg)
+
+	fmtFin()
+}
+
+// shortcut for PushStyleColor(ImGuiCol_Text, style.Colors[ImGuiCol_TextDisabled]); Text(fmt, ...); PopStyleColor();
+func TextDisabled0(fmt string) {
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+	C.igTextDisabled0(fmtArg)
 
 	fmtFin()
 }
@@ -12679,6 +12810,14 @@ func TextWrapped(fmt string) {
 	fmtFin()
 }
 
+// shortcut for PushTextWrapPos(0.0f); Text(fmt, ...); PopTextWrapPos();. Note that this won't work on an auto-resizing window if there's no other widgets to extend the window width, yoy may need to set a size using SetNextWindowSize().
+func TextWrapped0(fmt string) {
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+	C.igTextWrapped0(fmtArg)
+
+	fmtFin()
+}
+
 // // Viewports
 func InternalTranslateWindowsInViewport(viewport *ViewportP, old_pos, new_pos, old_size, new_size Vec2) {
 	viewportArg, viewportFin := viewport.Handle()
@@ -12724,6 +12863,15 @@ func TreeNodeExPtr(ptr_id uintptr, flags TreeNodeFlags, fmt string) bool {
 	return C.wrap_igTreeNodeEx_Ptr(C.uintptr_t(ptr_id), C.ImGuiTreeNodeFlags(flags), fmtArg) == C.bool(true)
 }
 
+func TreeNodeExPtr0(ptr_id uintptr, flags TreeNodeFlags, fmt string) bool {
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+
+	defer func() {
+		fmtFin()
+	}()
+	return C.wrap_igTreeNodeEx_Ptr0(C.uintptr_t(ptr_id), C.ImGuiTreeNodeFlags(flags), fmtArg) == C.bool(true)
+}
+
 // TreeNodeExStrV parameter default value hint:
 // flags: 0
 func TreeNodeExStrV(label string, flags TreeNodeFlags) bool {
@@ -12744,6 +12892,17 @@ func TreeNodeExStrStr(str_id string, flags TreeNodeFlags, fmt string) bool {
 		fmtFin()
 	}()
 	return C.wrap_igTreeNodeEx_StrStr(str_idArg, C.ImGuiTreeNodeFlags(flags), fmtArg) == C.bool(true)
+}
+
+func TreeNodeExStrStr0(str_id string, flags TreeNodeFlags, fmt string) bool {
+	str_idArg, str_idFin := internal.WrapString[C.char](str_id)
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+
+	defer func() {
+		str_idFin()
+		fmtFin()
+	}()
+	return C.igTreeNodeEx_StrStr0(str_idArg, C.ImGuiTreeNodeFlags(flags), fmtArg) == C.bool(true)
 }
 
 // retrieve tree node open/close state.
@@ -12783,6 +12942,16 @@ func TreeNodePtr(ptr_id uintptr, fmt string) bool {
 	return C.wrap_igTreeNode_Ptr(C.uintptr_t(ptr_id), fmtArg) == C.bool(true)
 }
 
+// "
+func TreeNodePtr0(ptr_id uintptr, fmt string) bool {
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+
+	defer func() {
+		fmtFin()
+	}()
+	return C.wrap_igTreeNode_Ptr0(C.uintptr_t(ptr_id), fmtArg) == C.bool(true)
+}
+
 // // Widgets: Trees
 // // - TreeNode functions return true when the node is open, in which case you need to also call TreePop() when you are finished displaying the tree node contents.
 func TreeNodeStr(label string) bool {
@@ -12804,6 +12973,18 @@ func TreeNodeStrStr(str_id, fmt string) bool {
 		fmtFin()
 	}()
 	return C.wrap_igTreeNode_StrStr(str_idArg, fmtArg) == C.bool(true)
+}
+
+// helper variation to easily decorrelate the id from the displayed string. Read the FAQ about why and how to use ID. to align arbitrary text at the same level as a TreeNode() you can use Bullet().
+func TreeNodeStrStr0(str_id, fmt string) bool {
+	str_idArg, str_idFin := internal.WrapString[C.char](str_id)
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+
+	defer func() {
+		str_idFin()
+		fmtFin()
+	}()
+	return C.igTreeNode_StrStr0(str_idArg, fmtArg) == C.bool(true)
 }
 
 // ~ Unindent()+PopID()
@@ -15995,6 +16176,12 @@ func (self DrawList) SetFringeScale(v float32) {
 	C.wrap_ImDrawList_Set_FringeScale(selfArg, C.float(v))
 }
 
+func (self DrawList) SetInvFringeScale(v float32) {
+	selfArg, selfFin := self.Handle()
+	defer selfFin()
+	C.wrap_ImDrawList_Set_InvFringeScale(selfArg, C.float(v))
+}
+
 func (self DrawList) SetOwnerName(v string) {
 	vArg, _ := internal.WrapString[C.char](v)
 
@@ -16151,6 +16338,15 @@ func (self *DrawList) FringeScale() float32 {
 	return float32(C.wrap_ImDrawList_Get_FringeScale(internal.ReinterpretCast[*C.ImDrawList](selfArg)))
 }
 
+func (self *DrawList) InvFringeScale() float32 {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return float32(C.wrap_ImDrawList_Get_InvFringeScale(internal.ReinterpretCast[*C.ImDrawList](selfArg)))
+}
+
 func (self *DrawList) OwnerName() string {
 	selfArg, selfFin := self.Handle()
 
@@ -16202,16 +16398,10 @@ func (self DrawListSharedData) SetFontScale(v float32) {
 	C.wrap_ImDrawListSharedData_SetFontScale(selfArg, C.float(v))
 }
 
-func (self DrawListSharedData) SetCurveTessellationTol(v float32) {
+func (self DrawListSharedData) SetCurveTessellationMaxError(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
-	C.wrap_ImDrawListSharedData_SetCurveTessellationTol(selfArg, C.float(v))
-}
-
-func (self DrawListSharedData) SetInitialFringeScale(v float32) {
-	selfArg, selfFin := self.Handle()
-	defer selfFin()
-	C.wrap_ImDrawListSharedData_SetInitialFringeScale(selfArg, C.float(v))
+	C.wrap_ImDrawListSharedData_SetCurveTessellationMaxError(selfArg, C.float(v))
 }
 
 func (self DrawListSharedData) SetInitialFlags(v DrawListFlags) {
@@ -16341,13 +16531,13 @@ func (self *DrawListSharedData) FontScale() float32 {
 	return float32(C.wrap_ImDrawListSharedData_GetFontScale(internal.ReinterpretCast[*C.ImDrawListSharedData](selfArg)))
 }
 
-func (self *DrawListSharedData) CurveTessellationTol() float32 {
+func (self *DrawListSharedData) CurveTessellationMaxError() float32 {
 	selfArg, selfFin := self.Handle()
 
 	defer func() {
 		selfFin()
 	}()
-	return float32(C.wrap_ImDrawListSharedData_GetCurveTessellationTol(internal.ReinterpretCast[*C.ImDrawListSharedData](selfArg)))
+	return float32(C.wrap_ImDrawListSharedData_GetCurveTessellationMaxError(internal.ReinterpretCast[*C.ImDrawListSharedData](selfArg)))
 }
 
 func (self *DrawListSharedData) CircleTessellationMaxError() float32 {
@@ -16357,15 +16547,6 @@ func (self *DrawListSharedData) CircleTessellationMaxError() float32 {
 		selfFin()
 	}()
 	return float32(C.wrap_ImDrawListSharedData_GetCircleTessellationMaxError(internal.ReinterpretCast[*C.ImDrawListSharedData](selfArg)))
-}
-
-func (self *DrawListSharedData) InitialFringeScale() float32 {
-	selfArg, selfFin := self.Handle()
-
-	defer func() {
-		selfFin()
-	}()
-	return float32(C.wrap_ImDrawListSharedData_GetInitialFringeScale(internal.ReinterpretCast[*C.ImDrawListSharedData](selfArg)))
 }
 
 func (self *DrawListSharedData) InitialFlags() DrawListFlags {
@@ -19420,10 +19601,10 @@ func (self Context) SetFontBakedScale(v float32) {
 	C.wrap_ImGuiContext_SetFontBakedScale(selfArg, C.float(v))
 }
 
-func (self Context) SetFontRasterizerDensity(v float32) {
+func (self Context) SetCurrentPixelDensity(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
-	C.wrap_ImGuiContext_SetFontRasterizerDensity(selfArg, C.float(v))
+	C.wrap_ImGuiContext_SetCurrentPixelDensity(selfArg, C.float(v))
 }
 
 func (self Context) SetCurrentDpiScale(v float32) {
@@ -21903,13 +22084,13 @@ func (self *Context) FontBakedScale() float32 {
 	return float32(C.wrap_ImGuiContext_GetFontBakedScale(internal.ReinterpretCast[*C.ImGuiContext](selfArg)))
 }
 
-func (self *Context) FontRasterizerDensity() float32 {
+func (self *Context) CurrentPixelDensity() float32 {
 	selfArg, selfFin := self.Handle()
 
 	defer func() {
 		selfFin()
 	}()
-	return float32(C.wrap_ImGuiContext_GetFontRasterizerDensity(internal.ReinterpretCast[*C.ImGuiContext](selfArg)))
+	return float32(C.wrap_ImGuiContext_GetCurrentPixelDensity(internal.ReinterpretCast[*C.ImGuiContext](selfArg)))
 }
 
 func (self *Context) CurrentDpiScale() float32 {
@@ -34364,10 +34545,10 @@ func (self Style) SetAntiAliasedFill(v bool) {
 	C.wrap_ImGuiStyle_SetAntiAliasedFill(selfArg, C.bool(v))
 }
 
-func (self Style) SetCurveTessellationTol(v float32) {
+func (self Style) SetCurveTessellationMaxError(v float32) {
 	selfArg, selfFin := self.Handle()
 	defer selfFin()
-	C.wrap_ImGuiStyle_SetCurveTessellationTol(selfArg, C.float(v))
+	C.wrap_ImGuiStyle_SetCurveTessellationMaxError(selfArg, C.float(v))
 }
 
 func (self Style) SetCircleTessellationMaxError(v float32) {
@@ -35090,13 +35271,13 @@ func (self *Style) AntiAliasedFill() bool {
 	return C.wrap_ImGuiStyle_GetAntiAliasedFill(internal.ReinterpretCast[*C.ImGuiStyle](selfArg)) == C.bool(true)
 }
 
-func (self *Style) CurveTessellationTol() float32 {
+func (self *Style) CurveTessellationMaxError() float32 {
 	selfArg, selfFin := self.Handle()
 
 	defer func() {
 		selfFin()
 	}()
-	return float32(C.wrap_ImGuiStyle_GetCurveTessellationTol(internal.ReinterpretCast[*C.ImGuiStyle](selfArg)))
+	return float32(C.wrap_ImGuiStyle_GetCurveTessellationMaxError(internal.ReinterpretCast[*C.ImGuiStyle](selfArg)))
 }
 
 func (self *Style) CircleTessellationMaxError() float32 {
@@ -44582,4 +44763,410 @@ func (self *Vec2i) Y() int32 {
 		selfFin()
 	}()
 	return int32(C.wrap_ImVec2i_GetY(internal.ReinterpretCast[*C.ImVec2i](selfArg)))
+}
+
+func (self *STBTexteditState) TexteditStateGetCursor() int32 {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return int32(C.wrap_STB_TexteditState_GetCursor(internal.ReinterpretCast[*C.STB_TexteditState](selfArg)))
+}
+
+func (self *STBTexteditState) TexteditStateGetSelectstart() int32 {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return int32(C.wrap_STB_TexteditState_GetSelect_start(internal.ReinterpretCast[*C.STB_TexteditState](selfArg)))
+}
+
+func (self *STBTexteditState) TexteditStateGetSelectend() int32 {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return int32(C.wrap_STB_TexteditState_GetSelect_end(internal.ReinterpretCast[*C.STB_TexteditState](selfArg)))
+}
+
+func (self *STBTexteditState) TexteditStateGetInsertmode() uint {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return uint(C.wrap_STB_TexteditState_GetInsert_mode(internal.ReinterpretCast[*C.STB_TexteditState](selfArg)))
+}
+
+func (self *STBTexteditState) TexteditStateGetRowcountperpage() int32 {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return int32(C.wrap_STB_TexteditState_GetRow_count_per_page(internal.ReinterpretCast[*C.STB_TexteditState](selfArg)))
+}
+
+func (self *STBTexteditState) TexteditStateGetCursoratendofline() uint {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return uint(C.wrap_STB_TexteditState_GetCursor_at_end_of_line(internal.ReinterpretCast[*C.STB_TexteditState](selfArg)))
+}
+
+func (self *STBTexteditState) TexteditStateGetInitialized() uint {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return uint(C.wrap_STB_TexteditState_GetInitialized(internal.ReinterpretCast[*C.STB_TexteditState](selfArg)))
+}
+
+func (self *STBTexteditState) TexteditStateGetHaspreferredx() uint {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return uint(C.wrap_STB_TexteditState_GetHas_preferred_x(internal.ReinterpretCast[*C.STB_TexteditState](selfArg)))
+}
+
+func (self *STBTexteditState) TexteditStateGetSingleline() uint {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return uint(C.wrap_STB_TexteditState_GetSingle_line(internal.ReinterpretCast[*C.STB_TexteditState](selfArg)))
+}
+
+func (self *STBTexteditState) TexteditStateGetPadding1() uint {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return uint(C.wrap_STB_TexteditState_GetPadding1(internal.ReinterpretCast[*C.STB_TexteditState](selfArg)))
+}
+
+func (self *STBTexteditState) TexteditStateGetPadding2() uint {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return uint(C.wrap_STB_TexteditState_GetPadding2(internal.ReinterpretCast[*C.STB_TexteditState](selfArg)))
+}
+
+func (self *STBTexteditState) TexteditStateGetPadding3() uint {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return uint(C.wrap_STB_TexteditState_GetPadding3(internal.ReinterpretCast[*C.STB_TexteditState](selfArg)))
+}
+
+func (self *STBTexteditState) TexteditStateGetPreferredx() float32 {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return float32(C.wrap_STB_TexteditState_GetPreferred_x(internal.ReinterpretCast[*C.STB_TexteditState](selfArg)))
+}
+
+func (self *STBTexteditState) TexteditStateGetUndostate() StbUndoState {
+	selfArg, selfFin := self.Handle()
+
+	result := C.wrap_STB_TexteditState_GetUndostate(internal.ReinterpretCast[*C.STB_TexteditState](selfArg))
+
+	defer func() {
+		selfFin()
+	}()
+	return *NewStbUndoStateFromC(func() *C.StbUndoState { result := result; return &result }())
+}
+
+func (self StbTexteditRow) SetX0(v float32) {
+	selfArg, selfFin := self.Handle()
+	defer selfFin()
+	C.wrap_StbTexteditRow_SetX0(selfArg, C.float(v))
+}
+
+func (self StbTexteditRow) SetX1(v float32) {
+	selfArg, selfFin := self.Handle()
+	defer selfFin()
+	C.wrap_StbTexteditRow_SetX1(selfArg, C.float(v))
+}
+
+func (self StbTexteditRow) SetBaselineydelta(v float32) {
+	selfArg, selfFin := self.Handle()
+	defer selfFin()
+	C.wrap_StbTexteditRow_SetBaseline_y_delta(selfArg, C.float(v))
+}
+
+func (self StbTexteditRow) SetYmin(v float32) {
+	selfArg, selfFin := self.Handle()
+	defer selfFin()
+	C.wrap_StbTexteditRow_SetYmin(selfArg, C.float(v))
+}
+
+func (self StbTexteditRow) SetYmax(v float32) {
+	selfArg, selfFin := self.Handle()
+	defer selfFin()
+	C.wrap_StbTexteditRow_SetYmax(selfArg, C.float(v))
+}
+
+func (self StbTexteditRow) SetNumchars(v int32) {
+	selfArg, selfFin := self.Handle()
+	defer selfFin()
+	C.wrap_StbTexteditRow_SetNum_chars(selfArg, C.int(v))
+}
+
+func (self *StbTexteditRow) X0() float32 {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return float32(C.wrap_StbTexteditRow_GetX0(internal.ReinterpretCast[*C.StbTexteditRow](selfArg)))
+}
+
+func (self *StbTexteditRow) X1() float32 {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return float32(C.wrap_StbTexteditRow_GetX1(internal.ReinterpretCast[*C.StbTexteditRow](selfArg)))
+}
+
+func (self *StbTexteditRow) Baselineydelta() float32 {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return float32(C.wrap_StbTexteditRow_GetBaseline_y_delta(internal.ReinterpretCast[*C.StbTexteditRow](selfArg)))
+}
+
+func (self *StbTexteditRow) Ymin() float32 {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return float32(C.wrap_StbTexteditRow_GetYmin(internal.ReinterpretCast[*C.StbTexteditRow](selfArg)))
+}
+
+func (self *StbTexteditRow) Ymax() float32 {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return float32(C.wrap_StbTexteditRow_GetYmax(internal.ReinterpretCast[*C.StbTexteditRow](selfArg)))
+}
+
+func (self *StbTexteditRow) Numchars() int32 {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return int32(C.wrap_StbTexteditRow_GetNum_chars(internal.ReinterpretCast[*C.StbTexteditRow](selfArg)))
+}
+
+func (self StbUndoRecord) SetWhere(v int32) {
+	selfArg, selfFin := self.Handle()
+	defer selfFin()
+	C.wrap_StbUndoRecord_SetWhere(selfArg, C.int(v))
+}
+
+func (self StbUndoRecord) SetInsertlength(v int32) {
+	selfArg, selfFin := self.Handle()
+	defer selfFin()
+	C.wrap_StbUndoRecord_SetInsert_length(selfArg, C.int(v))
+}
+
+func (self StbUndoRecord) SetDeletelength(v int32) {
+	selfArg, selfFin := self.Handle()
+	defer selfFin()
+	C.wrap_StbUndoRecord_SetDelete_length(selfArg, C.int(v))
+}
+
+func (self StbUndoRecord) SetCharstorage(v int32) {
+	selfArg, selfFin := self.Handle()
+	defer selfFin()
+	C.wrap_StbUndoRecord_SetChar_storage(selfArg, C.int(v))
+}
+
+func (self *StbUndoRecord) Where() int32 {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return int32(C.wrap_StbUndoRecord_GetWhere(internal.ReinterpretCast[*C.StbUndoRecord](selfArg)))
+}
+
+func (self *StbUndoRecord) Insertlength() int32 {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return int32(C.wrap_StbUndoRecord_GetInsert_length(internal.ReinterpretCast[*C.StbUndoRecord](selfArg)))
+}
+
+func (self *StbUndoRecord) Deletelength() int32 {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return int32(C.wrap_StbUndoRecord_GetDelete_length(internal.ReinterpretCast[*C.StbUndoRecord](selfArg)))
+}
+
+func (self *StbUndoRecord) Charstorage() int32 {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return int32(C.wrap_StbUndoRecord_GetChar_storage(internal.ReinterpretCast[*C.StbUndoRecord](selfArg)))
+}
+
+func (self StbUndoState) SetUndorec(v *[99]StbUndoRecord) {
+	vArg := make([]C.StbUndoRecord, len(v))
+	for i, vV := range v {
+		vVArg, _ := vV.C()
+		vArg[i] = internal.ReinterpretCast[C.StbUndoRecord](vVArg)
+	}
+
+	selfArg, selfFin := self.Handle()
+	defer selfFin()
+	C.wrap_StbUndoState_SetUndo_rec(selfArg, (*C.StbUndoRecord)(&vArg[0]))
+
+	for i, vV := range vArg {
+		(*v)[i] = *NewStbUndoRecordFromC(func() *C.StbUndoRecord { result := vV; return &result }())
+	}
+}
+
+func (self StbUndoState) SetUndochar(v *[999]rune) {
+	vArg := make([]C.char, len(v))
+	for i, vV := range v {
+		vArg[i] = C.char(vV)
+	}
+
+	selfArg, selfFin := self.Handle()
+	defer selfFin()
+	C.wrap_StbUndoState_SetUndo_char(selfArg, (*C.char)(&vArg[0]))
+
+	for i, vV := range vArg {
+		(*v)[i] = rune(vV)
+	}
+}
+
+func (self StbUndoState) SetUndopoint(v int16) {
+	selfArg, selfFin := self.Handle()
+	defer selfFin()
+	C.wrap_StbUndoState_SetUndo_point(selfArg, C.short(v))
+}
+
+func (self StbUndoState) SetRedopoint(v int16) {
+	selfArg, selfFin := self.Handle()
+	defer selfFin()
+	C.wrap_StbUndoState_SetRedo_point(selfArg, C.short(v))
+}
+
+func (self StbUndoState) SetUndocharpoint(v int32) {
+	selfArg, selfFin := self.Handle()
+	defer selfFin()
+	C.wrap_StbUndoState_SetUndo_char_point(selfArg, C.int(v))
+}
+
+func (self StbUndoState) SetRedocharpoint(v int32) {
+	selfArg, selfFin := self.Handle()
+	defer selfFin()
+	C.wrap_StbUndoState_SetRedo_char_point(selfArg, C.int(v))
+}
+
+func (self *StbUndoState) Undorec() [99]StbUndoRecord {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return func() [99]StbUndoRecord {
+		result := [99]StbUndoRecord{}
+		resultMirr := C.wrap_StbUndoState_GetUndo_rec(internal.ReinterpretCast[*C.StbUndoState](selfArg))
+		for i := range result {
+			result[i] = *NewStbUndoRecordFromC(func() *C.StbUndoRecord {
+				result := C.imgui_StbUndoRecord_GetAtIdx(resultMirr, C.int(i))
+				return &result
+			}())
+		}
+
+		return result
+	}()
+}
+
+func (self *StbUndoState) Undochar() [999]rune {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return func() [999]rune {
+		result := [999]rune{}
+		resultMirr := C.wrap_StbUndoState_GetUndo_char(internal.ReinterpretCast[*C.StbUndoState](selfArg))
+		for i := range result {
+			result[i] = rune(C.imgui_char_GetAtIdx(resultMirr, C.int(i)))
+		}
+
+		return result
+	}()
+}
+
+func (self *StbUndoState) Undopoint() int16 {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return int16(C.wrap_StbUndoState_GetUndo_point(internal.ReinterpretCast[*C.StbUndoState](selfArg)))
+}
+
+func (self *StbUndoState) Redopoint() int16 {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return int16(C.wrap_StbUndoState_GetRedo_point(internal.ReinterpretCast[*C.StbUndoState](selfArg)))
+}
+
+func (self *StbUndoState) Undocharpoint() int32 {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return int32(C.wrap_StbUndoState_GetUndo_char_point(internal.ReinterpretCast[*C.StbUndoState](selfArg)))
+}
+
+func (self *StbUndoState) Redocharpoint() int32 {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return int32(C.wrap_StbUndoState_GetRedo_char_point(internal.ReinterpretCast[*C.StbUndoState](selfArg)))
 }

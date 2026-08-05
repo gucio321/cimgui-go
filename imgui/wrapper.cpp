@@ -20,7 +20,7 @@ uintptr_t wrap_ImGuiStorage_GetVoidPtr(ImGuiStorage* self,ImGuiID key) { return 
 void** wrap_ImGuiStorage_GetVoidPtrRefV(ImGuiStorage* self,ImGuiID key,uintptr_t default_val) { return ImGuiStorage_GetVoidPtrRef(self,key,(void*)(uintptr_t)default_val); }
 void wrap_ImGuiStorage_SetVoidPtr(ImGuiStorage* self,ImGuiID key,uintptr_t val) { ImGuiStorage_SetVoidPtr(self,key,(void*)(uintptr_t)val); }
 uintptr_t wrap_ImGuiStyleVarInfo_GetVarPtr(ImGuiStyleVarInfo* self,uintptr_t parent) { return (uintptr_t)ImGuiStyleVarInfo_GetVarPtr(self,(void*)(uintptr_t)parent); }
-void wrap_ImGuiTextBuffer_appendf(ImGuiTextBuffer* self, const char* fmt) { ImGuiTextBuffer_appendf(self,fmt); }
+void wrap_ImGuiTextBuffer_appendf(ImGuiTextBuffer* self,const char* fmt) { ImGuiTextBuffer_appendf(self,fmt); }
 bool wrap_ImGuiTextFilter_PassFilterV(ImGuiTextFilter* self,const char* text,const int text_len) { return ImGuiTextFilter_PassFilter(self,text,(text_len > 0) ? text + text_len*sizeof(char) : 0); }
 ImGuiID wrap_ImGuiWindow_GetID_Ptr(ImGuiWindow* self,const uintptr_t ptr) { return ImGuiWindow_GetID_Ptr(self,(const void*)(uintptr_t)ptr); }
 uintptr_t wrap_ImTextureData_GetPixels(ImTextureData* self) { return (uintptr_t)ImTextureData_GetPixels(self); }
@@ -95,8 +95,10 @@ void wrap_igTextExV(const char* text,const int text_len,ImGuiTextFlags flags) { 
 void wrap_igTextUnformattedV(const char* text,const int text_len) { igTextUnformatted(text,(text_len > 0) ? text + text_len*sizeof(char) : 0); }
 void wrap_igTextWrapped(const char* fmt) { igTextWrapped(fmt); }
 bool wrap_igTreeNodeEx_Ptr(const uintptr_t ptr_id,ImGuiTreeNodeFlags flags,const char* fmt) { return igTreeNodeEx_Ptr((const void*)(uintptr_t)ptr_id,flags,fmt); }
+bool wrap_igTreeNodeEx_Ptr0(const uintptr_t ptr_id,ImGuiTreeNodeFlags flags,const char* fmt) { return igTreeNodeEx_Ptr0((const void*)(uintptr_t)ptr_id,flags,fmt); }
 bool wrap_igTreeNodeEx_StrStr(const char* str_id,ImGuiTreeNodeFlags flags,const char* fmt) { return igTreeNodeEx_StrStr(str_id,flags,fmt); }
 bool wrap_igTreeNode_Ptr(const uintptr_t ptr_id,const char* fmt) { return igTreeNode_Ptr((const void*)(uintptr_t)ptr_id,fmt); }
+bool wrap_igTreeNode_Ptr0(const uintptr_t ptr_id,const char* fmt) { return igTreeNode_Ptr0((const void*)(uintptr_t)ptr_id,fmt); }
 bool wrap_igTreeNode_StrStr(const char* str_id,const char* fmt) { return igTreeNode_StrStr(str_id,fmt); }
 void wrap_igTreePush_Ptr(const uintptr_t ptr_id) { igTreePush_Ptr((const void*)(uintptr_t)ptr_id); }
 int wrap_igTypingSelectFindBestLeadingMatch(ImGuiTypingSelectRequest* req,int items_count,const char*(*get_item_name_func)(void*,int),uintptr_t user_data) { return igTypingSelectFindBestLeadingMatch(req,items_count,get_item_name_func,(void*)(uintptr_t)user_data); }

@@ -16,9 +16,15 @@
 #include <fstream>
 
 #ifdef _WIN32
+#ifndef NOMINMAX
 #define NOMINMAX
+#endif
+#ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
+#endif
+#ifdef APIENTRY
 #undef APIENTRY
+#endif
 #include <shlobj.h>
 #include <windows.h>
 #else
@@ -110,6 +116,7 @@ Editor::Editor() {
 
 	setLanguageByExtention(filename);
 	editor.SetShowMiniMapEnabled(true);
+	editor.SetFocus();
 
 	// configure line breaker
 	lineBreakConfig.lb2 = false;
@@ -238,7 +245,7 @@ void Editor::render() {
 	ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f));
 	ImGui::SetNextWindowSize(ImGui::GetMainViewport()->Size);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-	ImGui::Begin("MainWindow", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_MenuBar);
+	ImGui::Begin("Main Window", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_MenuBar);
 
 	// add a menubar
 	renderMenuBar();
@@ -254,7 +261,7 @@ void Editor::render() {
 	auto statusBarHeight = ImGui::GetFrameHeight() + 2.0f * style.WindowPadding.y;
 	auto editorSize = ImVec2(0.0f, area.y - style.ItemSpacing.y - statusBarHeight);
 	ImGui::PushFont(nullptr, fontSize);
-	editor.Render("TextEditor", editorSize);
+	editor.Render("Text Editor", editorSize);
 	ImGui::PopFont();
 
 	// render a statusbar
@@ -278,12 +285,18 @@ void Editor::render() {
 
 	} else if (state == State::confirmError) {
 		renderConfirmError();
+
+	} else if (state == State::addSquiggle) {
+		renderAddSquiggle();
+
+	} else if (state == State::clearSquiggles) {
+		renderClearSquiggle();
 	}
 
 	ImGui::End();
 	ImGui::PopStyleVar();
 
-	// render debug information as a notification (if required)
+	// render debug information (if required)
 	if (showDebugInformation) {
 		renderDebugInformation();
 	}
@@ -478,6 +491,12 @@ void Editor::renderMenuBar() {
 			if (ImGui::MenuItem("Show Context Menus", nullptr, &showContextMenus)) { toggleContextMenus(); }
 			if (ImGui::MenuItem("Enable Unicode Line Break Algorithm", nullptr, &enableUnicodeLineBreakAlgorithm)) { toggleLineBreak(); }
 			ImGui::Separator();
+			if (ImGui::MenuItem("Add Squiggle(s)", nullptr, nullptr, editor.AnyCursorHasSelection())) { showAddSquiggle(); }
+			if (ImGui::MenuItem("Clear Squiggles", nullptr, nullptr, editor.HasSquiggles())) { clearSquiggles(); }
+			if (ImGui::MenuItem("Clear Squiggles by Type", nullptr, nullptr, editor.HasSquiggles())) { showClearSquiggles(); }
+			ImGui::Separator();
+			bool navigationMode = ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_NavEnableKeyboard;
+			if (ImGui::MenuItem("Keyboard/Gamepad Navigation Mode", " " SHORTCUT "Alt-N", &navigationMode)) { toggleNavigationMode(); }
 			ImGui::MenuItem("Show Debug Information", nullptr, &showDebugInformation);
 			ImGui::EndMenu();
 		}
@@ -486,17 +505,14 @@ void Editor::renderMenuBar() {
 	}
 
 	// handle keyboard shortcuts
-	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows) && !ImGui::GetIO().WantCaptureKeyboard) {
-		if (ImGui::IsKeyDown(ImGuiMod_Ctrl)) {
-			if (ImGui::IsKeyPressed(ImGuiKey_N)) { newFile(); }
-			else if (ImGui::IsKeyPressed(ImGuiKey_O)) { openFile(); }
-			else if (ImGui::IsKeyPressed(ImGuiKey_S)) { if (filename == "untitled") { showSaveFileAs(); } else { saveFile(); } }
-			else if (ImGui::IsKeyPressed(ImGuiKey_I)) { showDiff(); }
-			else if (ImGui::IsKeyPressed(ImGuiKey_0)) { resetFontSize(); }
-			else if (ImGui::IsKeyPressed(ImGuiKey_Equal)) { increaseFontSize(); }
-			else if (ImGui::IsKeyPressed(ImGuiKey_Minus)) { decreaseFontSize(); }
-		}
-	}
+	if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_N)) { newFile(); }
+	else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_O)) { openFile(); }
+	else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_S)) { if (filename == "untitled") { showSaveFileAs(); } else { saveFile(); } }
+	else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_I)) { showDiff(); }
+	else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_0)) { resetFontSize(); }
+	else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_Equal)) { increaseFontSize(); }
+	else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_Minus)) { decreaseFontSize(); }
+	else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiMod_Alt | ImGuiKey_N, ImGuiInputFlags_RouteAlways)) { toggleNavigationMode(); }
 }
 
 
@@ -511,7 +527,7 @@ void Editor::renderStatusBar() {
 
 	// create a statusbar window
 	ImGui::PushStyleColor(ImGuiCol_ChildBg, editor.GetPalette().get(TextEditor::Color::background));
-	ImGui::BeginChild("StatusBar", ImVec2(0.0f, 0.0f), ImGuiChildFlags_Borders);
+	ImGui::BeginChild("Status Bar", ImVec2(0.0f, 0.0f), ImGuiChildFlags_Borders);
 	ImGui::SetNextItemWidth(120.0f);
 
 	// allow user to select language for colorizing
@@ -671,6 +687,26 @@ void Editor::showError(const std::string &message) {
 
 
 //
+//	Editor::showAddSquiggle
+//
+
+void Editor::showAddSquiggle() {
+	state = State::addSquiggle;
+	popup = true;
+}
+
+
+//
+//	Editor::showClearSquiggles
+//
+
+void Editor::showClearSquiggles() {
+	state = State::clearSquiggles;
+	popup = true;
+}
+
+
+//
 //	Editor::renderDiff
 //
 
@@ -706,7 +742,7 @@ void Editor::renderDiff() {
 		ImGui::SameLine();
 		ImGui::Indent(buttonOffset);
 
-		if (ImGui::Button("OK", ImVec2(buttonWidth, 0.0f)) || ImGui::IsKeyPressed(ImGuiKey_Escape, false)) {
+		if (ImGui::Button("OK", ImVec2(buttonWidth, 0.0f)) || ImGui::Shortcut(ImGuiKey_Escape)) {
 			ImGui::CloseCurrentPopup();
 			state = State::edit;
 		}
@@ -798,7 +834,7 @@ void Editor::renderConfirmClose() {
 
 		ImGui::SameLine();
 
-		if (ImGui::Button("Cancel", ImVec2(buttonWidth, 0.0f)) || ImGui::IsKeyPressed(ImGuiKey_Escape, false)) {
+		if (ImGui::Button("Cancel", ImVec2(buttonWidth, 0.0f)) || ImGui::Shortcut(ImGuiKey_Escape)) {
 			state = State::edit;
 			ImGui::CloseCurrentPopup();
 		}
@@ -834,7 +870,7 @@ void Editor::renderConfirmQuit() {
 
 		ImGui::SameLine();
 
-		if (ImGui::Button("Cancel", ImVec2(buttonWidth, 0.0f)) || ImGui::IsKeyPressed(ImGuiKey_Escape, false)) {
+		if (ImGui::Button("Cancel", ImVec2(buttonWidth, 0.0f)) || ImGui::Shortcut(ImGuiKey_Escape)) {
 			state = State::edit;
 			ImGui::CloseCurrentPopup();
 		}
@@ -862,8 +898,93 @@ void Editor::renderConfirmError() {
 		static constexpr float buttonWidth = 80.0f;
 		ImGui::Indent(ImGui::GetContentRegionAvail().x - buttonWidth);
 
-		if (ImGui::Button("OK", ImVec2(buttonWidth, 0.0f)) || ImGui::IsKeyPressed(ImGuiKey_Escape, false)) {
+		if (ImGui::Button("OK", ImVec2(buttonWidth, 0.0f)) || ImGui::Shortcut(ImGuiKey_Escape)) {
 			errorMessage.clear();
+			state = State::edit;
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+}
+
+
+//
+//	Editor::renderAddSquiggle
+//
+
+void Editor::renderAddSquiggle() {
+	if (popup) {
+		ImGui::OpenPopup("Add Squiggle");
+		ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+		popup = false;
+	}
+
+	if (ImGui::BeginPopupModal("Add Squiggle", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+		auto type = static_cast<int>(squiggleType);
+		if (ImGui::SliderInt("Type", &type, 1, 5)) { squiggleType = static_cast<size_t>(type); }
+		ImGui::ColorEdit4("Color", (float*) &squiggleColor);
+		ImGui::InputText("Tool Tip", squiggleToolTip, sizeof(squiggleToolTip));
+		ImGui::Separator();
+
+		static constexpr float buttonWidth = 80.0f;
+		ImGui::Indent(ImGui::GetContentRegionAvail().x - buttonWidth * 2.0f - 5.0f);
+
+		if (ImGui::Button("OK", ImVec2(buttonWidth, 0.0f))) {
+			ImU32 color = squiggleColor;
+
+			for (size_t i = 0; i < editor.GetNumberOfCursors(); i++) {
+				auto selection = editor.GetCursorSelection(i);
+
+				if (selection.start != selection.end) {
+					editor.AddSquiggle(selection.start, selection.end, squiggleType, color, squiggleToolTip);
+				}
+			}
+
+			state = State::edit;
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::SameLine(0.0f, 5.0f);
+
+		if (ImGui::Button("Cancel", ImVec2(buttonWidth, 0.0f)) || ImGui::Shortcut(ImGuiKey_Escape)) {
+			state = State::edit;
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+}
+
+
+//
+//	Editor::renderClearSquiggle
+//
+
+void Editor::renderClearSquiggle() {
+	if (popup) {
+		ImGui::OpenPopup("Clear Squiggles");
+		ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+		popup = false;
+	}
+
+	if (ImGui::BeginPopupModal("Clear Squiggles", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+		auto type = static_cast<int>(squiggleType);
+		if (ImGui::SliderInt("Type", &type, 1, 5)) { squiggleType = static_cast<size_t>(type); }
+		ImGui::Separator();
+
+		static constexpr float buttonWidth = 80.0f;
+		ImGui::Indent(ImGui::GetContentRegionAvail().x - buttonWidth * 2.0f - 5.0f);
+
+		if (ImGui::Button("OK", ImVec2(buttonWidth, 0.0f))) {
+			editor.ClearSquiggles(squiggleType);
+			state = State::edit;
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::SameLine(0.0f, 5.0f);
+
+		if (ImGui::Button("Cancel", ImVec2(buttonWidth, 0.0f)) || ImGui::Shortcut(ImGuiKey_Escape)) {
 			state = State::edit;
 			ImGui::CloseCurrentPopup();
 		}
@@ -887,6 +1008,7 @@ void Editor::renderDebugInformation() {
 
 		auto& io = ImGui::GetIO();
 		auto& style = ImGui::GetStyle();
+
 		information += "Dear ImGui:\n";
 		information += std::format("io.DisplaySize: {}, {}\n", io.DisplaySize.x, io.DisplaySize.y);
 		information += std::format("io.DisplayFramebufferScale: {}, {}\n", io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
@@ -1020,6 +1142,30 @@ void Editor::setLanguageByExtention(const std::string& name) {
 
 	} else {
 		setLanguage(nullptr);
+	}
+}
+
+
+//
+//	Editor::toggleNavigationMode
+//
+
+void Editor::toggleNavigationMode() {
+	auto& io = ImGui::GetIO();
+
+	if (io.ConfigFlags & ImGuiConfigFlags_NavEnableKeyboard) {
+		io.ConfigFlags &= ~ImGuiConfigFlags_NavEnableKeyboard;
+		io.ConfigFlags &= ~ImGuiConfigFlags_NavEnableGamepad;
+		io.ConfigNavCursorVisibleAuto = true;
+		io.ConfigNavCursorVisibleAlways = false;
+		notifications.Add(Notifications::Type::info, "Keyboard/gamepad navigation mode deactivated");
+
+	} else {
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+		io.ConfigNavCursorVisibleAuto = false;
+		io.ConfigNavCursorVisibleAlways = true;
+		notifications.Add(Notifications::Type::info, "Keyboard/gamepad navigation mode activated");
 	}
 }
 
@@ -1217,4 +1363,24 @@ void Editor::toggleLineBreak() {
 	lineBreakConfig.useUnicodeAnnex14 = enableUnicodeLineBreakAlgorithm;
 	editor.SetWordWrapEnabled(true);
 	editor.SetLineBreakConfig(lineBreakConfig);
+}
+
+
+//
+//	Editor::clearSquiggles
+//
+
+void Editor::clearSquiggles() {
+	if (editor.AnyCursorHasSelection()) {
+		for (size_t i = 0; i < editor.GetNumberOfCursors(); i++) {
+			auto selection = editor.GetCursorSelection(i);
+
+			if (selection.start != selection.end) {
+				editor.ClearSquiggles(selection.start, selection.end);
+			}
+		}
+
+	} else {
+		editor.ClearSquiggles();
+	}
 }

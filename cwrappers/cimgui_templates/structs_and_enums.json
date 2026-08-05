@@ -6411,55 +6411,55 @@
   },
   "locations": {
     "ImBitVector": "imgui_internal:682",
-    "ImColor": "imgui:3139",
-    "ImDrawChannel": "imgui:3390",
-    "ImDrawCmd": "imgui:3346",
-    "ImDrawCmdHeader": "imgui:3382",
-    "ImDrawData": "imgui:3629",
-    "ImDrawDataBuilder": "imgui_internal:928",
-    "ImDrawFlags_": "imgui:3414",
-    "ImDrawList": "imgui:3461",
-    "ImDrawListFlags_": "imgui:3442",
+    "ImColor": "imgui:3142",
+    "ImDrawChannel": "imgui:3393",
+    "ImDrawCmd": "imgui:3349",
+    "ImDrawCmdHeader": "imgui:3385",
+    "ImDrawData": "imgui:3634",
+    "ImDrawDataBuilder": "imgui_internal:927",
+    "ImDrawFlags_": "imgui:3417",
+    "ImDrawList": "imgui:3464",
+    "ImDrawListFlags_": "imgui:3445",
     "ImDrawListSharedData": "imgui_internal:901",
-    "ImDrawListSplitter": "imgui:3398",
+    "ImDrawListSplitter": "imgui:3401",
     "ImDrawTextFlags_": "imgui_internal:451",
-    "ImDrawVert": "imgui:3367",
-    "ImFont": "imgui:4064",
-    "ImFontAtlas": "imgui:3862",
+    "ImDrawVert": "imgui:3370",
+    "ImFont": "imgui:4069",
+    "ImFontAtlas": "imgui:3867",
     "ImFontAtlasBuilder": "imgui_internal:4284",
-    "ImFontAtlasFlags_": "imgui:3835",
+    "ImFontAtlasFlags_": "imgui:3840",
     "ImFontAtlasPostProcessData": "imgui_internal:4257",
-    "ImFontAtlasRect": "imgui:3825",
+    "ImFontAtlasRect": "imgui:3830",
     "ImFontAtlasRectEntry": "imgui_internal:4249",
-    "ImFontBaked": "imgui:4015",
-    "ImFontConfig": "imgui:3744",
-    "ImFontFlags_": "imgui:4050",
-    "ImFontGlyph": "imgui:3787",
-    "ImFontGlyphRangesBuilder": "imgui:3803",
+    "ImFontBaked": "imgui:4020",
+    "ImFontConfig": "imgui:3749",
+    "ImFontFlags_": "imgui:4055",
+    "ImFontGlyph": "imgui:3792",
+    "ImFontGlyphRangesBuilder": "imgui:3808",
     "ImFontLoader": "imgui_internal:4198",
-    "ImFontStackData": "imgui_internal:936",
+    "ImFontStackData": "imgui_internal:935",
     "ImGuiActivateFlags_": "imgui_internal:1740",
-    "ImGuiAxis": "imgui_internal:1185",
+    "ImGuiAxis": "imgui_internal:1184",
     "ImGuiBackendFlags_": "imgui:1822",
     "ImGuiBoxSelectState": "imgui_internal:1932",
-    "ImGuiButtonFlagsPrivate_": "imgui_internal:1073",
+    "ImGuiButtonFlagsPrivate_": "imgui_internal:1072",
     "ImGuiButtonFlags_": "imgui:1974",
     "ImGuiChildFlags_": "imgui:1267",
     "ImGuiCol_": "imgui:1839",
     "ImGuiColorEditFlags_": "imgui:1986",
-    "ImGuiColorMod": "imgui_internal:956",
-    "ImGuiComboFlagsPrivate_": "imgui_internal:1099",
+    "ImGuiColorMod": "imgui_internal:955",
+    "ImGuiComboFlagsPrivate_": "imgui_internal:1098",
     "ImGuiComboFlags_": "imgui:1443",
-    "ImGuiComboPreviewData": "imgui_internal:1199",
+    "ImGuiComboPreviewData": "imgui_internal:1198",
     "ImGuiCond_": "imgui:2107",
     "ImGuiConfigFlags_": "imgui:1794",
     "ImGuiContext": "imgui_internal:2443",
     "ImGuiContextHook": "imgui_internal:2426",
     "ImGuiContextHookType": "imgui_internal:2424",
     "ImGuiDataAuthority_": "imgui_internal:2048",
-    "ImGuiDataTypeInfo": "imgui_internal:982",
-    "ImGuiDataTypePrivate_": "imgui_internal:991",
-    "ImGuiDataTypeStorage": "imgui_internal:976",
+    "ImGuiDataTypeInfo": "imgui_internal:981",
+    "ImGuiDataTypePrivate_": "imgui_internal:990",
+    "ImGuiDataTypeStorage": "imgui_internal:975",
     "ImGuiDataType_": "imgui:1599",
     "ImGuiDeactivatedItemData": "imgui_internal:1505",
     "ImGuiDebugAllocEntry": "imgui_internal:2346",
@@ -6474,15 +6474,15 @@
     "ImGuiDockNodeState": "imgui_internal:2055",
     "ImGuiDragDropFlags_": "imgui:1570",
     "ImGuiErrorRecoveryState": "imgui_internal:1460",
-    "ImGuiFocusRequestFlags_": "imgui_internal:1145",
+    "ImGuiFocusRequestFlags_": "imgui_internal:1144",
     "ImGuiFocusScopeData": "imgui_internal:1829",
     "ImGuiFocusedFlags_": "imgui:1497",
     "ImGuiFreeTypeLoaderFlags_": "imgui_freetype:29",
-    "ImGuiGroupData": "imgui_internal:1212",
-    "ImGuiHoveredFlagsPrivate_": "imgui_internal:1056",
+    "ImGuiGroupData": "imgui_internal:1211",
+    "ImGuiHoveredFlagsPrivate_": "imgui_internal:1055",
     "ImGuiHoveredFlags_": "imgui:1511",
     "ImGuiIDStackTool": "imgui_internal:2409",
-    "ImGuiIO": "imgui:2517",
+    "ImGuiIO": "imgui:2520",
     "ImGuiInputEvent": "imgui_internal:1600",
     "ImGuiInputEventAppFocused": "imgui_internal:1598",
     "ImGuiInputEventKey": "imgui_internal:1596",
@@ -6495,35 +6495,35 @@
     "ImGuiInputFlagsPrivate_": "imgui_internal:1667",
     "ImGuiInputFlags_": "imgui:1770",
     "ImGuiInputSource": "imgui_internal:1581",
-    "ImGuiInputTextCallbackData": "imgui:2787",
-    "ImGuiInputTextDeactivatedState": "imgui_internal:1250",
-    "ImGuiInputTextFlagsPrivate_": "imgui_internal:1064",
+    "ImGuiInputTextCallbackData": "imgui:2790",
+    "ImGuiInputTextDeactivatedState": "imgui_internal:1249",
+    "ImGuiInputTextFlagsPrivate_": "imgui_internal:1063",
     "ImGuiInputTextFlags_": "imgui:1315",
-    "ImGuiInputTextState": "imgui_internal:1273",
-    "ImGuiItemFlagsPrivate_": "imgui_internal:1004",
+    "ImGuiInputTextState": "imgui_internal:1272",
+    "ImGuiItemFlagsPrivate_": "imgui_internal:1003",
     "ImGuiItemFlags_": "imgui:1288",
-    "ImGuiItemStatusFlags_": "imgui_internal:1028",
+    "ImGuiItemStatusFlags_": "imgui_internal:1027",
     "ImGuiKey": "imgui:1641",
-    "ImGuiKeyData": "imgui:2509",
+    "ImGuiKeyData": "imgui:2512",
     "ImGuiKeyOwnerData": "imgui_internal:1654",
     "ImGuiKeyRoutingData": "imgui_internal:1628",
     "ImGuiKeyRoutingTable": "imgui_internal:1642",
     "ImGuiLastItemData": "imgui_internal:1429",
-    "ImGuiLayoutType_": "imgui_internal:1166",
-    "ImGuiListClipper": "imgui:3028",
+    "ImGuiLayoutType_": "imgui_internal:1165",
+    "ImGuiListClipper": "imgui:3031",
     "ImGuiListClipperData": "imgui_internal:1724",
-    "ImGuiListClipperFlags_": "imgui:3002",
+    "ImGuiListClipperFlags_": "imgui:3005",
     "ImGuiListClipperRange": "imgui_internal:1711",
     "ImGuiLocEntry": "imgui_internal:2293",
     "ImGuiLocKey": "imgui_internal:2272",
-    "ImGuiLogFlags_": "imgui_internal:1173",
-    "ImGuiMenuColumns": "imgui_internal:1231",
+    "ImGuiLogFlags_": "imgui_internal:1172",
+    "ImGuiMenuColumns": "imgui_internal:1230",
     "ImGuiMetricsConfig": "imgui_internal:2363",
     "ImGuiMouseButton_": "imgui:2065",
     "ImGuiMouseCursor_": "imgui:2075",
     "ImGuiMouseSource": "imgui:2096",
-    "ImGuiMultiSelectFlags_": "imgui:3197",
-    "ImGuiMultiSelectIO": "imgui:3233",
+    "ImGuiMultiSelectFlags_": "imgui:3200",
+    "ImGuiMultiSelectIO": "imgui:3236",
     "ImGuiMultiSelectState": "imgui_internal:1992",
     "ImGuiMultiSelectTempData": "imgui_internal:1965",
     "ImGuiNavItemData": "imgui_internal:1812",
@@ -6537,38 +6537,38 @@
     "ImGuiOldColumnData": "imgui_internal:1897",
     "ImGuiOldColumnFlags_": "imgui_internal:1877",
     "ImGuiOldColumns": "imgui_internal:1907",
-    "ImGuiOnceUponAFrame": "imgui:2891",
+    "ImGuiOnceUponAFrame": "imgui:2894",
     "ImGuiPackedDate": "imgui_internal:852",
-    "ImGuiPayload": "imgui:2856",
-    "ImGuiPlatformIO": "imgui:4253",
-    "ImGuiPlatformImeData": "imgui:4385",
-    "ImGuiPlatformMonitor": "imgui:4375",
-    "ImGuiPlotType": "imgui_internal:1192",
+    "ImGuiPayload": "imgui:2859",
+    "ImGuiPlatformIO": "imgui:4258",
+    "ImGuiPlatformImeData": "imgui:4390",
+    "ImGuiPlatformMonitor": "imgui:4380",
+    "ImGuiPlotType": "imgui_internal:1191",
     "ImGuiPopupData": "imgui_internal:1525",
     "ImGuiPopupFlags_": "imgui:1406",
     "ImGuiPopupPositionPolicy": "imgui_internal:1517",
     "ImGuiPtrOrIndex": "imgui_internal:1494",
     "ImGuiScrollFlags_": "imgui_internal:1753",
-    "ImGuiSelectableFlagsPrivate_": "imgui_internal:1112",
+    "ImGuiSelectableFlagsPrivate_": "imgui_internal:1111",
     "ImGuiSelectableFlags_": "imgui:1425",
-    "ImGuiSelectionBasicStorage": "imgui:3279",
-    "ImGuiSelectionExternalStorage": "imgui:3302",
-    "ImGuiSelectionRequest": "imgui:3253",
-    "ImGuiSelectionRequestType": "imgui:3245",
-    "ImGuiSeparatorFlags_": "imgui_internal:1134",
+    "ImGuiSelectionBasicStorage": "imgui:3282",
+    "ImGuiSelectionExternalStorage": "imgui:3305",
+    "ImGuiSelectionRequest": "imgui:3256",
+    "ImGuiSelectionRequestType": "imgui:3248",
+    "ImGuiSeparatorFlags_": "imgui_internal:1133",
     "ImGuiSettingsCleanupArgs": "imgui_internal:2240",
     "ImGuiSettingsHandler": "imgui_internal:2251",
     "ImGuiShrinkWidthItem": "imgui_internal:1487",
-    "ImGuiSizeCallbackData": "imgui:2824",
-    "ImGuiSliderFlagsPrivate_": "imgui_internal:1105",
+    "ImGuiSizeCallbackData": "imgui:2827",
+    "ImGuiSliderFlagsPrivate_": "imgui_internal:1104",
     "ImGuiSliderFlags_": "imgui:2046",
     "ImGuiSortDirection": "imgui:1628",
     "ImGuiStackLevelInfo": "imgui_internal:2384",
-    "ImGuiStorage": "imgui:2964",
-    "ImGuiStoragePair": "imgui:2947",
+    "ImGuiStorage": "imgui:2967",
+    "ImGuiStoragePair": "imgui:2950",
     "ImGuiStyle": "imgui:2394",
-    "ImGuiStyleMod": "imgui_internal:963",
-    "ImGuiStyleVarInfo": "imgui_internal:947",
+    "ImGuiStyleMod": "imgui_internal:962",
+    "ImGuiStyleVarInfo": "imgui_internal:946",
     "ImGuiStyleVar_": "imgui:1922",
     "ImGuiTabBar": "imgui_internal:3120",
     "ImGuiTabBarFlagsPrivate_": "imgui_internal:3082",
@@ -6591,24 +6591,24 @@
     "ImGuiTableSettings": "imgui_internal:3473",
     "ImGuiTableSortSpecs": "imgui:2260",
     "ImGuiTableTempData": "imgui_internal:3418",
-    "ImGuiTextBuffer": "imgui:2926",
-    "ImGuiTextFilter": "imgui:2899",
-    "ImGuiTextFlags_": "imgui_internal:1152",
+    "ImGuiTextBuffer": "imgui:2929",
+    "ImGuiTextFilter": "imgui:2902",
+    "ImGuiTextFlags_": "imgui_internal:1151",
     "ImGuiTextIndex": "imgui_internal:837",
-    "ImGuiTextRange": "imgui:2909",
-    "ImGuiTooltipFlags_": "imgui_internal:1158",
-    "ImGuiTreeNodeFlagsPrivate_": "imgui_internal:1125",
+    "ImGuiTextRange": "imgui:2912",
+    "ImGuiTooltipFlags_": "imgui_internal:1157",
+    "ImGuiTreeNodeFlagsPrivate_": "imgui_internal:1124",
     "ImGuiTreeNodeFlags_": "imgui:1367",
     "ImGuiTreeNodeStackData": "imgui_internal:1448",
     "ImGuiTypingSelectFlags_": "imgui_internal:1840",
     "ImGuiTypingSelectRequest": "imgui_internal:1848",
     "ImGuiTypingSelectState": "imgui_internal:1859",
-    "ImGuiViewport": "imgui:4164",
-    "ImGuiViewportFlags_": "imgui:4136",
+    "ImGuiViewport": "imgui:4169",
+    "ImGuiViewportFlags_": "imgui:4141",
     "ImGuiViewportP": "imgui_internal:2168",
     "ImGuiWindow": "imgui_internal:2927",
     "ImGuiWindowBgClickFlags_": "imgui_internal:1338",
-    "ImGuiWindowClass": "imgui:2839",
+    "ImGuiWindowClass": "imgui:2842",
     "ImGuiWindowDockStyle": "imgui_internal:2146",
     "ImGuiWindowDockStyleCol": "imgui_internal:2131",
     "ImGuiWindowFlags_": "imgui:1216",
@@ -6617,17 +6617,21 @@
     "ImGuiWindowStackData": "imgui_internal:1478",
     "ImGuiWindowTempData": "imgui_internal:2869",
     "ImRect": "imgui_internal:602",
-    "ImTextureData": "imgui:3698",
-    "ImTextureFormat": "imgui:3666",
-    "ImTextureRect": "imgui:3685",
+    "ImTextureData": "imgui:3703",
+    "ImTextureFormat": "imgui:3671",
+    "ImTextureRect": "imgui:3690",
     "ImTextureRef": "imgui:372",
-    "ImTextureStatus": "imgui:3673",
+    "ImTextureStatus": "imgui:3678",
     "ImVec1": "imgui_internal:576",
     "ImVec2": "imgui:300",
     "ImVec2i": "imgui_internal:584",
     "ImVec2ih": "imgui_internal:592",
     "ImVec4": "imgui:313",
     "ImWcharClass": "imgui_internal:463",
+    "STB_TexteditState": "imstb_textedit:342",
+    "StbTexteditRow": "imstb_textedit:389",
+    "StbUndoRecord": "imstb_textedit:324",
+    "StbUndoState": "imstb_textedit:333",
     "stbrp_context_opaque": "imgui_internal:4281"
   },
   "nonPOD": {
@@ -7019,6 +7023,9 @@
     },
     "ImVec4": {
       "above": "// ImVec4: 4D vector used to store clipping rectangles, colors etc. [Compile-time configurable type]"
+    },
+    "StbTexteditRow": {
+      "above": "// result of layout query"
     }
   },
   "structs": {
@@ -7326,9 +7333,16 @@
       },
       {
         "comment": {
-          "sameline": "// [Internal] anti-alias fringe is scaled by this value, this helps to keep things sharp while zooming at vertex buffer content"
+          "sameline": "// [Internal] anti-alias fringe is scaled by this value, this helps to keep things sharp while zooming at vertex buffer content."
         },
         "name": "_FringeScale",
+        "type": "float"
+      },
+      {
+        "comment": {
+          "sameline": "// [internal] 1.0 / _FringeScale // FIXME: Consider renaming to _PixelDensity."
+        },
+        "name": "_InvFringeScale",
         "type": "float"
       },
       {
@@ -7386,7 +7400,7 @@
         "comment": {
           "sameline": "// Tessellation tolerance when using PathBezierCurveTo()"
         },
-        "name": "CurveTessellationTol",
+        "name": "CurveTessellationMaxError",
         "type": "float"
       },
       {
@@ -7394,13 +7408,6 @@
           "sameline": "// Number of circle segments to use per pixel of radius for AddCircle() etc"
         },
         "name": "CircleTessellationMaxError",
-        "type": "float"
-      },
-      {
-        "comment": {
-          "sameline": "// Initial scale to apply to AA fringe"
-        },
-        "name": "InitialFringeScale",
         "type": "float"
       },
       {
@@ -8807,7 +8814,7 @@
         "comment": {
           "sameline": "// Current font density. Used by all calls to GetFontBaked()."
         },
-        "name": "FontRasterizerDensity",
+        "name": "CurrentPixelDensity",
         "type": "float"
       },
       {
@@ -12453,6 +12460,7 @@
       },
       {
         "comment": {
+          "above": "\n    //int                   LastFrameActive;        // Last used frame-count (unused)",
           "sameline": "// UTF-8 length of the string in TextA (in bytes)"
         },
         "name": "TextLen",
@@ -14882,6 +14890,7 @@
       },
       {
         "comment": {
+          "above": "    // Rendering & Tesselation",
           "sameline": "// Enable anti-aliased lines/borders. Disable if you are really tight on CPU/GPU. Latched at the beginning of the frame (copied to ImDrawList)."
         },
         "name": "AntiAliasedLines",
@@ -14903,9 +14912,9 @@
       },
       {
         "comment": {
-          "sameline": "// Tessellation tolerance when using PathBezierCurveTo() without a specific number of segments. Decrease for highly tessellated curves (higher quality, more polygons), increase to reduce quality."
+          "sameline": "// Maximum error (in pixels) when using PathBezierCurveTo() without a specific number of segments. Decrease for highly tessellated curves (higher quality, more polygons), increase to reduce quality."
         },
-        "name": "CurveTessellationTol",
+        "name": "CurveTessellationMaxError",
         "type": "float"
       },
       {
@@ -18673,6 +18682,167 @@
       {
         "name": "w",
         "type": "float"
+      }
+    ],
+    "STB_TexteditState": [
+      {
+        "name": "cursor",
+        "type": "int"
+      },
+      {
+        "comment": {
+          "sameline": "// selection start point"
+        },
+        "name": "select_start",
+        "type": "int"
+      },
+      {
+        "name": "select_end",
+        "type": "int"
+      },
+      {
+        "name": "insert_mode",
+        "type": "unsigned char"
+      },
+      {
+        "name": "row_count_per_page",
+        "type": "int"
+      },
+      {
+        "comment": {
+          "above": "   /////////////////////\n   //\n   // private data\n   //",
+          "sameline": "// not implemented yet"
+        },
+        "name": "cursor_at_end_of_line",
+        "type": "unsigned char"
+      },
+      {
+        "name": "initialized",
+        "type": "unsigned char"
+      },
+      {
+        "name": "has_preferred_x",
+        "type": "unsigned char"
+      },
+      {
+        "name": "single_line",
+        "type": "unsigned char"
+      },
+      {
+        "name": "padding1",
+        "type": "unsigned char"
+      },
+      {
+        "name": "padding2",
+        "type": "unsigned char"
+      },
+      {
+        "name": "padding3",
+        "type": "unsigned char"
+      },
+      {
+        "comment": {
+          "sameline": "// this determines where the cursor up/down tries to seek to along x"
+        },
+        "name": "preferred_x",
+        "type": "float"
+      },
+      {
+        "name": "undostate",
+        "type": "StbUndoState"
+      }
+    ],
+    "StbTexteditRow": [
+      {
+        "comment": {
+          "sameline": "// starting x location, end x location (allows for align=right, etc)"
+        },
+        "name": "x0",
+        "type": "float"
+      },
+      {
+        "comment": {
+          "sameline": "// starting x location, end x location (allows for align=right, etc)"
+        },
+        "name": "x1",
+        "type": "float"
+      },
+      {
+        "comment": {
+          "sameline": "// position of baseline relative to previous row's baseline"
+        },
+        "name": "baseline_y_delta",
+        "type": "float"
+      },
+      {
+        "comment": {
+          "sameline": "// height of row above and below baseline"
+        },
+        "name": "ymin",
+        "type": "float"
+      },
+      {
+        "comment": {
+          "sameline": "// height of row above and below baseline"
+        },
+        "name": "ymax",
+        "type": "float"
+      },
+      {
+        "name": "num_chars",
+        "type": "int"
+      }
+    ],
+    "StbUndoRecord": [
+      {
+        "comment": {
+          "above": "\n   // private data"
+        },
+        "name": "where",
+        "type": "int"
+      },
+      {
+        "name": "insert_length",
+        "type": "int"
+      },
+      {
+        "name": "delete_length",
+        "type": "int"
+      },
+      {
+        "name": "char_storage",
+        "type": "int"
+      }
+    ],
+    "StbUndoState": [
+      {
+        "comment": {
+          "above": "\n   // private data"
+        },
+        "name": "undo_rec[99]",
+        "size": 99,
+        "type": "StbUndoRecord"
+      },
+      {
+        "name": "undo_char[999]",
+        "size": 999,
+        "type": "char"
+      },
+      {
+        "name": "undo_point",
+        "type": "short"
+      },
+      {
+        "name": "redo_point",
+        "type": "short"
+      },
+      {
+        "name": "undo_char_point",
+        "type": "int"
+      },
+      {
+        "name": "redo_char_point",
+        "type": "int"
       }
     ],
     "stbrp_context_opaque": [

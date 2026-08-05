@@ -41,6 +41,7 @@ void TextEditor::setText(const std::string_view& text) {
 	transactions.reset();
 	cursors.clearAll();
 	clearMarkers();
+	clearSquiggles();
 	makeCursorVisible();
 }
 
@@ -49,14 +50,35 @@ void TextEditor::setText(const std::string_view& text) {
 //	TextEditor::render
 //
 
-void TextEditor::render(const char* title, const ImVec2& size, ImGuiChildFlags childFlags, ImGuiWindowFlags windowFlags) {
+bool TextEditor::render(const char* title, const ImVec2& size, ImGuiChildFlags childFlags, ImGuiWindowFlags windowFlags) {
+	// ensure we are visible
+	ImGuiWindow* parentWindow = ImGui::GetCurrentWindow();
+
+	if (parentWindow->SkipItems) {
+		return false;
+	}
+
+	ImGui::BeginGroup();
+
+	// declare item bounding box for clipping and interaction
+	ImGuiContext& g = *GImGui;
+	ImGuiID id = parentWindow->GetID(title);
+	ImRect frameBB(parentWindow->DC.CursorPos, parentWindow->DC.CursorPos + size);
+
+	if (!ImGui::ItemAdd(frameBB, id)) {
+		ImGui::EndGroup();
+		return false;
+	}
+
 	// get font information
 	font = ImGui::GetFont();
 	fontSize = ImGui::GetFontSize();
+	fontScaleDpi = ImGui::GetStyle().FontScaleDpi;
+
 	glyphSize = ImVec2(ImGui::CalcTextSize("#").x, ImGui::GetTextLineHeightWithSpacing() * config.lineSpacing);
 
 	// ensure editor has focus (if required)
-	if (focusOnEditor) {
+	if (!firstFrame && focusOnEditor) {
 		ImGui::SetNextWindowFocus();
 		focusOnEditor = false;
 	}
@@ -65,9 +87,17 @@ void TextEditor::render(const char* title, const ImVec2& size, ImGuiChildFlags c
 	ImGui::SetNextWindowContentSize(totalSize);
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
 	ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::ColorConvertU32ToFloat4(palette.get(Color::background)));
-	editorVisible = ImGui::BeginChild(title, size, childFlags, windowFlags);
+	auto editorVisible = ImGui::BeginChild(title, size, childFlags, windowFlags);
 
 	if (editorVisible) {
+		// make sure the focus is correct for navigation
+		if (firstFrame) {
+			firstFrame = false;
+
+		} else if (ImGui::IsWindowFocused() && g.ActiveId != id) {
+			ImGui::SetFocusID(id, g.CurrentWindow);
+		}
+
 		// determine current position and visible size
 		cursorScreenPos = ImGui::GetCursorScreenPos();
 		visibleSize = ImGui::GetCurrentWindow()->InnerRect.GetSize();
@@ -99,10 +129,9 @@ void TextEditor::render(const char* title, const ImVec2& size, ImGuiChildFlags c
 		}
 
 		if (config.showMiniMap) {
-			auto fontScale = ImGui::GetStyle().FontScaleDpi;
-			miniMapRowHeight = 3.0f * fontScale;
-			miniMapColumnHeight = 2.0f * fontScale;
-			miniMapColumnWidth = 1.0f * fontScale;
+			miniMapRowHeight = 3.0f * fontScaleDpi;
+			miniMapColumnHeight = 2.0f * fontScaleDpi;
+			miniMapColumnWidth = 1.0f * fontScaleDpi;
 
 			if (config.miniMapColumns == 0.0f) {
 				miniMapWidth = std::floor(
@@ -147,7 +176,7 @@ void TextEditor::render(const char* title, const ImVec2& size, ImGuiChildFlags c
 		}
 
 		// determine width of cursor
-		cursorWidth = 1.0f * ImGui::GetStyle().FontScaleDpi;
+		cursorWidth = 1.0f * fontScaleDpi;
 
 		// setup clipping over the text area
 		auto drawList = ImGui::GetWindowDrawList();
@@ -163,6 +192,7 @@ void TextEditor::render(const char* title, const ImVec2& size, ImGuiChildFlags c
 		renderSelections();
 		renderTextMarkers();
 		renderMatchingBracketLines();
+		renderSquiggles();
 		renderText();
 		renderCursors();
 
@@ -184,6 +214,14 @@ void TextEditor::render(const char* title, const ImVec2& size, ImGuiChildFlags c
 		handlePossibleScrolling();
 	}
 
+	// ensure that EndChild will display a navigation highlight so we can "enter" into it
+	g.CurrentWindow->DC.NavLayersActiveMaskNext |= (1 << g.CurrentWindow->DC.NavLayerCurrent);
+
+	ImGui::EndChild();
+	ImGui::PopStyleColor();
+	ImGui::PopStyleVar();
+	ImGui::EndGroup();
+
 	// handle change tracking if there is a callback in place
 	if (delayedChangeCallback && delayedChangeDetected) {
 		if (std::chrono::system_clock::now() > delayedChangeReportTime) {
@@ -192,9 +230,7 @@ void TextEditor::render(const char* title, const ImVec2& size, ImGuiChildFlags c
 		}
 	}
 
-	ImGui::EndChild();
-	ImGui::PopStyleColor();
-	ImGui::PopStyleVar();
+	return editorVisible;
 }
 
 
@@ -335,11 +371,12 @@ void TextEditor::renderTextMarkers() {
 					drawList->AddRectFilled(start, end, marker.textColor);
 
 					if (marker.textTooltip.size() && ImGui::IsMouseHoveringRect(start, end)) {
-						ImGui::PushStyleColor(ImGuiCol_PopupBg, marker.textColor);
-						ImGui::BeginTooltip();
-						ImGui::TextUnformatted(marker.textTooltip.c_str());
-						ImGui::EndTooltip();
-						ImGui::PopStyleColor();
+						if (ImGui::BeginTooltip()) {
+							ImGui::PushStyleColor(ImGuiCol_PopupBg, marker.textColor);
+							ImGui::TextUnformatted(marker.textTooltip.c_str());
+							ImGui::PopStyleColor();
+							ImGui::EndTooltip();
+						}
 					}
 				}
 			}
@@ -375,6 +412,129 @@ void TextEditor::renderMatchingBracketLines() {
 					}
 				}
 			}
+		}
+	}
+}
+
+//
+//	renderSquiggle
+//
+
+inline static void renderSquiggle(float left, float right, float top, float bottom, float thickness, ImU32 color, const char* tooltip) {
+	auto drawList = ImGui::GetWindowDrawList();
+	auto height = bottom - top;
+	auto size = height * 0.2f;
+	auto offset = top + height * 0.8f;
+	ImVec2 point(left, offset);
+	bool down = true;
+
+	ImVec2 topLeft{left, top};
+	ImVec2 bottomRight{right, bottom};
+	drawList->PushClipRect(topLeft, bottomRight, true);
+
+	while (point.x < right) {
+		ImVec2 next{point.x + size, down ? offset + size : offset};
+		drawList->AddLine(point, next, color, thickness);
+		point = next;
+		down = !down;
+	}
+
+	drawList->PopClipRect();
+
+	if (*tooltip && ImGui::IsMouseHoveringRect(topLeft, bottomRight)) {
+		if (ImGui::BeginTooltip()) {
+			ImGui::TextUnformatted(tooltip);
+			ImGui::EndTooltip();
+		}
+	}
+}
+
+
+//
+//	TextEditor::renderSquiggles
+//
+
+void TextEditor::renderSquiggles() {
+	if (squiggles.size()) {
+		ImVec2 rowScreenPos = cursorScreenPos + ImVec2(textLeftOffset, firstVisibleRow * glyphSize.y);
+
+		// only process all visible rows
+		for (size_t i = firstVisibleRow; i <= lastVisibleRow; i++) {
+			// determine visible boundaries for this row
+			auto& line = document[typeSetter[i].line];
+			size_t index;
+			size_t column;
+			size_t endColumn;
+
+			if (config.wordWrap && line.sections) {
+				const auto& section = line.sections->at(typeSetter[i].section);
+				index = section.startIndex;
+				column = section.indent;
+				endColumn = section.columns;
+
+			} else {
+				index = 0;
+				column = 0;
+				endColumn = line.columns;
+			}
+
+			// setup squiggles
+			bool inSquiggle = false;
+			size_t squiggleIndex = 0;
+			float squiggleLeft = 0.0f;
+			float thickness = 1.2f * fontScaleDpi;
+
+			// only process all visible columns
+			while (column < endColumn && column <= lastVisibleColumn) {
+				auto& glyph = line[index++];
+				auto codepoint = glyph.codepoint;
+				ImVec2 glyphPos(rowScreenPos.x + column * glyphSize.x, rowScreenPos.y);
+
+				// handle squiggles
+				if (glyph.squiggle) {
+					auto nextIndex = glyph.squiggle - 1;
+
+					if (inSquiggle) {
+						if (squiggleIndex != nextIndex) {
+							// render squiggle and start new one
+							auto& squiggle = squiggles[squiggleIndex];
+							renderSquiggle(squiggleLeft, glyphPos.x, glyphPos.y, glyphPos.y + glyphSize.y, thickness, squiggle.color, squiggle.tooltip.c_str());
+							squiggleIndex = nextIndex;
+							squiggleLeft = glyphPos.x;
+						}
+
+					} else {
+						// start new squiggle
+						inSquiggle = true;
+						squiggleIndex = nextIndex;
+						squiggleLeft = glyphPos.x;
+					}
+
+				} else if (inSquiggle) {
+					// render squiggle
+					auto& squiggle = squiggles[squiggleIndex];
+					renderSquiggle(squiggleLeft, glyphPos.x, glyphPos.y, glyphPos.y + glyphSize.y, thickness, squiggle.color, squiggle.tooltip.c_str());
+					inSquiggle = false;
+				}
+
+				// handle tabs
+				if (codepoint == '\t') {
+					column += config.tabSize - (column % config.tabSize);
+
+				// handle regular glyphs
+				} else {
+					column++;
+				}
+			}
+
+			if (inSquiggle) {
+				// render last squiggle on line
+				auto& squiggle = squiggles[squiggleIndex];
+				auto glyphPos = cursorScreenPos + ImVec2(textLeftOffset + typeSetter[i].columns * glyphSize.x, i * glyphSize.y);
+				renderSquiggle(squiggleLeft, glyphPos.x, glyphPos.y, glyphPos.y + glyphSize.y, thickness, squiggle.color, squiggle.tooltip.c_str());
+			}
+
+			rowScreenPos.y += glyphSize.y;
 		}
 	}
 }
@@ -527,11 +687,12 @@ void TextEditor::renderLineNumberMarkers() {
 					drawList->AddRectFilled(start, end, marker.lineNumberColor);
 
 					if (marker.lineNumberTooltip.size() && ImGui::IsMouseHoveringRect(start, end)) {
-						ImGui::PushStyleColor(ImGuiCol_PopupBg, marker.lineNumberColor);
-						ImGui::BeginTooltip();
-						ImGui::TextUnformatted(marker.lineNumberTooltip.c_str());
-						ImGui::EndTooltip();
-						ImGui::PopStyleColor();
+						if (ImGui::BeginTooltip()) {
+							ImGui::PushStyleColor(ImGuiCol_PopupBg, marker.lineNumberColor);
+							ImGui::TextUnformatted(marker.lineNumberTooltip.c_str());
+							ImGui::PopStyleColor();
+							ImGui::EndTooltip();
+						}
 					}
 				}
 			}
@@ -928,13 +1089,15 @@ void TextEditor::updateState() {
 	lineFold.update(config, document, bracketeer);
 	cursors.update(document);
 
+	float unused;
+	auto firstVisibleLineFraction = std::modf(ImGui::GetScrollY() / glyphSize.y, &unused);
 	auto previousFirstLine = visPos2DocPos(VisPos(firstVisibleRow, 0)).line;
 
 	if (typeSetter.update(config, document, lineFold)) {
 		// see if we can scroll to preserve the first visible line
 		// but we don't overrule an API scroll request
 		if (scrollToLineNumber == invalidLine) {
-			scrollToLine(previousFirstLine, Scroll::alignTop);
+			scrollToLine(previousFirstLine, Scroll::alignTop, firstVisibleLineFraction);
 		}
 	}
 
@@ -946,6 +1109,19 @@ void TextEditor::updateState() {
 			delayedChangeDetected = true;
 			delayedChangeReportTime = std::chrono::system_clock::now() + delayedChangeDelay;
 		}
+	}
+
+	// compress marker and squiggle lists (if required)
+	if (deletesHappened) {
+		if (markers.size()) {
+			compressMarkers();
+		}
+
+		if (squiggles.size()) {
+			compressSquiggles();
+		}
+
+		deletesHappened = false;
 	}
 
 	// reset overlay "dirty" flags
@@ -975,25 +1151,7 @@ void TextEditor::handleKeyboardInputs() {
 		auto& io = ImGui::GetIO();
 		io.WantCaptureKeyboard = true;
 		io.WantTextInput = true;
-
-		// get state of modifier keys
-		// Dear ImGui switches the Cmd(Super) and Ctrl keys on MacOS
-		auto shift = ImGui::IsKeyDown(ImGuiMod_Shift);
-		auto ctrl = ImGui::IsKeyDown(ImGuiMod_Ctrl);
-		auto alt = ImGui::IsKeyDown(ImGuiMod_Alt);
-		auto super = ImGui::IsKeyDown(ImGuiMod_Super);
-	    auto meta = ImGui::GetIO().ConfigMacOSXBehaviors ? alt : ctrl;
-
-		auto isNoModifiers = !ctrl && !shift && !alt;
-		auto isShortcut = ctrl && !shift && !alt;
-		auto isShiftShortcut = ctrl && shift && !alt;
-		auto isOptionalShiftShortcut = ctrl && !alt;
-		auto isAltOnly = !ctrl && !shift && alt;
-		auto isShiftOnly = !ctrl && shift && !alt;
-		auto isOptionalShift = !ctrl && !alt;
-		auto isOptionalAlt = !ctrl && !shift;
-		auto isMetaShift = ImGui::GetIO().ConfigMacOSXBehaviors ? !ctrl && shift && !alt && super : !ctrl && shift && alt;
-    	auto isOptionalMetaShift = ImGui::GetIO().ConfigMacOSXBehaviors ? !ctrl : !alt;
+		auto macOS = io.ConfigMacOSXBehaviors;
 
 		// ignore specific keys when autocomplete is active, they will be handled later
 		if (autocomplete.isActive() && autocomplete.isSpecialKeyPressed()) {
@@ -1007,51 +1165,84 @@ void TextEditor::handleKeyboardInputs() {
 		}
 
 		// cursor movements and selections
-		if (isOptionalShift && ImGui::IsKeyPressed(ImGuiKey_UpArrow)) { moveUp(1, shift); }
-		else if (isOptionalShift && ImGui::IsKeyPressed(ImGuiKey_DownArrow)) { moveDown(1, shift); }
+		if (ImGui::Shortcut(ImGuiKey_UpArrow, ImGuiInputFlags_Repeat)) { moveUp(1, false); }
+		else if (ImGui::Shortcut(ImGuiMod_Shift | ImGuiKey_UpArrow, ImGuiInputFlags_Repeat)) { moveUp(1, true); }
+		else if (ImGui::Shortcut(ImGuiKey_DownArrow, ImGuiInputFlags_Repeat)) { moveDown(1, false); }
+		else if (ImGui::Shortcut(ImGuiMod_Shift | ImGuiKey_DownArrow, ImGuiInputFlags_Repeat)) { moveDown(1, true); }
 
-		else if (isMetaShift && ImGui::IsKeyPressed(ImGuiKey_LeftArrow)) { shrinkSelections(); }
-		else if (isMetaShift && ImGui::IsKeyPressed(ImGuiKey_RightArrow)) { growSelections(); }
-		else if (isOptionalMetaShift && ImGui::IsKeyPressed(ImGuiKey_LeftArrow)) { moveLeft(shift, meta); }
-		else if (isOptionalMetaShift && ImGui::IsKeyPressed(ImGuiKey_RightArrow)) { moveRight(shift, meta); }
+		else if (ImGui::Shortcut((macOS ? ImGuiMod_Super : ImGuiMod_Alt) | ImGuiMod_Shift | ImGuiKey_LeftArrow)) { shrinkSelections(); }
+		else if (ImGui::Shortcut((macOS ? ImGuiMod_Super : ImGuiMod_Alt) | ImGuiMod_Shift | ImGuiKey_RightArrow)) { growSelections(); }
 
-		else if (isOptionalShift && ImGui::IsKeyPressed(ImGuiKey_PageUp)) { moveUp(lastVisibleRow - firstVisibleRow - 2, shift); }
-		else if (isOptionalShift && ImGui::IsKeyPressed(ImGuiKey_PageDown)) { moveDown(lastVisibleRow - firstVisibleRow - 2, shift); }
-		else if (isOptionalShiftShortcut && ImGui::IsKeyPressed(ImGuiKey_UpArrow)) { moveToTop(shift); }
-		else if (isOptionalShiftShortcut && ImGui::IsKeyPressed(ImGuiKey_Home)) { moveToTop(shift); }
-		else if (isOptionalShiftShortcut && ImGui::IsKeyPressed(ImGuiKey_DownArrow)) { moveToBottom(shift); }
-		else if (isOptionalShiftShortcut && ImGui::IsKeyPressed(ImGuiKey_End)) { moveToBottom(shift); }
-		else if (isOptionalShift && ImGui::IsKeyPressed(ImGuiKey_Home)) { moveToStartOfLine(shift); }
-		else if (isOptionalShift && ImGui::IsKeyPressed(ImGuiKey_End)) { moveToEndOfLine(shift); }
-		else if (isShortcut && ImGui::IsKeyPressed(ImGuiKey_A)) { selectAll(); }
-		else if (isShortcut && ImGui::IsKeyPressed(ImGuiKey_D) && cursors.currentCursorHasSelection()) { addNextOccurrence(); }
+		else if (ImGui::Shortcut(ImGuiKey_LeftArrow, ImGuiInputFlags_Repeat)) { moveLeft(false, false); }
+		else if (ImGui::Shortcut(ImGuiMod_Shift | ImGuiKey_LeftArrow, ImGuiInputFlags_Repeat)) { moveLeft(true, false); }
+		else if (ImGui::Shortcut((macOS ? ImGuiMod_Alt : ImGuiMod_Ctrl) | ImGuiKey_LeftArrow, ImGuiInputFlags_Repeat)) { moveLeft(false, true); }
+		else if (ImGui::Shortcut((macOS ? ImGuiMod_Alt : ImGuiMod_Ctrl) | ImGuiMod_Shift | ImGuiKey_LeftArrow, ImGuiInputFlags_Repeat)) { moveLeft(true, true); }
+
+		else if (ImGui::Shortcut(ImGuiKey_RightArrow, ImGuiInputFlags_Repeat)) { moveRight(false, false); }
+		else if (ImGui::Shortcut(ImGuiMod_Shift | ImGuiKey_RightArrow, ImGuiInputFlags_Repeat)) { moveRight(true, false); }
+		else if (ImGui::Shortcut((macOS ? ImGuiMod_Alt : ImGuiMod_Ctrl) | ImGuiKey_RightArrow, ImGuiInputFlags_Repeat)) { moveRight(false, true); }
+		else if (ImGui::Shortcut((macOS ? ImGuiMod_Alt : ImGuiMod_Ctrl) | ImGuiMod_Shift | ImGuiKey_RightArrow, ImGuiInputFlags_Repeat)) { moveRight(true, true); }
+
+		else if (ImGui::Shortcut(ImGuiKey_PageUp, ImGuiInputFlags_Repeat)) { moveUp(lastVisibleRow - firstVisibleRow - 2, false); }
+		else if (ImGui::Shortcut(ImGuiMod_Shift | ImGuiKey_PageUp, ImGuiInputFlags_Repeat)) { moveUp(lastVisibleRow - firstVisibleRow - 2, true); }
+		else if (ImGui::Shortcut(ImGuiKey_PageDown, ImGuiInputFlags_Repeat)) { moveDown(lastVisibleRow - firstVisibleRow - 2, false); }
+		else if (ImGui::Shortcut(ImGuiMod_Shift | ImGuiKey_PageDown, ImGuiInputFlags_Repeat)) { moveDown(lastVisibleRow - firstVisibleRow - 2, true); }
+
+		else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_UpArrow)) { moveToTop(false); }
+		else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_Home)) { moveToTop(false); }
+		else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiMod_Shift | ImGuiKey_UpArrow)) { moveToTop(true); }
+		else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiMod_Shift | ImGuiKey_Home)) { moveToTop(true); }
+
+		else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_DownArrow)) { moveToBottom(false); }
+		else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_End)) { moveToBottom(false); }
+		else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiMod_Shift | ImGuiKey_DownArrow)) { moveToBottom(true); }
+		else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiMod_Shift | ImGuiKey_End)) { moveToBottom(true); }
+
+		else if (ImGui::Shortcut(ImGuiKey_Home)) { moveToStartOfLine(false); }
+		else if (ImGui::Shortcut(ImGuiMod_Shift | ImGuiKey_Home)) { moveToStartOfLine(true); }
+
+		else if (ImGui::Shortcut(ImGuiKey_End)) { moveToEndOfLine(false); }
+		else if (ImGui::Shortcut(ImGuiMod_Shift | ImGuiKey_End)) { moveToEndOfLine(true); }
+
+		else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_A)) { selectAll(); }
+		else if (cursors.currentCursorHasSelection() && ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_D)) { addNextOccurrence(); }
+		else if (cursors.currentCursorHasSelection() && ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiMod_Shift | ImGuiKey_D)) { selectAllOccurrences(); }
 
 		// clipboard operations
-		else if (isShortcut && ImGui::IsKeyPressed(ImGuiKey_X)) { cut(); }
-		else if (isShiftOnly && ImGui::IsKeyPressed(ImGuiKey_Delete)) { cut(); }
-		else if (isShortcut && ImGui::IsKeyPressed(ImGuiKey_C)) { copy() ;}
-		else if (isShortcut && ImGui::IsKeyPressed(ImGuiKey_Insert)) { copy(); }
+		else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_X)) { cut(); }
+		else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_Delete)) { cut(); }
 
-		else if (!config.readOnly && isShortcut && ImGui::IsKeyPressed(ImGuiKey_V)) { paste(); }
-		else if (!config.readOnly && isShiftOnly && ImGui::IsKeyPressed(ImGuiKey_Insert)) { paste(); }
-		else if (!config.readOnly && isShortcut && ImGui::IsKeyPressed(ImGuiKey_Z)) { undo(); }
-		else if (!config.readOnly && isShiftShortcut && ImGui::IsKeyPressed(ImGuiKey_Z)) { redo(); }
-		else if (!config.readOnly && isShortcut && ImGui::IsKeyPressed(ImGuiKey_Y)) { redo(); }
+		else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_C)) { copy(); }
+		else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_Insert)) { copy(); }
+
+		else if (!config.readOnly && ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_V, ImGuiInputFlags_Repeat)) { paste(); }
+		else if (!config.readOnly && ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_Insert, ImGuiInputFlags_Repeat)) { paste(); }
+
+		else if (!config.readOnly && ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_Z, ImGuiInputFlags_Repeat)) { undo(); }
+		else if (!config.readOnly && ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiMod_Shift | ImGuiKey_Z, ImGuiInputFlags_Repeat)) { redo(); }
+		else if (!config.readOnly && ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_Y, ImGuiInputFlags_Repeat)) { redo(); }
 
 		// remove text
-		else if (!config.readOnly && isOptionalAlt && ImGui::IsKeyPressed(ImGuiKey_Delete)) { handleDelete(alt); }
-		else if (!config.readOnly && isOptionalAlt && ImGui::IsKeyPressed(ImGuiKey_Backspace)) { handleBackspace(alt); }
-		else if (!config.readOnly && isShiftShortcut && ImGui::IsKeyPressed(ImGuiKey_K)) { removeSelectedLines(); }
+		else if (!config.readOnly && ImGui::Shortcut(ImGuiKey_Delete, ImGuiInputFlags_Repeat)) { handleDelete(false); }
+		else if (!config.readOnly && ImGui::Shortcut(ImGuiMod_Alt | ImGuiKey_Delete, ImGuiInputFlags_Repeat)) { handleDelete(true); }
+
+		else if (!config.readOnly && ImGui::Shortcut(ImGuiKey_Backspace, ImGuiInputFlags_Repeat)) { handleBackspace(false); }
+		else if (!config.readOnly && ImGui::Shortcut(ImGuiMod_Alt | ImGuiKey_Backspace, ImGuiInputFlags_Repeat)) { handleBackspace(true); }
+
+		else if (!config.readOnly && ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiMod_Shift | ImGuiKey_K)) { removeSelectedLines(); }
 
 		// text manipulation
-		else if (!config.readOnly && isShortcut && ImGui::IsKeyPressed(ImGuiKey_LeftBracket)) { deindentLines(); }
-		else if (!config.readOnly && isShortcut && ImGui::IsKeyPressed(ImGuiKey_RightBracket)) { indentLines(); }
-		else if (!config.readOnly && isAltOnly && ImGui::IsKeyPressed(ImGuiKey_UpArrow)) { moveUpLines(); }
-		else if (!config.readOnly && isAltOnly && ImGui::IsKeyPressed(ImGuiKey_DownArrow)) { moveDownLines(); }
-		else if (!config.readOnly && config.language && isOptionalShiftShortcut && ImGui::IsKeyPressed(ImGuiKey_Slash)) { toggleComments(); }
+		else if (!config.readOnly && ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_LeftBracket, ImGuiInputFlags_Repeat)) { deindentLines(); }
+		else if (!config.readOnly && ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_RightBracket, ImGuiInputFlags_Repeat)) { indentLines(); }
+
+		else if (!config.readOnly && ImGui::Shortcut(ImGuiMod_Alt | ImGuiKey_UpArrow)) { moveUpLines(); }
+		else if (!config.readOnly && ImGui::Shortcut(ImGuiMod_Alt | ImGuiKey_DownArrow)) { moveDownLines(); }
+
+		else if (!config.readOnly && config.language && ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_Slash)) { toggleComments(); }
+		else if (!config.readOnly && config.language && ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_L)) { toggleComments(); }
 
 		// find/replace support
-		else if (isShortcut && ImGui::IsKeyPressed(ImGuiKey_F)) {
+		else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_F)) {
 			if (autocomplete.isActive()) {
 				autocomplete.cancel();
 				findCancelledAutocomplete = true;
@@ -1060,11 +1251,11 @@ void TextEditor::handleKeyboardInputs() {
 			openFindReplace();
 		}
 
-		else if (isShiftShortcut && ImGui::IsKeyPressed(ImGuiKey_F)) { findAll(); }
-		else if (isShortcut && ImGui::IsKeyPressed(ImGuiKey_G)) { findNext(); }
+		else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiMod_Shift | ImGuiKey_F)) { findAll(); }
+		else if (ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_G, ImGuiInputFlags_Repeat)) { findNext(); }
 
 		// autocomplete support
-		else if (!config.readOnly && ImGui::IsKeyChordPressed(autocomplete.getTriggerShortcut())) {
+		else if (!config.readOnly && ImGui::Shortcut(autocomplete.getTriggerShortcut())) {
 			// don't activate if we have multiple cursors active
 			if (cursors.hasMultiple()) {
 				// TODO: inform user
@@ -1077,19 +1268,21 @@ void TextEditor::handleKeyboardInputs() {
 		}
 
 		// change insert mode
-		else if (isNoModifiers && ImGui::IsKeyPressed(ImGuiKey_Insert)) { config.overwrite = !config.overwrite; }
+		else if (ImGui::Shortcut(ImGuiKey_Insert)) { config.overwrite = !config.overwrite; }
 
 		// handle new line
-		else if (!config.readOnly && isNoModifiers && (ImGui::IsKeyPressed(ImGuiKey_Enter) || ImGui::IsKeyPressed(ImGuiKey_KeypadEnter))) { handleCharacter('\n'); }
-		else if (!config.readOnly && isShortcut && (ImGui::IsKeyPressed(ImGuiKey_Enter) || ImGui::IsKeyPressed(ImGuiKey_KeypadEnter))) { insertLineBelow(); }
-		else if (!config.readOnly && isShiftShortcut && (ImGui::IsKeyPressed(ImGuiKey_Enter) || ImGui::IsKeyPressed(ImGuiKey_KeypadEnter))) { insertLineAbove(); }
+		else if (!config.readOnly && ImGui::Shortcut(ImGuiKey_Enter, ImGuiInputFlags_Repeat) ) { handleCharacter('\n'); }
+		else if (!config.readOnly && ImGui::Shortcut(ImGuiKey_KeypadEnter, ImGuiInputFlags_Repeat)) { handleCharacter('\n'); }
+
+		else if (!config.readOnly && ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_Enter, ImGuiInputFlags_Repeat)) { insertLineBelow(); }
+		else if (!config.readOnly && ImGui::Shortcut(ImGuiMod_Ctrl | ImGuiKey_KeypadEnter, ImGuiInputFlags_Repeat)) { insertLineBelow(); }
+
+		else if (!config.readOnly && ImGui::Shortcut(ImGuiMod_Shift | ImGuiKey_Enter, ImGuiInputFlags_Repeat)) { insertLineAbove(); }
+		else if (!config.readOnly && ImGui::Shortcut(ImGuiMod_Shift | ImGuiKey_KeypadEnter, ImGuiInputFlags_Repeat)) { insertLineAbove(); }
 
 		// handle tabs
-		else if (!config.readOnly && isOptionalShift && ImGui::IsKeyPressed(ImGuiKey_Tab)) {
-			if (shift) {
-				deindentLines();
-
-			} else if (cursors.anyHasSelection()) {
+		else if (!config.readOnly && ImGui::Shortcut(ImGuiKey_Tab, ImGuiInputFlags_Repeat)) {
+			if (cursors.anyHasSelection()) {
 				indentLines();
 
 			} else {
@@ -1097,8 +1290,12 @@ void TextEditor::handleKeyboardInputs() {
 			}
 		}
 
+		else if (!config.readOnly && ImGui::Shortcut(ImGuiMod_Shift | ImGuiKey_Tab, ImGuiInputFlags_Repeat)) {
+				deindentLines();
+		}
+
 		// handle escape key
-		else if (ImGui::IsKeyPressed(ImGuiKey_Escape)) {
+		else if ((autocomplete.isActive() || findReplaceVisible || cursors.hasMultiple()) && ImGui::Shortcut(ImGuiKey_Escape)) {
 			if (autocomplete.isActive()) {
 				autocomplete.cancel();
 
@@ -1113,7 +1310,7 @@ void TextEditor::handleKeyboardInputs() {
 		// handle regular text
 		if (!io.InputQueueCharacters.empty()) {
 			// ignore Ctrl inputs, but need to allow Alt+Ctrl as some keyboards (e.g. German) use AltGR (which is Alt+Ctrl) to input certain characters
-			if (!(ctrl && !alt) && !config.readOnly) {
+			if (!(ImGui::IsKeyDown(ImGuiMod_Ctrl) && !ImGui::IsKeyDown(ImGuiMod_Alt)) && !config.readOnly) {
 				for (auto i = 0; i < io.InputQueueCharacters.size(); i++) {
 					auto character = io.InputQueueCharacters[i];
 
@@ -1752,10 +1949,11 @@ void TextEditor::setCursor(DocPos pos) {
 //	TextEditor::scrollToLine
 //
 
-void TextEditor::scrollToLine(size_t line, Scroll alignment) {
+void TextEditor::scrollToLine(size_t line, Scroll alignment, float fraction) {
 	ensureVisiblePos = DocPos(invalidLine, 0);
 	scrollToLineNumber = std::min(line, document.size());
 	scrollToAlignment = alignment;
+	scrollToFraction = fraction;
 
 	if (config.lineFolding) {
 		lineFold.unfoldAroundLine(document, line);
@@ -1807,7 +2005,7 @@ void TextEditor::handlePossibleScrolling() {
 
 		switch (scrollToAlignment) {
 			case Scroll::alignTop:
-				scrollY = row * glyphSize.y;
+				scrollY = (row + scrollToFraction) * glyphSize.y;
 				break;
 
 			case Scroll::alignMiddle:
@@ -1869,6 +2067,177 @@ void TextEditor::clearMarkers() {
 	}
 
 	markers.clear();
+}
+
+
+//
+//	TextEditor::compressMarkers
+//
+
+void TextEditor::compressMarkers() {
+	if (markers.size()) {
+		// references to current markers
+		struct Reference {
+			bool used = false;
+			bool index = 0;
+		};
+
+		std::vector<Reference> references(markers.size());
+
+		// determine markers still in use
+		for (auto& line : document) {
+			if (line.marker) {
+				references[line.marker - 1].used = true;
+			}
+		}
+
+		// reindex markers
+		size_t index = 0;
+
+		for (auto& reference : references) {
+			if (reference.used) {
+				reference.index = index++;
+			}
+		}
+
+		// apply new index numbers to lines
+		for (auto& line : document) {
+			if (line.marker) {
+				line.marker = references[line.marker - 1].index + 1;
+			}
+		}
+
+		// remove unused markers
+		size_t i = markers.size();
+
+		do {
+			i--;
+
+			if (!references[i].used) {
+				markers.erase(markers.begin() + i);
+			}
+
+		} while (i > 0);
+	}
+}
+
+
+//
+//	TextEditor::addSquiggle
+//
+
+void TextEditor::addSquiggle(DocPos start, DocPos end, size_t type, ImU32 color, const std::string_view& tooltip) {
+	if (start < end) {
+		squiggles.emplace_back(type, color, tooltip);
+		auto index = squiggles.size();
+
+		document.iterateGlyphs(start, end, [index](Glyph& glyph) {
+			glyph.squiggle = index;
+		});
+	}
+}
+
+
+//
+//	TextEditor::clearSquiggles
+//
+
+void TextEditor::clearSquiggles(size_t type) {
+	for (auto& line : document) {
+		for (auto& glyph : line) {
+			if (glyph.squiggle) {
+				if (squiggles[glyph.squiggle - 1].type == type) {
+					glyph.squiggle = 0;
+				}
+			}
+		}
+	}
+
+	compressSquiggles();
+}
+
+
+//
+//	TextEditor::clearSquiggles
+//
+
+void TextEditor::clearSquiggles(DocPos start, DocPos end) {
+	document.iterateGlyphs(start, end, [](Glyph& glyph) {
+		glyph.squiggle = 0;
+	});
+
+	compressSquiggles();
+}
+
+
+//
+//	TextEditor::clearSquiggles
+//
+
+void TextEditor::clearSquiggles() {
+	for (auto& line : document) {
+		for (auto& glyph : line) {
+			glyph.squiggle = 0;
+		}
+	}
+
+	squiggles.clear();
+}
+
+
+//
+//	TextEditor::compressSquiggles
+//
+
+void TextEditor::compressSquiggles() {
+	if (squiggles.size()) {
+		// references to current squiggles;
+		struct Reference {
+			bool used = false;
+			bool index = 0;
+		};
+
+		std::vector<Reference> references(squiggles.size());
+
+		// determine squiggles still in use
+		for (auto& line : document) {
+			for (auto& glyph : line) {
+				if (glyph.squiggle) {
+					references[glyph.squiggle - 1].used = true;
+				}
+			}
+		}
+
+		// reindex squiggles
+		size_t index = 0;
+
+		for (auto& reference : references) {
+			if (reference.used) {
+				reference.index = index++;
+			}
+		}
+
+		// apply new index numbers to glyphs
+		for (auto& line : document) {
+			for (auto& glyph : line) {
+				if (glyph.squiggle) {
+					glyph.squiggle = references[glyph.squiggle - 1].index + 1;
+				}
+			}
+		}
+
+		// remove unused squiggles
+		size_t i = squiggles.size();
+
+		do {
+			i--;
+
+			if (!references[i].used) {
+				squiggles.erase(squiggles.begin() + i);
+			}
+
+		} while (i > 0);
+	}
 }
 
 
@@ -2245,7 +2614,7 @@ void TextEditor::deindentLines() {
 void TextEditor::moveUpLines() {
 	// don't move up if first line is in one of the cursors
 	if (cursors[0].getSelectionStart().line != 0) {
- 		auto transaction = startTransaction();
+		auto transaction = startTransaction();
 
 		for (auto cursor = cursors.begin(); cursor < cursors.end(); cursor++) {
 			auto start = cursor->getSelectionStart();
@@ -2765,6 +3134,7 @@ void TextEditor::deleteText(std::shared_ptr<Transaction> transaction, DocPos sta
 	document.deleteText(config, start, end);
 	transaction->addDelete(start, end, text);
 	makeCursorVisible();
+	deletesHappened = true;
 }
 
 
@@ -3378,6 +3748,43 @@ ImWchar TextEditor::Document::getCodePoint(DocPos location) const {
 	}
 }
 
+
+//
+//	TextEditor::Document::iterateGlyphs
+//
+
+void TextEditor::Document::iterateGlyphs(DocPos start, DocPos end, std::function<void(Glyph&)> callback) {
+	if (start.line == end.line) {
+		// start and end are on same line
+		for (size_t i = start.index; i < end.index; i++) {
+			callback(at(start.line)[i]);
+		}
+
+	} else {
+		// process remainder of fist line
+		auto last = at(start.line).size();
+
+		for (size_t i = start.index; i < last; i++) {
+			callback(at(start.line)[i]);
+		}
+
+		// process all full lines
+		for (auto line = start.line + 1; line < end.line; line++) {
+			last = at(line).size();
+
+			for (size_t i = 0; i < last; i++) {
+				callback(at(line)[i]);
+			}
+		}
+
+		// process remainder on last line
+		for (size_t i = 0; i < end.index; i++) {
+			callback(at(end.line)[i]);
+		}
+	}
+}
+
+
 //
 //	TextEditor::Document::getColor
 //
@@ -3912,7 +4319,7 @@ void TextEditor::Document::deleteLines(size_t start, size_t end) {
 
 void TextEditor::Document::clearDocument() {
 	if (deletor) {
-		for (size_t i = 0; i <= size(); i++) {
+		for (size_t i = 0; i < size(); i++) {
 			deletor(i, at(i).userData);
 		}
 	}
@@ -6414,7 +6821,7 @@ static inline TextEditor::BreakOption lb9(LineBreakState& state) {
 	static const std::unordered_set<LBC> BKCRLFNLSPZW = {LBC::bk, LBC::cr, LBC::lf, LBC::nl, LBC::sp, LBC::zw};
 
 	// treat X (CM | ZWJ)* as if it were X
-  	// where X is any line break class except BK, CR, LF, NL, SP, or ZW
+	// where X is any line break class except BK, CR, LF, NL, SP, or ZW
 	if (BKCRLFNLSPZW.find(state.current.cls) == BKCRLFNLSPZW.end() &&
 		(state.next.cls == LBC::cm || state.next.cls == LBC::zwj)) {
 
@@ -6982,8 +7389,8 @@ static inline TextEditor::BreakOption lb26(const LineBreakState& state) {
 			break;
 
 		default:
-		  return TextEditor::BreakOption::undefined;
-  	}
+			return TextEditor::BreakOption::undefined;
+	}
 
 	return TextEditor::BreakOption::undefined;
 }
@@ -7015,7 +7422,7 @@ static inline TextEditor::BreakOption lb27(const LineBreakState& state) {
 			break;
 
 		default:
-		  return TextEditor::BreakOption::undefined;
+			return TextEditor::BreakOption::undefined;
 	}
 
 	return TextEditor::BreakOption::undefined;
@@ -7147,14 +7554,14 @@ static inline TextEditor::BreakOption lb30b(const LineBreakState& state) {
 }
 
 
-#define RULE(r) 													\
+#define RULE(r)														\
 	result = r(state);												\
 																	\
 	if (result != TextEditor::BreakOption::undefined) {				\
 		return result;												\
 	}
 
-#define RULE2(r) 													\
+#define RULE2(r)													\
 	if (config.r) {													\
 		RULE(r)														\
 	}
@@ -13604,7 +14011,7 @@ const TextEditor::Language* TextEditor::Language::Sql() {
 			"treat", "trigger", "trim", "trim_array", "true", "truncate", "uescape", "union", "unique", "unknown", "unnest",
 			"update", "upper", "user", "using", "value", "values", "value_of", "varbinary", "varchar", "varying", "var_pop",
 			"var_samp", "versioning", "when", "whenever", "where", "width_bucket", "window", "with", "within", "without", "year"
-	   };
+		};
 
 		for (auto& keyword : keywords) { language.keywords.insert(keyword); }
 

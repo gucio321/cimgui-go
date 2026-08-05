@@ -72,6 +72,15 @@ func (self *AnnotationCollection) Append(pos, off imgui.Vec2, bg, fg uint32, cla
 	fmtFin()
 }
 
+func (self *AnnotationCollection) Append0(pos, off imgui.Vec2, bg, fg uint32, clamp bool, fmt string) {
+	selfArg, selfFin := self.Handle()
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+	C.ImPlotAnnotationCollection_Append0(internal.ReinterpretCast[*C.ImPlotAnnotationCollection](selfArg), internal.ReinterpretCast[C.ImVec2_c](pos.ToC()), internal.ReinterpretCast[C.ImVec2_c](off.ToC()), C.ImU32(bg), C.ImU32(fg), C.bool(clamp), fmtArg)
+
+	selfFin()
+	fmtFin()
+}
+
 func (self *AnnotationCollection) Text(idx int32) string {
 	selfArg, selfFin := self.Handle()
 
@@ -1234,6 +1243,15 @@ func (self *TagCollection) Append(axis AxisEnum, value float64, bg, fg uint32, f
 	fmtFin()
 }
 
+func (self *TagCollection) Append0(axis AxisEnum, value float64, bg, fg uint32, fmt string) {
+	selfArg, selfFin := self.Handle()
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+	C.ImPlotTagCollection_Append0(internal.ReinterpretCast[*C.ImPlotTagCollection](selfArg), C.ImAxis(axis), C.double(value), C.ImU32(bg), C.ImU32(fg), fmtArg)
+
+	selfFin()
+	fmtFin()
+}
+
 func (self *TagCollection) Text(idx int32) string {
 	selfArg, selfFin := self.Handle()
 
@@ -1485,6 +1503,13 @@ func AnnotationBoolV(x, y float64, col imgui.Vec4, pix_offset imgui.Vec2, clamp,
 func AnnotationStr(x, y float64, col imgui.Vec4, pix_offset imgui.Vec2, clamp bool, fmt string) {
 	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
 	C.wrap_ImPlot_Annotation_Str(C.double(x), C.double(y), internal.ReinterpretCast[C.ImVec4_c](col.ToC()), internal.ReinterpretCast[C.ImVec2_c](pix_offset.ToC()), C.bool(clamp), fmtArg)
+
+	fmtFin()
+}
+
+func AnnotationStr0(x, y float64, col imgui.Vec4, pix_offset imgui.Vec2, clamp bool, fmt string) {
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+	C.ImPlot_Annotation_Str0(C.double(x), C.double(y), internal.ReinterpretCast[C.ImVec4_c](col.ToC()), internal.ReinterpretCast[C.ImVec2_c](pix_offset.ToC()), C.bool(clamp), fmtArg)
 
 	fmtFin()
 }
@@ -8199,6 +8224,13 @@ func TagXStr(x float64, col imgui.Vec4, fmt string) {
 	fmtFin()
 }
 
+func TagXStr0(x float64, col imgui.Vec4, fmt string) {
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+	C.ImPlot_TagX_Str0(C.double(x), internal.ReinterpretCast[C.ImVec4_c](col.ToC()), fmtArg)
+
+	fmtFin()
+}
+
 // Shows a y-axis tag at the specified coordinate value.
 // TagYBoolV parameter default value hint:
 // round: false
@@ -8209,6 +8241,13 @@ func TagYBoolV(y float64, col imgui.Vec4, round bool) {
 func TagYStr(y float64, col imgui.Vec4, fmt string) {
 	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
 	C.wrap_ImPlot_TagY_Str(C.double(y), internal.ReinterpretCast[C.ImVec4_c](col.ToC()), fmtArg)
+
+	fmtFin()
+}
+
+func TagYStr0(y float64, col imgui.Vec4, fmt string) {
+	fmtArg, fmtFin := internal.WrapString[C.char](fmt)
+	C.ImPlot_TagY_Str0(C.double(y), internal.ReinterpretCast[C.ImVec4_c](col.ToC()), fmtArg)
 
 	fmtFin()
 }

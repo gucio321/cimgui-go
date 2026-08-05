@@ -27,9 +27,11 @@ DocPos_c wrap_DocSelection_GetEnd(DocSelection *self) { return self->end; }
 void wrap_Glyph_SetCodepoint(Glyph *GlyphPtr, ImWchar v) { GlyphPtr->codepoint = v; }
 void wrap_Glyph_SetColor(Glyph *GlyphPtr, Color v) { GlyphPtr->color = v; }
 void wrap_Glyph_SetBreakOption(Glyph *GlyphPtr, BreakOption v) { GlyphPtr->breakOption = v; }
+void wrap_Glyph_SetSquiggle(Glyph *GlyphPtr, size_t v) { GlyphPtr->squiggle = v; }
 ImWchar wrap_Glyph_GetCodepoint(Glyph *self) { return self->codepoint; }
 Color wrap_Glyph_GetColor(Glyph *self) { return self->color; }
 BreakOption wrap_Glyph_GetBreakOption(Glyph *self) { return self->breakOption; }
+size_t wrap_Glyph_GetSquiggle(Glyph *self) { return self->squiggle; }
 void wrap_PopupData_SetPos(PopupData *PopupDataPtr, DocPos v) { PopupDataPtr->pos = v; }
 void wrap_PopupData_SetUserData(PopupData *PopupDataPtr, uintptr_t v) { PopupDataPtr->userData = (void*)v; }
 DocPos_c wrap_PopupData_GetPos(PopupData *self) { return self->pos; }

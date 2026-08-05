@@ -356,7 +356,7 @@ CIMGUI_API size_t TextEditor_GetLineCount(TextEditor* self)
 {
     return self->GetLineCount();
 }
-CIMGUI_API void TextEditor_Render(TextEditor* self,const char* title,const ImVec2_c size,ImGuiChildFlags childFlags,ImGuiWindowFlags windowFlags)
+CIMGUI_API bool TextEditor_Render(TextEditor* self,const char* title,const ImVec2_c size,ImGuiChildFlags childFlags,ImGuiWindowFlags windowFlags)
 {
     return self->Render(title,ConvertToCPP_ImVec2(size),childFlags,windowFlags);
 }
@@ -605,6 +605,26 @@ CIMGUI_API void TextEditor_ClearMarkers(TextEditor* self)
 CIMGUI_API bool TextEditor_HasMarkers(TextEditor* self)
 {
     return self->HasMarkers();
+}
+CIMGUI_API void TextEditor_AddSquiggle(TextEditor* self,DocPos_c start,DocPos_c end,size_t type,ImU32 color,const char* tooltip)
+{
+    return self->AddSquiggle(ConvertToCPP_DocPos(start),ConvertToCPP_DocPos(end),type,color,tooltip);
+}
+CIMGUI_API void TextEditor_ClearSquiggles_DocPos(TextEditor* self,DocPos_c start,DocPos_c end)
+{
+    return self->ClearSquiggles(ConvertToCPP_DocPos(start),ConvertToCPP_DocPos(end));
+}
+CIMGUI_API void TextEditor_ClearSquiggles_size_t(TextEditor* self,size_t type)
+{
+    return self->ClearSquiggles(type);
+}
+CIMGUI_API void TextEditor_ClearSquiggles_Nil(TextEditor* self)
+{
+    return self->ClearSquiggles();
+}
+CIMGUI_API bool TextEditor_HasSquiggles(TextEditor* self)
+{
+    return self->HasSquiggles();
 }
 CIMGUI_API void TextEditor_SetChangeCallback(TextEditor* self,void(*cb)(),int delay)
 {
@@ -1151,7 +1171,12 @@ CIMGUI_API const char* TextEditor_GetText_static(TextEditor* self)
     str.assign(self->GetText());
     return str.c_str();
 }
-
+////////////Dejavu
+CIMGUI_API int GetDejavu(void** deja)
+{
+	*deja = (void*) &dejavu;
+	return dejavuSize;
+}
 CIMGUI_API void SetDejavu()
 {
     auto& io = ImGui::GetIO();

@@ -249,6 +249,37 @@ func (self *Notifications) Destroy() {
 	selfFin()
 }
 
+func PalettePalette() *Palette {
+	return NewPaletteFromC(C.Palette_Palette())
+}
+
+func Paletteconstget(noname1 *Palette, noname2 Color) uint32 {
+	noname1Arg, noname1Fin := noname1.Handle()
+
+	defer func() {
+		noname1Fin()
+	}()
+	return uint32(C.Palette_const_get(internal.ReinterpretCast[*C.Palette](noname1Arg), C.Color(noname2)))
+}
+
+func PaletteDestroy(noname1 *Palette) {
+	noname1Arg, noname1Fin := noname1.Handle()
+	C.Palette_destroy(internal.ReinterpretCast[*C.Palette](noname1Arg))
+
+	noname1Fin()
+}
+
+func PaletteSet(noname1 *Palette, noname2 uint32, noname3 int32) {
+	noname1Arg, noname1Fin := noname1.Handle()
+	C.Palette_set(internal.ReinterpretCast[*C.Palette](noname1Arg), C.ImU32(noname2), C.int(noname3))
+
+	noname1Fin()
+}
+
+func SetDejavu() {
+	C.SetDejavu()
+}
+
 func (self *TextDiff) Language() *Language {
 	selfArg, selfFin := self.Handle()
 
@@ -342,7 +373,7 @@ func (self *TextDiff) IsWordWrapEnabled() bool {
 // RenderV parameter default value hint:
 // size: ImVec2()
 // childFlags: 0
-// windowFlags: ImGuiWindowFlags_NoNavInputs | ImGuiWindowFlags_NoMove
+// windowFlags: ImGuiWindowFlags_NoMove
 func (self *TextDiff) RenderV(title string, size imgui.Vec2, childFlags imgui.ChildFlags, windowFlags imgui.WindowFlags) {
 	selfArg, selfFin := self.Handle()
 	titleArg, titleFin := internal.WrapString[C.char](title)
@@ -480,6 +511,21 @@ func (self *TextEditor) AddNextOccurrence() {
 	selfFin()
 }
 
+// AddSquiggleV parameter default value hint:
+// tooltip: std::string_view()
+func (self *TextEditor) AddSquiggleV(start, end DocPos, typeArg uint64, color uint32, tooltip string) {
+	selfArg, selfFin := self.Handle()
+	startArg, startFin := start.C()
+	endArg, endFin := end.C()
+	tooltipArg, tooltipFin := internal.WrapString[C.char](tooltip)
+	C.TextEditor_AddSquiggle(internal.ReinterpretCast[*C.TextEditor](selfArg), internal.ReinterpretCast[C.DocPos](startArg), internal.ReinterpretCast[C.DocPos](endArg), C.xulong(typeArg), C.ImU32(color), tooltipArg)
+
+	selfFin()
+	startFin()
+	endFin()
+	tooltipFin()
+}
+
 func (self *TextEditor) AllCursorsHaveSelection() bool {
 	selfArg, selfFin := self.Handle()
 
@@ -540,6 +586,31 @@ func (self *TextEditor) ClearLineNumberContextMenuCallback() {
 func (self *TextEditor) ClearMarkers() {
 	selfArg, selfFin := self.Handle()
 	C.TextEditor_ClearMarkers(internal.ReinterpretCast[*C.TextEditor](selfArg))
+
+	selfFin()
+}
+
+func (self *TextEditor) ClearSquigglesDocPos(start, end DocPos) {
+	selfArg, selfFin := self.Handle()
+	startArg, startFin := start.C()
+	endArg, endFin := end.C()
+	C.TextEditor_ClearSquiggles_DocPos(internal.ReinterpretCast[*C.TextEditor](selfArg), internal.ReinterpretCast[C.DocPos](startArg), internal.ReinterpretCast[C.DocPos](endArg))
+
+	selfFin()
+	startFin()
+	endFin()
+}
+
+func (self *TextEditor) ClearSquiggles() {
+	selfArg, selfFin := self.Handle()
+	C.TextEditor_ClearSquiggles_Nil(internal.ReinterpretCast[*C.TextEditor](selfArg))
+
+	selfFin()
+}
+
+func (self *TextEditor) ClearSquigglessizet(typeArg uint64) {
+	selfArg, selfFin := self.Handle()
+	C.TextEditor_ClearSquiggles_size_t(internal.ReinterpretCast[*C.TextEditor](selfArg), C.xulong(typeArg))
 
 	selfFin()
 }
@@ -940,6 +1011,31 @@ func (self *TextEditor) TextLeftMargin() uint64 {
 	return uint64(C.TextEditor_GetTextLeftMargin(internal.ReinterpretCast[*C.TextEditor](selfArg)))
 }
 
+func (self *TextEditor) Textalloc() string {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return C.GoString(C.TextEditor_GetText_alloc(internal.ReinterpretCast[*C.TextEditor](selfArg)))
+}
+
+func TextEditorGetTextfree(ptr string) {
+	ptrArg, ptrFin := internal.WrapString[C.char](ptr)
+	C.TextEditor_GetText_free(ptrArg)
+
+	ptrFin()
+}
+
+func (self *TextEditor) Textstatic() string {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return C.GoString(C.TextEditor_GetText_static(internal.ReinterpretCast[*C.TextEditor](selfArg)))
+}
+
 func (self *TextEditor) UndoIndex() uint64 {
 	selfArg, selfFin := self.Handle()
 
@@ -1017,6 +1113,15 @@ func (self *TextEditor) HasMarkers() bool {
 		selfFin()
 	}()
 	return C.TextEditor_HasMarkers(internal.ReinterpretCast[*C.TextEditor](selfArg)) == C.bool(true)
+}
+
+func (self *TextEditor) HasSquiggles() bool {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return C.TextEditor_HasSquiggles(internal.ReinterpretCast[*C.TextEditor](selfArg)) == C.bool(true)
 }
 
 func (self *TextEditor) HasTextContextMenuCallback() bool {
@@ -1311,14 +1416,16 @@ func (self *TextEditor) Redo() {
 // RenderV parameter default value hint:
 // size: ImVec2()
 // childFlags: 0
-// windowFlags: ImGuiWindowFlags_NoNavInputs | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_HorizontalScrollbar
-func (self *TextEditor) RenderV(title string, size imgui.Vec2, childFlags imgui.ChildFlags, windowFlags imgui.WindowFlags) {
+// windowFlags: ImGuiWindowFlags_NoMove | ImGuiWindowFlags_HorizontalScrollbar
+func (self *TextEditor) RenderV(title string, size imgui.Vec2, childFlags imgui.ChildFlags, windowFlags imgui.WindowFlags) bool {
 	selfArg, selfFin := self.Handle()
 	titleArg, titleFin := internal.WrapString[C.char](title)
-	C.TextEditor_Render(internal.ReinterpretCast[*C.TextEditor](selfArg), titleArg, internal.ReinterpretCast[C.ImVec2_c](size.ToC()), C.ImGuiChildFlags(childFlags), C.ImGuiWindowFlags(windowFlags))
 
-	selfFin()
-	titleFin()
+	defer func() {
+		selfFin()
+		titleFin()
+	}()
+	return C.TextEditor_Render(internal.ReinterpretCast[*C.TextEditor](selfArg), titleArg, internal.ReinterpretCast[C.ImVec2_c](size.ToC()), C.ImGuiChildFlags(childFlags), C.ImGuiWindowFlags(windowFlags)) == C.bool(true)
 }
 
 func (self *TextEditor) ReplaceSectionTextDocPos(start, end DocPos, text string) {
@@ -1911,13 +2018,26 @@ func (self *TextDiff) Render(title string) {
 	titleFin()
 }
 
-func (self *TextEditor) Render(title string) {
+func (self *TextEditor) AddSquiggle(start, end DocPos, typeArg uint64, color uint32) {
 	selfArg, selfFin := self.Handle()
-	titleArg, titleFin := internal.WrapString[C.char](title)
-	C.wrap_TextEditor_Render(internal.ReinterpretCast[*C.TextEditor](selfArg), titleArg)
+	startArg, startFin := start.C()
+	endArg, endFin := end.C()
+	C.wrap_TextEditor_AddSquiggle(internal.ReinterpretCast[*C.TextEditor](selfArg), internal.ReinterpretCast[C.DocPos](startArg), internal.ReinterpretCast[C.DocPos](endArg), C.xulong(typeArg), C.ImU32(color))
 
 	selfFin()
-	titleFin()
+	startFin()
+	endFin()
+}
+
+func (self *TextEditor) Render(title string) bool {
+	selfArg, selfFin := self.Handle()
+	titleArg, titleFin := internal.WrapString[C.char](title)
+
+	defer func() {
+		selfFin()
+		titleFin()
+	}()
+	return C.wrap_TextEditor_Render(internal.ReinterpretCast[*C.TextEditor](selfArg), titleArg) == C.bool(true)
 }
 
 func (self *TextEditor) SelectAllOccurrencesOf(text string) {
@@ -2120,6 +2240,12 @@ func (self Glyph) SetBreakOption(v BreakOption) {
 	C.wrap_Glyph_SetBreakOption(selfArg, C.BreakOption(v))
 }
 
+func (self Glyph) SetSquiggle(v uint64) {
+	selfArg, selfFin := self.Handle()
+	defer selfFin()
+	C.wrap_Glyph_SetSquiggle(selfArg, C.xulong(v))
+}
+
 func (self *Glyph) Codepoint() imgui.Wchar {
 	selfArg, selfFin := self.Handle()
 
@@ -2145,6 +2271,15 @@ func (self *Glyph) BreakOption() BreakOption {
 		selfFin()
 	}()
 	return BreakOption(C.wrap_Glyph_GetBreakOption(internal.ReinterpretCast[*C.Glyph](selfArg)))
+}
+
+func (self *Glyph) Squiggle() uint64 {
+	selfArg, selfFin := self.Handle()
+
+	defer func() {
+		selfFin()
+	}()
+	return uint64(C.wrap_Glyph_GetSquiggle(internal.ReinterpretCast[*C.Glyph](selfArg)))
 }
 
 func (self PopupData) SetPos(v DocPos) {

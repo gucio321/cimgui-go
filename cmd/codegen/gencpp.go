@@ -231,15 +231,9 @@ extern "C" {
 			for _, a := range f.ArgsT {
 				invocationArgs = append(invocationArgs, a.Name)
 
-				shouldIgnore := false
-				for k := range f.Defaults {
-					if string(a.Name) == k {
-						shouldIgnore = true
-						break
-					}
-				}
+				_, hasDefault := f.Defaults[string(a.Name)]
 
-				if !shouldIgnore {
+				if !hasDefault {
 					newArgsT = append(newArgsT, a)
 				}
 			}

@@ -87,6 +87,7 @@ struct Glyph
   ImWchar codepoint;
   Color color;
   BreakOption breakOption;
+  size_t squiggle;
 };
 typedef struct Glyph Glyph;
 
@@ -254,7 +255,7 @@ CIMGUI_API void TextEditor_ReplaceSectionText_DocSelection(TextEditor* self,cons
 CIMGUI_API void TextEditor_ClearText(TextEditor* self);
 CIMGUI_API bool TextEditor_IsEmpty(TextEditor* self);
 CIMGUI_API size_t TextEditor_GetLineCount(TextEditor* self);
-CIMGUI_API void TextEditor_Render(TextEditor* self,const char* title,const ImVec2_c size,ImGuiChildFlags childFlags,ImGuiWindowFlags windowFlags);
+CIMGUI_API bool TextEditor_Render(TextEditor* self,const char* title,const ImVec2_c size,ImGuiChildFlags childFlags,ImGuiWindowFlags windowFlags);
 CIMGUI_API void TextEditor_SetFocus(TextEditor* self);
 CIMGUI_API void TextEditor_Cut(TextEditor* self);
 CIMGUI_API void TextEditor_Copy(TextEditor* self);
@@ -316,6 +317,11 @@ CIMGUI_API void TextEditor_FindAll(TextEditor* self);
 CIMGUI_API void TextEditor_AddMarker(TextEditor* self,size_t line,ImU32 lineNumberColor,ImU32 textColor,const char* lineNumberTooltip,const char* textTooltip);
 CIMGUI_API void TextEditor_ClearMarkers(TextEditor* self);
 CIMGUI_API bool TextEditor_HasMarkers(TextEditor* self);
+CIMGUI_API void TextEditor_AddSquiggle(TextEditor* self,DocPos_c start,DocPos_c end,size_t type,ImU32 color,const char* tooltip);
+CIMGUI_API void TextEditor_ClearSquiggles_DocPos(TextEditor* self,DocPos_c start,DocPos_c end);
+CIMGUI_API void TextEditor_ClearSquiggles_size_t(TextEditor* self,size_t type);
+CIMGUI_API void TextEditor_ClearSquiggles_Nil(TextEditor* self);
+CIMGUI_API bool TextEditor_HasSquiggles(TextEditor* self);
 CIMGUI_API void TextEditor_SetChangeCallback(TextEditor* self,void(*cb)(),int delay);
 CIMGUI_API void TextEditor_SetInsertor(TextEditor* self,void*(*cb)(size_t));
 CIMGUI_API void TextEditor_SetDeletor(TextEditor* self,void(*cb)(size_t,void*));
@@ -455,6 +461,8 @@ CIMGUI_API char* TextEditor_GetText_alloc(TextEditor* self);
 CIMGUI_API void TextEditor_GetText_free(char* ptr);
 //returned value must be used to copy value before calling TextEditor_GetText_static again
 CIMGUI_API const char* TextEditor_GetText_static(TextEditor* self);
+////////////Dejavu
+CIMGUI_API int GetDejavu(void** deja);
 CIMGUI_API void SetDejavu();
 #endif //CIMGUICTE_INCLUDED
 
